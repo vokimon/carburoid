@@ -36,6 +36,14 @@
         android:textColor="#D32F2F"
         android:layout_marginTop="4dp" />
 
+    <TextView
+        android:id="@+id/text_distance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="#4CAF50"
+        android:layout_marginTop="4dp" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

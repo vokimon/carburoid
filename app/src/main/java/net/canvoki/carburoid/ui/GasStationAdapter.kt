@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.distances.CurrentDistancePolicy
 
 class GasStationAdapter(private val stations: List<GasStation>) :
     RecyclerView.Adapter<GasStationAdapter.ViewHolder>() {
@@ -16,6 +17,7 @@ class GasStationAdapter(private val stations: List<GasStation>) :
         val address: TextView = view.findViewById(R.id.text_address)
         val location: TextView = view.findViewById(R.id.text_location)
         val price: TextView = view.findViewById(R.id.text_price)
+        val distance: TextView = view.findViewById(R.id.text_distance)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,6 +36,9 @@ class GasStationAdapter(private val stations: List<GasStation>) :
         holder.location.text = if (location.isNotEmpty()) location else "Location unknown"
 
         holder.price.text = station.priceGasoleoA ?: "Price N/A"
+
+        val distance = CurrentDistancePolicy.getDistance(station)
+        holder.distance.text = distance?.let { "%.1f km".format(it / 1000) } ?: "Distance N/A"
     }
 
     override fun getItemCount() = stations.size
