@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import android.widget.TextView
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -29,13 +30,22 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var recyclerView: RecyclerView
+    private lateinit var spinner: ProgressBar
+    private lateinit var emptyView: TextView
+    private lateinit var progressText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+        spinner = findViewById(R.id.progress_bar)
+        emptyView = findViewById(R.id.text_empty)
+        progressText = findViewById(R.id.text_progress)
+
+        showEmpty("No stations")
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -78,28 +88,37 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun emptyViewStatus(
-        message: String?
-    ) {
+    private fun showEmpty(message: String) {
         lifecycleScope.launch {
-            _emptyViewStatus(message)
+            withContext(Dispatchers.Main) {
+                recyclerView.visibility = View.GONE
+                spinner.visibility = View.GONE
+                progressText.visibility = View.GONE
+                emptyView.visibility = View.VISIBLE
+                emptyView.text = message
+            }
         }
     }
 
-    private suspend fun _emptyViewStatus(
-        message: String?
-    ) {
-
-        withContext(Dispatchers.Main) {
-            val emptyView = findViewById<TextView>(R.id.text_empty)
-            if (message == null) {
-                recyclerView.visibility = View.VISIBLE
-                emptyView.visibility = View.GONE
-            } else {
-                log(message)
+    private fun showProgress(message: String?) {
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
                 recyclerView.visibility = View.GONE
-                emptyView.visibility = View.VISIBLE
-                emptyView.text = message
+                spinner.visibility = View.VISIBLE
+                progressText.visibility = View.VISIBLE
+                progressText.text = message ?: "---"
+                emptyView.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun showContent() {
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                recyclerView.visibility = View.VISIBLE
+                spinner.visibility = View.GONE
+                progressText.visibility = View.GONE
+                emptyView.visibility = View.GONE
             }
         }
     }
@@ -132,7 +151,7 @@ class MainActivity : AppCompatActivity() {
     private fun loadGasStations() {
         lifecycleScope.launch {
             try {
-                emptyViewStatus("Loading Gas Stations...")
+                showProgress("Loading Gas Stations...")
                 val response = GasStationApiFactory.create().getGasStations()
                 showToast("Downloaded ${response.stations.size} stations")
 
@@ -149,7 +168,11 @@ class MainActivity : AppCompatActivity() {
 
                 log("Final list: ${sortedStations.size} stations")
 
-                emptyViewStatus(if (sortedStations.isEmpty()) "Failed to load stations" else null)
+                if (sortedStations.isEmpty()) {
+                    showEmpty("No stations")
+                } else {
+                    showContent()
+                }
 
                 val adapter = GasStationAdapter(sortedStations)
                 recyclerView.adapter = adapter
@@ -157,7 +180,7 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 showToast("Download failed: ${e.message}")
                 e.printStackTrace()
-                emptyViewStatus("Failed to load stations: ${e.message}")
+                showEmpty("Error loading stations: ${e.message}")
             }
         }
     }

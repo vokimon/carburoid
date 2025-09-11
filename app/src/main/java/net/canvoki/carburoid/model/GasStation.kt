@@ -36,20 +36,15 @@ data class GasStation(
     val lngStr: String?,
 
 ) {
-    init {
-        log("init: name=$name, latStr=$latStr, lngStr=$lngStr")
-    }
     val latitude: Double?
         get() = latStr
             ?.takeIf { it.isNotBlank() }
             ?.replace(',', '.')
             ?.toDoubleOrNull()
-            //?.also { log("Parsed latitude: $it from '$latStr'") }
 
     val longitude: Double?
         get() = lngStr
             ?.takeIf { it.isNotBlank() }
             ?.replace(',', '.')
             ?.toDoubleOrNull()
-            //?.also { log("Parsed longitude: $it from '$lngStr'") }
 }
