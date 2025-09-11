@@ -14,6 +14,12 @@ data class GasStation(
     @SerializedName("Dirección")
     val address: String?,
 
+    @SerializedName("Localidad")
+    val city: String?,
+
+    @SerializedName("Provincia")
+    val state: String?,
+
     @SerializedName("Precio Gasoleo A")
     val priceGasoleoA: String?  // ← Renamed to valid identifier
 )

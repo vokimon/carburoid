@@ -14,8 +14,10 @@ class GasStationAdapter(private val stations: List<GasStation>) :
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.text_name)
         val address: TextView = view.findViewById(R.id.text_address)
+        val location: TextView = view.findViewById(R.id.text_location)
         val price: TextView = view.findViewById(R.id.text_price)
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_gas_station, parent, false)
@@ -26,7 +28,12 @@ class GasStationAdapter(private val stations: List<GasStation>) :
         val station = stations[position]
         holder.name.text = station.name ?: "Unknown"
         holder.address.text = station.address ?: "No address"
-        holder.price.text = station.priceGasoleoA ?: "Price N/A"  // ← Updated property name
+
+        // Combine city and province
+        val location = listOfNotNull(station.city, station.state).joinToString(" - ")
+        holder.location.text = if (location.isNotEmpty()) location else "Location unknown"
+
+        holder.price.text = station.priceGasoleoA ?: "Price N/A"
     }
 
     override fun getItemCount() = stations.size
