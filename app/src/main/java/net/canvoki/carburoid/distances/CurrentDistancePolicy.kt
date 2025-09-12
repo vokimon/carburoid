@@ -12,8 +12,15 @@ object CurrentDistancePolicy {
     /**
      * Sets the active distance computation strategy.
      */
-    fun setMethod(method: DistanceMethod) {
+    fun setMethod(method: DistanceMethod?) {
         this.method = method
+    }
+
+    /**
+     * Gets the active distance computation strategy.
+     */
+    fun getMethod(): DistanceMethod? {
+        return this.method
     }
 
     /**

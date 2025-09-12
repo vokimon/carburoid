@@ -5,6 +5,8 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.distances.DistanceMethod
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.After
 import org.junit.Test
 
 
@@ -32,6 +34,18 @@ class DummyDistanceMethod() : DistanceMethod {
 class StationFilterTest {
 
     private val filter = StationFilter()
+
+    private var originalMethod: DistanceMethod? = null
+
+    @Before
+    fun saveOriginalMethod() {
+        originalMethod = CurrentDistancePolicy.getMethod()
+    }
+
+    @After
+    fun restoreOriginalMethod() {
+        CurrentDistancePolicy.setMethod(originalMethod)
+    }
 
     fun setDistancePolicy() {
         CurrentDistancePolicy.setMethod(DummyDistanceMethod())
