@@ -30,6 +30,23 @@ class DummyDistanceMethod() : DistanceMethod {
 }
 
 
+fun dummyStation(index: Int, distance: Double, price: Double?): GasStation {
+    return GasStation(
+        name = "Station ${index} at ${distance} km, ${price} €",
+        address = "Address $index",
+        city = "A city",
+        state = "A state",
+        priceGasoleoA = price?.toString(),
+        latStr = "40,4168",
+        lngStr = distance.toString().replace(".",","),
+    )
+}
+
+fun assertResult(expected: List<String>, result: List<GasStation>) {
+    //assertEquals(expected.joinToString("\n"), result.map { it.name!!}.joinToString("\n"))
+    assertEquals(expected, result.map { it.name!!})
+}
+
 
 class StationFilterTest {
 
@@ -49,23 +66,6 @@ class StationFilterTest {
 
     fun setDistancePolicy() {
         CurrentDistancePolicy.setMethod(DummyDistanceMethod())
-    }
-
-    fun dummyStation(index: Int, distance: Double, price: Double?): GasStation {
-        return GasStation(
-            name = "Station ${index} at ${distance} km, ${price} €",
-            address = "Address $index",
-            city = "A city",
-            state = "A state",
-            priceGasoleoA = price?.toString(),
-            latStr = "40,4168",
-            lngStr = distance.toString().replace(".",","),
-        )
-    }
-
-    fun assertResult(expected: List<String>, result: List<GasStation>) {
-        //assertEquals(expected.joinToString("\n"), result.map { it.name!!}.joinToString("\n"))
-        assertEquals(expected, result.map { it.name!!})
     }
 
     fun testCase(stations: List<GasStation>, expected: List<String>) {
