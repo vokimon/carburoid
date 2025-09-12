@@ -91,4 +91,19 @@ class StationFilterTest {
             ),
         )
     }
+
+    @Test
+    fun `further and expensive stations ignored`() {
+        testCase(
+            stations = listOf(
+                dummyStation(index=1, distance=20.0, price=0.3),
+                dummyStation(index=2, distance=10.0, price=0.3),
+                dummyStation(index=3, distance=30.0, price=0.4),
+            ),
+            expected = listOf(
+                "Station 2 at 10.0 km, 0.3 €",
+                "Station 1 at 20.0 km, 0.3 €",
+            ),
+        )
+    }
 }
