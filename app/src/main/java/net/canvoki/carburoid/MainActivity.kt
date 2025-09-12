@@ -155,15 +155,12 @@ class MainActivity : AppCompatActivity() {
                 val response = GasStationApiFactory.create().getGasStations()
                 showToast("Downloaded ${response.stations.size} stations")
 
-                val stationsWithCoords = response.stations//.filter { it.latitude != null && it.longitude != null }
-                log("With coords: ${stationsWithCoords.size}")
-
-                val sortedStations = stationsWithCoords
+                val sortedStations = response.stations
                     .filter { CurrentDistancePolicy.getDistance(it) != null }
                     .sortedBy { CurrentDistancePolicy.getDistance(it) }
                     .toMutableList()
                     .apply {
-                        addAll(stationsWithCoords.filter { CurrentDistancePolicy.getDistance(it) == null })
+                        addAll(response.stations.filter { CurrentDistancePolicy.getDistance(it) == null })
                     }
 
                 log("Final list: ${sortedStations.size} stations")
