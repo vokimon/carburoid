@@ -33,13 +33,13 @@ class StationFilterTest {
         CurrentDistancePolicy.setMethod(DummyDistanceMethod())
     }
 
-    fun dummyStation(index: Int, distance: Double, price: Double): GasStation {
+    fun dummyStation(index: Int, distance: Double, price: Double?): GasStation {
         return GasStation(
             name = "Station ${index} at ${distance} km, ${price} €",
             address = "Address $index",
             city = "A city",
             state = "A state",
-            priceGasoleoA = price.toString(),
+            priceGasoleoA = price?.toString(),
             latStr = "40,4168",
             lngStr = distance.toString().replace(".",","),
         )
@@ -93,12 +93,27 @@ class StationFilterTest {
     }
 
     @Test
-    fun `further and expensive stations ignored`() {
+    fun `ignore further and expensive stations`() {
         testCase(
             stations = listOf(
                 dummyStation(index=1, distance=20.0, price=0.3),
                 dummyStation(index=2, distance=10.0, price=0.3),
                 dummyStation(index=3, distance=30.0, price=0.4),
+            ),
+            expected = listOf(
+                "Station 2 at 10.0 km, 0.3 €",
+                "Station 1 at 20.0 km, 0.3 €",
+            ),
+        )
+    }
+
+    @Test
+    fun `ignore stations without the product`() {
+        testCase(
+            stations = listOf(
+                dummyStation(index=1, distance=20.0, price=0.3),
+                dummyStation(index=2, distance=10.0, price=0.3),
+                dummyStation(index=3, distance=30.0, price=null),
             ),
             expected = listOf(
                 "Station 2 at 10.0 km, 0.3 €",
