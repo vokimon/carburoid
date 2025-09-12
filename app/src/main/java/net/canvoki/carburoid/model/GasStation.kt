@@ -2,7 +2,7 @@ package net.canvoki.carburoid.model
 
 import android.util.Log
 import com.google.gson.annotations.SerializedName
-
+import net.canvoki.carburoid.distances.CurrentDistancePolicy
 
 data class GasStationResponse(
     @SerializedName("ListaEESSPrecio")
@@ -47,4 +47,11 @@ data class GasStation(
             ?.takeIf { it.isNotBlank() }
             ?.replace(',', '.')
             ?.toDoubleOrNull()
+
+    var distanceInMeters: Float? = null
+        private set  // use computeDistance
+
+    fun computeDistance() {
+        distanceInMeters = CurrentDistancePolicy.getDistance(this)
+    }
 }
