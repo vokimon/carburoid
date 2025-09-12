@@ -37,7 +37,11 @@ android {
         viewBinding true
     }
 }
-
+tasks.withType(Test) {
+    testLogging {
+        events "standardOut", "failed"//, "started", "passed", "skipped"
+    }
+}
 dependencies {
     implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.appcompat:appcompat:1.7.0'
@@ -53,5 +57,4 @@ dependencies {
     testImplementation 'com.google.code.gson:gson:2.10.1'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
-
 }
