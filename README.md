@@ -1,2 +1,3 @@
-# carburoid
-Find nearest and cheaper gas stations in Spain for Android
+# Carburoid
+
+Find the nearest and cheaper gas stations in Spain in your Android device.
