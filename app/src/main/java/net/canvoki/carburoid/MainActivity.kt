@@ -25,6 +25,7 @@ import net.canvoki.carburoid.distances.DistanceFromCurrentPosition
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.network.GasStationApiFactory
 import net.canvoki.carburoid.ui.GasStationAdapter
+import net.canvoki.carburoid.algorithms.StationFilter
 
 class MainActivity : AppCompatActivity() {
 
@@ -80,6 +81,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun log(message: String) {
+        println("Carburoid: $message")
         Log.d("Carburoid", message)
     }
 
@@ -155,13 +157,7 @@ class MainActivity : AppCompatActivity() {
                 val response = GasStationApiFactory.create().getGasStations()
                 showToast("Downloaded ${response.stations.size} stations")
 
-                val sortedStations = response.stations
-                    .filter { CurrentDistancePolicy.getDistance(it) != null }
-                    .sortedBy { CurrentDistancePolicy.getDistance(it) }
-                    .toMutableList()
-                    .apply {
-                        addAll(response.stations.filter { CurrentDistancePolicy.getDistance(it) == null })
-                    }
+                val sortedStations = StationFilter().filterParetoOptimal(response.stations)
 
                 log("Final list: ${sortedStations.size} stations")
 

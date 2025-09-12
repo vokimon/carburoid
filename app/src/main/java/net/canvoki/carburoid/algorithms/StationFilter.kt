@@ -1,5 +1,6 @@
 package net.canvoki.carburoid.algorithms
 
+import android.util.Log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 
@@ -14,7 +15,11 @@ class StationFilter {
         var minPrice = 1000.0
         val result = mutableListOf<GasStation>()
         for (station in sortedStations) {
-            val stationPrice = station.priceGasoleoA?.replace(",",".")?.toDouble() ?: 10000.0
+            val stationPrice = station.priceGasoleoA?.replace(",",".")?.toDoubleOrNull()
+            if (stationPrice == null) {
+                println("Filtered non number ${station.priceGasoleoA}")
+                continue
+            }
             if (stationPrice > minPrice) {
                 println("Filtered $stationPrice vs $minPrice")
                 continue
