@@ -48,7 +48,7 @@ class GasStationRepositoryTest {
     }
 
     @Test
-    fun `getCache initially`() = runTest {
+    fun `getCache initially empty`() = runTest {
         val response = dummyResponse()
         repository.saveToCache(response)
 
@@ -72,4 +72,20 @@ class GasStationRepositoryTest {
             cached.stations,
         )
     }
+
+    @Test
+    fun `getCache after clear`() = runTest {
+        val response = dummyResponse(listOf(
+            dummyStation(index=1, distance=10.0, price=0.3),
+        ))
+        repository.saveToCache(response)
+        repository.clearCache()
+
+        val cached = repository.getCache()
+        assertResult(
+            emptyList(),
+            cached.stations,
+        )
+    }
+
 }

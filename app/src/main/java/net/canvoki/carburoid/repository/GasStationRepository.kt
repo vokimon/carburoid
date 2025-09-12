@@ -37,7 +37,7 @@ class GasStationRepository(
     }
 
     suspend fun clearCache() {
-        // TODO: Implement
+        cache = GasStationResponse(emptyList())
     }
 
     suspend fun getCache(): GasStationResponse = cache
