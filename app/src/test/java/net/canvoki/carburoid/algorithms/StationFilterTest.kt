@@ -7,6 +7,10 @@ import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
+
+// TODO: Ignore private gas stations
+// TODO: Configurable product
+
 /**
  * Distance is the absolute value of the longitude.
  * We cannot use a Location based solution since
@@ -81,7 +85,7 @@ class StationFilterTest {
         testCase(
             stations = listOf(
                 dummyStation(index=1, distance=20.0, price=0.3),
-                dummyStation(index=2, distance=10.0, price=0.3),
+                dummyStation(index=2, distance=10.0, price=0.3), // This one is out of order
                 dummyStation(index=3, distance=30.0, price=0.3),
             ),
             expected = listOf(
@@ -98,7 +102,7 @@ class StationFilterTest {
             stations = listOf(
                 dummyStation(index=1, distance=20.0, price=0.3),
                 dummyStation(index=2, distance=10.0, price=0.3),
-                dummyStation(index=3, distance=30.0, price=0.4),
+                dummyStation(index=3, distance=15.0, price=0.4), // This one is further and expensive
             ),
             expected = listOf(
                 "Station 2 at 10.0 km, 0.3 €",
@@ -113,7 +117,7 @@ class StationFilterTest {
             stations = listOf(
                 dummyStation(index=1, distance=20.0, price=0.3),
                 dummyStation(index=2, distance=10.0, price=0.3),
-                dummyStation(index=3, distance=30.0, price=null),
+                dummyStation(index=3, distance=30.0, price=null), // This one has no price for the product
             ),
             expected = listOf(
                 "Station 2 at 10.0 km, 0.3 €",
