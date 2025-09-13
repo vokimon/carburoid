@@ -38,6 +38,7 @@ class GasStationRepository(
 
     suspend fun clearCache() {
         cache = null
+        cacheFile.delete()
     }
 
     suspend fun getCache(): String? = cache

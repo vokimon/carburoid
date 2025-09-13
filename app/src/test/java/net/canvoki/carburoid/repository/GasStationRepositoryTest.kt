@@ -111,4 +111,18 @@ class GasStationRepositoryTest {
         // ✅ Then: second repository sees same data
         assertEquals(response, repository2.getCache())
     }
+
+    @Test
+    fun `cache clearing survives repository recreation`() = runTest {
+        val response = jsonResponse(listOf(
+            station(index = 1, distance = 10.0, price = 0.3)
+        ))
+        repository.saveToCache(response)
+        repository.clearCache()
+
+        val repository2 = GasStationRepository(api, cacheFile)  // ✅ New instance
+
+        // ✅ Then: second repository sees same data
+        assertNull(repository2.getCache())
+    }
 }
