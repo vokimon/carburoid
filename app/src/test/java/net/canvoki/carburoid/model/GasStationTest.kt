@@ -35,7 +35,7 @@ class GasStationTest {
             ?.takeIf { it.isNotBlank() }
             ?.replace(',', '.')
             ?.toDoubleOrNull()
-            ?.also { log("Parsed latitude: $it from '$station.latStr'") }
+            //?.also { log("Parsed latitude: $it from '$station.latStr'") }
         !!, 0.0001)
         /*
         latStr
