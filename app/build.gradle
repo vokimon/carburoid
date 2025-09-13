@@ -5,15 +5,15 @@ plugins {
 }
 
 android {
-    namespace 'net.canvoki.carburoid'
-    compileSdk 34
+    namespace = 'net.canvoki.carburoid'
+    compileSdk = 34
 
     defaultConfig {
         applicationId "net.canvoki.carburoid"
-        minSdk 24
-        targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        minSdk = 24
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -35,7 +35,7 @@ android {
     }
 
     buildFeatures {
-        viewBinding true
+        viewBinding = true
     }
 }
 tasks.withType(Test) {
