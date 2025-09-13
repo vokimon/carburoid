@@ -32,7 +32,7 @@ class GasStationRepository(
 
     suspend fun getStations(): List<GasStation> = emptyList()
 
-    suspend fun triggerBackgroundUpdate() {
+    suspend fun launchFetch() {
         isBackgroundUpdateRunning = true
         scope.launch {
             _events.emit(RepositoryEvent.UpdateStarted)

@@ -132,7 +132,7 @@ class GasStationRepositoryTest {
     }
 
     @Test
-    fun `triggerBackgroundUpdate calls api and emits UpdateStarted event and sets flag`() = runTest {
+    fun `launchFetch calls api and emits UpdateStarted event and sets flag`() = runTest {
         val (apiCallDeferred) = deferredCalls({ api.getGasStations() }, 1)
         val repository = GasStationRepository(api, cacheFile, this)
 
@@ -143,7 +143,7 @@ class GasStationRepositoryTest {
         yieldUntilIdle()  // 👈 Let collector start
 
 
-        repository.triggerBackgroundUpdate()
+        repository.launchFetch()
         yieldUntilIdle()
 
         assertEquals(listOf(RepositoryEvent.UpdateStarted), events)
