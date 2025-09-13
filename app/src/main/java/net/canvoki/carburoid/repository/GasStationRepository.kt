@@ -22,7 +22,7 @@ class GasStationRepository(
     private val _events = MutableSharedFlow<RepositoryEvent>(replay = 0)
     val events: SharedFlow<RepositoryEvent> = _events.asSharedFlow()
 
-    private var cache = GasStationResponse(emptyList())
+    private var cache: String? = null
 
     private var isBackgroundUpdateRunning = false
 
@@ -32,13 +32,13 @@ class GasStationRepository(
         // TODO: Implement
     }
 
-    suspend fun saveToCache(response: GasStationResponse) {
+    suspend fun saveToCache(response: String) {
         cache = response
     }
 
     suspend fun clearCache() {
-        cache = GasStationResponse(emptyList())
+        cache = null
     }
 
-    suspend fun getCache(): GasStationResponse = cache
+    suspend fun getCache(): String? = cache
 }

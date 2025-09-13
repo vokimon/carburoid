@@ -1,14 +1,14 @@
 package net.canvoki.carburoid.repository
 
+import com.google.gson.Gson
 import io.mockk.mockk
 import io.mockk.coEvery
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import net.canvoki.carburoid.algorithms.DummyDistanceMethod
-import net.canvoki.carburoid.algorithms.dummyStation
-import net.canvoki.carburoid.algorithms.assertResult
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
@@ -35,10 +35,26 @@ class GasStationRepositoryTest {
     private lateinit var api: GasStationApi
     private lateinit var repository: GasStationRepository
 
-    fun dummyResponse(
-        stations: List<GasStation> = emptyList()
-    ): GasStationResponse {
-        return GasStationResponse(stations)
+    fun jsonResponse(
+        stations: List<Map<String, Any>> = emptyList()
+    ): String {
+        return Gson().toJson(
+            mapOf(
+                "ListaEESSPrecio" to stations
+            )
+        )
+    }
+
+    fun station(index: Int, distance: Double, price: Double?): Map<String, Any> {
+        return mapOf(
+            "Rótulo" to "Station ${index} at ${distance} km, ${price} €",
+            "Dirección" to "Address $index",
+            "Localidad" to "A city",
+            "Provincia" to "A state",
+            "Precio Gasoleo A" to "${price?.toString()?.replace(".", ",") ?: ""}",
+            "Latitud" to "40,4168",
+            "Longitud (WGS84)" to "${distance.toString().replace(".",",")}",
+        )
     }
 
     @Before
@@ -49,43 +65,27 @@ class GasStationRepositoryTest {
 
     @Test
     fun `getCache initially empty`() = runTest {
-        val response = dummyResponse()
-        repository.saveToCache(response)
-
-        val cached = repository.getCache()
-        assertResult(
-            emptyList(),
-            cached.stations,
-        )
+        assertNull(repository.getCache())
     }
 
     @Test
     fun `getCache after setting it`() = runTest {
-        val response = dummyResponse(listOf(
-            dummyStation(index=1, distance=10.0, price=0.3),
+        val response = jsonResponse(stations=listOf(
+            station(index=1, distance=10.0, price=0.3),
         ))
         repository.saveToCache(response)
 
-        val cached = repository.getCache()
-        assertResult(
-            listOf("Station 1 at 10.0 km, 0.3 €"),
-            cached.stations,
-        )
+        assertEquals(response, repository.getCache())
     }
 
     @Test
     fun `getCache after clear`() = runTest {
-        val response = dummyResponse(listOf(
-            dummyStation(index=1, distance=10.0, price=0.3),
+        val response = jsonResponse(stations=listOf(
+            station(index=1, distance=10.0, price=0.3),
         ))
         repository.saveToCache(response)
         repository.clearCache()
 
-        val cached = repository.getCache()
-        assertResult(
-            emptyList(),
-            cached.stations,
-        )
+        assertNull(repository.getCache())
     }
-
 }
