@@ -17,11 +17,11 @@ class StationFilter {
         for (station in sortedStations) {
             val stationPrice = station.priceGasoleoA?.replace(",",".")?.toDoubleOrNull()
             if (stationPrice == null) {
-                println("Filtered non number ${station.priceGasoleoA}")
+                //println("Filtered non number ${station.priceGasoleoA}")
                 continue
             }
             if (stationPrice > minPrice) {
-                println("Filtered $stationPrice vs $minPrice")
+                //println("Filtered $stationPrice vs $minPrice")
                 continue
             }
             minPrice = stationPrice
