@@ -3,18 +3,18 @@ package net.canvoki.carburoid.repository
 import com.google.gson.Gson
 import io.mockk.mockk
 import io.mockk.coEvery
+import io.mockk.coVerify
 import java.io.File
-import java.nio.file.Path
+import java.nio.file.Files
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.io.TempDir
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
-import net.canvoki.carburoid.model.GasStation
-import net.canvoki.carburoid.model.GasStationResponse
+import org.junit.Before
+import org.junit.Ignore
+import org.junit.Test
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import net.canvoki.carburoid.test.yieldUntilIdle
 import net.canvoki.carburoid.network.GasStationApi
-import net.canvoki.carburoid.repository.GasStationRepository
 
 /*
 Cache
@@ -35,39 +35,39 @@ Cases:
 
 class GasStationRepositoryTest {
 
-    @TempDir
-    private lateinit var tempDir: Path
+    private lateinit var tempDir: File
     private lateinit var api: GasStationApi
     private lateinit var cacheFile: File
     private lateinit var repository: GasStationRepository
-
 
     fun jsonResponse(
         stations: List<Map<String, Any>> = emptyList()
     ): String {
         return Gson().toJson(
-            mapOf(
-                "ListaEESSPrecio" to stations
-            )
+            mapOf("ListaEESSPrecio" to stations)
         )
     }
 
     fun station(index: Int, distance: Double, price: Double?): Map<String, Any> {
         return mapOf(
-            "Rótulo" to "Station ${index} at ${distance} km, ${price} €",
+            "Rótulo" to "Station $index at $distance km, $price €",
             "Dirección" to "Address $index",
             "Localidad" to "A city",
             "Provincia" to "A state",
             "Precio Gasoleo A" to "${price?.toString()?.replace(".", ",") ?: ""}",
             "Latitud" to "40,4168",
-            "Longitud (WGS84)" to "${distance.toString().replace(".",",")}",
+            "Longitud (WGS84)" to "${distance.toString().replace(".", ",")}",
         )
     }
 
-    @BeforeEach
+    @Before
     fun setUp() {
+        tempDir = Files.createTempDirectory("carburoid-test").toFile().apply {
+            deleteOnExit()
+        }
+
         api = mockk()
-        cacheFile = tempDir.resolve("test_cache.json").toFile()
+        cacheFile = File(tempDir, "test_cache.json")
         repository = GasStationRepository(api, cacheFile)
     }
 
@@ -104,9 +104,7 @@ class GasStationRepositoryTest {
         ))
         repository.saveToCache(response)
 
-        val repository2 = GasStationRepository(api, cacheFile)  // ✅ New instance
-
-        // ✅ Then: second repository sees same data
+        val repository2 = GasStationRepository(api, cacheFile)
         assertEquals(response, repository2.getCache())
     }
 
@@ -118,9 +116,7 @@ class GasStationRepositoryTest {
         repository.saveToCache(response)
         repository.clearCache()
 
-        val repository2 = GasStationRepository(api, cacheFile)  // ✅ New instance
-
-        // ✅ Then: second repository sees same data
+        val repository2 = GasStationRepository(api, cacheFile)
         assertNull(repository2.getCache())
     }
 }
