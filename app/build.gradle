@@ -40,7 +40,7 @@ android {
 }
 tasks.withType(Test) {
     testLogging {
-        events "standardOut", "failed"//, "started", "passed", "skipped"
+        events "failed", "standardOut", "standardError"//, "started", "passed", "skipped"
     }
 }
 dependencies {
