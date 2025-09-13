@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.launch
@@ -23,6 +24,7 @@ import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.distances.DistanceFromAddress
 import net.canvoki.carburoid.distances.DistanceFromCurrentPosition
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApiFactory
 import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.algorithms.StationFilter
@@ -154,7 +156,8 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 showProgress("Loading Gas Stations...")
-                val response = GasStationApiFactory.create().getGasStations()
+                val json = GasStationApiFactory.create().getGasStations()
+                val response = Gson().fromJson(json, GasStationResponse::class.java)
                 showToast("Downloaded ${response.stations.size} stations")
 
                 val sortedStations = StationFilter().filterParetoOptimal(response.stations)

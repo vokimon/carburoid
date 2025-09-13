@@ -8,7 +8,8 @@ import retrofit2.http.GET
 interface GasStationApi {
 
     @GET("PreciosCarburantes/EstacionesTerrestres/")
-    suspend fun getGasStations(): GasStationResponse
+    suspend fun getGasStations(): String
+
 }
 
 object GasStationApiFactory {
@@ -17,6 +18,7 @@ object GasStationApiFactory {
     }
     private val retrofit = retrofit2.Retrofit.Builder()
         .baseUrl("https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/")
-        .addConverterFactory(retrofit2.converter.gson.GsonConverterFactory.create())
+        .addConverterFactory(retrofit2.converter.scalars.ScalarsConverterFactory.create())
         .build()
 }
+
