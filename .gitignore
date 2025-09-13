@@ -8,3 +8,8 @@ local.properties
 captures/
 app/release/
 app/debug/
+
+# editors
+.*.sw?
+.*.kate-swp
+
