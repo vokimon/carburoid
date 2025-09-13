@@ -4,12 +4,13 @@ import com.google.gson.Gson
 import io.mockk.mockk
 import io.mockk.coEvery
 import java.io.File
+import java.nio.file.Path
 import kotlinx.coroutines.test.runTest
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import org.junit.jupiter.api.io.TempDir
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
@@ -34,6 +35,8 @@ Cases:
 
 class GasStationRepositoryTest {
 
+    @TempDir
+    private lateinit var tempDir: Path
     private lateinit var api: GasStationApi
     private lateinit var cacheFile: File
     private lateinit var repository: GasStationRepository
@@ -61,16 +64,11 @@ class GasStationRepositoryTest {
         )
     }
 
-    @Before
+    @BeforeEach
     fun setUp() {
         api = mockk()
-        cacheFile = File.createTempFile("test_cache", ".json")
-        cacheFile.delete()
+        cacheFile = tempDir.resolve("test_cache.json").toFile()
         repository = GasStationRepository(api, cacheFile)
-    }
-    @After
-    fun tearDown() {
-        cacheFile.delete()
     }
 
     @Test
