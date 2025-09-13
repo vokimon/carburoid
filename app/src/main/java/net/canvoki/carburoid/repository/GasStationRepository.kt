@@ -1,9 +1,9 @@
 package net.canvoki.carburoid.repository
 
+import java.io.File
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import android.content.Context
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
@@ -16,13 +16,12 @@ sealed class RepositoryEvent {
 
 class GasStationRepository(
     private val api: GasStationApi,
-    private val context: Context? = null,
+    private val cacheFile: File,
 ) {
-
     private val _events = MutableSharedFlow<RepositoryEvent>(replay = 0)
     val events: SharedFlow<RepositoryEvent> = _events.asSharedFlow()
 
-    private var cache: String? = null
+    private var cache: String? = if (cacheFile.exists()) cacheFile.readText() else null
 
     private var isBackgroundUpdateRunning = false
 
@@ -34,6 +33,7 @@ class GasStationRepository(
 
     suspend fun saveToCache(response: String) {
         cache = response
+        cacheFile.writeText(response)
     }
 
     suspend fun clearCache() {

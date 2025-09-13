@@ -3,6 +3,7 @@ package net.canvoki.carburoid.repository
 import com.google.gson.Gson
 import io.mockk.mockk
 import io.mockk.coEvery
+import java.io.File
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -13,6 +14,7 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
 import net.canvoki.carburoid.repository.GasStationRepository
+
 /*
 Cache
 
@@ -33,7 +35,9 @@ Cases:
 class GasStationRepositoryTest {
 
     private lateinit var api: GasStationApi
+    private lateinit var cacheFile: File
     private lateinit var repository: GasStationRepository
+
 
     fun jsonResponse(
         stations: List<Map<String, Any>> = emptyList()
@@ -60,7 +64,13 @@ class GasStationRepositoryTest {
     @Before
     fun setUp() {
         api = mockk()
-        repository = GasStationRepository(api)
+        cacheFile = File.createTempFile("test_cache", ".json")
+        cacheFile.delete()
+        repository = GasStationRepository(api, cacheFile)
+    }
+    @After
+    fun tearDown() {
+        cacheFile.delete()
     }
 
     @Test
@@ -87,5 +97,18 @@ class GasStationRepositoryTest {
         repository.clearCache()
 
         assertNull(repository.getCache())
+    }
+
+    @Test
+    fun `cache content survives repository recreation`() = runTest {
+        val response = jsonResponse(listOf(
+            station(index = 1, distance = 10.0, price = 0.3)
+        ))
+        repository.saveToCache(response)
+
+        val repository2 = GasStationRepository(api, cacheFile)  // ✅ New instance
+
+        // ✅ Then: second repository sees same data
+        assertEquals(response, repository2.getCache())
     }
 }
