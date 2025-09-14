@@ -12,50 +12,10 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
+import net.canvoki.carburoid.json.SpanishDateTypeAdapter
+import net.canvoki.carburoid.json.SpanishFloatTypeAdapter
 
 
-fun toSpanishFloat(value: Double?): String? {
-    return value?.toString()?.replace(".", ",")
-}
-fun fromSpanishFloat(value: String?): Double? {
-    return value?.replace(',', '.')?.toDoubleOrNull()
-}
-
-class SpanishFloatTypeAdapter : TypeAdapter<Double?>() {
-    override fun write(out: JsonWriter, value: Double?) {
-        if (value == null) {
-            out.nullValue()
-        } else {
-            out.value(toSpanishFloat(value))
-        }
-    }
-
-    override fun read(`in`: JsonReader): Double? {
-        val raw = `in`.nextString()
-        return fromSpanishFloat(raw)
-    }
-}
-
-class SpanishDateTypeAdapter : TypeAdapter<Instant?>() {
-    private val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy H:m:s", Locale.ROOT)
-
-    override fun write(out: JsonWriter, value: Instant?) {
-        if (value == null) {
-            out.nullValue()
-        } else {
-            out.value(value.toString()) // or format as Spanish if writing back
-        }
-    }
-
-    override fun read(`in`: JsonReader): Instant? {
-        val raw = `in`.nextString()
-        return try {
-            LocalDateTime.parse(raw, formatter).toInstant(ZoneOffset.UTC)
-        } catch (e: Exception) {
-            null
-        }
-    }
-}
 data class GasStationResponse(
     @SerializedName("ListaEESSPrecio")
     val stations: List<GasStation>,

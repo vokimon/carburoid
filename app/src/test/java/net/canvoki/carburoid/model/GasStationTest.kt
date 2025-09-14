@@ -80,6 +80,3 @@ class GasStationTest {
         assertEquals(-3.7038, station.longitude!!, 0.0001)
     }
 }
-
-
-
