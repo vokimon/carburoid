@@ -12,7 +12,7 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
 
-typealias Parser = (String) -> List<GasStation>
+typealias Parser = (String) -> GasStationResponse
 
 sealed class RepositoryEvent {
     object UpdateStarted : RepositoryEvent()

@@ -17,6 +17,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import net.canvoki.carburoid.test.yieldUntilIdle
 import net.canvoki.carburoid.test.deferredCalls
+import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
 
 /*
@@ -373,6 +375,44 @@ class GasStationRepositoryTest {
         )
         assertNull(repository.getCache())
         assertFalse(repository.isFetchInProgress())
+
+        eventCollector.cancel()
+    }
+
+    @Test
+    fun `launchFetch updates data if the serialization works`() = runTest {
+        val data = GasStationResponse(
+            stations=listOf(
+                GasStation(name="Station 1", address="Address 1", city="City", state="State", "1,5", "40,0", "-3,0"),
+        ))
+        val repository = GasStationRepository(
+            api = api,
+            cacheFile = cacheFile,
+            parser = { json -> data },
+            scope = this,
+        )
+
+        val (deferred) = deferredCalls({ api.getGasStations() }, 1)
+        val events = mutableListOf<RepositoryEvent>()
+        val eventCollector = launch { repository.events.collect { events.add(it) } }
+        yieldUntilIdle()
+
+        repository.launchFetch()
+        yieldUntilIdle()
+
+        deferred.complete("Fetched content")
+        yieldUntilIdle()
+
+        assertEquals(
+            listOf(
+                RepositoryEvent.UpdateStarted,
+                RepositoryEvent.UpdateReady,
+            ),
+            events
+        )
+        assertEquals("Fetched content", repository.getCache())
+        assertFalse(repository.isFetchInProgress())
+        // TODO: repository.data is data
 
         eventCollector.cancel()
     }
