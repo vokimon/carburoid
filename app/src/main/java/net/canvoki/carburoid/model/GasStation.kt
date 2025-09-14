@@ -53,15 +53,10 @@ data class GasStation(
     val latitude: Double?,
 
     @SerializedName("Longitud (WGS84)")
-    val lngStr: String?,
+    @JsonAdapter(SpanishFloatTypeAdapter::class)
+    val longitude: Double?,
 
 ) {
-    val longitude: Double?
-        get() = lngStr
-            ?.takeIf { it.isNotBlank() }
-            ?.replace(',', '.')
-            ?.toDoubleOrNull()
-
     var distanceInMeters: Float? = null
         private set  // use computeDistance
 

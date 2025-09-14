@@ -76,7 +76,7 @@ class GasStationRepositoryTest {
 
     private fun dataExample() = GasStationResponse(
         stations=listOf(
-            GasStation(name="Station 1", address="Address 1", city="City", state="State", "1,5", 40.0, "-3,0"),
+            GasStation(name="Station 1", address="Address 1", city="City", state="State", "1,5", 40.0, -3.0),
         )
     )
 
