@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.json.toSpanishFloat
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 
 class GasStationAdapter(private val stations: List<GasStation>) :
@@ -35,7 +36,8 @@ class GasStationAdapter(private val stations: List<GasStation>) :
         val location = listOfNotNull(station.city, station.state).joinToString(" - ")
         holder.location.text = if (location.isNotEmpty()) location else "Location unknown"
 
-        holder.price.text = station.priceGasoleoA.toString().replace(".",",") ?: "Price N/A"
+        val price = toSpanishFloat(station.priceGasoleoA) ?: "???"
+        holder.price.text = "${price}€/l"
 
         val distance = CurrentDistancePolicy.getDistance(station)
         holder.distance.text = distance?.let { "%.1f km".format(it / 1000) } ?: "Distance N/A"
