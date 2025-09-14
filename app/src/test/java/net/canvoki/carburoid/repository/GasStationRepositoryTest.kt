@@ -7,6 +7,7 @@ import io.mockk.coVerify
 import java.io.File
 import java.nio.file.Files
 import java.time.Instant
+import java.time.Duration
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.launch
 import org.junit.Before
@@ -488,23 +489,33 @@ class GasStationRepositoryTest {
     }
 
     @Test
-    fun `isExpired, if missing cache true`() = runTest {
+    fun `isExpired, true if missing cache`() = runTest {
         val repository = GasStationRepository(api, cacheFile, this)
 
-        assertTrue(
-            "Expected repository to be expired when no cache exists",
-            repository.isExpired(),
-        )
+        assertEquals(true, repository.isExpired())
     }
 
     @Test
-    fun `isExpired, if recent cache false`() = runTest {
+    fun `isExpired, false if recent cache`() = runTest {
         writeCache(Instant.now())
         val repository = GasStationRepository(api, cacheFile, this, parser=::productionParser)
 
-        assertFalse(
-            "Expired but cache is up to date",
-            repository.isExpired(),
-        )
+        assertEquals(false, repository.isExpired())
+    }
+
+    @Test
+    fun `isExpired, true if unknown date`() = runTest {
+        writeCache(null)
+        val repository = GasStationRepository(api, cacheFile, this, parser=::productionParser)
+
+        assertEquals(true, repository.isExpired())
+    }
+
+    @Test
+    fun `isExpired, true if old cache`() = runTest {
+        writeCache(Instant.now().minus(Duration.ofMinutes(31))) // TODO: take it from shared config
+        val repository = GasStationRepository(api, cacheFile, this, parser=::productionParser)
+
+        assertEquals(true, repository.isExpired())
     }
 }

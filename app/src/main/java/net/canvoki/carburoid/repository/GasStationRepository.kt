@@ -2,6 +2,8 @@ package net.canvoki.carburoid.repository
 
 import java.util.concurrent.atomic.AtomicBoolean
 import java.io.File
+import java.time.Instant
+import java.time.Duration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -76,8 +78,15 @@ class GasStationRepository(
     }
 
     fun isFetchInProgress() = isBackgroundUpdateRunning.get()
+
     fun isExpired() : Boolean {
         if (parsed == null) return true
+        if (parsed?.downloadDate == null) return true
+
+        val deadline = Instant.now().minus(Duration.ofMinutes(30))
+        if (parsed?.downloadDate?: deadline <= deadline)
+            return true
+
         return false
     }
 
