@@ -6,6 +6,11 @@ import com.google.gson.annotations.JsonAdapter
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonWriter
 import com.google.gson.stream.JsonReader
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 
 
@@ -31,9 +36,33 @@ class SpanishFloatTypeAdapter : TypeAdapter<Double?>() {
     }
 }
 
+class SpanishDateTypeAdapter : TypeAdapter<Instant?>() {
+    private val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy H:m:s", Locale.ROOT)
+
+    override fun write(out: JsonWriter, value: Instant?) {
+        if (value == null) {
+            out.nullValue()
+        } else {
+            out.value(value.toString()) // or format as Spanish if writing back
+        }
+    }
+
+    override fun read(`in`: JsonReader): Instant? {
+        val raw = `in`.nextString()
+        return try {
+            LocalDateTime.parse(raw, formatter).toInstant(ZoneOffset.UTC)
+        } catch (e: Exception) {
+            null
+        }
+    }
+}
 data class GasStationResponse(
     @SerializedName("ListaEESSPrecio")
-    val stations: List<GasStation>
+    val stations: List<GasStation>,
+
+    @SerializedName("Fecha")
+    @JsonAdapter(SpanishDateTypeAdapter::class)
+    val downloadDate: Instant? = null,
 )
 
 fun log(message: String) {
