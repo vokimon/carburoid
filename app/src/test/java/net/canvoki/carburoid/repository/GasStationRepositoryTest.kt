@@ -513,7 +513,7 @@ class GasStationRepositoryTest {
 
     @Test
     fun `isExpired, true if old cache`() = runTest {
-        writeCache(Instant.now().minus(Duration.ofMinutes(31))) // TODO: take it from shared config
+        writeCache(Instant.now().minus(Duration.ofMinutes(GasStationRepository.minutesToExpire)))
         val repository = GasStationRepository(api, cacheFile, this, parser=::productionParser)
 
         assertEquals(true, repository.isExpired())

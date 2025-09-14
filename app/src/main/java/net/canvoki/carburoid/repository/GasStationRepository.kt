@@ -28,6 +28,9 @@ class GasStationRepository(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
     private val parser: Parser? = null,
 ) {
+    companion object {
+        const val minutesToExpire = 30L
+    }
     private val _events = MutableSharedFlow<RepositoryEvent>(replay = 0)
     val events: SharedFlow<RepositoryEvent> = _events.asSharedFlow()
 
@@ -80,13 +83,12 @@ class GasStationRepository(
     fun isFetchInProgress() = isBackgroundUpdateRunning.get()
 
     fun isExpired() : Boolean {
-        if (parsed == null) return true
-        if (parsed?.downloadDate == null) return true
+        val p = parsed ?: return true
+        val date = p.downloadDate ?: return true
 
-        val deadline = Instant.now().minus(Duration.ofMinutes(30))
-        if (parsed?.downloadDate?: deadline <= deadline)
-            return true
-
+        val deadline = Instant.now().minus(Duration.ofMinutes(minutesToExpire))
+        if (date <= deadline) return true
+        //up-to-date cache
         return false
     }
 
