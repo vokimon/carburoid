@@ -67,7 +67,29 @@ class MainActivity : AppCompatActivity() {
         } else {
             requestLocationPermission()
         }
+
+        lifecycleScope.launch {
+            repository.events.collect { event ->
+                when (event) {
+                    is RepositoryEvent.UpdateStarted -> {
+                        // Show loading, disable refresh, etc.
+                        //showLoading()
+                        println("Carburoid: EVENT UpdateStarted")
+                    }
+                    is RepositoryEvent.UpdateReady -> {
+                        println("Carburoid: EVENT UpdateReady")
+                        loadGasStations()
+                    }
+                    is RepositoryEvent.UpdateFailed -> {
+                        println("Carburoid: EVENT UpdateFailed")
+                        //showError(event.error)
+                    }
+                }
+            }
+        }
+
     }
+
 
     private fun checkLocationPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -165,9 +187,9 @@ class MainActivity : AppCompatActivity() {
     private fun loadGasStations() {
         lifecycleScope.launch {
             try {
-                val stations = gasStationRepository.getStations() ?: emptyList()
+                showProgress("Refreshing data...")
+                val stations = repository.getStations() ?: emptyList()
                 val sortedStations = StationFilter().filterParetoOptimal(stations)
-
                 log("Final list: ${sortedStations.size} stations")
 
                 if (sortedStations.isEmpty()) {
