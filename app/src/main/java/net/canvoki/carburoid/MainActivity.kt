@@ -27,12 +27,19 @@ import net.canvoki.carburoid.distances.DistanceFromCurrentPosition
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.repository.GasStationRepository
+import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.network.GasStationApiFactory
 import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.algorithms.StationFilter
-import net.canvoki.carburoid.repository.Parser as GasStationParser
+import net.canvoki.carburoid.CarburoidApplication
 
 class MainActivity : AppCompatActivity() {
+
+    private val app: CarburoidApplication
+        get() = application as CarburoidApplication
+
+    private val repository: GasStationRepository
+        get() = app.repository
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var recyclerView: RecyclerView
@@ -40,29 +47,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var emptyView: TextView
     private lateinit var progressText: TextView
 
-    private lateinit var gasStationRepository: GasStationRepository
-
-    fun setupRepository() : GasStationRepository {
-        val cacheFile = File(filesDir, "gas_stations_cache.json")
-        val api = GasStationApiFactory.create()
-        // TODO: Centralize this definition
-        val parser: GasStationParser = { json ->
-            Gson().fromJson(json, GasStationResponse::class.java)
-        }
-        val repository = GasStationRepository(
-            api = api,
-            cacheFile = cacheFile,
-            scope = lifecycleScope,
-            parser = parser,
-        )
-        return repository
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        gasStationRepository = setupRepository()
 
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)

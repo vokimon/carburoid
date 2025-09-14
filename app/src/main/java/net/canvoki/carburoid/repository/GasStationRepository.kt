@@ -1,5 +1,6 @@
 package net.canvoki.carburoid.repository
 
+import com.google.gson.Gson
 import java.util.concurrent.atomic.AtomicBoolean
 import java.io.File
 import java.time.Instant
