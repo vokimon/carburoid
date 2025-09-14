@@ -29,22 +29,7 @@ class GasStationTest {
         // Verify computed properties
         assertEquals("REPSOL", station.name)
         assertEquals("Madrid", station.city)
-        assertEquals("40,4168", station.latStr)
         assertEquals("-3,7038", station.lngStr)
-        assertEquals(40.4168, station.latStr
-            ?.takeIf { it.isNotBlank() }
-            ?.replace(',', '.')
-            ?.toDoubleOrNull()
-            //?.also { log("Parsed latitude: $it from '$station.latStr'") }
-        !!, 0.0001)
-        /*
-        latStr
-        ?.takeIf { it.isNotBlank() }
-        ?.replace(',', '.')
-        ?.toDoubleOrNull()
-        ?.also { log("Parsed latitude: $it from '$latStr'") }
-        */
-
         assertEquals(40.4168, station.latitude!!, 0.0001)
         assertEquals(-3.7038, station.longitude!!, 0.0001)
     }

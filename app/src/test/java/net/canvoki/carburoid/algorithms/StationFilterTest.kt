@@ -37,7 +37,7 @@ fun dummyStation(index: Int, distance: Double, price: Double?): GasStation {
         city = "A city",
         state = "A state",
         priceGasoleoA = price?.toString(),
-        latStr = "40,4168",
+        latitude = 40.4168,
         lngStr = distance.toString().replace(".",","),
     )
 }

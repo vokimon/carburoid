@@ -2,7 +2,26 @@ package net.canvoki.carburoid.model
 
 import android.util.Log
 import com.google.gson.annotations.SerializedName
+import com.google.gson.annotations.JsonAdapter
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonWriter
+import com.google.gson.stream.JsonReader
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
+
+class SpanishFloatTypeAdapter : TypeAdapter<Double?>() {
+    override fun write(out: JsonWriter, value: Double?) {
+        if (value == null) {
+            out.nullValue()
+        } else {
+            out.value(value.toString().replace(".", ","))
+        }
+    }
+
+    override fun read(`in`: JsonReader): Double? {
+        val raw = `in`.nextString()
+        return raw.replace(',', '.').toDoubleOrNull()
+    }
+}
 
 data class GasStationResponse(
     @SerializedName("ListaEESSPrecio")
@@ -30,18 +49,13 @@ data class GasStation(
     val priceGasoleoA: String?,
 
     @SerializedName("Latitud")
-    val latStr: String?,
+    @JsonAdapter(SpanishFloatTypeAdapter::class)
+    val latitude: Double?,
 
     @SerializedName("Longitud (WGS84)")
     val lngStr: String?,
 
 ) {
-    val latitude: Double?
-        get() = latStr
-            ?.takeIf { it.isNotBlank() }
-            ?.replace(',', '.')
-            ?.toDoubleOrNull()
-
     val longitude: Double?
         get() = lngStr
             ?.takeIf { it.isNotBlank() }

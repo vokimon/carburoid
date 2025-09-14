@@ -48,7 +48,6 @@ class GasStationRepository(
         }
     }
 
-
     private val isBackgroundUpdateRunning = AtomicBoolean(false)
 
     suspend fun getStations(): List<GasStation>? = parsed?.stations
