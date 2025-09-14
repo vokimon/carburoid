@@ -23,10 +23,6 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
 
-private fun productionParser(json: String): GasStationResponse {
-    return Gson().fromJson(json, GasStationResponse::class.java)
-}
-
 /*
 
 Cache
@@ -102,7 +98,7 @@ class GasStationRepositoryTest {
 
         api = mockk()
         cacheFile = File(tempDir, "test_cache.json")
-        repository = GasStationRepository(api, cacheFile)
+        repository = GasStationRepository(api, cacheFile, parser=null)
     }
 
     @Test
@@ -138,7 +134,7 @@ class GasStationRepositoryTest {
         ))
         repository.saveToCache(response)
 
-        val repository2 = GasStationRepository(api, cacheFile)
+        val repository2 = GasStationRepository(api, cacheFile, parser=null)
         assertEquals(response, repository2.getCache())
     }
 
@@ -173,7 +169,7 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch emits UpdateStarted when called`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
-        val repository = GasStationRepository(api, cacheFile, this)
+        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
 
         val events = mutableListOf<RepositoryEvent>()
         val eventCollector = launch {
@@ -194,7 +190,7 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch api called`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
-        val repository = GasStationRepository(api, cacheFile, this)
+        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
 
         // We don't care about events in this test — but we must collect them to avoid suspending forever
         coVerify(exactly = 0) { api.getGasStations() }
@@ -212,7 +208,7 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch on success, flag unset and sets cache`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
-        val repository = GasStationRepository(api, cacheFile, this)
+        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
 
         repository.launchFetch()
         yieldUntilIdle()
@@ -230,7 +226,7 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch on failure, flag unset and no cache`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
-        val repository = GasStationRepository(api, cacheFile, this)
+        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
 
         repository.launchFetch()
         yieldUntilIdle()
@@ -248,7 +244,7 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch on failure, flag unset and cache kept`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
-        val repository = GasStationRepository(api, cacheFile, this)
+        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
         repository.saveToCache("Previous value")
 
         repository.launchFetch()
@@ -267,7 +263,7 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch emits UpdateReady on success`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
-        val repository = GasStationRepository(api, cacheFile, this)
+        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
 
         val events = mutableListOf<RepositoryEvent>()
         val eventCollector = launch {
@@ -292,7 +288,7 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch emits UpdateFailed on failure`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
-        val repository = GasStationRepository(api, cacheFile, this)
+        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
 
         val events = mutableListOf<RepositoryEvent>()
         val eventCollector = launch {
@@ -317,7 +313,7 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch api skipped if pending api`() = runTest {
         val (deferred1, deferred2) = deferredCalls({ api.getGasStations() }, 2)
-        val repository = GasStationRepository(api, cacheFile, this)
+        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
 
         // We don't care about events in this test — but we must collect them to avoid suspending forever
         coVerify(exactly = 0) { api.getGasStations() }
@@ -341,7 +337,7 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch api called if previous finished, is ok`() = runTest {
         val (deferred1, deferred2) = deferredCalls({ api.getGasStations() }, 2)
-        val repository = GasStationRepository(api, cacheFile, this)
+        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
 
         // We don't care about events in this test — but we must collect them to avoid suspending forever
         coVerify(exactly = 0) { api.getGasStations() }
@@ -437,7 +433,7 @@ class GasStationRepositoryTest {
 
     @Test
     fun `before any fetch, getStations returns null`() = runTest {
-        val repository = GasStationRepository(api, cacheFile, this)
+        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
 
         val stations = repository.getStations()
 
@@ -490,7 +486,7 @@ class GasStationRepositoryTest {
 
     @Test
     fun `isExpired, true if missing cache`() = runTest {
-        val repository = GasStationRepository(api, cacheFile, this)
+        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
 
         assertEquals(true, repository.isExpired())
     }
@@ -498,7 +494,7 @@ class GasStationRepositoryTest {
     @Test
     fun `isExpired, false if recent cache`() = runTest {
         writeCache(Instant.now())
-        val repository = GasStationRepository(api, cacheFile, this, parser=::productionParser)
+        val repository = GasStationRepository(api, cacheFile, this)
 
         assertEquals(false, repository.isExpired())
     }
@@ -506,7 +502,7 @@ class GasStationRepositoryTest {
     @Test
     fun `isExpired, true if unknown date`() = runTest {
         writeCache(null)
-        val repository = GasStationRepository(api, cacheFile, this, parser=::productionParser)
+        val repository = GasStationRepository(api, cacheFile, this)
 
         assertEquals(true, repository.isExpired())
     }
@@ -514,7 +510,7 @@ class GasStationRepositoryTest {
     @Test
     fun `isExpired, true if old cache`() = runTest {
         writeCache(Instant.now().minus(Duration.ofMinutes(GasStationRepository.minutesToExpire)))
-        val repository = GasStationRepository(api, cacheFile, this, parser=::productionParser)
+        val repository = GasStationRepository(api, cacheFile, this)
 
         assertEquals(true, repository.isExpired())
     }
