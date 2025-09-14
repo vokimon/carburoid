@@ -149,7 +149,7 @@ class GasStationRepositoryTest {
     }
 
     @Test
-    fun `launchFetch emits UpdateStarted event`() = runTest {
+    fun `launchFetch emits UpdateStarted when called`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
         val repository = GasStationRepository(api, cacheFile, this)
 
@@ -170,7 +170,7 @@ class GasStationRepositoryTest {
     }
 
     @Test
-    fun `launchFetch calls api`() = runTest {
+    fun `launchFetch api called`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
         val repository = GasStationRepository(api, cacheFile, this)
 
@@ -186,7 +186,6 @@ class GasStationRepositoryTest {
         yieldUntilIdle()
 
     }
-
 
     @Test
     fun `launchFetch on success, flag unset and sets cache`() = runTest {
@@ -244,7 +243,7 @@ class GasStationRepositoryTest {
     }
 
     @Test
-    fun `launchFetch on success, event sent`() = runTest {
+    fun `launchFetch emits UpdateReady on success`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
         val repository = GasStationRepository(api, cacheFile, this)
 
@@ -269,7 +268,7 @@ class GasStationRepositoryTest {
     }
 
     @Test
-    fun `launchFetch on failure, event sent`() = runTest {
+    fun `launchFetch emits UpdateFailed on failure`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
         val repository = GasStationRepository(api, cacheFile, this)
 
@@ -294,7 +293,7 @@ class GasStationRepositoryTest {
     }
 
     @Test
-    fun `launchFetch called twice skips api`() = runTest {
+    fun `launchFetch api skipped if pending api`() = runTest {
         val (deferred1, deferred2) = deferredCalls({ api.getGasStations() }, 2)
         val repository = GasStationRepository(api, cacheFile, this)
 
@@ -318,7 +317,7 @@ class GasStationRepositoryTest {
     }
 
     @Test
-    fun `launchFetch called twice sequentially, is ok`() = runTest {
+    fun `launchFetch api called if previous finished, is ok`() = runTest {
         val (deferred1, deferred2) = deferredCalls({ api.getGasStations() }, 2)
         val repository = GasStationRepository(api, cacheFile, this)
 
