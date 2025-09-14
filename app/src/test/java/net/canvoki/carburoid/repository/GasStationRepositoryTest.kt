@@ -375,6 +375,7 @@ class GasStationRepositoryTest {
         )
         assertNull(repository.getCache())
         assertFalse(repository.isFetchInProgress())
+        assertEquals(null, repository.getStations())
 
         eventCollector.cancel()
     }
@@ -412,7 +413,7 @@ class GasStationRepositoryTest {
         )
         assertEquals("Fetched content", repository.getCache())
         assertFalse(repository.isFetchInProgress())
-        // TODO: repository.data is data
+        assertEquals(data?.stations, repository.getStations())
 
         eventCollector.cancel()
     }

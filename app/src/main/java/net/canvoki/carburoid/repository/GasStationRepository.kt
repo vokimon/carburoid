@@ -30,10 +30,11 @@ class GasStationRepository(
     val events: SharedFlow<RepositoryEvent> = _events.asSharedFlow()
 
     private var cache: String? = if (cacheFile.exists()) cacheFile.readText() else null
+    private var parsed: GasStationResponse? = null
 
     private val isBackgroundUpdateRunning = AtomicBoolean(false)
 
-    suspend fun getStations(): List<GasStation> = emptyList()
+    suspend fun getStations(): List<GasStation>? = parsed?.stations
 
     suspend fun launchFetch() {
         if (!isBackgroundUpdateRunning.compareAndSet(false, true)) { // expected, new value
@@ -44,7 +45,7 @@ class GasStationRepository(
             try {
                 val response = api.getGasStations()
                 if (parser != null)  {
-                        parser(response)
+                        parsed = parser(response)
                 }
                 saveToCache(response)
                 _events.emit(RepositoryEvent.UpdateReady)
