@@ -45,7 +45,7 @@ class SpanishDateTest {
 
         val result = adapter.read(reader)
 
-        assertNull(result)
+        assertEquals(null, result)
     }
 
     @Test
@@ -70,7 +70,7 @@ class SpanishDateTest {
     }
 
     @Test
-    fun `type adapter reads valid date`() {
+    fun `type adapter writes valid date`() {
         val writer = java.io.StringWriter()
         val jsonWriter = JsonWriter(writer)
         val input = Instant.parse("2024-06-01T07:30:45Z") // UTC
