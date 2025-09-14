@@ -74,6 +74,12 @@ class GasStationRepositoryTest {
         )
     }
 
+    private fun dataExample() = GasStationResponse(
+        stations=listOf(
+            GasStation(name="Station 1", address="Address 1", city="City", state="State", "1,5", "40,0", "-3,0"),
+        )
+    )
+
     @Before
     fun setUp() {
         tempDir = Files.createTempDirectory("carburoid-test").toFile().apply {
@@ -382,10 +388,7 @@ class GasStationRepositoryTest {
 
     @Test
     fun `launchFetch updates data if the serialization works`() = runTest {
-        val data = GasStationResponse(
-            stations=listOf(
-                GasStation(name="Station 1", address="Address 1", city="City", state="State", "1,5", "40,0", "-3,0"),
-        ))
+        val data = dataExample()
         val repository = GasStationRepository(
             api = api,
             cacheFile = cacheFile,
