@@ -15,7 +15,6 @@ import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.json.SpanishDateTypeAdapter
 import net.canvoki.carburoid.json.SpanishFloatTypeAdapter
 
-
 data class GasStationResponse(
     @SerializedName("ListaEESSPrecio")
     val stations: List<GasStation>,

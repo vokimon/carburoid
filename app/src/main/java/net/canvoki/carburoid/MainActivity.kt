@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import java.io.File
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Dispatchers
@@ -25,9 +26,11 @@ import net.canvoki.carburoid.distances.DistanceFromAddress
 import net.canvoki.carburoid.distances.DistanceFromCurrentPosition
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
+import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.network.GasStationApiFactory
 import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.algorithms.StationFilter
+import net.canvoki.carburoid.repository.Parser as GasStationParser
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,9 +40,29 @@ class MainActivity : AppCompatActivity() {
     private lateinit var emptyView: TextView
     private lateinit var progressText: TextView
 
+    private lateinit var gasStationRepository: GasStationRepository
+
+    fun setupRepository() : GasStationRepository {
+        val cacheFile = File(filesDir, "gas_stations_cache.json")
+        val api = GasStationApiFactory.create()
+        // TODO: Centralize this definition
+        val parser: GasStationParser = { json ->
+            Gson().fromJson(json, GasStationResponse::class.java)
+        }
+        val repository = GasStationRepository(
+            api = api,
+            cacheFile = cacheFile,
+            scope = lifecycleScope,
+            parser = parser,
+        )
+        return repository
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        gasStationRepository = setupRepository()
 
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -155,12 +178,8 @@ class MainActivity : AppCompatActivity() {
     private fun loadGasStations() {
         lifecycleScope.launch {
             try {
-                showProgress("Loading Gas Stations...")
-                val json = GasStationApiFactory.create().getGasStations()
-                val response = Gson().fromJson(json, GasStationResponse::class.java)
-                showToast("Downloaded ${response.stations.size} stations")
-
-                val sortedStations = StationFilter().filterParetoOptimal(response.stations)
+                val stations = gasStationRepository.getStations() ?: emptyList()
+                val sortedStations = StationFilter().filterParetoOptimal(stations)
 
                 log("Final list: ${sortedStations.size} stations")
 
