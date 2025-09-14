@@ -12,7 +12,7 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
 
-typealias Deserializer = (String) -> List<GasStation>
+typealias Parser = (String) -> List<GasStation>
 
 sealed class RepositoryEvent {
     object UpdateStarted : RepositoryEvent()
@@ -24,7 +24,7 @@ class GasStationRepository(
     private val api: GasStationApi,
     private val cacheFile: File,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
-    private val deserializer: Deserializer? = null,
+    private val parser: Parser? = null,
 ) {
     private val _events = MutableSharedFlow<RepositoryEvent>(replay = 0)
     val events: SharedFlow<RepositoryEvent> = _events.asSharedFlow()
@@ -43,8 +43,8 @@ class GasStationRepository(
             _events.emit(RepositoryEvent.UpdateStarted)
             try {
                 val response = api.getGasStations()
-                if (deserializer != null)  {
-                    deserializer(response)
+                if (parser != null)  {
+                        parser(response)
                 }
                 saveToCache(response)
                 _events.emit(RepositoryEvent.UpdateReady)

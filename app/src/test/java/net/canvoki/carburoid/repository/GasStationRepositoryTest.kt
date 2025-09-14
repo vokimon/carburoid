@@ -343,13 +343,13 @@ class GasStationRepositoryTest {
 
     @Test
     fun `launchFetch fails if the serialization fails`() = runTest {
-        val deserializer: Deserializer  = { json ->
+        val parser: Parser  = { json ->
             throw Exception("Invalid JSON")
         }
         val repository = GasStationRepository(
             api = api,
             cacheFile = cacheFile,
-            deserializer = deserializer,
+            parser = parser,
             scope = this,
         )
 
