@@ -6,6 +6,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import java.io.File
 import java.nio.file.Files
+import java.time.Instant
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.launch
 import org.junit.Before
@@ -20,6 +21,10 @@ import net.canvoki.carburoid.test.deferredCalls
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
+
+private fun productionParser(json: String): GasStationResponse {
+    return Gson().fromJson(json, GasStationResponse::class.java)
+}
 
 /*
 
@@ -474,4 +479,32 @@ class GasStationRepositoryTest {
         )
     }
 
+    private fun writeCache(downloadDate: Instant?) {
+        val response = GasStationResponse(
+            stations = emptyList(),
+            downloadDate = downloadDate
+        )
+        cacheFile.writeText(Gson().toJson(response))
+    }
+
+    @Test
+    fun `isExpired, if missing cache true`() = runTest {
+        val repository = GasStationRepository(api, cacheFile, this)
+
+        assertTrue(
+            "Expected repository to be expired when no cache exists",
+            repository.isExpired(),
+        )
+    }
+
+    @Test
+    fun `isExpired, if recent cache false`() = runTest {
+        writeCache(Instant.now())
+        val repository = GasStationRepository(api, cacheFile, this, parser=::productionParser)
+
+        assertFalse(
+            "Expired but cache is up to date",
+            repository.isExpired(),
+        )
+    }
 }

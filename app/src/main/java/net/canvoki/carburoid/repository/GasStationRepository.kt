@@ -76,6 +76,10 @@ class GasStationRepository(
     }
 
     fun isFetchInProgress() = isBackgroundUpdateRunning.get()
+    fun isExpired() : Boolean {
+        if (parsed == null) return true
+        return false
+    }
 
     suspend fun saveToCache(response: String) {
         cache = response
