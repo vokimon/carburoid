@@ -28,19 +28,31 @@ class GasStationRepository(
 
     private var cache: String? = if (cacheFile.exists()) cacheFile.readText() else null
 
-    private var isBackgroundUpdateRunning = false
+    private val isBackgroundUpdateRunning = AtomicBoolean(false)
 
     suspend fun getStations(): List<GasStation> = emptyList()
 
     suspend fun launchFetch() {
-        isBackgroundUpdateRunning = true
+        if (!isBackgroundUpdateRunning.compareAndSet(false, true)) { // expected, new value
+            return
+        }
         scope.launch {
             _events.emit(RepositoryEvent.UpdateStarted)
+            try {
+                val response = api.getGasStations()
+                saveToCache(response)
+                _events.emit(RepositoryEvent.UpdateReady)
+            }
+            catch (e: Exception) {
+                _events.emit(RepositoryEvent.UpdateFailed(e.message ?: e::class.simpleName ?: "Unknown"))
+            }
+            finally {
+                isBackgroundUpdateRunning.set(false)
+            }
         }
-        // val response = api.getGasStations()
     }
 
-    fun isFetchInProgress() = isBackgroundUpdateRunning
+    fun isFetchInProgress() = isBackgroundUpdateRunning.get()
 
     suspend fun saveToCache(response: String) {
         cache = response

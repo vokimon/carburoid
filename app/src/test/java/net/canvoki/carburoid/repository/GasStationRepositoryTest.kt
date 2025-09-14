@@ -12,6 +12,7 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import net.canvoki.carburoid.test.yieldUntilIdle
@@ -132,24 +133,213 @@ class GasStationRepositoryTest {
     }
 
     @Test
-    fun `launchFetch calls api and emits UpdateStarted event and sets flag`() = runTest {
-        val (apiCallDeferred) = deferredCalls({ api.getGasStations() }, 1)
+    fun `launchFetch sets flag`() = runTest {
+        val (deferred) = deferredCalls({ api.getGasStations() }, 1)
+        val repository = GasStationRepository(api, cacheFile, this)
+
+        repository.launchFetch()
+        yieldUntilIdle()
+
+        assertTrue(
+            "isFetchInProgress() should return True",
+            repository.isFetchInProgress(),
+        )
+
+        deferred.complete("Value")
+    }
+
+    @Test
+    fun `launchFetch emits UpdateStarted event`() = runTest {
+        val (deferred) = deferredCalls({ api.getGasStations() }, 1)
         val repository = GasStationRepository(api, cacheFile, this)
 
         val events = mutableListOf<RepositoryEvent>()
         val eventCollector = launch {
             repository.events.collect { events.add(it) }
         }
-        yieldUntilIdle()  // 👈 Let collector start
-
+        yieldUntilIdle()  // Let collector start
 
         repository.launchFetch()
         yieldUntilIdle()
 
         assertEquals(listOf(RepositoryEvent.UpdateStarted), events)
-        assertTrue(repository.isFetchInProgress())
+
+        deferred.complete("Value")
 
         eventCollector.cancel()
+    }
+
+    @Test
+    fun `launchFetch calls api`() = runTest {
+        val (deferred) = deferredCalls({ api.getGasStations() }, 1)
+        val repository = GasStationRepository(api, cacheFile, this)
+
+        // We don't care about events in this test — but we must collect them to avoid suspending forever
+        coVerify(exactly = 0) { api.getGasStations() }
+
+        repository.launchFetch()
+        yieldUntilIdle()
+
+        coVerify(exactly = 1) { api.getGasStations() }
+
+        deferred.complete("Value")
+        yieldUntilIdle()
+
+    }
+
+
+    @Test
+    fun `launchFetch on success, flag unset and sets cache`() = runTest {
+        val (deferred) = deferredCalls({ api.getGasStations() }, 1)
+        val repository = GasStationRepository(api, cacheFile, this)
+
+        repository.launchFetch()
+        yieldUntilIdle()
+
+        deferred.complete("Fetched Value")
+        yieldUntilIdle()
+
+        assertFalse(
+            "isFetchInProgress() should return False",
+            repository.isFetchInProgress(),
+        )
+        assertEquals("Fetched Value", repository.getCache())
+    }
+
+    @Test
+    fun `launchFetch on failure, flag unset and no cache`() = runTest {
+        val (deferred) = deferredCalls({ api.getGasStations() }, 1)
+        val repository = GasStationRepository(api, cacheFile, this)
+
+        repository.launchFetch()
+        yieldUntilIdle()
+
+        deferred.completeExceptionally(RuntimeException("Emulated error"))
+        yieldUntilIdle()
+
+        assertFalse(
+            "isFetchInProgress() should return False",
+            repository.isFetchInProgress(),
+        )
+        assertEquals(null, repository.getCache())
+    }
+
+    @Test
+    fun `launchFetch on failure, flag unset and cache kept`() = runTest {
+        val (deferred) = deferredCalls({ api.getGasStations() }, 1)
+        val repository = GasStationRepository(api, cacheFile, this)
+        repository.saveToCache("Previous value")
+
+        repository.launchFetch()
+        yieldUntilIdle()
+
+        deferred.completeExceptionally(RuntimeException("Emulated error"))
+        yieldUntilIdle()
+
+        assertFalse(
+            "isFetchInProgress() should return False",
+            repository.isFetchInProgress(),
+        )
+        assertEquals("Previous value", repository.getCache())
+    }
+
+    @Test
+    fun `launchFetch on success, event sent`() = runTest {
+        val (deferred) = deferredCalls({ api.getGasStations() }, 1)
+        val repository = GasStationRepository(api, cacheFile, this)
+
+        val events = mutableListOf<RepositoryEvent>()
+        val eventCollector = launch {
+            repository.events.collect { events.add(it) }
+        }
+        yieldUntilIdle()  // Let collector start
+
+        repository.launchFetch()
+        yieldUntilIdle()
+
+        deferred.complete("Fetched Value")
+        yieldUntilIdle()
+
+        assertEquals(listOf(
+            RepositoryEvent.UpdateStarted,
+            RepositoryEvent.UpdateReady,
+        ), events)
+
+        eventCollector.cancel()
+    }
+
+    @Test
+    fun `launchFetch on failure, event sent`() = runTest {
+        val (deferred) = deferredCalls({ api.getGasStations() }, 1)
+        val repository = GasStationRepository(api, cacheFile, this)
+
+        val events = mutableListOf<RepositoryEvent>()
+        val eventCollector = launch {
+            repository.events.collect { events.add(it) }
+        }
+        yieldUntilIdle()  // Let collector start
+
+        repository.launchFetch()
+        yieldUntilIdle()
+
+        deferred.completeExceptionally(RuntimeException("Emulated error"))
+        yieldUntilIdle()
+
+        assertEquals(listOf(
+            RepositoryEvent.UpdateStarted,
+            RepositoryEvent.UpdateFailed("Emulated error"),
+        ), events)
+
+        eventCollector.cancel()
+    }
+
+    @Test
+    fun `launchFetch called twice skips api`() = runTest {
+        val (deferred1, deferred2) = deferredCalls({ api.getGasStations() }, 2)
+        val repository = GasStationRepository(api, cacheFile, this)
+
+        // We don't care about events in this test — but we must collect them to avoid suspending forever
+        coVerify(exactly = 0) { api.getGasStations() }
+
+        repository.launchFetch()
+        yieldUntilIdle()
+
+        coVerify(exactly = 1) { api.getGasStations() }
+
+        repository.launchFetch()
+        yieldUntilIdle()
+
+        coVerify(exactly = 1) { api.getGasStations() }
+
+        deferred1.complete("Value1")
+        deferred2.complete("Value2")
+        yieldUntilIdle()
+
+    }
+
+    @Test
+    fun `launchFetch called twice sequentially, is ok`() = runTest {
+        val (deferred1, deferred2) = deferredCalls({ api.getGasStations() }, 2)
+        val repository = GasStationRepository(api, cacheFile, this)
+
+        // We don't care about events in this test — but we must collect them to avoid suspending forever
+        coVerify(exactly = 0) { api.getGasStations() }
+
+        repository.launchFetch()
+        yieldUntilIdle()
+
+        coVerify(exactly = 1) { api.getGasStations() }
+
+        deferred1.complete("Value1")
+        yieldUntilIdle()
+
+        repository.launchFetch()
+        yieldUntilIdle()
+
+        coVerify(exactly = 2) { api.getGasStations() }
+
+        deferred2.complete("Value2")
+        yieldUntilIdle()
     }
 
 }
