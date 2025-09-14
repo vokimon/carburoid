@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     is RepositoryEvent.UpdateFailed -> {
                         println("Carburoid: EVENT UpdateFailed")
-                        //showError(event.error)
+                        showToast(event.error)
                     }
                 }
             }
