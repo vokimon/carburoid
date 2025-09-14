@@ -341,4 +341,40 @@ class GasStationRepositoryTest {
         yieldUntilIdle()
     }
 
+    @Test
+    fun `launchFetch fails if the serialization fails`() = runTest {
+        val deserializer: Deserializer  = { json ->
+            throw Exception("Invalid JSON")
+        }
+        val repository = GasStationRepository(
+            api = api,
+            cacheFile = cacheFile,
+            deserializer = deserializer,
+            scope = this,
+        )
+
+        val (deferred) = deferredCalls({ api.getGasStations() }, 1)
+        val events = mutableListOf<RepositoryEvent>()
+        val eventCollector = launch { repository.events.collect { events.add(it) } }
+        yieldUntilIdle()
+
+        repository.launchFetch()
+        yieldUntilIdle()
+
+        deferred.complete("""Fetched content""")
+        yieldUntilIdle()
+
+        assertEquals(
+            listOf(
+                RepositoryEvent.UpdateStarted,
+                RepositoryEvent.UpdateFailed("Invalid JSON"),
+            ),
+            events
+        )
+        assertNull(repository.getCache())
+        assertFalse(repository.isFetchInProgress())
+
+        eventCollector.cancel()
+    }
+
 }
