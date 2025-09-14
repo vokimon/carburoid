@@ -55,7 +55,13 @@ class GasStationRepository(
 
     private val isBackgroundUpdateRunning = AtomicBoolean(false)
 
-    suspend fun getStations(): List<GasStation>? = parsed?.stations
+    suspend fun getStations(): List<GasStation>? {
+        val result = parsed?.stations
+        if (isExpired()) {
+            launchFetch()
+        }
+        return result
+    }
 
     suspend fun launchFetch() {
         if (!isBackgroundUpdateRunning.compareAndSet(false, true)) { // expected, new value
