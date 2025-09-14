@@ -17,6 +17,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import net.canvoki.carburoid.json.toSpanishFloat
 import net.canvoki.carburoid.test.yieldUntilIdle
 import net.canvoki.carburoid.test.deferredCalls
 import net.canvoki.carburoid.model.GasStation
@@ -70,9 +71,9 @@ class GasStationRepositoryTest {
             "Dirección" to "Address $index",
             "Localidad" to "A city",
             "Provincia" to "A state",
-            "Precio Gasoleo A" to "${price?.toString()?.replace(".", ",") ?: ""}",
+            "Precio Gasoleo A" to (toSpanishFloat(price) ?: ""),
             "Latitud" to "40,4168",
-            "Longitud (WGS84)" to "${distance.toString().replace(".", ",")}",
+            "Longitud (WGS84)" to (toSpanishFloat(distance) ?: ""),
         )
     }
 
