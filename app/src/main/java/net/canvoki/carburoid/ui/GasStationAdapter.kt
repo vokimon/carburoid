@@ -35,7 +35,7 @@ class GasStationAdapter(private val stations: List<GasStation>) :
         val location = listOfNotNull(station.city, station.state).joinToString(" - ")
         holder.location.text = if (location.isNotEmpty()) location else "Location unknown"
 
-        holder.price.text = station.priceGasoleoA ?: "Price N/A"
+        holder.price.text = station.priceGasoleoA.toString().replace(".",",") ?: "Price N/A"
 
         val distance = CurrentDistancePolicy.getDistance(station)
         holder.distance.text = distance?.let { "%.1f km".format(it / 1000) } ?: "Distance N/A"

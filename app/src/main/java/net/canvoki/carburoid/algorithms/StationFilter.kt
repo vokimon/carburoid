@@ -15,7 +15,7 @@ class StationFilter {
         var minPrice = 1000.0
         val result = mutableListOf<GasStation>()
         for (station in sortedStations) {
-            val stationPrice = station.priceGasoleoA?.replace(",",".")?.toDoubleOrNull()
+            val stationPrice = station.priceGasoleoA
             if (stationPrice == null) {
                 //println("Filtered non number ${station.priceGasoleoA}")
                 continue
