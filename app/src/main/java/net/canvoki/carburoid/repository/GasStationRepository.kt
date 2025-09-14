@@ -72,7 +72,8 @@ class GasStationRepository(
                 _events.emit(RepositoryEvent.UpdateReady)
             }
             catch (e: Exception) {
-                _events.emit(RepositoryEvent.UpdateFailed(e.message ?: e::class.simpleName ?: "Unknown"))
+                val message = e.message ?: e::class.simpleName ?: "Unknown"
+                _events.emit(RepositoryEvent.UpdateFailed(message))
             }
             finally {
                 isBackgroundUpdateRunning.set(false)
