@@ -29,8 +29,25 @@ class GasStationRepository(
     private val _events = MutableSharedFlow<RepositoryEvent>(replay = 0)
     val events: SharedFlow<RepositoryEvent> = _events.asSharedFlow()
 
-    private var cache: String? = if (cacheFile.exists()) cacheFile.readText() else null
+    private var cache: String? = null
     private var parsed: GasStationResponse? = null
+
+    init {
+        if (cacheFile.exists()) {
+            try {
+                cache = cacheFile.readText()
+                cache?.let {
+                    parsed = parser?.invoke(it)
+                }
+            }
+            catch(e: Exception) {
+                cache = null
+                parsed = null
+                cacheFile.delete()
+            }
+        }
+    }
+
 
     private val isBackgroundUpdateRunning = AtomicBoolean(false)
 

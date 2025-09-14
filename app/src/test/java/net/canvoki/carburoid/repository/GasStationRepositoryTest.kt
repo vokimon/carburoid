@@ -421,4 +421,49 @@ class GasStationRepositoryTest {
         eventCollector.cancel()
     }
 
+    @Test
+    fun `before any fetch, getStations returns null`() = runTest {
+        val repository = GasStationRepository(api, cacheFile, this)
+
+        val stations = repository.getStations()
+
+        assertEquals(null, stations)
+    }
+
+    @Test
+    fun `parse cache on init`() = runTest {
+        val data = dataExample()
+        cacheFile.writeText("whatever")
+
+        val repository = GasStationRepository(
+            api = api,
+            cacheFile = cacheFile,
+            parser = { json -> data },
+            scope = this,
+        )
+
+        assertEquals(data?.stations, repository.getStations())
+        assertEquals("whatever", repository.getCache())
+    }
+
+    @Test
+    fun `parse cache on init fails, at to null, cache file deleted`() = runTest {
+        val data = dataExample()
+        cacheFile.writeText("whatever")
+
+        val repository = GasStationRepository(
+            api = api,
+            cacheFile = cacheFile,
+            parser = { json -> throw Exception("An error") },
+            scope = this,
+        )
+
+        assertEquals(null, repository.getCache())
+        assertEquals(null, repository.getStations())
+        assertEquals(
+            "Cache file should have been deleted",
+            false, cacheFile.exists()
+        )
+    }
+
 }
