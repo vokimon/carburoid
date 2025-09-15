@@ -75,7 +75,7 @@ class GasStationRepository(
             try {
                 val response = api.getGasStations()
                 if (parser != null)  {
-                        parsed = parser(response)
+                    parsed = parser(response)
                 }
                 saveToCache(response)
                 _events.emit(RepositoryEvent.UpdateReady)
