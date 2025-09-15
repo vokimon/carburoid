@@ -84,7 +84,9 @@ class GasStationRepositoryTest {
                 address="Address 1",
                 city="City",
                 state="State",
-                priceGasoleoA=1.5,
+                prices=mapOf(
+                    "Gasoleo A" to 1.5,
+                ),
                 latitude=40.0,
                 longitude=-3.0
             ),

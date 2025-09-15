@@ -36,7 +36,9 @@ fun dummyStation(index: Int, distance: Double, price: Double?): GasStation {
         address = "Address $index",
         city = "A city",
         state = "A state",
-        priceGasoleoA = price,
+        prices = mapOf(
+            "Gasoleo A" to price,
+        ),
         latitude = 40.4168,
         longitude = distance,
     )

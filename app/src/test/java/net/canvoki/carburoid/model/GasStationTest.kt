@@ -31,7 +31,7 @@ class GasStationTest {
         assertEquals("Madrid", station.city)
         assertEquals(40.4168, station.latitude!!, 0.0001)
         assertEquals(-3.7038, station.longitude!!, 0.0001)
-        assertEquals(1.659, station.priceGasoleoA!!, 0.0001)
+        assertEquals(1.659, station.price!!, 0.0001)
     }
 
     @Test

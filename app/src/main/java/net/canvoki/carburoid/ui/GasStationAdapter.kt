@@ -36,7 +36,7 @@ class GasStationAdapter(private val stations: List<GasStation>) :
         val location = listOfNotNull(station.city, station.state).joinToString(" - ")
         holder.location.text = if (location.isNotEmpty()) location else "Location unknown"
 
-        val price = toSpanishFloat(station.priceGasoleoA) ?: "???"
+        val price = toSpanishFloat(station.price) ?: "???"
         holder.price.text = "${price}€/l"
 
         val distance = CurrentDistancePolicy.getDistance(station)

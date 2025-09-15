@@ -56,10 +56,6 @@ data class GasStation(
     @SerializedName("Provincia")
     val state: String?,
 
-    @SerializedName("Precio Gasoleo A")
-    @JsonAdapter(SpanishFloatTypeAdapter::class)
-    val priceGasoleoA: Double?,
-
     @SerializedName("Latitud")
     @JsonAdapter(SpanishFloatTypeAdapter::class)
     val latitude: Double?,
@@ -72,6 +68,9 @@ data class GasStation(
 ) {
     var distanceInMeters: Float? = null
         private set
+
+    val price: Double?
+        get() = prices["Gasoleo A"]  // For now
 
     fun computeDistance() {
         distanceInMeters = CurrentDistancePolicy.getDistance(this)
