@@ -70,13 +70,23 @@ data class GasStation(
         private set
 
     val price: Double?
-        get() = prices["Gasoleo A"]  // For now
+        get() = prices[currentProduct]  // For now
 
     fun computeDistance() {
         distanceInMeters = CurrentDistancePolicy.getDistance(this)
     }
 
     companion object {
+
+        val DEFAULT_PRODUCT = "Gasoleo A"
+        private var currentProduct : String = DEFAULT_PRODUCT
+        fun setCurrentProduct(product: String) {
+            currentProduct = product
+        }
+        fun resetCurrentProduct() {
+            currentProduct = DEFAULT_PRODUCT
+        }
+
         private val gson: Gson by lazy {
             GsonBuilder()
                 .registerTypeAdapter(

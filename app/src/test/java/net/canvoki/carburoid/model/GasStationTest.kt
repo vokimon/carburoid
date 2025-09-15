@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.junit.After
 
 class GasStationTest {
 
@@ -96,6 +97,48 @@ class GasStationTest {
             "My product" to 2.000,
         ), station.prices)
     }
+
+    fun twoProductsStation() : GasStation {
+        return GasStation.parse("""
+            {
+                "Rótulo": "CEPSA",
+                "Dirección": "Gran Vía 2",
+                "Localidad": "Madrid",
+                "Provincia": "Madrid",
+                "Precio Gasoleo A": "1,670",
+                "Precio My product": "2,000",
+                "Latitud": "",
+                "Longitud (WGS84)": "   "
+            }""")
+    }
+
+    @After
+    fun resetCurrentProduct() {
+        GasStation.resetCurrentProduct()
+    }
+
+    @Test
+    fun `price changes product`() {
+        val station = twoProductsStation()
+        val gasoleoAPrice = station.prices["Gasoleo A"]
+        val myProductPrice = station.prices["My product"]
+
+        assertEquals(gasoleoAPrice, station.price) // Default Gasoleo A
+
+        GasStation.setCurrentProduct("My product")
+
+        assertEquals(myProductPrice, station.price) // Set My Product
+
+        GasStation.setCurrentProduct("Missing product")
+
+        assertEquals(null, station.price) // Missing product in this GasStation
+
+        GasStation.resetCurrentProduct()
+
+        assertEquals(gasoleoAPrice, station.price) // Back to default Gasoleo A
+    }
+
+
 
     @Test
     fun `parse station list`() {
