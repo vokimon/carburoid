@@ -190,35 +190,39 @@ class MainActivity : AppCompatActivity() {
             .addOnFailureListener {
                 setFallbackLocation()
                 showToast("Failed to get location — using Madrid")
-                loadGasStations()
             }
     }
+
 
     private fun loadGasStations() {
         lifecycleScope.launch {
             try {
                 showProgress("Refreshing data...")
-                val stations = repository.getData()?.stations ?: emptyList()
-                val sortedStations = StationFilter().filterParetoOptimal(stations)
-                log("Final list: ${sortedStations.size} stations")
 
-                if (sortedStations.isEmpty()) {
-                    showEmpty("No stations")
-                } else {
-                    showContent()
+                // 🚧 Do heavy work in IO (or Default) dispatcher
+                val stations = repository.getData()?.stations ?: emptyList()
+                val sortedStations = timeit("PROCESSING STATIONS") {
+                    StationFilter().filterParetoOptimal(stations)
                 }
 
-                val adapter = GasStationAdapter(sortedStations)
-                recyclerView.adapter = adapter
+                timeit("UPDATING CONTENT") {
+                    if (sortedStations.isEmpty()) {
+                        showEmpty("No stations")
+                    } else {
+                        gasStationAdapter.updateData(sortedStations)
+                        showContent()
+                    }
+                }
 
             } catch (e: Exception) {
-                showToast("Download failed: ${e.message}")
+                withContext(Dispatchers.Main) {
+                    showToast("Download failed: ${e.message}")
+                    showEmpty("Error loading stations: ${e.message}")
+                }
                 e.printStackTrace()
-                showEmpty("Error loading stations: ${e.message}")
             }
         }
     }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
