@@ -24,7 +24,7 @@ class GasStationTest {
         """.trimIndent()
 
         // Parse with Gson
-        val station = Gson().fromJson(json, GasStation::class.java)
+        val station = GasStation.parse(json)
 
         // Verify computed properties
         assertEquals("REPSOL", station.name)
@@ -42,17 +42,59 @@ class GasStationTest {
                 "Dirección": "Gran Vía 2",
                 "Localidad": "Madrid",
                 "Provincia": "Madrid",
-                "Precio Gasoleo A": "1.670",
+                "Precio Gasoleo A": "1,670",
                 "Latitud": "",
                 "Longitud (WGS84)": "   "
             }
         """.trimIndent()
 
-        val station = Gson().fromJson(json, GasStation::class.java)
+        val station = GasStation.parse(json)
 
         // Should be null for blank/whitespace
         assertEquals(null, station.latitude)
         assertEquals(null, station.longitude)
+    }
+
+    @Test
+    fun `parse station prices available as map`() {
+        val json = """
+            {
+                "Rótulo": "CEPSA",
+                "Dirección": "Gran Vía 2",
+                "Localidad": "Madrid",
+                "Provincia": "Madrid",
+                "Precio Gasoleo A": "1,670",
+                "Latitud": "",
+                "Longitud (WGS84)": "   "
+            }
+        """.trimIndent()
+
+        val station = GasStation.parse(json)
+
+        assertEquals(mapOf("Gasoleo A" to 1.670), station.prices)
+    }
+
+    @Test
+    fun `parse station unexpected prices`() {
+        val json = """
+            {
+                "Rótulo": "CEPSA",
+                "Dirección": "Gran Vía 2",
+                "Localidad": "Madrid",
+                "Provincia": "Madrid",
+                "Precio Gasoleo A": "1,670",
+                "Precio My product": "2,000",
+                "Latitud": "",
+                "Longitud (WGS84)": "   "
+            }
+        """.trimIndent()
+
+        val station = GasStation.parse(json)
+
+        assertEquals(mapOf(
+            "Gasoleo A" to 1.670,
+            "My product" to 2.000,
+        ), station.prices)
     }
 
     @Test
@@ -65,7 +107,7 @@ class GasStationTest {
                         "Dirección": "Calle Mayor 1",
                         "Localidad": "Madrid",
                         "Provincia": "Madrid",
-                        "Precio Gasoleo A": "1.659",
+                        "Precio Gasoleo A": "1,659",
                         "Latitud": "40,4168",
                         "Longitud (WGS84)": "-3,7038"
                     }
@@ -73,10 +115,11 @@ class GasStationTest {
             }
         """.trimIndent()
 
-        val response = Gson().fromJson(json, GasStationResponse::class.java)
+        val response = GasStationResponse.parse(json)
         val station = response.stations.first()
 
         assertEquals(40.4168, station.latitude!!, 0.0001)
         assertEquals(-3.7038, station.longitude!!, 0.0001)
     }
+
 }

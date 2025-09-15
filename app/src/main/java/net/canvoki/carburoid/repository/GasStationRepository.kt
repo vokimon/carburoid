@@ -28,7 +28,7 @@ class GasStationRepository(
     private val cacheFile: File,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
     private val parser: Parser? = { json ->
-        Gson().fromJson(json, GasStationResponse::class.java)
+        GasStationResponse.parse(json)
     },
 ) {
     companion object {
