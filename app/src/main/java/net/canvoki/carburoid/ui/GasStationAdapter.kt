@@ -10,7 +10,7 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.json.toSpanishFloat
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 
-class GasStationAdapter(private val stations: List<GasStation>) :
+class GasStationAdapter(private var stations: List<GasStation>) :
     RecyclerView.Adapter<GasStationAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -19,6 +19,11 @@ class GasStationAdapter(private val stations: List<GasStation>) :
         val location: TextView = view.findViewById(R.id.text_location)
         val price: TextView = view.findViewById(R.id.text_price)
         val distance: TextView = view.findViewById(R.id.text_distance)
+    }
+
+    fun updateData(newData: List<GasStation>) {
+        stations = newData
+        notifyDataSetChanged() // Rebind all items
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

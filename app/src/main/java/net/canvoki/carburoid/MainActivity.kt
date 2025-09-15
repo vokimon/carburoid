@@ -45,6 +45,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var spinner: ProgressBar
     private lateinit var emptyView: TextView
     private lateinit var progressText: TextView
+    private lateinit var swipeRefreshLayout: androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    private lateinit var gasStationAdapter: GasStationAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         log("onCreate")
@@ -57,6 +59,10 @@ class MainActivity : AppCompatActivity() {
         spinner = findViewById(R.id.progress_bar)
         emptyView = findViewById(R.id.text_empty)
         progressText = findViewById(R.id.text_progress)
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
+
+        gasStationAdapter = GasStationAdapter(emptyList())
+        recyclerView.adapter = gasStationAdapter
 
         showEmpty("No stations")
 
@@ -67,6 +73,11 @@ class MainActivity : AppCompatActivity() {
         } else {
             requestLocationPermission()
         }
+        swipeRefreshLayout.setOnRefreshListener {
+            lifecycleScope.launch {
+                repository.launchFetch() // Triggers background fetch if needed
+            }
+        }
 
         lifecycleScope.launch {
             repository.events.collect { event ->
@@ -74,13 +85,17 @@ class MainActivity : AppCompatActivity() {
                     is RepositoryEvent.UpdateStarted -> {
                         // Show loading, disable refresh, etc.
                         //showLoading()
+                        swipeRefreshLayout.isRefreshing = true
                         log("EVENT UpdateStarted")
                     }
                     is RepositoryEvent.UpdateReady -> {
+                        swipeRefreshLayout.isRefreshing = false
+                        showProgress("Processing Data...")
                         log("EVENT UpdateReady")
                         loadGasStations()
                     }
                     is RepositoryEvent.UpdateFailed -> {
+                        swipeRefreshLayout.isRefreshing = false
                         log("EVENT UpdateFailed")
                         showToast(event.error)
                     }
