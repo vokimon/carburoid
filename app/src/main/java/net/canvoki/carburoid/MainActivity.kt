@@ -188,7 +188,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 showProgress("Refreshing data...")
-                val stations = repository.getStations() ?: emptyList()
+                val stations = repository.getData()?.stations ?: emptyList()
                 val sortedStations = StationFilter().filterParetoOptimal(stations)
                 log("Final list: ${sortedStations.size} stations")
 

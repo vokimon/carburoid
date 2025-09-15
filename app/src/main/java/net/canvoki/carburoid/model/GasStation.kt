@@ -15,6 +15,7 @@ import net.canvoki.carburoid.json.fromSpanishFloat
 
 fun log(message: String) {
     println("Carburoid: $message")
+    //Log.d("Carburoid", message)
 }
 
 // ✅ GasStationResponse with parser using the enhanced Gson
@@ -69,12 +70,12 @@ data class GasStation(
     var distanceInMeters: Float? = null
         private set
 
-    val price: Double?
-        get() = prices[currentProduct]  // For now
-
     fun computeDistance() {
         distanceInMeters = CurrentDistancePolicy.getDistance(this)
     }
+
+    val price: Double?
+        get() = prices[currentProduct]  // For now
 
     companion object {
 

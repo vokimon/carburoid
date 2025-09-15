@@ -24,31 +24,6 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
 
-/*
-
-Cache
-
-- [x] Setup/Teardown: Use special testing database location, cleared before and after each tests
-- [x] Setup/Teardown: Mock api so that all calls fail. No yet called but in provision it will, we could add this later.
-- [x] TestCase: Create a Repo, assert stations is []
-- [x] TestCase: Create a Repo, set cache to data, assert cachedStations is filled
-- [x] TestCase: Create a Repo, set cache to data, Destroy the repo, Create a second Repo, assert cachedStations still filled because of serialization.
-
-Then continue with the triggerBackgroundUpdate method in isolation without the middleman getStations()
-Cases:
-
-- Calling it calls the api, assert that triggers the event, and sets the flag
-- Resolving the api to result, assert it triggers the event, unsets the flags, and cachedStations is updated
-- Resolving the api to failure, assert it triggers the event, unsets the flag, and cachedStations is kept
-    - Failure is api exception
-    - Failure is serialization exception
-
-Next getStations
-
-- getStations triggers a fetch if no cache
-- getStations triggers a fetch if cache outdated
-- getStations does not trigger a fetch if cache up-to-date
-*/
 
 class GasStationRepositoryTest {
 
@@ -394,7 +369,7 @@ class GasStationRepositoryTest {
         )
         assertNull(repository.getCache())
         assertFalse(repository.isFetchInProgress())
-        assertEquals(null, repository.getStations())
+        assertEquals(null, repository.getData())
 
         eventCollector.cancel()
     }
@@ -429,16 +404,16 @@ class GasStationRepositoryTest {
         )
         assertEquals("Fetched content", repository.getCache())
         assertFalse(repository.isFetchInProgress())
-        assertEquals(data?.stations, repository.getStations())
+        assertEquals(data, repository.getData())
 
         eventCollector.cancel()
     }
 
     @Test
-    fun `before any fetch, getStations returns null`() = runTest {
+    fun `before any fetch, getData returns null`() = runTest {
         val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
 
-        val stations = repository.getStations()
+        val stations = repository.getData()
 
         assertEquals(null, stations)
     }
@@ -455,7 +430,7 @@ class GasStationRepositoryTest {
             scope = this,
         )
 
-        assertEquals(data?.stations, repository.getStations())
+        assertEquals(data, repository.getData())
         assertEquals("whatever", repository.getCache())
     }
 
@@ -472,7 +447,7 @@ class GasStationRepositoryTest {
         )
 
         assertEquals(null, repository.getCache())
-        assertEquals(null, repository.getStations())
+        assertEquals(null, repository.getData())
         assertEquals(
             "Cache file should have been deleted",
             false, cacheFile.exists()
