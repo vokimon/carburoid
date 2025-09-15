@@ -13,19 +13,19 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/text_address"
+        android:id="@+id/text_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:layout_marginTop="4dp" />
 
     <TextView
-        android:id="@+id/text_location"
+        android:id="@+id/text_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:textStyle="italic"
-        android:textColor="#555555"
+        android:textColor="#777777"
         android:layout_marginTop="2dp" />
 
     <TextView
@@ -45,6 +45,7 @@
         android:layout_marginTop="4dp" />
 
     <View
+        android:id="@+id/separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#DDDDDD"
