@@ -1,6 +1,5 @@
 package net.canvoki.carburoid.model
 
-import android.util.Log
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.JsonAdapter
 import com.google.gson.*
@@ -13,10 +12,6 @@ import net.canvoki.carburoid.json.SpanishFloatTypeAdapter
 import net.canvoki.carburoid.json.toSpanishFloat
 import net.canvoki.carburoid.json.fromSpanishFloat
 
-fun log(message: String) {
-    println("Carburoid: $message")
-    //Log.d("Carburoid", message)
-}
 
 // ✅ GasStationResponse with parser using the enhanced Gson
 data class GasStationResponse(

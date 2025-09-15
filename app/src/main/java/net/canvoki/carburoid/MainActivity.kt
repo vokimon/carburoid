@@ -4,7 +4,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import androidx.lifecycle.lifecycleScope
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import android.widget.TextView
@@ -48,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var progressText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        log("onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -74,14 +74,14 @@ class MainActivity : AppCompatActivity() {
                     is RepositoryEvent.UpdateStarted -> {
                         // Show loading, disable refresh, etc.
                         //showLoading()
-                        println("Carburoid: EVENT UpdateStarted")
+                        log("EVENT UpdateStarted")
                     }
                     is RepositoryEvent.UpdateReady -> {
-                        println("Carburoid: EVENT UpdateReady")
+                        log("EVENT UpdateReady")
                         loadGasStations()
                     }
                     is RepositoryEvent.UpdateFailed -> {
-                        println("Carburoid: EVENT UpdateFailed")
+                        log("EVENT UpdateFailed")
                         showToast(event.error)
                     }
                 }
@@ -112,11 +112,6 @@ class MainActivity : AppCompatActivity() {
             longitude = -3.7038
         }
         CurrentDistancePolicy.setMethod(DistanceFromAddress(madrid))
-    }
-
-    private fun log(message: String) {
-        println("Carburoid: $message")
-        Log.d("Carburoid", message)
     }
 
     private fun showToast(message: String) {
