@@ -5,9 +5,12 @@ import android.location.Location
 import androidx.lifecycle.lifecycleScope
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AdapterView
 import android.widget.Toast
 import android.widget.TextView
 import android.widget.ProgressBar
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -32,6 +35,33 @@ import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.CarburoidApplication
 
+private val products = listOf(
+      "Adblue",
+      "Amoniaco",
+      "Biodiesel",
+      "Bioetanol",
+      "Biogas Natural Comprimido",
+      "Biogas Natural Licuado",
+      "Diésel Renovable",
+      "Gas Natural Comprimido",
+      "Gas Natural Licuado",
+      "Gases licuados del petróleo",
+      "Gasoleo A",
+      "Gasoleo B",
+      "Gasoleo Premium",
+      "Gasolina 95 E10",
+      "Gasolina 95 E25",
+      "Gasolina 95 E5",
+      "Gasolina 95 E5 Premium",
+      "Gasolina 95 E85",
+      "Gasolina 98 E10",
+      "Gasolina 98 E5",
+      "Gasolina Renovable",
+      "Hidrogeno",
+      "Metanol",
+)
+
+
 class MainActivity : AppCompatActivity() {
 
     private val app: CarburoidApplication
@@ -41,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         get() = app.repository
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var productSpinner: Spinner
     private lateinit var recyclerView: RecyclerView
     private lateinit var spinner: ProgressBar
     private lateinit var emptyView: TextView
@@ -52,6 +83,22 @@ class MainActivity : AppCompatActivity() {
         log("onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        productSpinner = findViewById(R.id.product_spinner)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, products)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        productSpinner.adapter = adapter
+
+        productSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedProduct = products[position]
+                if (GasStation.currentProduct != selectedProduct) {
+                    GasStation.setCurrentProduct(selectedProduct)
+                    loadGasStations()
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) { /* noop */ }
+        }
 
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)

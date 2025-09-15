@@ -74,15 +74,7 @@ data class GasStation(
 
     companion object {
 
-        val DEFAULT_PRODUCT = "Gasoleo A"
-        private var currentProduct : String = DEFAULT_PRODUCT
-        fun setCurrentProduct(product: String) {
-            currentProduct = product
-        }
-        fun resetCurrentProduct() {
-            currentProduct = DEFAULT_PRODUCT
-        }
-
+        // Serialization
         private val gson: Gson by lazy {
             GsonBuilder()
                 .registerTypeAdapter(
@@ -94,6 +86,17 @@ data class GasStation(
 
         fun parse(json: String): GasStation {
             return gson.fromJson(json, GasStation::class.java)
+        }
+
+        // Products
+        val DEFAULT_PRODUCT = "Gasoleo A"
+        var currentProduct : String = DEFAULT_PRODUCT
+            private set
+        fun setCurrentProduct(product: String) {
+            currentProduct = product
+        }
+        fun resetCurrentProduct() {
+            currentProduct = DEFAULT_PRODUCT
         }
     }
 }
