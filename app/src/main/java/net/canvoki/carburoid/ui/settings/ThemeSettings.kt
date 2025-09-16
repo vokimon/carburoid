@@ -25,8 +25,7 @@ object ThemeSettings {
     }
 
     fun applyTheme(context: Context) {
-        val prefs = preferences(context)
-        val themeMode = prefs.getString(KEY, "auto")
+        val themeMode = currentValue(context)
         when (themeMode) {
             "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -38,15 +37,23 @@ object ThemeSettings {
         return context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
     }
 
-    private fun saveAndApplyTheme(context: Context, mode: String) {
+    private fun currentValue(context: Context) : String? {
         val prefs = preferences(context)
-        prefs.edit().putString(KEY, mode).apply()
+        return prefs.getString(KEY, "auto")
+    }
+
+    private fun setCurrentValue(context: Context, value: String) {
+        val prefs = preferences(context)
+        prefs.edit().putString(KEY, value).apply()
+    }
+
+    private fun saveAndApplyTheme(context: Context, mode: String) {
+        setCurrentValue(context, mode)
         applyTheme(context)
     }
 
     private fun updateSummary(preference: ListPreference, context: Context) {
-        val prefs = preferences(context)
-        val current = prefs.getString(KEY, "auto")
+        val current = currentValue(context)
         preference.summary = when (current) {
             "light" -> "Light"
             "dark" -> "Dark"
