@@ -12,7 +12,7 @@ import kotlinx.coroutines.SupervisorJob
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.network.GasStationApiFactory
 import net.canvoki.carburoid.model.GasStationResponse
-import net.canvoki.carburoid.ui.applyPreferencesTheme
+import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 class CarburoidApplication : Application() {
 
@@ -24,7 +24,7 @@ class CarburoidApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        applyPreferencesTheme(this)
+        ThemeSettings.applyTheme(this)
         cacheFile = File(filesDir, "gas_stations_cache.json")
         setupDebugData()
         repository = setupRepository()
