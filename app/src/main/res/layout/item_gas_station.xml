@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="16dp"
-    android:paddingTop="12dp"
+    android:paddingTop="8dp"
     android:paddingBottom="8dp">
 
     <!-- Station Name -->
@@ -50,7 +50,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/price_distance_container"
         app:layout_constraintTop_toBottomOf="@id/text_name"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:maxLines="1"
         android:ellipsize="end" />
 
@@ -70,11 +70,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceHeadlineMedium"
+            android:gravity="end"
             android:textColor="?attr/colorError"
             android:textStyle="bold"
             android:text="1,529 €"
-            android:layout_marginBottom="4dp"
-            android:gravity="end" />
+            android:layout_marginBottom="2dp" />
 
         <!-- Distance -->
         <TextView
@@ -93,7 +93,7 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="?attr/colorOutline"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/text_address"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
