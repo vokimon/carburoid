@@ -13,7 +13,7 @@
         android:id="@+id/text_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceTitleMedium"
+        style="@style/TextAppearance.Material3.TitleMedium"
         android:textStyle="bold"
         android:textColor="?attr/colorOnBackground"
         android:text="Station Name Example"
@@ -28,7 +28,7 @@
         android:id="@+id/text_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceBodySmall"
+        style="@style/TextAppearance.Material3.BodySmall"
         android:textStyle="italic"
         android:textColor="?attr/colorOutline"
         android:text="123 Example St."
@@ -44,7 +44,7 @@
         android:id="@+id/text_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceBodyMedium"
+        style="@style/TextAppearance.Material3.BodyMedium"
         android:textColor="?attr/colorSecondary"
         android:text="City, State"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,8 +69,8 @@
             android:id="@+id/text_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceHeadlineMedium"
             android:gravity="end"
+            style="@style/TextAppearance.Material3.HeadlineMedium"
             android:textColor="?attr/colorError"
             android:textStyle="bold"
             android:text="1,529 €"
@@ -81,10 +81,10 @@
             android:id="@+id/text_distance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:gravity="end"
+            style="@style/TextAppearance.Material3.BodyMedium"
             android:textColor="?attr/colorPrimary"
-            android:text="3,2 km"
-            android:gravity="end" />
+            android:text="3,2 km" />
     </LinearLayout>
 
     <!-- Separator -->
