@@ -13,7 +13,7 @@
         android:id="@+id/text_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
         android:textStyle="bold"
         android:textColor="?attr/colorOnBackground"
         android:text="Station Name Example"
@@ -28,7 +28,7 @@
         android:id="@+id/text_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="13sp"
+        android:textAppearance="?attr/textAppearanceBodySmall"
         android:textStyle="italic"
         android:textColor="?attr/colorOutline"
         android:text="123 Example St."
@@ -44,7 +44,7 @@
         android:id="@+id/text_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?attr/colorSecondary"
         android:text="City, State"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,6 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:gravity="end"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -68,12 +69,11 @@
             android:id="@+id/text_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
+            android:textAppearance="?attr/textAppearanceHeadlineMedium"
             android:textColor="?attr/colorError"
             android:textStyle="bold"
             android:text="1,529 €"
             android:layout_marginBottom="4dp"
-            android:textAlignment="viewEnd"
             android:gravity="end" />
 
         <!-- Distance -->
@@ -81,10 +81,9 @@
             android:id="@+id/text_distance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
             android:textColor="?attr/colorPrimary"
             android:text="3,2 km"
-            android:textAlignment="viewEnd"
             android:gravity="end" />
     </LinearLayout>
 
