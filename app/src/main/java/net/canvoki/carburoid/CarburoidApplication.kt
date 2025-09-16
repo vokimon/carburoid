@@ -2,6 +2,7 @@ package net.canvoki.carburoid
 
 import android.app.Application
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
 import java.io.File
 import java.io.FileNotFoundException
 import kotlin.coroutines.CoroutineContext
@@ -11,6 +12,7 @@ import kotlinx.coroutines.SupervisorJob
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.network.GasStationApiFactory
 import net.canvoki.carburoid.model.GasStationResponse
+import net.canvoki.carburoid.ui.applyPreferencesTheme
 
 class CarburoidApplication : Application() {
 
@@ -22,6 +24,7 @@ class CarburoidApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        applyPreferencesTheme(this)
         cacheFile = File(filesDir, "gas_stations_cache.json")
         setupDebugData()
         repository = setupRepository()

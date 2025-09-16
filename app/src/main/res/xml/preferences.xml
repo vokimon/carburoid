@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <SwitchPreferenceCompat
         app:key="hide_expensive_further"
         app:title="Hide further &amp; more expensive stations"
         app:summary="Toggles whether to filter out stations that are both further AND more expensive"
         app:defaultValue="true" />
+
+    <ListPreference
+        app:key="dark_mode"
+        app:title="Theme"
+        app:summary="%s"
+        app:entries="@array/theme_entries"
+        app:entryValues="@array/theme_values"
+        app:defaultValue="auto" />
+
 </PreferenceScreen>
