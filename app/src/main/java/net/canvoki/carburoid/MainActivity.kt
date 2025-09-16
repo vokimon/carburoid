@@ -1,10 +1,13 @@
 package net.canvoki.carburoid
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.Intent
 import android.location.Location
 import androidx.lifecycle.lifecycleScope
 import android.os.Bundle
 import android.view.View
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.AdapterView
 import android.widget.Toast
@@ -36,6 +39,7 @@ import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.CarburoidApplication
 
 private val products = listOf(
+      "Gasoleo A",
       "Adblue",
       "Amoniaco",
       "Biodiesel",
@@ -152,6 +156,20 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
     private fun checkLocationPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
