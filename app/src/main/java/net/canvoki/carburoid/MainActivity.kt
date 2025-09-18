@@ -267,7 +267,7 @@ class MainActivity : AppCompatActivity() {
                 // 🚧 Do heavy work in IO (or Default) dispatcher
                 val stations = repository.getData()?.stations ?: emptyList()
                 val sortedStations = timeit("PROCESSING STATIONS") {
-                    StationFilter().filterParetoOptimal(stations)
+                    StationFilter().filter(stations)
                 }
 
                 timeit("UPDATING CONTENT") {

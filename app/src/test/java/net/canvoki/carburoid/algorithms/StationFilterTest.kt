@@ -72,7 +72,7 @@ class StationFilterTest {
 
     fun testCase(stations: List<GasStation>, expected: List<String>) {
         setDistancePolicy()
-        val result = filter.filterParetoOptimal(stations)
+        val result = filter.filter(stations)
         assertResult(expected, result)
     }
 
