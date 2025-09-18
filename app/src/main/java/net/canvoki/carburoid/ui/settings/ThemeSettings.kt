@@ -1,10 +1,12 @@
 package net.canvoki.carburoid.ui.settings
+
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
+import androidx.preference.PreferenceManager
 
 object ThemeSettings {
 
@@ -34,8 +36,7 @@ object ThemeSettings {
     }
 
     private fun preferences(context: Context) : SharedPreferences {
-        return context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
-    }
+        return PreferenceManager.getDefaultSharedPreferences(context)    }
 
     private fun currentValue(context: Context) : String? {
         val prefs = preferences(context)

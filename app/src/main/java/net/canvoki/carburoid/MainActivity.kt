@@ -1,4 +1,5 @@
 package net.canvoki.carburoid
+
 import android.Manifest
 import android.content.pm.PackageManager
 import android.content.Intent
@@ -36,6 +37,7 @@ import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.network.GasStationApiFactory
 import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.algorithms.StationFilter
+import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.CarburoidApplication
 
 private val products = listOf(
@@ -154,6 +156,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        lifecycleScope.launch {
+            FilterSettings.changes.collect {
+                log("EVENT Filter updated")
+                loadGasStations()
+            }
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -261,13 +270,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadGasStations() {
         lifecycleScope.launch {
+            val config = FilterSettings.config(this@MainActivity)
             try {
                 showProgress("Refreshing data...")
 
                 // 🚧 Do heavy work in IO (or Default) dispatcher
                 val stations = repository.getData()?.stations ?: emptyList()
                 val sortedStations = timeit("PROCESSING STATIONS") {
-                    StationFilter().filter(stations)
+                    StationFilter(config).filter(stations)
                 }
 
                 timeit("UPDATING CONTENT") {

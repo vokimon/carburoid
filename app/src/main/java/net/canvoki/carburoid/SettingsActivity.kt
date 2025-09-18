@@ -9,7 +9,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import net.canvoki.carburoid.ui.settings.ThemeSettings
-
+import net.canvoki.carburoid.algorithms.FilterSettings
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,5 +28,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
         ThemeSettings.registerIn(preferenceScreen)
+        FilterSettings.registerIn(preferenceScreen)
     }
 }
