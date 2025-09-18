@@ -70,9 +70,16 @@ class StationFilterTest {
         CurrentDistancePolicy.setMethod(DummyDistanceMethod())
     }
 
-    fun testCase(stations: List<GasStation>, expected: List<String>) {
+    fun testCase(
+            stations: List<GasStation>,
+            expected: List<String>,
+            hideExpensiveFurther: Boolean=true,
+    ) {
         setDistancePolicy()
-        val result = filter.filter(stations)
+        val config = FilterConfig(
+            hideExpensiveFurther=hideExpensiveFurther,
+        )
+        val result = StationFilter(config).filter(stations)
         assertResult(expected, result)
     }
 
