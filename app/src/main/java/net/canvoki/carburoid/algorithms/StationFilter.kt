@@ -21,7 +21,7 @@ class StationFilter (
                 //log("Filtered non number ${station.price}")
                 continue
             }
-            if (stationPrice > minPrice) {
+            if (config.hideExpensiveFurther && stationPrice > minPrice) {
                 //log("Filtered $stationPrice vs $minPrice")
                 continue
             }

@@ -135,6 +135,23 @@ class StationFilterTest {
     }
 
     @Test
+    fun `do not ignore further and expensive stations if configured`() {
+        testCase(
+            hideExpensiveFurther=false,
+            stations = listOf(
+                dummyStation(index=1, distance=20.0, price=0.3),
+                dummyStation(index=2, distance=10.0, price=0.3),
+                dummyStation(index=3, distance=15.0, price=0.4), // This one is further and expensive
+            ),
+            expected = listOf(
+                "Station 2 at 10.0 km, 0.3 €",
+                "Station 3 at 15.0 km, 0.4 €",
+                "Station 1 at 20.0 km, 0.3 €",
+            ),
+        )
+    }
+
+    @Test
     fun `ignore stations without the product`() {
         testCase(
             stations = listOf(
