@@ -20,7 +20,8 @@ class GasStationTest {
                 "Provincia": "Madrid",
                 "Precio Gasoleo A": "1.659",
                 "Latitud": "40,4168",
-                "Longitud (WGS84)": "-3,7038"
+                "Longitud (WGS84)": "-3,7038",
+                "Tipo Venta": "P"
             }
         """.trimIndent()
 
@@ -33,6 +34,7 @@ class GasStationTest {
         assertEquals(40.4168, station.latitude!!, 0.0001)
         assertEquals(-3.7038, station.longitude!!, 0.0001)
         assertEquals(1.659, station.price!!, 0.0001)
+        assertEquals(true, station.isPublicSale)
     }
 
     @Test
@@ -45,7 +47,8 @@ class GasStationTest {
                 "Provincia": "Madrid",
                 "Precio Gasoleo A": "1,670",
                 "Latitud": "",
-                "Longitud (WGS84)": "   "
+                "Longitud (WGS84)": "   ",
+                "Tipo Venta": "P"
             }
         """.trimIndent()
 
@@ -66,7 +69,8 @@ class GasStationTest {
                 "Provincia": "Madrid",
                 "Precio Gasoleo A": "1,670",
                 "Latitud": "",
-                "Longitud (WGS84)": "   "
+                "Longitud (WGS84)": "   ",
+                "Tipo Venta": "P"
             }
         """.trimIndent()
 
@@ -108,7 +112,8 @@ class GasStationTest {
                 "Precio Gasoleo A": "1,670",
                 "Precio My product": "2,000",
                 "Latitud": "",
-                "Longitud (WGS84)": "   "
+                "Longitud (WGS84)": "   ",
+                "Tipo Venta": "P"
             }""")
     }
 
@@ -152,7 +157,8 @@ class GasStationTest {
                         "Provincia": "Madrid",
                         "Precio Gasoleo A": "1,659",
                         "Latitud": "40,4168",
-                        "Longitud (WGS84)": "-3,7038"
+                        "Longitud (WGS84)": "-3,7038",
+                        "Tipo Venta": "P"
                     }
                 ]
             }

@@ -11,6 +11,7 @@ import net.canvoki.carburoid.json.SpanishDateTypeAdapter
 import net.canvoki.carburoid.json.SpanishFloatTypeAdapter
 import net.canvoki.carburoid.json.toSpanishFloat
 import net.canvoki.carburoid.json.fromSpanishFloat
+import net.canvoki.carburoid.json.SaleTypeAdapter
 
 
 // ✅ GasStationResponse with parser using the enhanced Gson
@@ -59,6 +60,10 @@ data class GasStation(
     @SerializedName("Longitud (WGS84)")
     @JsonAdapter(SpanishFloatTypeAdapter::class)
     val longitude: Double?,
+
+    @SerializedName("Tipo Venta")
+    @JsonAdapter(SaleTypeAdapter::class)
+    val isPublicSale: Boolean = true,
 
     val prices: Map<String, Double?> = emptyMap()
 ) {

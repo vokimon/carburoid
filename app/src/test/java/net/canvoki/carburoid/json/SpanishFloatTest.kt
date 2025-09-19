@@ -55,7 +55,7 @@ class SpanishFloatTest {
     }
 
     @Test
-    fun `type adapter reads valid date`() {
+    fun `type adapter writes valid date`() {
         val writer = java.io.StringWriter()
         val jsonWriter = JsonWriter(writer)
         val input = 4.5

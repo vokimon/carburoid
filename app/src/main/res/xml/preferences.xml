@@ -16,9 +16,9 @@
         app:defaultValue="true" />
 
     <SwitchPreferenceCompat
-        app:key="only_public_sale"
-        app:title="Hide prices for members"
-        app:summary="Show only public prices"
+        app:key="only_public_prices"
+        app:title="Show only public prices"
+        app:summary="Hide prices available only for members"
         app:defaultValue="true" />
 
     <SwitchPreferenceCompat

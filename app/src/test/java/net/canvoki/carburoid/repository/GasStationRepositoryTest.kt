@@ -49,6 +49,7 @@ class GasStationRepositoryTest {
             "Precio Gasoleo A" to (toSpanishFloat(price) ?: ""),
             "Latitud" to "40,4168",
             "Longitud (WGS84)" to (toSpanishFloat(distance) ?: ""),
+            "Tipo Venta" to "P",
         )
     }
 
@@ -63,7 +64,8 @@ class GasStationRepositoryTest {
                     "Gasoleo A" to 1.5,
                 ),
                 latitude=40.0,
-                longitude=-3.0
+                longitude=-3.0,
+                isPublicSale=true,
             ),
         )
     )
