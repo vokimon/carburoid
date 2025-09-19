@@ -63,7 +63,7 @@ data class GasStation(
 
     @SerializedName("Tipo Venta")
     @JsonAdapter(SaleTypeAdapter::class)
-    val isPublicSale: Boolean = true,
+    val isPublicPrice: Boolean = true,
 
     val prices: Map<String, Double?> = emptyMap()
 ) {

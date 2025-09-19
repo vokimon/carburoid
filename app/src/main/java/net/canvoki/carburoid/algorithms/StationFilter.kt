@@ -21,6 +21,7 @@ class StationFilter (
                 //log("Filtered non number ${station.price}")
                 continue
             }
+            if (!station.isPublicPrice) continue
             if (config.hideExpensiveFurther && stationPrice > minPrice) {
                 //log("Filtered $stationPrice vs $minPrice")
                 continue

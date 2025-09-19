@@ -30,7 +30,7 @@ class DummyDistanceMethod() : DistanceMethod {
 }
 
 
-fun dummyStation(index: Int, distance: Double, price: Double?): GasStation {
+fun dummyStation(index: Int, distance: Double, price: Double?, isPublicPrice: Boolean=true): GasStation {
     return GasStation(
         name = "Station ${index} at ${distance} km, ${price} €",
         address = "Address $index",
@@ -41,12 +41,13 @@ fun dummyStation(index: Int, distance: Double, price: Double?): GasStation {
         ),
         latitude = 40.4168,
         longitude = distance,
+        isPublicPrice = isPublicPrice,
     )
 }
 
 fun assertResult(expected: List<String>, result: List<GasStation>) {
-    //assertEquals(expected.joinToString("\n"), result.map { it.name!!}.joinToString("\n"))
-    assertEquals(expected, result.map { it.name!!})
+    assertEquals(expected.joinToString("\n"), result.map { it.name!!}.joinToString("\n"))
+    //assertEquals(expected, result.map { it.name!!})
 }
 
 
@@ -165,4 +166,21 @@ class StationFilterTest {
             ),
         )
     }
+
+    @Test
+    fun `filter non public price`() {
+        testCase(
+            stations = listOf(
+                dummyStation(index=1, distance=20.0, price=0.3),
+                dummyStation(index=2, distance=10.0, price=0.3, isPublicPrice=false),
+                dummyStation(index=3, distance=30.0, price=0.3),
+            ),
+            expected = listOf(
+                //"Station 2 at 10.0 km, 0.3 €", <- This one is removed
+                "Station 1 at 20.0 km, 0.3 €",
+                "Station 3 at 30.0 km, 0.3 €",
+            ),
+        )
+    }
+
 }

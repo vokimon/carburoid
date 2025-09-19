@@ -65,7 +65,7 @@ class GasStationRepositoryTest {
                 ),
                 latitude=40.0,
                 longitude=-3.0,
-                isPublicSale=true,
+                isPublicPrice=true,
             ),
         )
     )
