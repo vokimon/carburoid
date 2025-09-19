@@ -14,10 +14,11 @@ object FilterSettings {
 
     private const val PREFS_NAME = "app_settings"
     private const val KEY_HIDE_EXPENSIVE = "hide_expensive_further"
+    private const val ONLY_PUBLIC_PRICES = "only_public_prices"
 
     private val relevantKeys = setOf(
-        KEY_HIDE_EXPENSIVE
-        // Add more here in future
+        KEY_HIDE_EXPENSIVE,
+        ONLY_PUBLIC_PRICES,
     )
 
     private val _changes = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
@@ -52,7 +53,8 @@ object FilterSettings {
     fun config(context: Context): FilterConfig {
         val prefs = preferences(context)
         return FilterConfig(
-            hideExpensiveFurther = prefs.getBoolean(KEY_HIDE_EXPENSIVE, false)
+            hideExpensiveFurther = prefs.getBoolean(KEY_HIDE_EXPENSIVE, false),
+            onlyPublicPrices = prefs.getBoolean(ONLY_PUBLIC_PRICES, false),
         )
     }
 

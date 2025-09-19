@@ -2,6 +2,7 @@ package net.canvoki.carburoid.algorithms
 
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
+import net.canvoki.carburoid.log
 
 class StationFilter (
     var config : FilterConfig = FilterConfig()
@@ -21,12 +22,18 @@ class StationFilter (
                 //log("Filtered non number ${station.price}")
                 continue
             }
-            if (!station.isPublicPrice) continue
+            if (config.onlyPublicPrices && !station.isPublicPrice) {
+                //log("Filtered non public price")
+                continue
+            }
             if (config.hideExpensiveFurther && stationPrice > minPrice) {
                 //log("Filtered $stationPrice vs $minPrice")
                 continue
             }
-            minPrice = stationPrice
+            if (station.isPublicPrice) {
+                log("Updating price to ${stationPrice} ${station.isPublicPrice}")
+                minPrice = stationPrice
+            }
             result.add(station)
         }
         return result

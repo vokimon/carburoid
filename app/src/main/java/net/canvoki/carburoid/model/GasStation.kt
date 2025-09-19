@@ -74,6 +74,7 @@ data class GasStation(
         distanceInMeters = CurrentDistancePolicy.getDistance(this)
     }
 
+
     val price: Double?
         get() = prices[currentProduct]  // For now
 

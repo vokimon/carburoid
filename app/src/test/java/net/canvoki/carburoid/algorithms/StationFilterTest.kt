@@ -75,10 +75,12 @@ class StationFilterTest {
             stations: List<GasStation>,
             expected: List<String>,
             hideExpensiveFurther: Boolean=true,
+            onlyPublicPrices: Boolean=true,
     ) {
         setDistancePolicy()
         val config = FilterConfig(
             hideExpensiveFurther=hideExpensiveFurther,
+            onlyPublicPrices=onlyPublicPrices,
         )
         val result = StationFilter(config).filter(stations)
         assertResult(expected, result)
@@ -183,4 +185,39 @@ class StationFilterTest {
         )
     }
 
+    @Test
+    fun `do not filter non public prices if stated not to`() {
+        testCase(
+            onlyPublicPrices=false,
+            stations = listOf(
+                dummyStation(index=1, distance=20.0, price=0.3),
+                dummyStation(index=2, distance=10.0, price=0.3, isPublicPrice=false),
+                dummyStation(index=3, distance=30.0, price=0.3),
+            ),
+            expected = listOf(
+                "Station 2 at 10.0 km, 0.3 €", // <- This one not filtered
+                "Station 1 at 20.0 km, 0.3 €",
+                "Station 3 at 30.0 km, 0.3 €",
+            ),
+        )
+    }
+
+   @Test
+    fun `non public prices do not lower the cutoff price`() {
+        testCase(
+            onlyPublicPrices=false,
+            stations = listOf(
+                dummyStation(index=1, distance=10.0, price=0.5),
+                dummyStation(index=2, distance=15.0, price=0.3, isPublicPrice=false),
+                dummyStation(index=3, distance=20.0, price=0.4),
+            ),
+            expected = listOf(
+                "Station 1 at 10.0 km, 0.5 €",
+                "Station 2 at 15.0 km, 0.3 €",
+                "Station 3 at 20.0 km, 0.4 €", // Should be filtered if 2 were public
+            ),
+        )
+    }
+
+    // TODO: non public prices do not lower the cutoff price
 }

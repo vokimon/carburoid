@@ -11,19 +11,19 @@
 
     <SwitchPreferenceCompat
         app:key="hide_expensive_further"
-        app:title="Hide expensive farther stations"
-        app:summary="Filters out stations that are more expensive than nearer ones (Recommended)"
+        app:title="Show only nearer or cheaper stations"
+        app:summary="Filters out stations more expensive than nearer ones (Recommended)"
         app:defaultValue="true" />
 
     <SwitchPreferenceCompat
         app:key="only_public_prices"
         app:title="Show only public prices"
-        app:summary="Hide prices available only for members"
+        app:summary="Hide prices for members only"
         app:defaultValue="true" />
 
     <SwitchPreferenceCompat
         app:key="filter_by_opening_hours"
-        app:title="Hide stations"
+        app:title="Hide closed stations"
         app:summary="Do not show stations not open right now."
         app:defaultValue="true" />
 
