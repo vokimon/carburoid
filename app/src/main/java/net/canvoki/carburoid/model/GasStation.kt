@@ -13,6 +13,15 @@ import net.canvoki.carburoid.json.toSpanishFloat
 import net.canvoki.carburoid.json.fromSpanishFloat
 import net.canvoki.carburoid.json.SaleTypeAdapter
 
+// Serialization
+private val gson: Gson by lazy {
+    GsonBuilder()
+        .registerTypeAdapter(
+            GasStation::class.java,
+            GasStationJsonAdapter(GsonBuilder().create())
+        )
+        .create()
+}
 
 // ✅ GasStationResponse with parser using the enhanced Gson
 data class GasStationResponse(
@@ -24,15 +33,6 @@ data class GasStationResponse(
     val downloadDate: Instant? = null
 ) {
     companion object {
-        private val gson: Gson by lazy {
-            GsonBuilder()
-                .registerTypeAdapter(
-                    GasStation::class.java,
-                    GasStationJsonAdapter(GsonBuilder().create()) // inject safe Gson
-                )
-                .create()
-        }
-
         fun parse(json: String): GasStationResponse {
             return gson.fromJson(json, GasStationResponse::class.java)
         }
@@ -79,15 +79,6 @@ data class GasStation(
 
     companion object {
 
-        // Serialization
-        private val gson: Gson by lazy {
-            GsonBuilder()
-                .registerTypeAdapter(
-                    GasStation::class.java,
-                    GasStationJsonAdapter(GsonBuilder().create())
-                )
-                .create()
-        }
 
         fun parse(json: String): GasStation {
             return gson.fromJson(json, GasStation::class.java)
