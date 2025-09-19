@@ -20,7 +20,7 @@
             android:textSize="16sp"
             android:layout_marginBottom="4dp" />
 
-        <Spinner
+        <net.canvoki.carburoid.product.ProductSpinner
             android:id="@+id/product_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
