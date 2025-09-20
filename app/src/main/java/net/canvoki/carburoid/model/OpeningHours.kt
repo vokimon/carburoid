@@ -143,4 +143,13 @@ class OpeningHours() {
             // Crossed? cycle through end
             return allDays.subList(startIndex, allDays.size) + allDays.subList(0, endIndex+1)
         }
+
+        fun parseScheduleEntry(spec: String): ScheduleEntry? {
+            val parts = spec.split(": ")
+            if (parts.size != 2) return null
+            val (daysStr, timesStr) = parts
+            val days = parseDayRange(daysStr) ?: return null
+            val times = parseIntervals(timesStr) ?: return null
+            return days to times
+        }
 }

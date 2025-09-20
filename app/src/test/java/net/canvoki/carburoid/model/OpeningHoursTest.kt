@@ -389,5 +389,35 @@ class OpeningHoursTest {
         ), "J-M")
     }
 
+    // parseScheduleEntry
 
+    fun parseScheduleEntry_TestCase(expected: ScheduleEntry?, spec: String) {
+        assertEquals(expected, OpeningHours.parseScheduleEntry(spec))
+    }
+
+    @Test
+    fun `parseScheduleEntry no colon`() {
+        parseScheduleEntry_TestCase(null, "no colon")
+    }
+
+    @Test
+    fun `parseScheduleEntry bad days`() {
+        parseScheduleEntry_TestCase(null, "BAD: 14:00-22:00")
+    }
+
+    @Test
+    fun `parseScheduleEntry bad times`() {
+        parseScheduleEntry_TestCase(null, "M-J: BAD")
+    }
+
+    @Test
+    fun `parseScheduleEntry proper`() {
+        parseScheduleEntry_TestCase(listOf(
+            DayOfWeek.FRIDAY,
+            DayOfWeek.SATURDAY,
+        ) to listOf(
+             (3 to 0) to (12 to 0),
+             (14 to 0) to (22 to 0),
+        ), "V-S: 3:00-12:00 y 14:00-22:00")
+    }
 }
