@@ -165,7 +165,7 @@ class OpeningHoursTest {
         assertEquals("L-X: 08:00-13:30", result)
     }
 
-    fun parseTimeTestCase(expected: Pair<Int, Int>?, spec: String) {
+    fun parseTimeTestCase(expected: TimeSpec?, spec: String) {
         val time = OpeningHours.parseTime(spec)
         assertEquals(expected, time)
     }
@@ -227,7 +227,7 @@ class OpeningHoursTest {
 
     // parseInterval (single)
 
-    fun parseIntervalTestCase(expected: Pair<Pair<Int, Int>, Pair<Int, Int>>?, spec: String) {
+    fun parseIntervalTestCase(expected: Interval?, spec: String) {
         val result = OpeningHours.parseInterval(spec)
         assertEquals(expected, result)
     }
@@ -270,7 +270,7 @@ class OpeningHoursTest {
 
     // parseIntervals (multiple)
 
-    fun parseIntervalsTestCase(expected: List<Pair<Pair<Int, Int>, Pair<Int, Int>>>?, spec: String) {
+    fun parseIntervalsTestCase(expected: Intervals?, spec: String) {
         val result = OpeningHours.parseIntervals(spec)
         assertEquals(expected, result)
     }
@@ -343,7 +343,7 @@ class OpeningHoursTest {
         parseDayShort_testCase(DayOfWeek.SUNDAY, "D")
     }
 
-    fun parseDayRange_testCase(expected: List<DayOfWeek>?, spec: String) {
+    fun parseDayRange_testCase(expected: DayRange?, spec: String) {
         val result = OpeningHours.parseDayRange(spec)
         assertEquals(expected, result)
     }

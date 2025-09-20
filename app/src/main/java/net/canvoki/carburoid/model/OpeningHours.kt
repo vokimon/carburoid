@@ -4,6 +4,11 @@ import java.time.DayOfWeek
 import java.time.LocalTime
 
 val END_OF_DAY = LocalTime.of(23, 59)
+typealias TimeSpec = Pair<Int,Int>
+typealias Interval = Pair<TimeSpec, TimeSpec>
+typealias Intervals = List<Interval>
+typealias DayRange = List<DayOfWeek>
+typealias ScheduleEntry = Pair<DayRange, Intervals>
 
 class OpeningHours() {
     private val intervals = mutableListOf<Pair<LocalTime, LocalTime>>()
@@ -72,7 +77,8 @@ class OpeningHours() {
     }
 
     companion object {
-        fun parseTime(intervalStr: String): Pair<Int,Int>? {
+
+        fun parseTime(intervalStr: String): TimeSpec? {
             val parts = intervalStr.split(":")
             if (parts.size != 2) return null
 
@@ -85,7 +91,7 @@ class OpeningHours() {
             return hours to minutes
         }
 
-        fun parseInterval(intervalStr: String): Pair<Pair<Int,Int>,Pair<Int,Int>>? {
+        fun parseInterval(intervalStr: String): Interval? {
             if (intervalStr == "24H") return ((0 to 0) to (23 to 59))
             val parts = intervalStr.split("-")
             if (parts.size != 2) return null
@@ -101,7 +107,7 @@ class OpeningHours() {
             return start to end
         }
 
-        fun parseIntervals(spec: String): List<Pair<Pair<Int,Int>,Pair<Int,Int>>>? {
+        fun parseIntervals(spec: String): Intervals? {
             val parts = spec.split(" y ")
             val intervals = parts.map { parseInterval(it) }
             if (intervals.any { it == null }) return null
@@ -121,7 +127,7 @@ class OpeningHours() {
             }
         }
 
-        fun parseDayRange(spec: String): List<DayOfWeek>? {
+        fun parseDayRange(spec: String): DayRange? {
             val parts = spec.split("-")
             val start = parts.getOrNull(0)?.let { parseDayShort(it) }
             if (start==null) return null
