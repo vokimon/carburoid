@@ -7,7 +7,7 @@ val END_OF_DAY = LocalTime.of(23, 59)
 
 class OpeningHours() {
     private val intervals = mutableListOf<Pair<LocalTime, LocalTime>>()
-    var currentDay: DayOfWeek? = null
+    var currentDay: DayOfWeek = DayOfWeek.MONDAY
 
     fun serialize(): String {
         if (intervals.isEmpty()) return ""
@@ -35,7 +35,7 @@ class OpeningHours() {
         return String.format("%02d:%02d", time.hour, time.minute)
     }
 
-    private fun spanishWeekDayShort(day: DayOfWeek?): String? = when (day) {
+    private fun spanishWeekDayShort(day: DayOfWeek): String = when (day) {
         DayOfWeek.MONDAY -> "L"
         DayOfWeek.TUESDAY -> "M"
         DayOfWeek.WEDNESDAY -> "X"
@@ -43,6 +43,5 @@ class OpeningHours() {
         DayOfWeek.FRIDAY -> "V"
         DayOfWeek.SATURDAY -> "S"
         DayOfWeek.SUNDAY -> "D"
-        else -> null
     }
 }
