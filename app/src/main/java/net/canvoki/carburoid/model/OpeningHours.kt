@@ -11,12 +11,13 @@ class OpeningHours() {
     private val dayIntervals = mutableMapOf<DayOfWeek, MutableList<Pair<LocalTime, LocalTime>>>()
 
     fun serialize(): String {
-        val daysRepresentations = dayIntervals.map { (day, intervals) ->
-            val dayCode = spanishWeekDayShort(day)
-            val intervalStrings = intervals.map { formatInterval(it) }
-            "$dayCode: ${formatIntervals(intervals)}"
+        val dayStrings: List<Pair<String,String>> = DayOfWeek.values().map { day ->
+            spanishWeekDayShort(day)  to formatIntervals(dayIntervals[day] ?: emptyList())
         }
-        return daysRepresentations.joinToString("; ")
+        return dayStrings
+            .filter {(day, str) -> str.isNotEmpty() }
+            .map {(day, str) -> "$day: $str" }
+            .joinToString("; ")
     }
 
     fun add(day: DayOfWeek, startHour: Int, startMinute: Int, endHour: Int, endMinute: Int) {
