@@ -38,9 +38,7 @@ object ProductManager {
     fun getCurrent(): String = current
 
     fun setCurrent(product: String) {
-        if (product in products) {
-            current = product
-        }
+        current = product
     }
 
     fun resetCurrent() {
