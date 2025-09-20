@@ -6,6 +6,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.After
+import net.canvoki.carburoid.product.ProductManager
 
 class GasStationTest {
 
@@ -119,7 +120,7 @@ class GasStationTest {
 
     @After
     fun resetCurrentProduct() {
-        GasStation.resetCurrentProduct()
+        ProductManager.resetCurrent()
     }
 
     @Test
@@ -130,15 +131,15 @@ class GasStationTest {
 
         assertEquals(gasoleoAPrice, station.price) // Default Gasoleo A
 
-        GasStation.setCurrentProduct("My product")
+        ProductManager.setCurrent("My product")
 
         assertEquals(myProductPrice, station.price) // Set My Product
 
-        GasStation.setCurrentProduct("Missing product")
+        ProductManager.setCurrent("Missing product")
 
         assertEquals(null, station.price) // Missing product in this GasStation
 
-        GasStation.resetCurrentProduct()
+        ProductManager.resetCurrent()
 
         assertEquals(gasoleoAPrice, station.price) // Back to default Gasoleo A
     }

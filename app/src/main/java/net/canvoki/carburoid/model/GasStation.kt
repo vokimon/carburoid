@@ -12,6 +12,7 @@ import net.canvoki.carburoid.json.SpanishFloatTypeAdapter
 import net.canvoki.carburoid.json.toSpanishFloat
 import net.canvoki.carburoid.json.fromSpanishFloat
 import net.canvoki.carburoid.json.SaleTypeAdapter
+import net.canvoki.carburoid.product.ProductManager
 
 // Serialization
 private val gson: Gson by lazy {
@@ -74,26 +75,12 @@ data class GasStation(
         distanceInMeters = CurrentDistancePolicy.getDistance(this)
     }
 
-
     val price: Double?
-        get() = prices[currentProduct]  // For now
+        get() = prices[ProductManager.getCurrent()]
 
     companion object {
-
-
         fun parse(json: String): GasStation {
             return gson.fromJson(json, GasStation::class.java)
-        }
-
-        // Products
-        val DEFAULT_PRODUCT = "Gasoleo A"
-        var currentProduct : String = DEFAULT_PRODUCT
-            private set
-        fun setCurrentProduct(product: String) {
-            currentProduct = product
-        }
-        fun resetCurrentProduct() {
-            currentProduct = DEFAULT_PRODUCT
         }
     }
 }
