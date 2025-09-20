@@ -7,7 +7,8 @@ val END_OF_DAY = LocalTime.of(23, 59)
 
 class OpeningHours() {
     private val intervals = mutableListOf<Pair<LocalTime, LocalTime>>()
-    var currentDay: DayOfWeek = DayOfWeek.MONDAY
+    private var currentDay: DayOfWeek = DayOfWeek.MONDAY
+    private val dayIntervals = mutableMapOf<DayOfWeek, MutableList<Pair<LocalTime, LocalTime>>>()
 
     fun serialize(): String {
         if (intervals.isEmpty()) return ""
@@ -17,10 +18,10 @@ class OpeningHours() {
     }
 
     fun add(day: DayOfWeek, startHour: Int, startMinute: Int, endHour: Int, endMinute: Int) {
-        intervals.add(
-            LocalTime.of(startHour, startMinute) to LocalTime.of(endHour, endMinute)
-        )
+        val interval = LocalTime.of(startHour, startMinute) to LocalTime.of(endHour, endMinute)
+        intervals.add(interval)
         currentDay = day
+        dayIntervals.getOrPut(day) { mutableListOf() }.add(interval)
     }
 
     private fun formatInterval(interval: Pair<LocalTime, LocalTime>) : String {
