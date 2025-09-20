@@ -420,4 +420,22 @@ class OpeningHoursTest {
              (14 to 0) to (22 to 0),
         ), "V-S: 3:00-12:00 y 14:00-22:00")
     }
+
+    // parse
+    fun parse_TestCase(expected: String?, spec: String) {
+        assertEquals(expected, OpeningHours.parse(spec)?.toString())
+    }
+
+    @Test
+    fun `parse single entry`() {
+        parse_TestCase("L-M: 08:00-13:30", "L-M: 08:00-13:30")
+    }
+    @Test
+    fun `parse multiple entries`() {
+        parse_TestCase("L-M: 08:00-13:30; V: 24H", "L-M: 08:00-13:30; V: 24H")
+    }
+    @Test
+    fun `parse bad entry`() {
+        parse_TestCase(null, "L-M: 08:00-13:30; V: BAD")
+    }
 }

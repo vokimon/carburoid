@@ -152,4 +152,24 @@ class OpeningHours() {
             val times = parseIntervals(timesStr) ?: return null
             return days to times
         }
+
+        fun parse(spec: String): OpeningHours? {
+            val oh = OpeningHours()
+            val entries = spec.split("; ")
+            for (entrySpec in entries) {
+                println("Entry: '$entrySpec'")
+                val (days, times) = parseScheduleEntry(entrySpec) ?: return null
+                for (day in days) {
+                    for (time in times) {
+                        val (start, end) = time
+                        val (sh, sm) = start
+                        val (eh, em) = end
+                        oh.add(day, sh, sm, eh, em)
+                    }
+                }
+                continue
+            }
+            return oh
+        }
+    }
 }
