@@ -20,9 +20,11 @@ class OpeningHours() {
         for (window in dayStrings.windowed(2, partialWindows=true)) {
             val (currentDay, currentInterval) = window[0]
             val nextInterval = window.getOrNull(1)?.second
-            if (currentInterval == nextInterval) {
+            if (nextInterval == currentInterval) {
+                // set pivot if not set
                 if (pivot.isEmpty())
                     pivot = "${currentDay}-"
+                // Do not output yet
                 continue
             }
             result.add(pivot+currentDay to currentInterval)
