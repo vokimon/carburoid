@@ -10,6 +10,13 @@ class OpeningHours() {
     private var currentDay: DayOfWeek = DayOfWeek.MONDAY
     private val dayIntervals = mutableMapOf<DayOfWeek, MutableList<Pair<LocalTime, LocalTime>>>()
 
+    fun add(day: DayOfWeek, startHour: Int, startMinute: Int, endHour: Int, endMinute: Int) {
+        val interval = LocalTime.of(startHour, startMinute) to LocalTime.of(endHour, endMinute)
+        intervals.add(interval)
+        currentDay = day
+        dayIntervals.getOrPut(day) { mutableListOf() }.add(interval)
+    }
+
     fun serialize(): String {
         val dayStrings: List<Pair<String,String>> = DayOfWeek.values().map { day ->
             spanishWeekDayShort(day)  to formatIntervals(dayIntervals[day] ?: emptyList())
@@ -36,13 +43,6 @@ class OpeningHours() {
         return result
             .map {(day, str) -> "$day: $str" }
             .joinToString("; ")
-    }
-
-    fun add(day: DayOfWeek, startHour: Int, startMinute: Int, endHour: Int, endMinute: Int) {
-        val interval = LocalTime.of(startHour, startMinute) to LocalTime.of(endHour, endMinute)
-        intervals.add(interval)
-        currentDay = day
-        dayIntervals.getOrPut(day) { mutableListOf() }.add(interval)
     }
 
     private fun formatIntervals(intervals: List<Pair<LocalTime, LocalTime>>): String {
