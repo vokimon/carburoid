@@ -31,7 +31,7 @@ class StationFilter (
                 continue
             }
             if (station.isPublicPrice) {
-                log("Updating price to ${stationPrice} ${station.isPublicPrice}")
+                //log("Updating price to ${stationPrice} ${station.isPublicPrice}")
                 minPrice = stationPrice
             }
             result.add(station)
