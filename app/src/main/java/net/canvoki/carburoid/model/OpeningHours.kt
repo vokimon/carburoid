@@ -72,7 +72,7 @@ class OpeningHours() {
     }
 
     companion object {
-        fun parseTime(intervalStr: String) : Pair<Int,Int>? {
+        fun parseTime(intervalStr: String): Pair<Int,Int>? {
             val parts = intervalStr.split(":")
             if (parts.size != 2) return null
 
@@ -85,7 +85,7 @@ class OpeningHours() {
             return hours to minutes
         }
 
-        fun parseInterval(intervalStr: String) : Pair<Pair<Int,Int>,Pair<Int,Int>>? {
+        fun parseInterval(intervalStr: String): Pair<Pair<Int,Int>,Pair<Int,Int>>? {
             if (intervalStr == "24H") return ((0 to 0) to (23 to 59))
             val parts = intervalStr.split("-")
             if (parts.size != 2) return null
@@ -101,11 +101,24 @@ class OpeningHours() {
             return start to end
         }
 
-        fun parseIntervals(spec: String) : List<Pair<Pair<Int,Int>,Pair<Int,Int>>>? {
+        fun parseIntervals(spec: String): List<Pair<Pair<Int,Int>,Pair<Int,Int>>>? {
             val parts = spec.split(" y ")
             val intervals = parts.map { parseInterval(it) }
             if (intervals.any { it == null }) return null
             return intervals.map { it!! }
+        }
+
+        fun parseDayShort(spec: String): DayOfWeek? {
+            return when (spec) {
+                "L" -> DayOfWeek.MONDAY
+                "M" -> DayOfWeek.TUESDAY
+                "X" -> DayOfWeek.WEDNESDAY
+                "J" -> DayOfWeek.THURSDAY
+                "V" -> DayOfWeek.FRIDAY
+                "S" -> DayOfWeek.SATURDAY
+                "D" -> DayOfWeek.SUNDAY
+                else -> null
+            }
         }
 
 }

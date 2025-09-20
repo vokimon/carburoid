@@ -225,6 +225,8 @@ class OpeningHoursTest {
         parseTimeTestCase(1 to 2, "01:02")
     }
 
+    // parseInterval (single)
+
     fun parseIntervalTestCase(expected: Pair<Pair<Int, Int>, Pair<Int, Int>>?, spec: String) {
         val result = OpeningHours.parseInterval(spec)
         assertEquals(expected, result)
@@ -266,6 +268,8 @@ class OpeningHoursTest {
     }
 
 
+    // parseIntervals (multiple)
+
     fun parseIntervalsTestCase(expected: List<Pair<Pair<Int, Int>, Pair<Int, Int>>>?, spec: String) {
         val result = OpeningHours.parseIntervals(spec)
         assertEquals(expected, result)
@@ -291,6 +295,52 @@ class OpeningHoursTest {
     @Test
     fun `parseIntervals bad interval`() {
         parseIntervalsTestCase(null, "BAD")
+    }
+
+    // parseDayShort
+
+    fun testCaseParseDayShort(expected: DayOfWeek?, spec: String) {
+        assertEquals(expected, OpeningHours.parseDayShort(spec))
+    }
+
+    @Test
+    fun `parseDayShort L returns MONDAY`() {
+        testCaseParseDayShort(DayOfWeek.MONDAY, "L")
+    }
+
+    @Test
+    fun `parseDayShort BAD returns null`() {
+        testCaseParseDayShort(null, "BAD")
+    }
+
+    @Test
+    fun `parseDayShort M returns TUESDAY`() {
+        testCaseParseDayShort(DayOfWeek.TUESDAY, "M")
+    }
+
+    @Test
+    fun `parseDayShort X returns WEDNESDAY`() {
+        testCaseParseDayShort(DayOfWeek.WEDNESDAY, "X")
+    }
+
+    @Test
+    fun `parseDayShort J returns THURSDAY`() {
+        testCaseParseDayShort(DayOfWeek.THURSDAY, "J")
+    }
+
+    @Test
+    fun `parseDayShort V returns FRIDAY`() {
+        testCaseParseDayShort(DayOfWeek.FRIDAY, "V")
+    }
+
+    @Test
+    fun `parseDayShort S returns SATURDAY`() {
+        testCaseParseDayShort(DayOfWeek.SATURDAY, "S")
+    }
+
+    @Test
+    fun `parseDayShort D returns SUNDAY`() {
+        testCaseParseDayShort(DayOfWeek.SUNDAY, "D")
     }
 
 }
