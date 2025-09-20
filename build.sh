@@ -8,7 +8,7 @@ run() {
 }
 
 run ./gradlew assembleDebug &&
-    run ./gradlew testDebugUnitTest --info &&
+    run ./gradlew testDebugUnitTest &&
     (run adb uninstall net.canvoki.carburoid || true ) &&
     run ./gradlew installDebug &&
     run adb shell am start -n net.canvoki.carburoid/.MainActivity &&
