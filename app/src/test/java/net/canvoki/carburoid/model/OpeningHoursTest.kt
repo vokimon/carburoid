@@ -153,4 +153,15 @@ class OpeningHoursTest {
         assertEquals("L: 08:00-13:30; X: 08:00-13:30", result)
     }
 
+    @Test
+    fun `serialize more than two equal intervals in separated days`() {
+        val openingHours = OpeningHours()
+        openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)
+        openingHours.add(DayOfWeek.TUESDAY, 8, 0, 13, 30)
+        openingHours.add(DayOfWeek.WEDNESDAY, 8, 0, 13, 30)
+
+        val result = openingHours.serialize()
+
+        assertEquals("L-X: 08:00-13:30", result)
+    }
 }

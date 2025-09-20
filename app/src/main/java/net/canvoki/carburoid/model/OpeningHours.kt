@@ -21,7 +21,8 @@ class OpeningHours() {
             val (currentDay, currentInterval) = window[0]
             val nextInterval = window.getOrNull(1)?.second
             if (currentInterval == nextInterval) {
-                pivot = "${currentDay}-"
+                if (pivot.isEmpty())
+                    pivot = "${currentDay}-"
                 continue
             }
             result.add(pivot+currentDay to currentInterval)
