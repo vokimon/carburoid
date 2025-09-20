@@ -48,4 +48,14 @@ class OpeningHoursTest {
 
         assertEquals("L: 08:00-13:30 y 15:30-20:00", result) // 🟥 Will fail — current impl overwrites
     }
+
+    @Test
+    fun `serialize for single day 24H`() {
+        val openingHours = OpeningHours()
+        openingHours.add(DayOfWeek.MONDAY, 0, 0, 23, 59)
+
+        val result = openingHours.serialize()
+
+        assertEquals("L: 24H", result)
+    }
 }
