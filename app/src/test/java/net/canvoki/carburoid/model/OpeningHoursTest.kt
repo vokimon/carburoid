@@ -120,7 +120,6 @@ class OpeningHoursTest {
         assertEquals("D: 10:00-14:00", result)
     }
 
-    @Ignore("not yet")
     @Test
     fun `serialize Monday and Wednesday each with one interval`() {
         val openingHours = OpeningHours()
