@@ -15,16 +15,20 @@ class OpeningHours() {
             spanishWeekDayShort(day)  to formatIntervals(dayIntervals[day] ?: emptyList())
         }
 
-        if (
-            dayStrings[0].first == "L" &&
-            dayStrings[1].first == "M" &&
-            dayStrings[0].second == dayStrings[1].second &&
-            dayStrings[0].second.isNotEmpty()
-        ) {
-            return "L-M: ${dayStrings[0].second}"
+        var pivot = ""
+        val result = mutableListOf<Pair<String,String>>()
+        for (window in dayStrings.windowed(2, partialWindows=true)) {
+            val (currentDay, currentInterval) = window[0]
+            val nextInterval = window.getOrNull(1)?.second
+            if (currentInterval == nextInterval) {
+                pivot = "${currentDay}-"
+                continue
+            }
+            result.add(pivot+currentDay to currentInterval)
+            pivot = ""
         }
 
-        return dayStrings
+        return result
             .filter {(_, str) -> str.isNotEmpty() }
             .map {(day, str) -> "$day: $str" }
             .joinToString("; ")

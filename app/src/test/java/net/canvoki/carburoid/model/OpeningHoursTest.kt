@@ -121,18 +121,18 @@ class OpeningHoursTest {
     }
 
     @Test
-    fun `serialize Monday and Wednesday each with one interval`() {
+    fun `serialize consecutive days with different intervals`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)
-        openingHours.add(DayOfWeek.WEDNESDAY, 10, 0, 14, 0)
+        openingHours.add(DayOfWeek.TUESDAY, 10, 0, 13, 30)
 
         val result = openingHours.serialize()
 
-        assertEquals("L: 08:00-13:30; X: 10:00-14:00", result)
+        assertEquals("L: 08:00-13:30; M: 10:00-13:30", result)
     }
 
     @Test
-    fun `collapses two consecutive days with identical intervals into day range`() {
+    fun `serialize collapses two consecutive days with identical intervals into day range`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)
         openingHours.add(DayOfWeek.TUESDAY, 8, 0, 13, 30)
@@ -140,6 +140,17 @@ class OpeningHoursTest {
         val result = openingHours.serialize()
 
         assertEquals("L-M: 08:00-13:30", result)
+    }
+
+    @Test
+    fun `Serialize does not collapse equal intervals in separated days`() {
+        val openingHours = OpeningHours()
+        openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)
+        openingHours.add(DayOfWeek.WEDNESDAY, 8, 0, 13, 30)
+
+        val result = openingHours.serialize()
+
+        assertEquals("L: 08:00-13:30; X: 08:00-13:30", result)
     }
 
 }
