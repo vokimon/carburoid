@@ -100,4 +100,12 @@ class OpeningHours() {
 
             return start to end
         }
+
+        fun parseIntervals(spec: String) : List<Pair<Pair<Int,Int>,Pair<Int,Int>>>? {
+            val parts = spec.split(" y ")
+            val intervals = parts.map { parseInterval(it) }
+            if (intervals.any { it == null }) return null
+            return intervals.map { it!! }
+        }
+
 }

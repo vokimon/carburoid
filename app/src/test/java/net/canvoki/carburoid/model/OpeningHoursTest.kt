@@ -226,8 +226,8 @@ class OpeningHoursTest {
     }
 
     fun parseIntervalTestCase(expected: Pair<Pair<Int, Int>, Pair<Int, Int>>?, spec: String) {
-        val time = OpeningHours.parseInterval(spec)
-        assertEquals(expected, time)
+        val result = OpeningHours.parseInterval(spec)
+        assertEquals(expected, result)
     }
 
     @Test
@@ -263,6 +263,34 @@ class OpeningHoursTest {
     @Test
     fun `parseInterval proper interval`() {
         parseIntervalTestCase((12 to 34) to (22 to 30), "12:34-22:30")
+    }
+
+
+    fun parseIntervalsTestCase(expected: List<Pair<Pair<Int, Int>, Pair<Int, Int>>>?, spec: String) {
+        val result = OpeningHours.parseIntervals(spec)
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `parseIntervals single interval`() {
+        parseIntervalsTestCase(
+            listOf(
+                (12 to 34) to (22 to 30)
+            ), "12:34-22:30")
+    }
+
+    @Test
+    fun `parseIntervals multiple interval`() {
+        parseIntervalsTestCase(
+            listOf(
+                (0 to 0) to (10 to 0),
+                (12 to 34) to (22 to 30),
+            ), "00:00-10:00 y 12:34-22:30")
+    }
+
+    @Test
+    fun `parseIntervals bad interval`() {
+        parseIntervalsTestCase(null, "BAD")
     }
 
 }
