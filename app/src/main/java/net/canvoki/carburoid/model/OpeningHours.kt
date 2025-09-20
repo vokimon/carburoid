@@ -70,4 +70,14 @@ class OpeningHours() {
         DayOfWeek.SATURDAY -> "S"
         DayOfWeek.SUNDAY -> "D"
     }
+
+    companion object {
+        fun parseTime(intervalStr: String) : Pair<Int,Int>? {
+            val parts = intervalStr.split(":")
+            if (parts.size != 2) return null
+            val hours = parts[0].toIntOrNull() ?: return null
+            val minutes= parts[1].toIntOrNull() ?: return null
+            return hours to minutes
+        }
+
 }

@@ -164,4 +164,32 @@ class OpeningHoursTest {
 
         assertEquals("L-X: 08:00-13:30", result)
     }
+
+    fun parseTimeTestCase(expected: Pair<Int, Int>?, spec: String) {
+        val time = OpeningHours.parseTime(spec)
+        assertEquals(expected, time)
+    }
+
+    @Test
+    fun `parseTime without colon`() {
+        parseTimeTestCase(null, "nocolon")
+    }
+
+    @Test
+    fun `parseTime non numerical hours`() {
+        parseTimeTestCase(null, "hh:12")
+    }
+
+    @Test
+    fun `parseTime non numerical minutes`() {
+        parseTimeTestCase(null, "12:mm")
+    }
+
+    @Test
+    fun `parseTime`() {
+        val spec = "13:30"
+        val time = OpeningHours.parseTime(spec)
+        assertEquals(13 to 30, time)
+    }
+
 }
