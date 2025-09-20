@@ -77,5 +77,4 @@ class SaleTypeAdapterTest {
 
         assertEquals("\"P\"", writer.toString())
     }
-
 }

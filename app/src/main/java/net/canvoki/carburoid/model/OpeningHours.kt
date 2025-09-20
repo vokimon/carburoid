@@ -22,7 +22,7 @@ class OpeningHours() {
         dayIntervals.getOrPut(day) { mutableListOf() }.add(interval)
     }
 
-    fun serialize(): String {
+    override fun toString(): String {
         val dayStrings: List<Pair<String,String>> = DayOfWeek.values().map { day ->
             spanishWeekDayShort(day)  to formatIntervals(dayIntervals[day] ?: emptyList())
         }

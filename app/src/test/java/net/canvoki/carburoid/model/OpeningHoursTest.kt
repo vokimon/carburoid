@@ -11,156 +11,156 @@ import kotlin.test.assertEquals
 class OpeningHoursTest {
 
     @Test
-    fun `serialize for no range`() {
+    fun `toString for no range`() {
         val openingHours = OpeningHours()
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("", result)
     }
 
     @Test
-    fun `serialize for single day single range`() {
+    fun `toString for single day single range`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("L: 08:00-13:30", result)
     }
 
     @Test
-    fun `serialize for single day different time`() {
+    fun `toString for single day different time`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 7, 10, 14, 3)
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("L: 07:10-14:03", result)
     }
 
     @Test
-    fun `serialize for Monday with two intervals`() {
+    fun `toString for Monday with two intervals`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)
         openingHours.add(DayOfWeek.MONDAY, 15, 30, 20, 0)
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("L: 08:00-13:30 y 15:30-20:00", result)
     }
 
     @Test
-    fun `serialize for single day 24H`() {
+    fun `toString for single day 24H`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 0, 0, 23, 59)
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("L: 24H", result)
     }
 
     @Test
-    fun `serialize Tuesday single interval`() {
+    fun `toString Tuesday single interval`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.TUESDAY, 10, 0, 14, 0)
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("M: 10:00-14:00", result)
     }
 
     @Test
-    fun `serialize Wenesday single interval`() {
+    fun `toString Wenesday single interval`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.WEDNESDAY, 10, 0, 14, 0)
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("X: 10:00-14:00", result)
     }
 
     @Test
-    fun `serialize Thursday single interval`() {
+    fun `toString Thursday single interval`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.THURSDAY, 10, 0, 14, 0)
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("J: 10:00-14:00", result)
     }
 
     @Test
-    fun `serialize Friday single interval`() {
+    fun `toString Friday single interval`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.FRIDAY, 10, 0, 14, 0)
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("V: 10:00-14:00", result)
     }
 
     @Test
-    fun `serialize Saturday single interval`() {
+    fun `toString Saturday single interval`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.SATURDAY, 10, 0, 14, 0)
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("S: 10:00-14:00", result)
     }
 
     @Test
-    fun `serialize Sunday single interval`() {
+    fun `toString Sunday single interval`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.SUNDAY, 10, 0, 14, 0)
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("D: 10:00-14:00", result)
     }
 
     @Test
-    fun `serialize consecutive days with different intervals`() {
+    fun `toString consecutive days with different intervals`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)
         openingHours.add(DayOfWeek.TUESDAY, 10, 0, 13, 30)
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("L: 08:00-13:30; M: 10:00-13:30", result)
     }
 
     @Test
-    fun `serialize collapses two consecutive days with identical intervals into day range`() {
+    fun `toString collapses two consecutive days with identical intervals into day range`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)
         openingHours.add(DayOfWeek.TUESDAY, 8, 0, 13, 30)
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("L-M: 08:00-13:30", result)
     }
 
     @Test
-    fun `Serialize does not collapse equal intervals in separated days`() {
+    fun `toString does not collapse equal intervals in separated days`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)
         openingHours.add(DayOfWeek.WEDNESDAY, 8, 0, 13, 30)
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("L: 08:00-13:30; X: 08:00-13:30", result)
     }
 
     @Test
-    fun `serialize more than two equal intervals in separated days`() {
+    fun `toString more than two equal intervals in separated days`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)
         openingHours.add(DayOfWeek.TUESDAY, 8, 0, 13, 30)
         openingHours.add(DayOfWeek.WEDNESDAY, 8, 0, 13, 30)
 
-        val result = openingHours.serialize()
+        val result = openingHours.toString()
 
         assertEquals("L-X: 08:00-13:30", result)
     }
