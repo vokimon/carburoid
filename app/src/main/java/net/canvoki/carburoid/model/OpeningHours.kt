@@ -20,7 +20,9 @@ class OpeningHours() {
         for (window in dayStrings.windowed(2, partialWindows=true)) {
             val (currentDay, currentInterval) = window[0]
             val nextInterval = window.getOrNull(1)?.second
+            if (currentInterval.isEmpty()) continue
             if (nextInterval == currentInterval) {
+                // repeated interval detected
                 // set pivot if not set
                 if (pivot.isEmpty())
                     pivot = "${currentDay}-"
@@ -28,11 +30,10 @@ class OpeningHours() {
                 continue
             }
             result.add(pivot+currentDay to currentInterval)
-            pivot = ""
+            pivot = "" // reset pivot
         }
 
         return result
-            .filter {(_, str) -> str.isNotEmpty() }
             .map {(day, str) -> "$day: $str" }
             .joinToString("; ")
     }
