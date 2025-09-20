@@ -9,6 +9,7 @@ import java.time.Instant
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.json.SpanishDateTypeAdapter
 import net.canvoki.carburoid.json.SpanishFloatTypeAdapter
+import net.canvoki.carburoid.json.OpeningHoursAdapter
 import net.canvoki.carburoid.json.toSpanishFloat
 import net.canvoki.carburoid.json.fromSpanishFloat
 import net.canvoki.carburoid.json.SaleTypeAdapter
@@ -65,6 +66,10 @@ data class GasStation(
     @SerializedName("Tipo Venta")
     @JsonAdapter(SaleTypeAdapter::class)
     val isPublicPrice: Boolean = true,
+
+    @SerializedName("Horarios")
+    @JsonAdapter(OpeningHoursAdapter::class)
+    val openingHours: OpeningHours? = OpeningHours.parse("L-D: 24H"),
 
     val prices: Map<String, Double?> = emptyMap()
 ) {

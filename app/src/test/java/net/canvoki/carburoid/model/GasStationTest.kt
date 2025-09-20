@@ -22,6 +22,7 @@ class GasStationTest {
                 "Precio Gasoleo A": "1.659",
                 "Latitud": "40,4168",
                 "Longitud (WGS84)": "-3,7038",
+                "Horarios": "L-D: 10:00-20:00",
                 "Tipo Venta": "P"
             }
         """.trimIndent()
@@ -36,6 +37,7 @@ class GasStationTest {
         assertEquals(-3.7038, station.longitude!!, 0.0001)
         assertEquals(1.659, station.price!!, 0.0001)
         assertEquals(true, station.isPublicPrice)
+        assertEquals("L-D: 10:00-20:00", station.openingHours.toString())
     }
 
     @Test
@@ -170,6 +172,29 @@ class GasStationTest {
 
         assertEquals(40.4168, station.latitude!!, 0.0001)
         assertEquals(-3.7038, station.longitude!!, 0.0001)
+    }
+
+    fun `parse station with no Horarios gets null`() {
+        // Sample JSON for one station
+        val json = """
+            {
+                "Rótulo": "REPSOL",
+                "Dirección": "Calle Mayor 1",
+                "Localidad": "Madrid",
+                "Provincia": "Madrid",
+                "Precio Gasoleo A": "1.659",
+                "Latitud": "40,4168",
+                "Longitud (WGS84)": "-3,7038",
+                "Tipo Venta": "P"
+            }
+        """.trimIndent()
+
+        // Parse with Gson
+        val station = GasStation.parse(json)
+
+        // Verify computed properties
+        assertEquals(null, station.openingHours)
+
     }
 
 }
