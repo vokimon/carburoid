@@ -2,6 +2,8 @@ package net.canvoki.carburoid.model
 
 import java.time.DayOfWeek
 import java.time.LocalTime
+import java.time.Instant
+import java.time.ZoneId
 
 val END_OF_DAY = LocalTime.of(23, 59)
 typealias TimeSpec = Pair<Int,Int>
@@ -9,6 +11,11 @@ typealias Interval = Pair<TimeSpec, TimeSpec>
 typealias Intervals = List<Interval>
 typealias DayRange = List<DayOfWeek>
 typealias ScheduleEntry = Pair<DayRange, Intervals>
+
+data class OpeningStatus(
+    val isOpen: Boolean,
+    val nextChange: Instant?,
+)
 
 class OpeningHours() {
     private val intervals = mutableListOf<Pair<LocalTime, LocalTime>>()
@@ -20,6 +27,12 @@ class OpeningHours() {
         intervals.add(interval)
         currentDay = day
         dayIntervals.getOrPut(day) { mutableListOf() }.add(interval)
+    }
+
+    fun getStatus(instant: Instant, zoneId: ZoneId): OpeningStatus {
+        if (dayIntervals.isEmpty())
+            return OpeningStatus(false, null)
+        return OpeningStatus(true, null)
     }
 
     override fun toString(): String {

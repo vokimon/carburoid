@@ -4,6 +4,8 @@ import org.junit.Test
 import org.junit.Ignore
 import java.time.DayOfWeek
 import java.time.LocalTime
+import java.time.Instant
+import java.time.ZoneId
 import kotlin.test.assertEquals
 
 
@@ -437,5 +439,45 @@ class OpeningHoursTest {
     @Test
     fun `parse bad entry`() {
         parse_TestCase(null, "L-M: 08:00-13:30; V: BAD")
+    }
+
+    // getStatus
+
+    fun getStatus_testCase(
+        openings: String,
+        at: String,
+        isOpen: Boolean,
+        nextChange: String?,
+        isCanaryIslands: Boolean=false,
+    ) {
+        val oh = OpeningHours.parse(openings)?: OpeningHours()
+        val instant = Instant.parse(at)
+        val zoneId = ZoneId.of(if (isCanaryIslands) "Atlantic/Canary" else "Europe/Madrid")
+        val status = oh.getStatus(instant, zoneId)
+        val expectedNextChange = nextChange?.let { Instant.parse(it) }
+        assertEquals(
+            OpeningStatus(isOpen=isOpen, nextChange=expectedNextChange),
+            status
+        )
+    }
+
+    @Test
+    fun `getStatus 24 7 returns open with no next change`() {
+        getStatus_testCase(
+            openings="L-D: 24H",
+            at="2025-06-09T00:00:00Z",
+            isOpen=true,
+            nextChange=null,
+        )
+    }
+
+    @Test
+    fun `getStatus always closed never opens`() {
+        getStatus_testCase(
+            openings="",
+            at="2025-06-09T00:00:00Z",
+            isOpen=false,
+            nextChange=null,
+        )
     }
 }
