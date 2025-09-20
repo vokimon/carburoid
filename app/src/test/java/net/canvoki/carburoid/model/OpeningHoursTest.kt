@@ -128,8 +128,18 @@ class OpeningHoursTest {
 
         val result = openingHours.serialize()
 
-        // Order? We'll assume insertion order for now — API doesn’t specify, so we don’t overengineer
         assertEquals("L: 08:00-13:30; X: 10:00-14:00", result)
+    }
+
+    @Test
+    fun `collapses two consecutive days with identical intervals into day range`() {
+        val openingHours = OpeningHours()
+        openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)
+        openingHours.add(DayOfWeek.TUESDAY, 8, 0, 13, 30)
+
+        val result = openingHours.serialize()
+
+        assertEquals("L-M: 08:00-13:30", result)
     }
 
 }

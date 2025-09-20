@@ -14,8 +14,18 @@ class OpeningHours() {
         val dayStrings: List<Pair<String,String>> = DayOfWeek.values().map { day ->
             spanishWeekDayShort(day)  to formatIntervals(dayIntervals[day] ?: emptyList())
         }
+
+        if (
+            dayStrings[0].first == "L" &&
+            dayStrings[1].first == "M" &&
+            dayStrings[0].second == dayStrings[1].second &&
+            dayStrings[0].second.isNotEmpty()
+        ) {
+            return "L-M: ${dayStrings[0].second}"
+        }
+
         return dayStrings
-            .filter {(day, str) -> str.isNotEmpty() }
+            .filter {(_, str) -> str.isNotEmpty() }
             .map {(day, str) -> "$day: $str" }
             .joinToString("; ")
     }
