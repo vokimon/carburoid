@@ -75,8 +75,13 @@ class OpeningHours() {
         fun parseTime(intervalStr: String) : Pair<Int,Int>? {
             val parts = intervalStr.split(":")
             if (parts.size != 2) return null
+
             val hours = parts[0].toIntOrNull() ?: return null
             val minutes= parts[1].toIntOrNull() ?: return null
+
+            if (hours !in 0..23) return null
+            if (minutes !in 0..59) return null
+
             return hours to minutes
         }
 

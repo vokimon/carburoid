@@ -186,10 +186,43 @@ class OpeningHoursTest {
     }
 
     @Test
-    fun `parseTime`() {
-        val spec = "13:30"
-        val time = OpeningHours.parseTime(spec)
-        assertEquals(13 to 30, time)
+    fun `parseTime beyond range hours`() {
+        parseTimeTestCase(null, "24:12")
+    }
+
+    @Test
+    fun `parseTime below range hours`() {
+        parseTimeTestCase(null, "-1:12")
+    }
+
+    @Test
+    fun `parseTime beyond range minutes`() {
+        parseTimeTestCase(null, "12:-1")
+    }
+
+    @Test
+    fun `parseTime below range minutes`() {
+        parseTimeTestCase(null, "12:60")
+    }
+
+    @Test
+    fun `parseTime upper bound`() {
+        parseTimeTestCase(23 to 59, "23:59")
+    }
+
+    @Test
+    fun `parseTime lower bound`() {
+        parseTimeTestCase(0 to 0, "00:00")
+    }
+
+    @Test
+    fun `parseTime upadded`() {
+        parseTimeTestCase(1 to 2, "1:2")
+    }
+
+    @Test
+    fun `parseTime zero padded`() {
+        parseTimeTestCase(1 to 2, "01:02")
     }
 
 }
