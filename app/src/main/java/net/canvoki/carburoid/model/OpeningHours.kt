@@ -14,7 +14,7 @@ class OpeningHours() {
         val daysRepresentations = dayIntervals.map { (day, intervals) ->
             val dayCode = spanishWeekDayShort(day)
             val intervalStrings = intervals.map { formatInterval(it) }
-            "$dayCode: ${intervalStrings.joinToString(" y ")}"
+            "$dayCode: ${formatIntervals(intervals)}"
         }
         return daysRepresentations.joinToString("; ")
     }
@@ -24,6 +24,10 @@ class OpeningHours() {
         intervals.add(interval)
         currentDay = day
         dayIntervals.getOrPut(day) { mutableListOf() }.add(interval)
+    }
+
+    private fun formatIntervals(intervals: List<Pair<LocalTime, LocalTime>>): String {
+        return intervals.map { formatInterval(it) }.joinToString(" y ")
     }
 
     private fun formatInterval(interval: Pair<LocalTime, LocalTime>) : String {
