@@ -225,4 +225,44 @@ class OpeningHoursTest {
         parseTimeTestCase(1 to 2, "01:02")
     }
 
+    fun parseIntervalTestCase(expected: Pair<Pair<Int, Int>, Pair<Int, Int>>?, spec: String) {
+        val time = OpeningHours.parseInterval(spec)
+        assertEquals(expected, time)
+    }
+
+    @Test
+    fun `parseInterval no dash`() {
+        parseIntervalTestCase(null, "nodash")
+    }
+
+    @Test
+    fun `parseInterval 24H`() {
+        parseIntervalTestCase((0 to 0) to (23 to 59), "24H")
+    }
+
+    @Test
+    fun `parseInterval bad begin`() {
+        parseIntervalTestCase(null, "bad-12:34")
+    }
+
+    @Test
+    fun `parseInterval bad end`() {
+        parseIntervalTestCase(null, "12:34-end")
+    }
+
+    @Test
+    fun `parseInterval crossed interval hours`() {
+        parseIntervalTestCase(null, "12:34-02:30")
+    }
+
+    @Test
+    fun `parseInterval crossed interval minutes`() {
+        parseIntervalTestCase(null, "12:34-12:30")
+    }
+
+    @Test
+    fun `parseInterval proper interval`() {
+        parseIntervalTestCase((12 to 34) to (22 to 30), "12:34-22:30")
+    }
+
 }

@@ -85,4 +85,19 @@ class OpeningHours() {
             return hours to minutes
         }
 
+        fun parseInterval(intervalStr: String) : Pair<Pair<Int,Int>,Pair<Int,Int>>? {
+            if (intervalStr == "24H") return ((0 to 0) to (23 to 59))
+            val parts = intervalStr.split("-")
+            if (parts.size != 2) return null
+
+            val start = parseTime(parts[0]) ?: return null
+            val end = parseTime(parts[1]) ?: return null
+
+            if (start.first > end.first) return null
+            if (start.first == end.first) {
+                if (start.second >= end.second) return null
+            }
+
+            return start to end
+        }
 }
