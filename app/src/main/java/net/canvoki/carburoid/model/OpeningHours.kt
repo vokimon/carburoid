@@ -121,4 +121,20 @@ class OpeningHours() {
             }
         }
 
+        fun parseDayRange(spec: String): List<DayOfWeek>? {
+            val parts = spec.split("-")
+            val start = parts.getOrNull(0)?.let { parseDayShort(it) }
+            if (start==null) return null
+
+            if (parts.size == 1) return listOf(start)
+
+            val end = parts[1]?.let { parseDayShort(it) }
+            val allDays = DayOfWeek.values().toList()
+            val startIndex = allDays.indexOf(start)
+            val endIndex = allDays.indexOf(end)
+            if (startIndex < endIndex)
+                return allDays.subList(startIndex, endIndex+1)
+            // Crossed? cycle through end
+            return allDays.subList(startIndex, allDays.size) + allDays.subList(0, endIndex+1)
+        }
 }

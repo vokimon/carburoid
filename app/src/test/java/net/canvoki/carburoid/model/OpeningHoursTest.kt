@@ -299,48 +299,95 @@ class OpeningHoursTest {
 
     // parseDayShort
 
-    fun testCaseParseDayShort(expected: DayOfWeek?, spec: String) {
+    fun parseDayShort_testCase(expected: DayOfWeek?, spec: String) {
         assertEquals(expected, OpeningHours.parseDayShort(spec))
     }
 
     @Test
     fun `parseDayShort L returns MONDAY`() {
-        testCaseParseDayShort(DayOfWeek.MONDAY, "L")
+        parseDayShort_testCase(DayOfWeek.MONDAY, "L")
     }
 
     @Test
     fun `parseDayShort BAD returns null`() {
-        testCaseParseDayShort(null, "BAD")
+        parseDayShort_testCase(null, "BAD")
     }
 
     @Test
     fun `parseDayShort M returns TUESDAY`() {
-        testCaseParseDayShort(DayOfWeek.TUESDAY, "M")
+        parseDayShort_testCase(DayOfWeek.TUESDAY, "M")
     }
 
     @Test
     fun `parseDayShort X returns WEDNESDAY`() {
-        testCaseParseDayShort(DayOfWeek.WEDNESDAY, "X")
+        parseDayShort_testCase(DayOfWeek.WEDNESDAY, "X")
     }
 
     @Test
     fun `parseDayShort J returns THURSDAY`() {
-        testCaseParseDayShort(DayOfWeek.THURSDAY, "J")
+        parseDayShort_testCase(DayOfWeek.THURSDAY, "J")
     }
 
     @Test
     fun `parseDayShort V returns FRIDAY`() {
-        testCaseParseDayShort(DayOfWeek.FRIDAY, "V")
+        parseDayShort_testCase(DayOfWeek.FRIDAY, "V")
     }
 
     @Test
     fun `parseDayShort S returns SATURDAY`() {
-        testCaseParseDayShort(DayOfWeek.SATURDAY, "S")
+        parseDayShort_testCase(DayOfWeek.SATURDAY, "S")
     }
 
     @Test
     fun `parseDayShort D returns SUNDAY`() {
-        testCaseParseDayShort(DayOfWeek.SUNDAY, "D")
+        parseDayShort_testCase(DayOfWeek.SUNDAY, "D")
     }
+
+    fun parseDayRange_testCase(expected: List<DayOfWeek>?, spec: String) {
+        val result = OpeningHours.parseDayRange(spec)
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `parseDayRange single day wraps in list`() {
+        parseDayRange_testCase(listOf(
+            DayOfWeek.TUESDAY,
+        ), "M")
+    }
+
+    @Test
+    fun `parseDayRange bad day returns null`() {
+        parseDayRange_testCase(null, "BAD")
+    }
+
+    @Test
+    fun `parseDayRange consecutiive bounds`() {
+        parseDayRange_testCase(listOf(
+            DayOfWeek.TUESDAY,
+            DayOfWeek.WEDNESDAY,
+        ), "M-X")
+    }
+
+    @Test
+    fun `parseDayRange non-consecutive bounds`() {
+        parseDayRange_testCase(listOf(
+            DayOfWeek.TUESDAY,
+            DayOfWeek.WEDNESDAY,
+            DayOfWeek.THURSDAY,
+        ), "M-J")
+    }
+
+    @Test
+    fun `parseDayRange inverted order cycles`() {
+        parseDayRange_testCase(listOf(
+            DayOfWeek.THURSDAY,
+            DayOfWeek.FRIDAY,
+            DayOfWeek.SATURDAY,
+            DayOfWeek.SUNDAY,
+            DayOfWeek.MONDAY,
+            DayOfWeek.TUESDAY,
+        ), "J-M")
+    }
+
 
 }
