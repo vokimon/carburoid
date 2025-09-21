@@ -85,11 +85,13 @@ class OpeningHours() {
         if (closingAt != null) {
             val nextDay = day + 1
             var closingDay = day
-            if (dayIntervals.containsKey(nextDay)) {
-                val (start, end) = dayIntervals[nextDay]!![0]
-                if (start == LocalTime.of(0, 0)) {
-                    closingAt = end
-                    closingDay = nextDay
+            if (closingAt == LocalTime.of(23,59)) {
+                if (dayIntervals.containsKey(nextDay)) {
+                    val (start, end) = dayIntervals[nextDay]!![0]
+                    if (start == LocalTime.of(0, 0)) {
+                        closingAt = end
+                        closingDay = nextDay
+                    }
                 }
             }
             if (closingAt == LocalTime.of(23, 59)) {

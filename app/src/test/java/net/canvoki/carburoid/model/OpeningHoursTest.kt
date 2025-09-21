@@ -647,6 +647,16 @@ class OpeningHoursTest {
         )
     }
 
+    @Test
+    fun `getStatus not ending at midnight breaks continuity`() {
+        getStatus_testCase(
+            openings="M: 8:00-23:00; X: 00:00-10:00", // Tuesday and Wednesday noncontiguous
+            at=madridInstant(DayOfWeek.TUESDAY, "12:00"), // on the first opening
+            isOpen=true,
+            until=madridInstant(DayOfWeek.TUESDAY, "23:00"), // takes the first closing
+        )
+    }
+
 
     // toLocal toInstant helpers
 
