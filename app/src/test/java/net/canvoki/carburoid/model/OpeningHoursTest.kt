@@ -601,7 +601,7 @@ class OpeningHoursTest {
     fun `getStatus in between openings in the same day`() {
         getStatus_testCase(
             openings="M: 8:00-14:00 y 17:00-20:00", // Tuesday splitted day
-            at=madridInstant(DayOfWeek.TUESDAY, "15:00"),
+            at=madridInstant(DayOfWeek.TUESDAY, "15:00"), // in between
             isOpen=false,
             until=madridInstant(DayOfWeek.TUESDAY, "17:00"),
         )
@@ -614,6 +614,16 @@ class OpeningHoursTest {
             at=madridInstant(DayOfWeek.TUESDAY, "12:00"), // on the first opening
             isOpen=true,
             until=madridInstant(DayOfWeek.TUESDAY, "20:00"), // takes the second closing
+        )
+    }
+
+    @Test
+    fun `getStatus noncontiguous openings close on the first`() {
+        getStatus_testCase(
+            openings="M: 8:00-14:00 y 16:00-20:00", // Tuesday separated openings within day
+            at=madridInstant(DayOfWeek.TUESDAY, "12:00"), // on the first opening
+            isOpen=true,
+            until=madridInstant(DayOfWeek.TUESDAY, "14:00"), // takes the first closing
         )
     }
 

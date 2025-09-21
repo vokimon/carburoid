@@ -66,7 +66,10 @@ class OpeningHours() {
         for ((start, end) in dayIntervals.getOrDefault(day, emptyList())) {
             if (end < time) continue // interval in the past, ignore
 
+            // Looking for closure
             if (closingAt != null) {
+                // If there is a gap the end is the previous one
+                if (start > closingAt.plusMinutes(1)) break
                 closingAt = end
                 continue
             }
