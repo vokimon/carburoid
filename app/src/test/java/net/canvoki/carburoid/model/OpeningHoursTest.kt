@@ -571,7 +571,7 @@ class OpeningHoursTest {
         )
     }
 
-    @Skip("Enable just to detect production data failures")
+    @Ignore("Enable just to detect production data failures")
     @Test
     fun `round trip parse-serialize matches original for all specs in file`() {
         // Populate the file with
