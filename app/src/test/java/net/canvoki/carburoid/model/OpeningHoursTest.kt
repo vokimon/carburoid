@@ -6,7 +6,9 @@ import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.Instant
 import java.time.ZoneId
+import java.io.File
 import kotlin.test.assertEquals
+import kotlin.test.fail
 
 
 
@@ -551,5 +553,37 @@ class OpeningHoursTest {
                 zoneId = ZoneId.of("Europe/Madrid")
             ),
         )
+    }
+
+    @Skip("Enable just to detect production data failures")
+    @Test
+    fun `round trip parse-serialize matches original for all specs in file`() {
+        // Populate the file with
+        // $ curl -s "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/" | jq -r '..|.Horario? // empty' | sort | uniq  > app/src/test/resources/opening_hours_specs.txt
+        val file = File("src/test/resources/opening_hours_specs.txt")
+        val lines = file.readLines()
+
+        val failures = mutableListOf<String>()
+
+        for (line in lines) {
+            if (line.isBlank()) continue
+
+            try {
+                val oh = OpeningHours.parse(line)
+                val serialized = oh.toString()
+
+                if (serialized != line) {
+                    failures.add("Original: '$line' → Serialized: '$serialized'")
+                }
+            } catch (e: Exception) {
+                failures.add("Failed to parse: '$line' → ${e.message}")
+            }
+        }
+
+        if (failures.isNotEmpty()) {
+            println("Round-trip failures:")
+            failures.forEach { println("  $it") }
+            fail("Round-trip failed for ${failures.size} specs")
+        }
     }
 }
