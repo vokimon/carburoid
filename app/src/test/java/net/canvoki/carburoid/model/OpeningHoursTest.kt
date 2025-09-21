@@ -465,16 +465,16 @@ class OpeningHoursTest {
         openings: String,
         at: String,
         isOpen: Boolean,
-        nextChange: String?,
+        until: String?,
         isCanaryIslands: Boolean=false,
     ) {
         val oh = OpeningHours.parse(openings)?: OpeningHours()
         val instant = Instant.parse(at)
         val zoneId = ZoneId.of(if (isCanaryIslands) "Atlantic/Canary" else "Europe/Madrid")
         val status = oh.getStatus(instant, zoneId)
-        val expectedNextChange = nextChange?.let { Instant.parse(it) }
+        val expectedNextChange = until?.let { Instant.parse(it) }
         assertEquals(
-            OpeningStatus(isOpen=isOpen, nextChange=expectedNextChange),
+            OpeningStatus(isOpen=isOpen, until=expectedNextChange),
             status
         )
     }
@@ -486,7 +486,7 @@ class OpeningHoursTest {
             openings="L-D: 24H",
             at="2025-06-09T00:00:00Z",
             isOpen=true,
-            nextChange=null,
+            until=null,
         )
     }
 
@@ -496,7 +496,7 @@ class OpeningHoursTest {
             openings="",
             at="2025-06-09T00:00:00Z",
             isOpen=false,
-            nextChange=null,
+            until=null,
         )
     }
 
@@ -506,7 +506,7 @@ class OpeningHoursTest {
             openings="M: 24H", // Tuesday full day
             at="2025-09-02T10:00:00Z",  // Madrid Tuesday 12h
             isOpen=true,
-            nextChange="2025-09-02T22:00:00Z", // Madrid Wednesday 0h
+            until="2025-09-02T22:00:00Z", // Madrid Wednesday 0h
         )
     }
 
@@ -516,7 +516,7 @@ class OpeningHoursTest {
             openings="M: 24H", // Tuesday full day
             at="2025-09-01T10:00:00Z", // Madrid Monday 12h
             isOpen=false,
-            nextChange="2025-09-01T22:00:00Z", // Madrid Tuesday 0h
+            until="2025-09-01T22:00:00Z", // Madrid Tuesday 0h
         )
     }
 
@@ -526,7 +526,7 @@ class OpeningHoursTest {
             openings="X: 24H", // Wednesday full day
             at="2025-09-01T10:00:00Z", // Madrid Monday 12h
             isOpen=false,
-            nextChange="2025-09-02T22:00:00Z", // Madrid Wednesday 0h
+            until="2025-09-02T22:00:00Z", // Madrid Wednesday 0h
         )
     }
 
@@ -536,7 +536,7 @@ class OpeningHoursTest {
             openings="X: 24H", // Wednesday full day
             at="2025-09-04T10:00:00Z", // Madrid Thursday 12h
             isOpen=false,
-            nextChange="2025-09-10T22:00:00Z", // Madrid next Wednesday 0h
+            until="2025-09-09T22:00:00Z", // Madrid next Wednesday 0h
         )
     }
 

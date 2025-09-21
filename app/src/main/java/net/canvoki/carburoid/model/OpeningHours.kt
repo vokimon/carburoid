@@ -16,7 +16,7 @@ typealias ScheduleEntry = Pair<DayRange, Intervals>
 
 data class OpeningStatus(
     val isOpen: Boolean,
-    val nextChange: Instant?,
+    val until: Instant?,
 )
 
 fun toLocal(instant: Instant, zoneId: ZoneId = ZoneId.of("Europe/Madrid")): Pair<DayOfWeek, LocalTime> {
@@ -63,14 +63,14 @@ class OpeningHours() {
         val (day, _) = toLocal(instant, zoneId)
 
         if (dayIntervals.containsKey(day)) {
-            val nextChange = toInstant(instant, day+1, LocalTime.MIDNIGHT, zoneId)
-            return OpeningStatus(isOpen = true, nextChange = nextChange)
+            val until = toInstant(instant, day+1, LocalTime.MIDNIGHT, zoneId)
+            return OpeningStatus(isOpen = true, until = until)
         }
-        for (i in 1..7) {
+        for (i in 1L..7L) {
             val nextDay = day + i
             if (dayIntervals.containsKey(nextDay)) {
-                val nextChange = toInstant(instant, nextDay, LocalTime.MIDNIGHT, zoneId)
-                return OpeningStatus(isOpen = false, nextChange = nextChange)
+                val until = toInstant(instant, nextDay, LocalTime.MIDNIGHT, zoneId)
+                return OpeningStatus(isOpen = false, until = until)
             }
         }
 
