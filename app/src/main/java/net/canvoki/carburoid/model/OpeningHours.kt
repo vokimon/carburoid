@@ -87,10 +87,6 @@ class OpeningHours() {
             var closingDay = day
             if (closingAt == LocalTime.of(23,59)) {
                 for ((start, end) in dayIntervals.getOrDefault(nextDay, emptyList())) {
-                    if (start == LocalTime.of(0, 0)) {
-                        closingAt = end
-                        closingDay = nextDay
-                    }
                     if (start == closingAt || start == closingAt?.plusMinutes(1)) {
                         closingAt = end
                         closingDay = nextDay
