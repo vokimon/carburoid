@@ -78,7 +78,8 @@ class OpeningHours() {
         for (i in 1L..7L) {
             val nextDay = day + i
             if (dayIntervals.containsKey(nextDay)) {
-                val until = toInstant(instant, nextDay, LocalTime.MIDNIGHT, zoneId)
+                val (start, end) = dayIntervals[nextDay]!![0]
+                val until = toInstant(instant, nextDay, start, zoneId)
                 return OpeningStatus(isOpen = false, until = until)
             }
         }
