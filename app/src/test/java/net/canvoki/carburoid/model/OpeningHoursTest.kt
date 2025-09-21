@@ -558,6 +558,28 @@ class OpeningHoursTest {
     }
 
     @Test
+    fun `getStatus single partial day within that opening, open till end of opening`() {
+        getStatus_testCase(
+            openings="M: 8:00-20:00", // Tuesday full day
+            at=madridInstant(DayOfWeek.TUESDAY, "12:00"),
+            isOpen=true,
+            until=madridInstant(DayOfWeek.TUESDAY, "20:00"),
+        )
+    }
+
+    @Test
+    fun `getStatus single partial day before that opening, closed till start of opening`() {
+        getStatus_testCase(
+            openings="M: 8:00-20:00", // Tuesday full day
+            at=madridInstant(DayOfWeek.TUESDAY, "07:00"),
+            isOpen=false,
+            until=madridInstant(DayOfWeek.TUESDAY, "08:00"),
+        )
+    }
+
+    // toLocal toInstant helpers
+
+    @Test
     fun `toLocal applies tz trucates to minutes`() {
         assertEquals(
             DayOfWeek.MONDAY to LocalTime.parse("12:04")!!,

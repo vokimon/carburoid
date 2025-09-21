@@ -60,10 +60,19 @@ class OpeningHours() {
         if (dayIntervals.isEmpty())
             return OpeningStatus(false, null)
 
-        val (day, _) = toLocal(instant, zoneId)
+        val (day, time) = toLocal(instant, zoneId)
 
         if (dayIntervals.containsKey(day)) {
-            val until = toInstant(instant, day+1, LocalTime.MIDNIGHT, zoneId)
+            val (start, end) = dayIntervals[day]!![0]
+            if (time < start) {
+                val until = toInstant(instant, day, start, zoneId)
+                return OpeningStatus(isOpen = false, until = until)
+            }
+            if (end == LocalTime.of(23, 59)) {
+                val until = toInstant(instant, day+1, LocalTime.MIDNIGHT, zoneId)
+                return OpeningStatus(isOpen = true, until = until)
+            }
+            val until = toInstant(instant, day, end, zoneId)
             return OpeningStatus(isOpen = true, until = until)
         }
         for (i in 1L..7L) {
