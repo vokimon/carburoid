@@ -253,21 +253,21 @@ class OpeningHoursTest {
 
     @Test
     fun `parseInterval bad end`() {
-        parseIntervalTestCase(null, "12:34-end")
+        parseIntervalTestCase(null, "12:34-bad")
     }
 
     @Test
     fun `parseInterval crossed interval hours`() {
-        parseIntervalTestCase(null, "12:34-02:30")
+        parseIntervalTestCase((12 to 34) to (2 to 30), "12:34-02:30")
     }
 
     @Test
-    fun `parseInterval crossed interval minutes`() {
-        parseIntervalTestCase(null, "12:34-12:30")
+    fun `parseInterval crossed interval minutes, considered valid`() {
+        parseIntervalTestCase((12 to 34) to (12 to 30), "12:34-12:30")
     }
 
     @Test
-    fun `parseInterval proper interval`() {
+    fun `parseInterval proper interval, considered valid`() {
         parseIntervalTestCase((12 to 34) to (22 to 30), "12:34-22:30")
     }
 
@@ -425,6 +425,7 @@ class OpeningHoursTest {
         ), "V-S: 3:00-12:00 y 14:00-22:00")
     }
 
+
     // parse
     fun parse_TestCase(expected: String?, spec: String) {
         assertEquals(expected, OpeningHours.parse(spec)?.toString())
@@ -441,6 +442,21 @@ class OpeningHoursTest {
     @Test
     fun `parse bad entry`() {
         parse_TestCase(null, "L-M: 08:00-13:30; V: BAD")
+    }
+
+    @Test
+    fun `parse crossing hours expands on two days`() {
+        parse_TestCase("L: 22:00-23:59; M: 00:00-02:00", "L: 22:00-02:00")
+    }
+
+    @Test
+    fun `parse crossing hours expansion on Sunday cycles to Monday`() {
+        parse_TestCase("L: 00:00-02:00; D: 22:00-23:59", "D: 22:00-02:00")
+    }
+
+    @Test
+    fun `parse ending in 0h moved to 23_59`() {
+        parse_TestCase("L: 22:00-23:59", "L: 22:00-00:00")
     }
 
     // getStatus

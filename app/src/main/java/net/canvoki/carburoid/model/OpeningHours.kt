@@ -139,11 +139,6 @@ class OpeningHours() {
             val start = parseTime(parts[0]) ?: return null
             val end = parseTime(parts[1]) ?: return null
 
-            if (start.first > end.first) return null
-            if (start.first == end.first) {
-                if (start.second >= end.second) return null
-            }
-
             return start to end
         }
 
@@ -197,14 +192,24 @@ class OpeningHours() {
             val oh = OpeningHours()
             val entries = spec.split("; ")
             for (entrySpec in entries) {
-                println("Entry: '$entrySpec'")
+                //println("Entry: '$entrySpec'")
                 val (days, times) = parseScheduleEntry(entrySpec) ?: return null
                 for (day in days) {
                     for (time in times) {
                         val (start, end) = time
                         val (sh, sm) = start
                         val (eh, em) = end
-                        oh.add(day, sh, sm, eh, em)
+                        if (sh<eh || (sh==eh && sm<=em)) {
+                            oh.add(day, sh, sm, eh, em)
+                            continue
+                        }
+                        oh.add(day, sh, sm, 23, 59)
+                        if ((eh to em) == (0 to 0))
+                            continue
+                        val nextDay = day + 1
+                        oh.add(nextDay, 0, 0, eh, em)
+
+
                     }
                 }
                 continue
