@@ -4,6 +4,7 @@ import org.junit.Test
 import org.junit.Ignore
 import java.time.DayOfWeek
 import java.time.LocalTime
+import java.time.LocalDateTime
 import java.time.Instant
 import java.time.ZoneId
 import java.io.File
@@ -478,6 +479,22 @@ class OpeningHoursTest {
             status
         )
     }
+    private val BASE_MONDAY = Instant.parse("2025-09-01T00:00:00Z") // Monday
+    private val MADRID_ZONE = ZoneId.of("Europe/Madrid")
+
+    /**
+     * Returns the ISO Zulu string of the the day at localtime in Madrid
+     * considering the first monday Sep 1 2025.
+     */
+    fun madridInstant(day: DayOfWeek, localtime: String, weekOffset: Int = 0): String {
+        val time = LocalTime.parse(localtime)
+        val daysFromBase = (day.ordinal - DayOfWeek.MONDAY.ordinal) + (weekOffset * 7)
+        val targetDate = BASE_MONDAY.atZone(MADRID_ZONE)
+            .toLocalDate()
+            .plusDays(daysFromBase.toLong())
+        val targetLocal = LocalDateTime.of(targetDate, time)
+        return targetLocal.atZone(MADRID_ZONE).toInstant().toString()
+    }
 
     @Ignore
     @Test
@@ -504,9 +521,9 @@ class OpeningHoursTest {
     fun `getStatus single full day within that day, open till next day`() {
         getStatus_testCase(
             openings="M: 24H", // Tuesday full day
-            at="2025-09-02T10:00:00Z",  // Madrid Tuesday 12h
+            at=madridInstant(DayOfWeek.TUESDAY, "12:00"),
             isOpen=true,
-            until="2025-09-02T22:00:00Z", // Madrid Wednesday 0h
+            until=madridInstant(DayOfWeek.WEDNESDAY, "00:00"),
         )
     }
 
@@ -514,9 +531,9 @@ class OpeningHoursTest {
     fun `getStatus before a single full day, closed until that day`() {
         getStatus_testCase(
             openings="M: 24H", // Tuesday full day
-            at="2025-09-01T10:00:00Z", // Madrid Monday 12h
+            at=madridInstant(DayOfWeek.MONDAY, "12:00"),
             isOpen=false,
-            until="2025-09-01T22:00:00Z", // Madrid Tuesday 0h
+            until=madridInstant(DayOfWeek.TUESDAY, "00:00"),
         )
     }
 
@@ -524,9 +541,9 @@ class OpeningHoursTest {
     fun `getStatus days before a single full day, closed until that day`() {
         getStatus_testCase(
             openings="X: 24H", // Wednesday full day
-            at="2025-09-01T10:00:00Z", // Madrid Monday 12h
+            at=madridInstant(DayOfWeek.MONDAY, "12:00"),
             isOpen=false,
-            until="2025-09-02T22:00:00Z", // Madrid Wednesday 0h
+            until=madridInstant(DayOfWeek.WEDNESDAY, "00:00"),
         )
     }
 
@@ -534,14 +551,11 @@ class OpeningHoursTest {
     fun `getStatus after a single full day, closed until that day next week`() {
         getStatus_testCase(
             openings="X: 24H", // Wednesday full day
-            at="2025-09-04T10:00:00Z", // Madrid Thursday 12h
+            at=madridInstant(DayOfWeek.THURSDAY, "12:00"),
             isOpen=false,
-            until="2025-09-09T22:00:00Z", // Madrid next Wednesday 0h
+            until=madridInstant(DayOfWeek.WEDNESDAY, "00:00", weekOffset=1),
         )
     }
-
-
-
 
     @Test
     fun `toLocal applies tz trucates to minutes`() {
