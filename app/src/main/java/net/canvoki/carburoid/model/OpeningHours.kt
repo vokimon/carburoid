@@ -59,6 +59,22 @@ class OpeningHours() {
     fun getStatus(instant: Instant, zoneId: ZoneId): OpeningStatus {
         if (dayIntervals.isEmpty())
             return OpeningStatus(false, null)
+
+        val (day, _) = toLocal(instant, zoneId)
+
+        if (dayIntervals.containsKey(day)) {
+            val nextChange = toInstant(instant, day+1, LocalTime.MIDNIGHT, zoneId)
+            return OpeningStatus(isOpen = true, nextChange = nextChange)
+        }
+        var nextDay = day + 1
+        while (nextDay != DayOfWeek.MONDAY) {
+            if (dayIntervals.containsKey(nextDay)) {
+                val nextChange = toInstant(instant, nextDay, LocalTime.MIDNIGHT, zoneId)
+                return OpeningStatus(isOpen = false, nextChange = nextChange)
+            }
+            nextDay = nextDay + 1
+        }
+
         return OpeningStatus(true, null)
     }
 

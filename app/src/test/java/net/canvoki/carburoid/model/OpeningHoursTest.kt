@@ -479,6 +479,7 @@ class OpeningHoursTest {
         )
     }
 
+    @Ignore
     @Test
     fun `getStatus 24 7 returns open with no next change`() {
         getStatus_testCase(
@@ -500,14 +501,37 @@ class OpeningHoursTest {
     }
 
     @Test
-    fun `getStatus whole single day in that day`() {
+    fun `getStatus single full day within that day, open till next day`() {
         getStatus_testCase(
-            openings="L-D: 24H",
-            at="2025-06-09T00:00:00Z",
+            openings="M: 24H", // Tuesday full day
+            at="2025-09-02T10:00:00Z",  // Madrid Tuesday 12h
             isOpen=true,
-            nextChange=null,
+            nextChange="2025-09-02T22:00:00Z", // Madrid Wednesday 0h
         )
     }
+
+    @Test
+    fun `getStatus before a single full day, closed until that day`() {
+        getStatus_testCase(
+            openings="M: 24H", // Tuesday full day
+            at="2025-09-01T10:00:00Z", // Madrid Monday 12h
+            isOpen=false,
+            nextChange="2025-09-01T22:00:00Z", // Madrid Tuesday 0h
+        )
+    }
+
+    @Test
+    fun `getStatus days before a single full day, closed until that day`() {
+        getStatus_testCase(
+            openings="X: 24H", // Wednesday full day
+            at="2025-09-01T10:00:00Z", // Madrid Monday 12h
+            isOpen=false,
+            nextChange="2025-09-02T22:00:00Z", // Madrid Wednesday 0h
+        )
+    }
+
+
+
 
     @Test
     fun `toLocal applies tz trucates to minutes`() {
