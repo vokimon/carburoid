@@ -79,15 +79,22 @@ class OpeningHours() {
                 val until = toInstant(instant, day, start, zoneId)
                 return OpeningStatus(isOpen = false, until = until)
             }
-            // we are within the interval find when we close
+            // start looking for a closure
             closingAt = end
         }
         if (closingAt != null) {
+            val nextDay = day + 1
+            var closingDay = day
+            if (dayIntervals.containsKey(nextDay)) {
+                val (start, end) = dayIntervals[nextDay]!![0]
+                closingAt = end
+                closingDay = nextDay
+            }
             if (closingAt == LocalTime.of(23, 59)) {
-                val until = toInstant(instant, day+1, LocalTime.MIDNIGHT, zoneId)
+                val until = toInstant(instant, closingDay+1, LocalTime.MIDNIGHT, zoneId)
                 return OpeningStatus(isOpen = true, until = until)
             }
-            val until = toInstant(instant, day, closingAt, zoneId)
+            val until = toInstant(instant, closingDay, closingAt, zoneId)
             return OpeningStatus(isOpen = true, until = until)
         }
         for (i in 1L..7L) {
