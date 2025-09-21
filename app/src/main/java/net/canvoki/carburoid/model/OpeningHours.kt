@@ -2,8 +2,10 @@ package net.canvoki.carburoid.model
 
 import java.time.DayOfWeek
 import java.time.LocalTime
+import java.time.LocalDateTime
 import java.time.Instant
 import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 
 val END_OF_DAY = LocalTime.of(23, 59)
 typealias TimeSpec = Pair<Int,Int>
@@ -16,6 +18,31 @@ data class OpeningStatus(
     val isOpen: Boolean,
     val nextChange: Instant?,
 )
+
+fun toLocal(instant: Instant, zoneId: ZoneId = ZoneId.of("Europe/Madrid")): Pair<DayOfWeek, LocalTime> {
+    val localDateTime = instant.atZone(zoneId).toLocalDateTime()
+    val truncatedTime = localDateTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES)
+    return localDateTime.dayOfWeek to truncatedTime
+}
+
+
+
+fun toInstant(reference: Instant, day: DayOfWeek, time: LocalTime, zoneId: ZoneId): Instant {
+    val refZoned = reference.atZone(zoneId)
+    val refDate = refZoned.toLocalDate()
+    val refDay = refZoned.dayOfWeek
+    val refDayValue = refDay.value
+    val refTime = refZoned.toLocalTime()
+    val targetDayValue = day.value
+
+    val daysToAdd = if (day==refDay && time < refTime) 7 else {
+        (targetDayValue - refDayValue + 7) % 7
+    }
+
+    val targetDate = refDate.plusDays(daysToAdd.toLong())
+    val targetLocal = LocalDateTime.of(targetDate, time)
+    return targetLocal.atZone(zoneId).toInstant()
+}
 
 class OpeningHours() {
     private val intervals = mutableListOf<Pair<LocalTime, LocalTime>>()

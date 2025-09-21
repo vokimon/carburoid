@@ -480,4 +480,76 @@ class OpeningHoursTest {
             nextChange=null,
         )
     }
+
+    @Test
+    fun `getStatus whole single day in that day`() {
+        getStatus_testCase(
+            openings="L-D: 24H",
+            at="2025-06-09T00:00:00Z",
+            isOpen=true,
+            nextChange=null,
+        )
+    }
+
+    @Test
+    fun `toLocal applies tz trucates to minutes`() {
+        assertEquals(
+            DayOfWeek.MONDAY to LocalTime.parse("12:04")!!,
+            toLocal(Instant.parse("2025-09-01T10:04:33Z")!!),
+        )
+    }
+
+    val wednesdayAtNonMadrid = Instant.parse("2025-09-03T10:04:00Z")
+
+    @Test
+    fun `toInstant same day later time just changes time`() {
+        assertEquals(
+            Instant.parse("2025-09-03T10:04:00Z"),
+            toInstant(
+                reference=wednesdayAtNonMadrid,
+                day = DayOfWeek.WEDNESDAY,
+                time = LocalTime.parse("12:04"),
+                zoneId = ZoneId.of("Europe/Madrid")
+            ),
+        )
+    }
+
+    @Test
+    fun `toInstant next day`() {
+        assertEquals(
+            Instant.parse("2025-09-04T10:04:00Z"),
+            toInstant(
+                reference=wednesdayAtNonMadrid,
+                day = DayOfWeek.THURSDAY,
+                time = LocalTime.parse("12:04"),
+                zoneId = ZoneId.of("Europe/Madrid")
+            ),
+        )
+    }
+
+    @Test
+    fun `toInstant next week`() {
+        assertEquals(
+            Instant.parse("2025-09-08T10:04:00Z"),
+            toInstant(
+                reference=wednesdayAtNonMadrid,
+                day = DayOfWeek.MONDAY,
+                time = LocalTime.parse("12:04"),
+                zoneId = ZoneId.of("Europe/Madrid")
+            ),
+        )
+    }
+
+    @Test
+    fun `toInstant same day earlier`() {
+        assertEquals(
+            Instant.parse("2025-09-10T08:04:00Z"),
+            toInstant(
+                reference=wednesdayAtNonMadrid,
+                day = DayOfWeek.WEDNESDAY,
+                time = LocalTime.parse("10:04"),
+                zoneId = ZoneId.of("Europe/Madrid")
+            ),
+        )
+    }
 }
