@@ -660,20 +660,40 @@ class OpeningHoursTest {
     @Test
     fun `getStatus continuity search follows next interval in next day`() {
         getStatus_testCase(
-            openings="M: 8:00-23:59; X: 00:00-10:00 y 10:00-14:00", // Tuesday and Wednesday noncontiguous
+            openings="M: 8:00-23:59; X: 00:00-10:00 y 10:00-14:00", // Tuesday and two contiguous on Wednesday
             at=madridInstant(DayOfWeek.TUESDAY, "12:00"), // on the first opening
             isOpen=true,
-            until=madridInstant(DayOfWeek.WEDNESDAY, "14:00"), // takes the first closing
+            until=madridInstant(DayOfWeek.WEDNESDAY, "14:00"), // takes the last closing
         )
     }
 
     @Test
-    fun `getStatus one hour gap is continuity`() {
+    fun `getStatus one minute gap is continuity`() {
         getStatus_testCase(
-            openings="M: 8:00-23:59; X: 00:00-09:59 y 10:00-14:00", // Tuesday and Wednesday noncontiguous
+            openings="M: 8:00-23:59; X: 00:00-09:59 y 10:00-14:00", // Tuesday and two contiguous on Wednesday
             at=madridInstant(DayOfWeek.TUESDAY, "12:00"), // on the first opening
             isOpen=true,
-            until=madridInstant(DayOfWeek.WEDNESDAY, "14:00"), // takes the first closing
+            until=madridInstant(DayOfWeek.WEDNESDAY, "14:00"), // takes the last closing
+        )
+    }
+
+    @Test
+    fun `getStatus more than one minute gap is discontinuity`() {
+        getStatus_testCase(
+            openings="M: 8:00-23:59; X: 00:00-09:58 y 10:00-14:00", // Tuesday and noncontiguous Wednesday
+            at=madridInstant(DayOfWeek.TUESDAY, "12:00"), // on the first opening
+            isOpen=true,
+            until=madridInstant(DayOfWeek.WEDNESDAY, "09:58"), // takes the second closing
+        )
+    }
+
+    @Test
+    fun `getStatus openness crossing several days`() {
+        getStatus_testCase(
+            openings="M: 8:00-23:59; X: 24H; J: 00:00-14:00", // Tuesday and Wednesday noncontiguous
+            at=madridInstant(DayOfWeek.TUESDAY, "12:00"), // on the first opening
+            isOpen=true,
+            until=madridInstant(DayOfWeek.THURSDAY, "14:00"), // takes the last closing
         )
     }
 

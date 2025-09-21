@@ -83,9 +83,14 @@ class OpeningHours() {
             closingAt = end
         }
         if (closingAt != null) {
-            val nextDay = day + 1
+            // Looking for closure
             var closingDay = day
-            if (closingAt == LocalTime.of(23,59)) {
+            for (dayOffset in 1L..7L) {
+                if (closingAt != LocalTime.of(23,59)) {
+                    // last day did not end open
+                    break
+                }
+                val nextDay = day + dayOffset
                 for ((start, end) in dayIntervals.getOrDefault(nextDay, emptyList())) {
                     if (start == closingAt || start == closingAt?.plusMinutes(1)) {
                         closingAt = end
