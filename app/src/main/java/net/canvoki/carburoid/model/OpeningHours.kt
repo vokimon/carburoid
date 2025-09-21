@@ -208,11 +208,8 @@ class OpeningHours() {
                             continue
                         val nextDay = day + 1
                         oh.add(nextDay, 0, 0, eh, em)
-
-
                     }
                 }
-                continue
             }
             return oh
         }
