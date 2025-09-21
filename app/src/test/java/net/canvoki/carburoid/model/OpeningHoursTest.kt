@@ -530,6 +530,16 @@ class OpeningHoursTest {
         )
     }
 
+    @Test
+    fun `getStatus after a single full day, closed until that day next week`() {
+        getStatus_testCase(
+            openings="X: 24H", // Wednesday full day
+            at="2025-09-04T10:00:00Z", // Madrid Thursday 12h
+            isOpen=false,
+            nextChange="2025-09-10T22:00:00Z", // Madrid next Wednesday 0h
+        )
+    }
+
 
 
 

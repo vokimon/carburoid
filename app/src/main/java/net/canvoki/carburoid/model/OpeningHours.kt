@@ -66,13 +66,12 @@ class OpeningHours() {
             val nextChange = toInstant(instant, day+1, LocalTime.MIDNIGHT, zoneId)
             return OpeningStatus(isOpen = true, nextChange = nextChange)
         }
-        var nextDay = day + 1
-        while (nextDay != DayOfWeek.MONDAY) {
+        for (i in 1..7) {
+            val nextDay = day + i
             if (dayIntervals.containsKey(nextDay)) {
                 val nextChange = toInstant(instant, nextDay, LocalTime.MIDNIGHT, zoneId)
                 return OpeningStatus(isOpen = false, nextChange = nextChange)
             }
-            nextDay = nextDay + 1
         }
 
         return OpeningStatus(true, null)
