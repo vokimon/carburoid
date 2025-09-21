@@ -68,12 +68,14 @@ class OpeningHours() {
                 val until = toInstant(instant, day, start, zoneId)
                 return OpeningStatus(isOpen = false, until = until)
             }
-            if (end == LocalTime.of(23, 59)) {
-                val until = toInstant(instant, day+1, LocalTime.MIDNIGHT, zoneId)
+            if (time <= end) {
+                if (end == LocalTime.of(23, 59)) {
+                    val until = toInstant(instant, day+1, LocalTime.MIDNIGHT, zoneId)
+                    return OpeningStatus(isOpen = true, until = until)
+                }
+                val until = toInstant(instant, day, end, zoneId)
                 return OpeningStatus(isOpen = true, until = until)
             }
-            val until = toInstant(instant, day, end, zoneId)
-            return OpeningStatus(isOpen = true, until = until)
         }
         for (i in 1L..7L) {
             val nextDay = day + i

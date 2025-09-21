@@ -587,6 +587,15 @@ class OpeningHoursTest {
         )
     }
 
+    @Test
+    fun `getStatus single partial day, same day after that opening, closed till start of opening next week`() {
+        getStatus_testCase(
+            openings="M: 8:00-20:00", // Tuesday full day
+            at=madridInstant(DayOfWeek.TUESDAY, "22:00"),
+            isOpen=false,
+            until=madridInstant(DayOfWeek.TUESDAY, "08:00", weekOffset=1),
+        )
+    }
     // toLocal toInstant helpers
 
     @Test
