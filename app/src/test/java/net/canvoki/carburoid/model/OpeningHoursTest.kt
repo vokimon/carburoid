@@ -607,6 +607,16 @@ class OpeningHoursTest {
         )
     }
 
+    @Test
+    fun `getStatus contiguous openings close on the second`() {
+        getStatus_testCase(
+            openings="M: 8:00-14:59 y 15:00-20:00", // Tuesday contiguous openings within day
+            at=madridInstant(DayOfWeek.TUESDAY, "12:00"), // on the first opening
+            isOpen=true,
+            until=madridInstant(DayOfWeek.TUESDAY, "20:00"), // takes the second closing
+        )
+    }
+
 
     // toLocal toInstant helpers
 

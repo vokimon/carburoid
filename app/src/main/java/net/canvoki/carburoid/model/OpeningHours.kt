@@ -66,6 +66,11 @@ class OpeningHours() {
         for ((start, end) in dayIntervals.getOrDefault(day, emptyList())) {
             if (end < time) continue // interval in the past, ignore
 
+            if (closingAt != null) {
+                closingAt = end
+                continue
+            }
+
             if (start > time) { // next interval in the future
                 // Closed until that interval begins
                 val until = toInstant(instant, day, start, zoneId)
