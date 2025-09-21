@@ -87,8 +87,10 @@ class OpeningHours() {
             var closingDay = day
             if (dayIntervals.containsKey(nextDay)) {
                 val (start, end) = dayIntervals[nextDay]!![0]
-                closingAt = end
-                closingDay = nextDay
+                if (start == LocalTime.of(0, 0)) {
+                    closingAt = end
+                    closingDay = nextDay
+                }
             }
             if (closingAt == LocalTime.of(23, 59)) {
                 val until = toInstant(instant, closingDay+1, LocalTime.MIDNIGHT, zoneId)
