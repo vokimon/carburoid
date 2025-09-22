@@ -84,19 +84,19 @@ class OpeningHours() {
         for ((start, end) in getDayIntervals(day)) {
             if (end < time) continue // ignore intervals in the past
 
-            // Looking for closure
-            if (closingAt != null) {
-                // If there is a gap the end is the previous one
-                if (start > closingAt.plusMinutes(1)) break
-                closingAt = end
-                continue
+            if (closingAt == null) { // no enclosing interval found yet
+                if (start > time) {
+                    // Next interval is in the future
+                    // We are closed until that interval
+                    return closedUntil(day to start)
+                }
             }
-
-            if (start > time) { // next interval in the future
-                // Closed until that interval begins
-                return closedUntil(day to start)
+            else { // Looking for closure
+                // A gap is there
+                if (start > closingAt.plusMinutes(1)) {
+                    return openUntil(day to closingAt)
+                }
             }
-            // start looking for a closure
             closingAt = end
         }
         if (closingAt == null) {
