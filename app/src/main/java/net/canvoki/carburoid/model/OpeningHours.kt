@@ -60,6 +60,16 @@ class OpeningHours() {
         return dayIntervals.getOrDefault(day, emptyList())
     }
 
+    private fun searchNextOpening(day: DayOfWeek): Pair<DayOfWeek, LocalTime>? {
+        for (i in 1L..7L) {
+            val nextDay = day + i
+            for ((start, end) in getDayIntervals(nextDay)) {
+                return nextDay to start
+            }
+        }
+        return null
+    }
+
     fun getStatus(instant: Instant, zoneId: ZoneId): OpeningStatus {
         val (day, time) = toLocal(instant, zoneId)
 
@@ -84,16 +94,11 @@ class OpeningHours() {
             closingAt = end
         }
         if (closingAt == null) {
-            // closed, no opening within the day, look for it on the next days
-            for (i in 1L..7L) {
-                val nextDay = day + i
-                for ((start, end) in getDayIntervals(nextDay)) {
-                    val until = toInstant(instant, nextDay, start, zoneId)
-                    return OpeningStatus(isOpen = false, until = until)
-                }
-            }
-            // No opening found, never open
-            return OpeningStatus(false, null)
+            var nextOpening = searchNextOpening(day)
+            if (nextOpening == null) return OpeningStatus(isOpen=false, until=null)
+            val (untilDay, untilTime) = nextOpening
+            val until = toInstant(instant, untilDay, untilTime, zoneId)
+            return OpeningStatus(isOpen = false, until = until)
         }
         // Looking for closure
         var closingDay = day
