@@ -82,9 +82,15 @@ class OpeningHours() {
                 untilDay = untilDay + 1
                 untilTime = LocalTime.MIDNIGHT
             }
-            val until = toInstant(instant, untilDay, untilTime, zoneId)
-            return OpeningStatus(isOpen = true, until = until)
+            val untilInstant = toInstant(instant, untilDay, untilTime, zoneId)
+            return OpeningStatus(isOpen = true, until = untilInstant)
 
+        }
+        fun closedUntil(until: Pair<DayOfWeek, LocalTime>?): OpeningStatus {
+            if (until==null) return OpeningStatus(isOpen=false, null)
+            val (untilDay, untilTime) = until
+            val untilInstant = toInstant(instant, untilDay, untilTime, zoneId)
+            return OpeningStatus(isOpen = false, until = untilInstant)
         }
 
         var closingAt: LocalTime? = null
@@ -101,18 +107,14 @@ class OpeningHours() {
 
             if (start > time) { // next interval in the future
                 // Closed until that interval begins
-                val until = toInstant(instant, day, start, zoneId)
-                return OpeningStatus(isOpen = false, until = until)
+                return closedUntil(day to start)
             }
             // start looking for a closure
             closingAt = end
         }
         if (closingAt == null) {
             var nextOpening = searchNextOpening(day)
-            if (nextOpening == null) return OpeningStatus(isOpen=false, until=null)
-            val (untilDay, untilTime) = nextOpening
-            val until = toInstant(instant, untilDay, untilTime, zoneId)
-            return OpeningStatus(isOpen = false, until = until)
+            return closedUntil(nextOpening)
         }
 
         // Looking for closure
