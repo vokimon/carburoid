@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         progressText = findViewById(R.id.text_progress)
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
 
-        gasStationAdapter = GasStationAdapter(this, emptyList())
+        gasStationAdapter = GasStationAdapter(this, emptyList(), ::onItemClicked)
         recyclerView.adapter = gasStationAdapter
 
         showEmpty("No stations")
@@ -261,6 +261,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun onItemClicked(station: GasStation) {
+        log("Funcionaca llamada con ${station.name}")
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
