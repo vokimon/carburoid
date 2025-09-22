@@ -52,26 +52,20 @@ class OpeningHours() {
         val interval = LocalTime.of(startHour, startMinute) to LocalTime.of(endHour, endMinute)
         val intervals = dayIntervals.getOrPut(day) { mutableListOf() }
 
-        val mergeStart = intervals.indexOfFirst { interval.first <= it.second  }
-        val mergeEnd = intervals.indexOfFirst { interval.second < it.first  }
+        val mergeStart = intervals.indexOfFirst { interval.first <= it.second  }.let{ if (it<0) intervals.size else it}
+        val mergeEnd = intervals.indexOfFirst { interval.second < it.first  }.let{ if (it<0) intervals.size else it}
 
-        if (mergeStart == -1) {
-            // append
-            intervals.add(interval)
-            return
-        }
         if (mergeStart==mergeEnd) {
-            // insert
             intervals.add(mergeStart, interval)
             return
         }
+
         // merge
-        val safeEnd = if (mergeEnd<0) intervals.size else mergeEnd
         val merged = (
             minOf(intervals[mergeStart].first, interval.first) to
-            maxOf(intervals[safeEnd-1].second, interval.second)
+            maxOf(intervals[mergeEnd-1].second, interval.second)
         )
-        intervals.subList(mergeStart, safeEnd).clear()
+        intervals.subList(mergeStart, mergeEnd).clear()
         intervals.add(mergeStart, merged)
     }
 
