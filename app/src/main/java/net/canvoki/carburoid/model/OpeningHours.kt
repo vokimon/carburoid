@@ -56,20 +56,6 @@ class OpeningHours() {
         dayIntervals.getOrPut(day) { mutableListOf() }.add(interval)
     }
 
-    private fun getDayIntervals(day: DayOfWeek): List<Pair<LocalTime, LocalTime>> {
-        return dayIntervals.getOrDefault(day, emptyList())
-    }
-
-    private fun searchNextOpening(day: DayOfWeek): Pair<DayOfWeek, LocalTime>? {
-        for (i in 1L..7L) {
-            val nextDay = day + i
-            for ((start, end) in getDayIntervals(nextDay)) {
-                return nextDay to start
-            }
-        }
-        return null
-    }
-
     fun getStatus(instant: Instant, zoneId: ZoneId): OpeningStatus {
         val (day, time) = toLocal(instant, zoneId)
 
@@ -82,6 +68,7 @@ class OpeningHours() {
                 untilDay = untilDay + 1
                 untilTime = LocalTime.MIDNIGHT
             }
+
             val untilInstant = toInstant(instant, untilDay, untilTime, zoneId)
             return OpeningStatus(isOpen = true, until = untilInstant)
 
@@ -116,26 +103,44 @@ class OpeningHours() {
             var nextOpening = searchNextOpening(day)
             return closedUntil(nextOpening)
         }
+        var nextClosing = searchNextOpeningGap(day, closingAt)
+        return openUntil(nextClosing)
+    }
 
-        // Looking for closure
+    private fun getDayIntervals(day: DayOfWeek): List<Pair<LocalTime, LocalTime>> {
+        return dayIntervals.getOrDefault(day, emptyList())
+    }
+
+    private fun searchNextOpening(day: DayOfWeek): Pair<DayOfWeek, LocalTime>? {
+        for (i in 1L..7L) {
+            val nextDay = day + i
+            for ((start, end) in getDayIntervals(nextDay)) {
+                return nextDay to start
+            }
+        }
+        return null
+    }
+
+    private fun searchNextOpeningGap(day: DayOfWeek, time: LocalTime): Pair<DayOfWeek, LocalTime>? {
+        var closingAt = time
         var closingDay = day
         for (dayOffset in 1L..8L) {
             val nextDay = day + dayOffset
             val dayIntervals = getDayIntervals(nextDay)
             if (dayIntervals.isEmpty()) {
-                return openUntil(closingDay to closingAt!!)
+                return closingDay to closingAt
             }
 
             for ((start, end) in dayIntervals) {
                 if (start != closingAt && start != closingAt?.plusMinutes(1)) {
                     // Gap detected
-                    return openUntil(closingDay to closingAt!!)
+                    return closingDay to closingAt
                 }
                 closingAt = end
                 closingDay = nextDay
             }
         }
-        return openUntil(null)
+        return null
     }
 
     override fun toString(): String {
