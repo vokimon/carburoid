@@ -45,14 +45,11 @@ fun toInstant(reference: Instant, day: DayOfWeek, time: LocalTime, zoneId: ZoneI
 }
 
 class OpeningHours() {
-    private val intervals = mutableListOf<Pair<LocalTime, LocalTime>>()
     private var currentDay: DayOfWeek = DayOfWeek.MONDAY
     private val dayIntervals = mutableMapOf<DayOfWeek, MutableList<Pair<LocalTime, LocalTime>>>()
 
     fun add(day: DayOfWeek, startHour: Int, startMinute: Int, endHour: Int, endMinute: Int) {
         val interval = LocalTime.of(startHour, startMinute) to LocalTime.of(endHour, endMinute)
-        intervals.add(interval)
-        currentDay = day
         dayIntervals.getOrPut(day) { mutableListOf() }.add(interval)
     }
 
