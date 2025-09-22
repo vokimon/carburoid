@@ -73,6 +73,20 @@ class OpeningHours() {
     fun getStatus(instant: Instant, zoneId: ZoneId): OpeningStatus {
         val (day, time) = toLocal(instant, zoneId)
 
+        fun openUntil(until: Pair<DayOfWeek, LocalTime>?): OpeningStatus {
+            if (until==null) return OpeningStatus(isOpen=true, null)
+
+            var (untilDay, untilTime) = until
+
+            if (untilTime == LocalTime.of(23, 59)) {
+                untilDay = untilDay + 1
+                untilTime = LocalTime.MIDNIGHT
+            }
+            val until = toInstant(instant, untilDay, untilTime, zoneId)
+            return OpeningStatus(isOpen = true, until = until)
+
+        }
+
         var closingAt: LocalTime? = null
         for ((start, end) in getDayIntervals(day)) {
             if (end < time) continue // ignore intervals in the past
@@ -100,35 +114,26 @@ class OpeningHours() {
             val until = toInstant(instant, untilDay, untilTime, zoneId)
             return OpeningStatus(isOpen = false, until = until)
         }
+
         // Looking for closure
         var closingDay = day
         for (dayOffset in 1L..8L) {
             val nextDay = day + dayOffset
             val dayIntervals = getDayIntervals(nextDay)
             if (dayIntervals.isEmpty()) {
-                if (closingAt == LocalTime.of(23, 59)) {
-                    val until = toInstant(instant, closingDay+1, LocalTime.MIDNIGHT, zoneId)
-                    return OpeningStatus(isOpen = true, until = until)
-                }
-                val until = toInstant(instant, closingDay, closingAt!!, zoneId)
-                return OpeningStatus(isOpen = true, until = until)
+                return openUntil(closingDay to closingAt!!)
             }
 
             for ((start, end) in dayIntervals) {
                 if (start != closingAt && start != closingAt?.plusMinutes(1)) {
                     // Gap detected
-                    if (closingAt == LocalTime.of(23, 59)) {
-                        val until = toInstant(instant, closingDay+1, LocalTime.MIDNIGHT, zoneId)
-                        return OpeningStatus(isOpen = true, until = until)
-                    }
-                    val until = toInstant(instant, closingDay, closingAt!!, zoneId)
-                    return OpeningStatus(isOpen = true, until = until)
+                    return openUntil(closingDay to closingAt!!)
                 }
                 closingAt = end
                 closingDay = nextDay
             }
         }
-        return OpeningStatus(isOpen=true, until=null)
+        return openUntil(null)
     }
 
     override fun toString(): String {
