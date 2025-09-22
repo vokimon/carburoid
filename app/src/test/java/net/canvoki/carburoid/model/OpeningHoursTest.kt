@@ -112,6 +112,31 @@ class OpeningHoursTest {
     }
 
     @Test
+    fun `toString keep intervals before the merge`() {
+        val openingHours = OpeningHours()
+        openingHours.add(DayOfWeek.MONDAY, 4, 0, 5, 0) // not involved
+        openingHours.add(DayOfWeek.MONDAY, 10, 0, 14, 0)
+        openingHours.add(DayOfWeek.MONDAY, 16, 0, 20, 0)
+        openingHours.add(DayOfWeek.MONDAY, 12, 0, 18, 0)
+
+        val result = openingHours.toString()
+
+        assertEquals("L: 04:00-05:00 y 10:00-20:00", result)
+    }
+    @Test
+    fun `toString keep intervals after the merge`() {
+        val openingHours = OpeningHours()
+        openingHours.add(DayOfWeek.MONDAY, 10, 0, 14, 0)
+        openingHours.add(DayOfWeek.MONDAY, 16, 0, 20, 0)
+        openingHours.add(DayOfWeek.MONDAY, 12, 0, 18, 0)
+        openingHours.add(DayOfWeek.MONDAY, 21, 0, 22, 0) // not involved
+
+        val result = openingHours.toString()
+
+        assertEquals("L: 10:00-20:00 y 21:00-22:00", result)
+    }
+
+    @Test
     fun `toString for single day 24H`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 0, 0, 23, 59)

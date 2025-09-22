@@ -71,10 +71,8 @@ class OpeningHours() {
             minOf(intervals[mergeStart].first, interval.first) to
             maxOf(intervals[safeEnd-1].second, interval.second)
         )
-        intervals.clear()
-        intervals.add(merged)
-        //intervals.subList(mergeStart, mergeStart+1).clear()
-        //intervals.add(mergeStart, merged)
+        intervals.subList(mergeStart, safeEnd).clear()
+        intervals.add(mergeStart, merged)
     }
 
     fun getStatus(instant: Instant, zoneId: ZoneId): OpeningStatus {
