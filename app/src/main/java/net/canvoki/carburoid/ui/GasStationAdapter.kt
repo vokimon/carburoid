@@ -1,5 +1,10 @@
 package net.canvoki.carburoid.ui
 
+import java.time.Instant
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
+import android.content.Context
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,18 +12,22 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.model.OpeningStatus
 import net.canvoki.carburoid.json.toSpanishFloat
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
+
 
 class GasStationAdapter(private var stations: List<GasStation>) :
     RecyclerView.Adapter<GasStationAdapter.ViewHolder>() {
 
+    lateinit var context: Context
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.text_name)
         val address: TextView = view.findViewById(R.id.text_address)
         val location: TextView = view.findViewById(R.id.text_location)
         val price: TextView = view.findViewById(R.id.text_price)
         val distance: TextView = view.findViewById(R.id.text_distance)
+        val openStatus: TextView = view.findViewById(R.id.text_open_status)
     }
 
     fun updateData(newData: List<GasStation>) {
@@ -27,9 +36,23 @@ class GasStationAdapter(private var stations: List<GasStation>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        context = parent.context
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_gas_station, parent, false)
         return ViewHolder(view)
+    }
+
+    fun formatUntilHuman(until: Instant, zoneId: ZoneId): String {
+        val now = Instant.now()
+        val untilMillis = until.atZone(zoneId).toInstant().toEpochMilli()
+        val nowMillis = now.atZone(zoneId).toInstant().toEpochMilli()
+
+        return DateUtils.getRelativeTimeSpanString(
+            untilMillis,
+            nowMillis,
+            DateUtils.MINUTE_IN_MILLIS,
+            DateUtils.FORMAT_ABBREV_RELATIVE
+        ).toString()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -46,7 +69,55 @@ class GasStationAdapter(private var stations: List<GasStation>) :
 
         val distance = CurrentDistancePolicy.getDistance(station)
         holder.distance.text = distance?.let { "%.1f km".format(it / 1000) } ?: "Distance N/A"
+
+        val status = station.openStatus(Instant.now())
+        holder.openStatus.text = formatOpeningStatus(status, ZoneId.of("Europe/Madrid"))
     }
+
+    fun formatOpeningStatus(
+        status: OpeningStatus?,
+        zoneId: ZoneId,
+        thresholdMinutes: Long = 24*60
+    ): String {
+        val now = Instant.now()
+        val untilThreshold = now.plus(thresholdMinutes, ChronoUnit.MINUTES)
+
+        return when {
+            status==null -> {
+                "CLOSED??"
+            }
+            !status.isOpen && status.until == null -> {
+                "CLOSED PERMANENTLY"
+            }
+            !status.isOpen && status.until != null -> {
+                val relative = getRelativeTimeSpan(status.until, now, zoneId)
+                "Opens ${relative}"
+            }
+            status.until == null -> "24-7"
+            status.until < untilThreshold -> {
+                    val relative = getRelativeTimeSpan(status.until, now, zoneId)
+                    "Closes ${relative}"
+            }
+            else -> "OPEN"
+        }
+    }
+
+    private fun getRelativeTimeSpan(
+        until: Instant,
+        now: Instant,
+        zoneId: ZoneId
+    ): String {
+        val untilMillis = until.atZone(zoneId).toInstant().toEpochMilli()
+        val nowMillis = now.atZone(zoneId).toInstant().toEpochMilli()
+
+        return DateUtils.getRelativeTimeSpanString(
+            untilMillis,
+            nowMillis,
+            DateUtils.MINUTE_IN_MILLIS,
+            DateUtils.FORMAT_ABBREV_RELATIVE
+        ).toString().lowercase()
+    }
+
 
     override fun getItemCount() = stations.size
 }

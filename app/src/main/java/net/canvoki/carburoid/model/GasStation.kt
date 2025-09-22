@@ -6,6 +6,7 @@ import com.google.gson.*
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 import java.time.Instant
+import java.time.ZoneId
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.json.SpanishDateTypeAdapter
 import net.canvoki.carburoid.json.SpanishFloatTypeAdapter
@@ -67,7 +68,7 @@ data class GasStation(
     @JsonAdapter(SaleTypeAdapter::class)
     val isPublicPrice: Boolean = true,
 
-    @SerializedName("Horarios")
+    @SerializedName("Horario")
     @JsonAdapter(OpeningHoursAdapter::class)
     val openingHours: OpeningHours? = OpeningHours.parse("L-D: 24H"),
 
@@ -79,6 +80,15 @@ data class GasStation(
     fun computeDistance() {
         distanceInMeters = CurrentDistancePolicy.getDistance(this)
     }
+
+    fun timeZone(): ZoneId {
+        return if ((longitude?:0.0) > -10.0)
+            ZoneId.of("Europe/Madrid")
+        else
+            ZoneId.of("Atlantic/Canary")
+    }
+
+    fun openStatus(instant: Instant) = openingHours?.getStatus(instant, timeZone())
 
     val price: Double?
         get() = prices[ProductManager.getCurrent()]

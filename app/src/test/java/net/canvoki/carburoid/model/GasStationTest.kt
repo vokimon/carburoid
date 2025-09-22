@@ -22,7 +22,7 @@ class GasStationTest {
                 "Precio Gasoleo A": "1.659",
                 "Latitud": "40,4168",
                 "Longitud (WGS84)": "-3,7038",
-                "Horarios": "L-D: 10:00-20:00",
+                "Horario": "L-D: 10:00-20:00",
                 "Tipo Venta": "P"
             }
         """.trimIndent()

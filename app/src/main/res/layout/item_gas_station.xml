@@ -39,7 +39,7 @@
         android:maxLines="1"
         android:ellipsize="end" />
 
-    <!-- Optional: Location Text -->
+    <!-- Location (City - State) -->
     <TextView
         android:id="@+id/text_location"
         android:layout_width="0dp"
@@ -85,6 +85,19 @@
             style="@style/TextAppearance.Material3.BodyMedium"
             android:textColor="?attr/colorPrimary"
             android:text="3,2 km" />
+
+        <!-- Opening status -->
+        <!-- green for open, red for closed -->
+        <TextView
+            android:id="@+id/text_open_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            style="@style/TextAppearance.Material3.LabelSmall"
+            android:textColor="?attr/colorOnBackground"
+            android:text="OPEN until 13:30"
+            android:layout_marginBottom="4dp" />
+
     </LinearLayout>
 
     <!-- Separator -->
