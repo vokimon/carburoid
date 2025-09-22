@@ -69,7 +69,7 @@ class OpeningHours() {
         val safeEnd = if (mergeEnd<0) intervals.size else mergeEnd
         val merged = (
             minOf(intervals[mergeStart].first, interval.first) to
-            maxOf(intervals[mergeStart].second, interval.second)
+            maxOf(intervals[safeEnd-1].second, interval.second)
         )
         intervals.clear()
         intervals.add(merged)

@@ -100,6 +100,18 @@ class OpeningHoursTest {
     }
 
     @Test
+    fun `toString later interval joins existing ones`() {
+        val openingHours = OpeningHours()
+        openingHours.add(DayOfWeek.MONDAY, 10, 0, 14, 0)
+        openingHours.add(DayOfWeek.MONDAY, 16, 0, 20, 0)
+        openingHours.add(DayOfWeek.MONDAY, 12, 0, 18, 0)
+
+        val result = openingHours.toString()
+
+        assertEquals("L: 10:00-20:00", result)
+    }
+
+    @Test
     fun `toString for single day 24H`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 0, 0, 23, 59)
