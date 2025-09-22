@@ -15,11 +15,13 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.OpeningStatus
 import net.canvoki.carburoid.json.toSpanishFloat
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
+import net.canvoki.carburoid.log
 
 
 class GasStationAdapter(
     private var context: Context,
     private var stations: List<GasStation>,
+    private val onStationClick: (GasStation) -> Unit = {},
 ):
     RecyclerView.Adapter<GasStationAdapter.ViewHolder>() {
 
@@ -58,6 +60,12 @@ class GasStationAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val station = stations[position]
+
+        holder.itemView.setOnClickListener {
+            log("Clicked on ${station.name}")
+            onStationClick(station)
+        }
+
         holder.name.text = station.name ?: "Unknown"
         holder.address.text = station.address ?: "No address"
 
