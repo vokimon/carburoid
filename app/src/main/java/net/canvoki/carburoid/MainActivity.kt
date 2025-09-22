@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         progressText = findViewById(R.id.text_progress)
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
 
-        gasStationAdapter = GasStationAdapter(emptyList())
+        gasStationAdapter = GasStationAdapter(this, emptyList())
         recyclerView.adapter = gasStationAdapter
 
         showEmpty("No stations")
