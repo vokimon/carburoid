@@ -660,7 +660,7 @@ class OpeningHoursTest {
     @Test
     fun `getStatus continuity search follows next interval in next day`() {
         getStatus_testCase(
-            openings="M: 8:00-23:59; X: 00:00-10:00 y 10:00-14:00", // Tuesday and two contiguous on Wednesday
+            openings="M: 8:00-23:59; X: 00:00-09:59 y 10:00-14:00", // Tuesday and two contiguous on Wednesday
             at=madridInstant(DayOfWeek.TUESDAY, "12:00"), // on the first opening
             isOpen=true,
             until=madridInstant(DayOfWeek.WEDNESDAY, "14:00"), // takes the last closing
