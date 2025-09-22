@@ -496,17 +496,6 @@ class OpeningHoursTest {
         return targetLocal.atZone(MADRID_ZONE).toInstant().toString()
     }
 
-    @Ignore
-    @Test
-    fun `getStatus 24 7 returns open with no next change`() {
-        getStatus_testCase(
-            openings="L-D: 24H",
-            at="2025-06-09T00:00:00Z",
-            isOpen=true,
-            until=null,
-        )
-    }
-
     @Test
     fun `getStatus always closed never opens`() {
         getStatus_testCase(
@@ -697,6 +686,25 @@ class OpeningHoursTest {
         )
     }
 
+    @Test
+    fun `getStatus far opening`() {
+        getStatus_testCase(
+            openings="J: 08:00-14:00", // Thursday
+            at=madridInstant(DayOfWeek.TUESDAY, "12:00"), // several days before
+            isOpen=false,
+            until=madridInstant(DayOfWeek.THURSDAY, "08:00"), // takes the last closing
+        )
+    }
+
+    @Test
+    fun `getStatus 24 7 returns open with no next change`() {
+        getStatus_testCase(
+            openings="L-D: 24H",
+            at=madridInstant(DayOfWeek.TUESDAY, "12:00"),
+            isOpen=true,
+            until=null,
+        )
+    }
 
     // toLocal toInstant helpers
 

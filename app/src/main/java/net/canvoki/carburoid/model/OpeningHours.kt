@@ -56,15 +56,16 @@ class OpeningHours() {
         dayIntervals.getOrPut(day) { mutableListOf() }.add(interval)
     }
 
-    fun getStatus(instant: Instant, zoneId: ZoneId): OpeningStatus {
-        if (dayIntervals.isEmpty())
-            return OpeningStatus(false, null)
+    private fun getDayIntervals(day: DayOfWeek): List<Pair<LocalTime, LocalTime>> {
+        return dayIntervals.getOrDefault(day, emptyList())
+    }
 
+    fun getStatus(instant: Instant, zoneId: ZoneId): OpeningStatus {
         val (day, time) = toLocal(instant, zoneId)
 
         var closingAt: LocalTime? = null
-        for ((start, end) in dayIntervals.getOrDefault(day, emptyList())) {
-            if (end < time) continue // interval in the past, ignore
+        for ((start, end) in getDayIntervals(day)) {
+            if (end < time) continue // ignore intervals in the past
 
             // Looking for closure
             if (closingAt != null) {
@@ -82,39 +83,47 @@ class OpeningHours() {
             // start looking for a closure
             closingAt = end
         }
-        if (closingAt != null) {
-            // Looking for closure
-            var closingDay = day
-            for (dayOffset in 1L..7L) {
-                if (closingAt != LocalTime.of(23,59)) {
-                    // last day did not end open
-                    break
-                }
-                val nextDay = day + dayOffset
-                for ((start, end) in dayIntervals.getOrDefault(nextDay, emptyList())) {
-                    if (start == closingAt || start == closingAt?.plusMinutes(1)) {
-                        closingAt = end
-                        closingDay = nextDay
-                    }
+        if (closingAt == null) {
+            // closed, no opening within the day, look for it on the next days
+            for (i in 1L..7L) {
+                val nextDay = day + i
+                for ((start, end) in getDayIntervals(nextDay)) {
+                    val until = toInstant(instant, nextDay, start, zoneId)
+                    return OpeningStatus(isOpen = false, until = until)
                 }
             }
-            if (closingAt == LocalTime.of(23, 59)) {
-                val until = toInstant(instant, closingDay+1, LocalTime.MIDNIGHT, zoneId)
+            // No opening found, never open
+            return OpeningStatus(false, null)
+        }
+        // Looking for closure
+        var closingDay = day
+        for (dayOffset in 1L..8L) {
+            val nextDay = day + dayOffset
+            val dayIntervals = getDayIntervals(nextDay)
+            if (dayIntervals.isEmpty()) {
+                if (closingAt == LocalTime.of(23, 59)) {
+                    val until = toInstant(instant, closingDay+1, LocalTime.MIDNIGHT, zoneId)
+                    return OpeningStatus(isOpen = true, until = until)
+                }
+                val until = toInstant(instant, closingDay, closingAt!!, zoneId)
                 return OpeningStatus(isOpen = true, until = until)
             }
-            val until = toInstant(instant, closingDay, closingAt!!, zoneId)
-            return OpeningStatus(isOpen = true, until = until)
-        }
-        for (i in 1L..7L) {
-            val nextDay = day + i
-            if (dayIntervals.containsKey(nextDay)) {
-                val (start, end) = dayIntervals[nextDay]!![0]
-                val until = toInstant(instant, nextDay, start, zoneId)
-                return OpeningStatus(isOpen = false, until = until)
+
+            for ((start, end) in dayIntervals) {
+                if (start != closingAt && start != closingAt?.plusMinutes(1)) {
+                    // Gap detected
+                    if (closingAt == LocalTime.of(23, 59)) {
+                        val until = toInstant(instant, closingDay+1, LocalTime.MIDNIGHT, zoneId)
+                        return OpeningStatus(isOpen = true, until = until)
+                    }
+                    val until = toInstant(instant, closingDay, closingAt!!, zoneId)
+                    return OpeningStatus(isOpen = true, until = until)
+                }
+                closingAt = end
+                closingDay = nextDay
             }
         }
-
-        return OpeningStatus(true, null)
+        return OpeningStatus(isOpen=true, until=null)
     }
 
     override fun toString(): String {
