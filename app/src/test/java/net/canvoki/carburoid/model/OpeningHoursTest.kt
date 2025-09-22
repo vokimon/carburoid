@@ -56,6 +56,17 @@ class OpeningHoursTest {
     }
 
     @Test
+    fun `toString for Monday with two out of order intervals`() {
+        val openingHours = OpeningHours()
+        openingHours.add(DayOfWeek.MONDAY, 15, 30, 20, 0)
+        openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)
+
+        val result = openingHours.toString()
+
+        assertEquals("L: 08:00-13:30 y 15:30-20:00", result)
+    }
+
+    @Test
     fun `toString for single day 24H`() {
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 0, 0, 23, 59)

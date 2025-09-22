@@ -50,7 +50,15 @@ class OpeningHours() {
 
     fun add(day: DayOfWeek, startHour: Int, startMinute: Int, endHour: Int, endMinute: Int) {
         val interval = LocalTime.of(startHour, startMinute) to LocalTime.of(endHour, endMinute)
-        dayIntervals.getOrPut(day) { mutableListOf() }.add(interval)
+        val intervals = dayIntervals.getOrPut(day) { mutableListOf() }
+
+        val insertPos = intervals.indexOfFirst { it.first >= interval.first }
+        if (insertPos == -1) {
+            intervals.add(interval)
+        } else {
+            intervals.add(insertPos, interval)
+        }
+
     }
 
     fun getStatus(instant: Instant, zoneId: ZoneId): OpeningStatus {
