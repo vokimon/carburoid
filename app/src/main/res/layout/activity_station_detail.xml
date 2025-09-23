@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Hero Section -->
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Material3.HeadlineLarge"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnBackground"
+            android:text="Station Name"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/text_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Material3.DisplayLarge"
+            android:textColor="?attr/colorPrimary"
+            android:textStyle="bold"
+            android:text="1,529 €"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/text_distance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Material3.BodyMedium"
+            android:textColor="?attr/colorSecondary"
+            android:text="3,2 km"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/text_open_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Material3.LabelLarge"
+            android:textColor="#33FF33"
+            android:text="Closes in 2 hours"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Location Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:text="Location"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/text_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Material3.BodyMedium"
+            android:textColor="?attr/colorOnBackground"
+            android:text="123 Example St." />
+
+        <TextView
+            android:id="@+id/text_city_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Material3.BodyMedium"
+            android:textColor="?attr/colorSecondary"
+            android:text="Madrid, Community of Madrid"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Hours Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:text="Opening Hours"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/text_opening_hours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Material3.BodyMedium"
+            android:textColor="?attr/colorOnBackground"
+            android:text="L-V: 08:00-13:30 y 15:30-20:00; S: 08:00-13:30"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Other Prices Section -->
+        <TextView
+            android:id="@+id/label_other_prices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:text="Other Prices"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/container_other_prices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- Dynamically added TextViews for other prices -->
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

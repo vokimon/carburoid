@@ -20,7 +20,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import java.io.File
@@ -36,6 +35,7 @@ import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.network.GasStationApiFactory
 import net.canvoki.carburoid.ui.GasStationAdapter
+import net.canvoki.carburoid.ui.StationDetailActivity
 import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.CarburoidApplication
@@ -264,6 +264,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun onItemClicked(station: GasStation) {
         log("Funcionaca llamada con ${station.name}")
+        val intent = Intent(this, StationDetailActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onRequestPermissionsResult(

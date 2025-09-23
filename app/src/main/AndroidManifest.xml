@@ -29,6 +29,10 @@
             android:name=".SettingsActivity"
             android:label="Settings"
             android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".ui.StationDetailActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
