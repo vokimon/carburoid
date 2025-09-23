@@ -32,6 +32,7 @@ class DummyDistanceMethod() : DistanceMethod {
 
 fun dummyStation(index: Int, distance: Double, price: Double?, isPublicPrice: Boolean=true): GasStation {
     return GasStation(
+        id = index,
         name = "Station ${index} at ${distance} km, ${price} €",
         address = "Address $index",
         city = "A city",
@@ -219,5 +220,4 @@ class StationFilterTest {
         )
     }
 
-    // TODO: non public prices do not lower the cutoff price
 }

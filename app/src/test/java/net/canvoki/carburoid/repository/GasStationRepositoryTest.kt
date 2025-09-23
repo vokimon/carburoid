@@ -42,6 +42,7 @@ class GasStationRepositoryTest {
 
     fun station(index: Int, distance: Double, price: Double?): Map<String, Any> {
         return mapOf(
+            "IDEESS" to "$index",
             "Rótulo" to "Station $index at $distance km, $price €",
             "Dirección" to "Address $index",
             "Localidad" to "A city",
@@ -56,6 +57,7 @@ class GasStationRepositoryTest {
     private fun dataExample() = GasStationResponse(
         stations=listOf(
             GasStation(
+                id=666,
                 name="Station 1",
                 address="Address 1",
                 city="City",
@@ -456,10 +458,10 @@ class GasStationRepositoryTest {
         )
     }
 
-    private fun writeCache(downloadDate: Instant?) {
+    private fun writeCache(downloadDate: Instant?, stations: List<GasStation>?=null) {
         val response = GasStationResponse(
-            stations = emptyList(),
-            downloadDate = downloadDate
+            stations = stations?:emptyList(),
+            downloadDate = downloadDate,
         )
         cacheFile.writeText(Gson().toJson(response))
     }
@@ -493,5 +495,42 @@ class GasStationRepositoryTest {
         val repository = GasStationRepository(api, cacheFile, this)
 
         assertEquals(true, repository.isExpired())
+    }
+
+    suspend fun setupStations(stations: List<Map<String,Any>>) {
+        val response = jsonResponse(stations=stations)
+        repository.saveToCache(response)
+    }
+
+    @Test
+    fun `getStationById with a match`() = runTest {
+        setupStations(listOf(
+            station(index=1, distance=10.0, price=0.3),
+            station(index=2, distance=20.0, price=0.3),
+        ))
+
+        val repository = GasStationRepository(api, cacheFile, this)
+        var station = repository.getStationById(2)
+        assertEquals(2, station?.id)
+    }
+
+    @Test
+    fun `getStationById with no match`() = runTest {
+        setupStations(listOf(
+            station(index=1, distance=10.0, price=0.3),
+            station(index=2, distance=20.0, price=0.3),
+        ))
+
+        val repository = GasStationRepository(api, cacheFile, this)
+        var station = repository.getStationById(3)
+        assertEquals(null, station)
+    }
+
+    @Test
+    fun `getStationById when empty`() = runTest {
+        val repository = GasStationRepository(api, cacheFile, this)
+
+        var station = repository.getStationById(2)
+        assertEquals(null, station)
     }
 }

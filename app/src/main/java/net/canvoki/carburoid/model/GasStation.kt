@@ -44,6 +44,9 @@ data class GasStationResponse(
 
 // ✅ GasStation data class
 data class GasStation(
+    @SerializedName("IDEESS")
+    val id: Int,
+
     @SerializedName("Rótulo")
     val name: String?,
 
