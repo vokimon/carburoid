@@ -58,7 +58,9 @@ class StationDetailActivity : AppCompatActivity() {
 
         binding.textOpeningHours.text = station.openingHours?.toString() ?: "Permanently Closed"
 
-        // Other prices
+        binding.textExclusivePriceWarning.visibility = if (station.isPublicPrice) View.GONE else View.VISIBLE
+
+        // Other products
         val otherProducts = station.prices.filter { it.key != ProductManager.getCurrent() }
         if (otherProducts.isNotEmpty()) {
             binding.labelOtherProducts.visibility = View.VISIBLE

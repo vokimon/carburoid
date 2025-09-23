@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Carburoid</string>
+    <string name="price_not_public">✱ Non-public price</string>
 </resources>

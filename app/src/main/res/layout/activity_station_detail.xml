@@ -16,7 +16,7 @@
             android:id="@+id/text_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="6dp"
             style="@style/TextAppearance.Material3.HeadlineLarge"
             android:textStyle="bold"
             android:textColor="?attr/colorOnBackground"
@@ -29,6 +29,20 @@
             android:layout_marginBottom="8dp"
             >
 
+            <!-- Warning for non-public prices -->
+            <TextView
+                android:id="@+id/text_exclusive_price_warning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                style="@style/TextAppearance.Material3.LabelSmall"
+                android:textColor="?attr/colorError"
+                android:text="@string/price_not_public"
+                android:gravity="end"
+                />
+
             <TextView
                 android:id="@+id/text_price"
                 android:layout_width="wrap_content"
@@ -36,6 +50,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                android:paddingTop="2dp"
                 style="@style/TextAppearance.Material3.DisplayLarge"
                 android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"
@@ -47,13 +62,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toStartOf="@id/text_price"
-                app:layout_constraintBaseline_toBaselineOf="@id/text_price"
+                app:layout_constraintBottom_toBottomOf="@id/text_price"
+                android:paddingBottom="14dp"
                 android:gravity="bottom|right"
                 style="@style/TextAppearance.Material3.BodyMedium"
                 android:textColor="?attr/colorSecondary"
                 android:text="Gasoleo A" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <TextView
             android:id="@+id/text_distance"
