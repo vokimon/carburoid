@@ -60,14 +60,14 @@ class GasStationRepository(
 
     private val isBackgroundUpdateRunning = AtomicBoolean(false)
 
-    suspend fun getData(): GasStationResponse? {
+    fun getData(): GasStationResponse? {
         if (isExpired()) {
             launchFetch()
         }
         return parsed
     }
 
-    suspend fun launchFetch() {
+    fun launchFetch() {
         if (!isBackgroundUpdateRunning.compareAndSet(false, true)) { // expected, new value
             log("ALREADY FETCHING, QUIT")
             return
