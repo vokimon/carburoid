@@ -263,8 +263,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onItemClicked(station: GasStation) {
-        log("Funcionaca llamada con ${station.name}")
         val intent = Intent(this, StationDetailActivity::class.java)
+        intent.putExtra("station_id", station.id)
         startActivity(intent)
     }
 
