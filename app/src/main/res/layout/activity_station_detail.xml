@@ -52,7 +52,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:paddingTop="2dp"
                 style="@style/TextAppearance.Material3.DisplayLarge"
-                android:textColor="?attr/colorPrimary"
+                android:textColor="?attr/colorError"
                 android:textStyle="bold"
                 android:text="1,529 €" />
 
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             style="@style/TextAppearance.Material3.BodyMedium"
-            android:textColor="?attr/colorSecondary"
+            android:textColor="?attr/colorPrimary"
             android:text="3,2 km" />
 
         <TextView
@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             style="@style/TextAppearance.Material3.LabelLarge"
-            android:textColor="#33FF33"
+            android:textColor="?attr/colorSecondary"
             android:text="Closes in 2 hours" />
 
 
