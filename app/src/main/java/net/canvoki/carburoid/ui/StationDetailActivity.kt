@@ -42,7 +42,7 @@ class StationDetailActivity : AppCompatActivity() {
             val statusText = "TODO: opening status" // formatOpeningStatus(this, status, station.timeZone(), 60)
             binding.textOpenStatus.text = statusText
             val colorAttr = if (status.isOpen)
-                    AppCompatR.attr.colorPrimary
+                    MaterialR.attr.colorSecondary
                 else
                     AppCompatR.attr.colorError
             val typedValue = TypedValue()
