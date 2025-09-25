@@ -1,5 +1,7 @@
 package net.canvoki.carburoid.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -56,6 +58,12 @@ class StationDetailActivity : AppCompatActivity() {
 
         binding.textAddress.text = station.address
         binding.textCityState.text = "${station.city}, ${station.state}"
+
+        binding.layoutAddressMap.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:${station?.latitude},${station?.longitude}"))
+            startActivity(intent)
+        }
+
 
         binding.textOpeningHours.text = station.openingHours?.toString() ?: getString(R.string.station_status_permanently_closed)
 

@@ -40,3 +40,4 @@ warning_location_error: S'ha produit un error en obtindre la ubicació; fent ser
 warning_location_forbidden: No s'ha donat permisos per obtindre la ubicació; fent servir Madrid.
 refreshing_data: S'estan actualitzant les dades...
 failed_download: "Ha fallat la descarrega de dades: %s"
+open_in_maps: Obre al mapa

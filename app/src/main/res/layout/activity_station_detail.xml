@@ -99,44 +99,101 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/TextAppearance.Material3.TitleMedium"
-            android:text="@string/detail_location"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:text="@string/detail_location" />
 
-        <TextView
-            android:id="@+id/text_address"
+        <LinearLayout
+            android:id="@+id/layout_address_map"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:textColor="?attr/colorOnBackground"
-            android:text="123 Example St." />
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true">
 
-        <TextView
-            android:id="@+id/text_city_state"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:textColor="?attr/colorSecondary"
-            android:text="Sant Joan Despí, BARCELONA"
-            android:layout_marginBottom="16dp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_location_on"
+                android:contentDescription="@string/open_in_maps"
+                android:layout_marginEnd="8dp"
+                android:tint="?attr/colorPrimary" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:textColor="?attr/colorOnBackground"
+                    android:text="123 Example St." />
+
+                <TextView
+                    android:id="@+id/text_city_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:textColor="?attr/colorSecondary"
+                    android:text="Sant Joan Despí, BARCELONA" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_outward"
+                android:contentDescription="@string/open_in_maps"
+                android:layout_marginStart="8dp"
+                android:tint="?attr/colorPrimary" />
+
+        </LinearLayout>
 
         <!-- Hours Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/TextAppearance.Material3.TitleMedium"
-            android:text="@string/detail_opening_hours"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:text="@string/detail_opening_hours" />
 
-        <TextView
-            android:id="@+id/text_opening_hours"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:textColor="?attr/colorOnBackground"
-            android:text="L-V: 08:00-13:30 y 15:30-20:00; S: 08:00-13:30"
-            android:layout_marginBottom="16dp" />
+            android:orientation="horizontal"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true" >
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_schedule"
+                android:contentDescription="@string/open_in_maps"
+                android:layout_marginEnd="8dp"
+                android:tint="?attr/colorPrimary" />
+
+            <TextView
+                android:id="@+id/text_opening_hours"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="?attr/colorOnBackground"
+                android:text="L-V: 08:00-13:30 y 15:30-20:00; S: 08:00-13:30"/>
+
+        </LinearLayout>
 
         <!-- Other Products Section -->
         <TextView

@@ -40,3 +40,4 @@ warning_location_error: Error detectando la ubicación; usando Madrid por defect
 warning_location_forbidden: Denegado acceso a la ubicación; usando Madrid por defecto.
 refreshing_data: Se estan actualitzando los datos...
 failed_download: "Ha fallado la descarga de datos: %s"
+open_in_maps: Abre en el mapa

@@ -42,4 +42,5 @@
     <string name="warning_location_forbidden">Location access denied; using Madrid as default.</string>
     <string name="refreshing_data">Refreshing data...</string>
     <string name="failed_download">Download failed: %s</string>
+    <string name="open_in_maps">Open in a map</string>
 </resources>
