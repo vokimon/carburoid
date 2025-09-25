@@ -62,22 +62,22 @@ class GasStationAdapter(
         val station = stations[position]
 
         holder.itemView.setOnClickListener {
-            log("Clicked on ${station.name}")
+            //log("Clicked on ${station.name}")
             onStationClick(station)
         }
 
-        holder.name.text = station.name ?: "Unknown"
-        holder.address.text = station.address ?: "No address"
+        holder.name.text = station.name ?: context.getString(R.string.item_no_name)
+        holder.address.text = station.address ?: context.getString(R.string.item_no_address)
 
         // Combine city and province
         val location = listOfNotNull(station.city, station.state).joinToString(" - ")
-        holder.location.text = if (location.isNotEmpty()) location else "Location unknown"
+        holder.location.text = if (location.isNotEmpty()) location else context.getString(R.string.item_no_city)
 
         val price = station.price?.let { "%.3f €".format(it)}
         holder.price.text = if (station.isPublicPrice) price else "*" + price
 
         val distance = CurrentDistancePolicy.getDistance(station)
-        holder.distance.text = distance?.let { "%.1f km".format(it / 1000) } ?: "Distance N/A"
+        holder.distance.text = distance?.let { "%.1f km".format(it / 1000) } ?: "?? km"
 
         val status = station.openStatus(Instant.now())
         holder.openStatus.text = formatOpeningStatus(status, ZoneId.of("Europe/Madrid"))
@@ -93,21 +93,25 @@ class GasStationAdapter(
 
         return when {
             status==null -> {
-                "CLOSED??"
+                context.getString(R.string.station_status_unknown)
             }
             !status.isOpen && status.until == null -> {
-                "CLOSED PERMANENTLY"
+                context.getString(R.string.station_status_permanently_closed)
             }
             !status.isOpen && status.until != null -> {
                 val relative = getRelativeTimeSpan(status.until, now, zoneId)
-                "Opens ${relative}"
+                context.getString(R.string.station_status_opens_at, relative)
             }
-            status.until == null -> "24-7"
+            status.until == null -> {
+                context.getString(R.string.station_status_247)
+            }
             status.until < untilThreshold -> {
-                    val relative = getRelativeTimeSpan(status.until, now, zoneId)
-                    "Closes ${relative}"
+                val relative = getRelativeTimeSpan(status.until, now, zoneId)
+                context.getString(R.string.station_status_closes_at, relative)
             }
-            else -> "OPEN"
+            else -> {
+                context.getString(R.string.station_status_open)
+            }
         }
     }
 

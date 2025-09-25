@@ -7,6 +7,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import androidx.preference.PreferenceManager
+import net.canvoki.carburoid.R
 
 object ThemeSettings {
 
@@ -56,9 +57,9 @@ object ThemeSettings {
     private fun updateSummary(preference: ListPreference, context: Context) {
         val current = currentValue(context)
         preference.summary = when (current) {
-            "light" -> "Light"
-            "dark" -> "Dark"
-            else -> "Auto (System Default)"
+            "light" -> context.getString(R.string.theme_light)
+            "dark" -> context.getString(R.string.theme_dark)
+            else -> context.getString(R.string.theme_system)
         }
     }
 }

@@ -25,4 +25,14 @@
     <string name="detail_location">Location</string>
     <string name="detail_opening_hours">Hours</string>
     <string name="detail_other_products">Other Products</string>
+    <string name="item_no_name">Unnamed</string>
+    <string name="item_no_address">No address</string>
+    <string name="item_no_city">No city</string>
+    <string name="station_status_unknown">Closed??</string>
+    <string name="station_status_permanently_closed">Permanently closed</string>
+    <string name="station_status_closed">Closed</string>
+    <string name="station_status_opens_at">Opens %s</string>
+    <string name="station_status_closes_at">Closes %s</string>
+    <string name="station_status_open">Open</string>
+    <string name="station_status_247">24-7</string>
 </resources>

@@ -23,3 +23,15 @@ price_not_public: ✱ Precio condicionado
 detail_location: Ubicación
 detail_opening_hours: Horario de servicio
 detail_other_products: Otros Productos
+station_no_name: Sin rótulo
+station_no_address: Sin dirección
+station_no_city: Sin municipio
+station_no_price: No disponible
+station_no_distance: ?? km
+station_status_unknown: Cerrado??
+station_status_permanently_closed: Cerrado Permanentmente
+station_status_closed: Cerradp
+station_status_opens_at: Abre %s
+station_status_closes_at: Cierra %s
+station_status_open: Abierto
+station_status_247: 24h

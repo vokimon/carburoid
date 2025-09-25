@@ -23,3 +23,15 @@ price_not_public: ✱ Conditional price
 detail_location: Location
 detail_opening_hours: Hours
 detail_other_products: Other Products
+station_no_name: Unnamed
+station_no_address: No address
+station_no_city: No city
+station_no_price: N/A
+station_no_distance: ?? km
+station_status_unknown: Closed??
+station_status_permanently_closed: Permanently closed
+station_status_closed: Closed
+station_status_opens_at: Opens %s
+station_status_closes_at: Closes %s
+station_status_open: Open
+station_status_247: 24-7

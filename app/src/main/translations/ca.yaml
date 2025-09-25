@@ -23,3 +23,15 @@ price_not_public: ✱ Preu condicionat
 detail_location: Ubicació
 detail_opening_hours: Horari de servei
 detail_other_products: Altres Productes
+station_no_name: Sense ròtul
+station_no_address: Sense adreça
+station_no_city: Sense municipi
+station_no_price: No Disponible
+station_no_distance: ?? km
+station_status_unknown: Tancat??
+station_status_permanently_closed: Tancat Permanentment
+station_status_closed: Tancat
+station_status_opens_at: Obre %s
+station_status_closes_at: Tanca %s
+station_status_open: Obert
+station_status_247: 24h
