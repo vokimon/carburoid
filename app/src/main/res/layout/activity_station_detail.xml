@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingEnd="8dp"
         android:orientation="vertical">
 
         <!-- Hero Section -->
@@ -26,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom|right"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             >
 
             <!-- Warning for non-public prices -->
@@ -60,10 +61,10 @@
                 android:id="@+id/text_current_product"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="12dp"
+                android:paddingBottom="14dp"
                 app:layout_constraintEnd_toStartOf="@id/text_price"
                 app:layout_constraintBottom_toBottomOf="@id/text_price"
-                android:paddingBottom="14dp"
                 android:gravity="bottom|right"
                 style="@style/TextAppearance.Material3.BodyMedium"
                 android:textColor="?attr/colorSecondary"
@@ -74,17 +75,19 @@
 
         <TextView
             android:id="@+id/text_distance"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_gravity="end"
             style="@style/TextAppearance.Material3.BodyMedium"
             android:textColor="?attr/colorPrimary"
             android:text="3,2 km" />
 
         <TextView
             android:id="@+id/text_open_status"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:layout_marginBottom="16dp"
             style="@style/TextAppearance.Material3.LabelLarge"
             android:textColor="?attr/colorSecondary"
@@ -151,6 +154,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="8dp"
             android:visibility="gone">
 
             <!-- Here the dynamically added TextViews for other products -->
