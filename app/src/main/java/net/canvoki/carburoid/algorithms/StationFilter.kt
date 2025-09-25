@@ -20,14 +20,18 @@ class StationFilter (
         val result = mutableListOf<GasStation>()
         val deadLine = Instant.now().plus(Duration.ofMinutes(config.hideClosedMarginInMinutes.toLong()))
         for (station in sortedStations) {
+            var canLimit = true
             val stationPrice = station.price
             if (stationPrice == null) {
                 //log("Filtered non number ${station.price}")
                 continue
             }
-            if (config.onlyPublicPrices && !station.isPublicPrice) {
-                //log("Filtered non public price")
-                continue
+            if (!station.isPublicPrice) {
+                if (config.onlyPublicPrices) {
+                    //log("Filtered non public price")
+                    continue
+                }
+                canLimit = false
             }
             if (config.hideExpensiveFurther && stationPrice > minPrice) {
                 //log("Filtered $stationPrice vs $minPrice")
@@ -46,7 +50,7 @@ class StationFilter (
                 }
             }
 
-            if (station.isPublicPrice) {
+            if (canLimit) {
                 //log("Updating price to ${stationPrice} ${station.isPublicPrice}")
                 minPrice = stationPrice
             }
