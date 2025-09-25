@@ -293,4 +293,21 @@ class StationFilterTest {
         }
     }
 
+    @Test
+    fun `permanently closed with infinite margin (one week)`() {
+        atMadridInstant(DayOfWeek.TUESDAY, "08:30") { // 2:30h to 11h
+            testCase(
+                hideClosedMarginInMinutes = 7*24*60, // Margin 3h!
+                stations = listOf(
+                    dummyStation(index=1, distance=10.0, price=0.5),
+                    dummyStation(index=2, distance=15.0, price=0.3, hours=""),
+                ),
+                expected = listOf(
+                    "Station 1 at 10.0 km, 0.5 €",
+                    "Station 2 at 15.0 km, 0.3 €", // Infinite margin
+                ),
+            )
+        }
+    }
+
 }

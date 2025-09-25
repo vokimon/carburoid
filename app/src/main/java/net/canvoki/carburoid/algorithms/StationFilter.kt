@@ -39,14 +39,16 @@ class StationFilter (
             }
 
             var status = station.openStatus(Instant.now())
-            if (status?.isOpen != true) {
-                if (status.until == null) {
-                    //log("Filtered permanently closed station ${station.name} ${station.city}")
-                    continue
-                }
-                if (status.until > deadLine) {
-                    //log("Filtered currently closed station ${station.name} ${station.city}")
-                    continue
+            if (config.hideClosedMarginInMinutes.toLong()<7*24*60) {
+                if (status?.isOpen != true) {
+                    if (status.until == null) {
+                        //log("Filtered permanently closed station ${station.name} ${station.city}")
+                        continue
+                    }
+                    else if (status.until > deadLine) {
+                        //log("Filtered currently closed station ${station.name} ${station.city}, opens at ${status.until}")
+                        continue
+                    }
                 }
             }
 
