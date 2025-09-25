@@ -91,7 +91,7 @@ data class GasStation(
             ZoneId.of("Atlantic/Canary")
     }
 
-    fun openStatus(instant: Instant) = openingHours?.getStatus(instant, timeZone())
+    fun openStatus(instant: Instant) = openingHours?.getStatus(instant, timeZone()) ?: OpeningStatus(isOpen=false, until=null)
 
     val price: Double?
         get() = prices[ProductManager.getCurrent()]

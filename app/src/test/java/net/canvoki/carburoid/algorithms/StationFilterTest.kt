@@ -1,9 +1,14 @@
 package net.canvoki.carburoid.algorithms
 
 import android.location.Location
+import java.time.Instant
+import java.time.DayOfWeek
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.model.OpeningHours
 import net.canvoki.carburoid.distances.DistanceMethod
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
+import net.canvoki.carburoid.test.madridInstant
+import net.canvoki.carburoid.test.atMadridInstant
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.After
@@ -30,7 +35,7 @@ class DummyDistanceMethod() : DistanceMethod {
 }
 
 
-fun dummyStation(index: Int, distance: Double, price: Double?, isPublicPrice: Boolean=true): GasStation {
+fun dummyStation(index: Int, distance: Double, price: Double?, isPublicPrice: Boolean=true, hours: String="L-D: 24H"): GasStation {
     return GasStation(
         id = index,
         name = "Station ${index} at ${distance} km, ${price} €",
@@ -41,8 +46,9 @@ fun dummyStation(index: Int, distance: Double, price: Double?, isPublicPrice: Bo
             "Gasoleo A" to price,
         ),
         latitude = 40.4168,
-        longitude = distance,
+        longitude = distance/100.0,
         isPublicPrice = isPublicPrice,
+        openingHours = OpeningHours.parse(hours) ?: OpeningHours(),
     )
 }
 
@@ -77,11 +83,13 @@ class StationFilterTest {
             expected: List<String>,
             hideExpensiveFurther: Boolean=true,
             onlyPublicPrices: Boolean=true,
+            hideClosedMarginInMinutes: Int = 0,
     ) {
         setDistancePolicy()
         val config = FilterConfig(
             hideExpensiveFurther=hideExpensiveFurther,
             onlyPublicPrices=onlyPublicPrices,
+            hideClosedMarginInMinutes=hideClosedMarginInMinutes,
         )
         val result = StationFilter(config).filter(stations)
         assertResult(expected, result)
@@ -218,6 +226,71 @@ class StationFilterTest {
                 "Station 3 at 20.0 km, 0.4 €", // Should be filtered if 2 were public
             ),
         )
+    }
+
+   @Test
+    fun `closed station`() {
+        testCase(
+            stations = listOf(
+                dummyStation(index=1, distance=10.0, price=0.2),
+                dummyStation(index=2, distance=15.0, price=0.3, hours=""),
+            ),
+            expected = listOf(
+                "Station 1 at 10.0 km, 0.2 €",
+                //"Station 2 at 15.0 km, 0.3 €", // Closed
+            ),
+        )
+    }
+
+    @Test
+    fun `closed station opening soon`() {
+        atMadridInstant(DayOfWeek.TUESDAY, "09:30") { // 1:30h to 11h
+            testCase(
+                hideClosedMarginInMinutes = 2*60, // Margin 2h
+                stations = listOf(
+                    dummyStation(index=1, distance=10.0, price=0.5),
+                    dummyStation(index=2, distance=15.0, price=0.3, hours="L-D: 11:00-23:00"),
+                ),
+                expected = listOf(
+                    "Station 1 at 10.0 km, 0.5 €",
+                    "Station 2 at 15.0 km, 0.3 €", // Closed but soon open!
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `closed station opening late`() {
+        atMadridInstant(DayOfWeek.TUESDAY, "08:30") { // 2:30h to 11h
+            testCase(
+                hideClosedMarginInMinutes = 2*60, // Margin 2h
+                stations = listOf(
+                    dummyStation(index=1, distance=10.0, price=0.5),
+                    dummyStation(index=2, distance=15.0, price=0.3, hours="L-D: 11:00-23:00"),
+                ),
+                expected = listOf(
+                    "Station 1 at 10.0 km, 0.5 €",
+                    //"Station 2 at 15.0 km, 0.3 €", // Closed during the next 2h
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `closed station opening late but extended margin`() {
+        atMadridInstant(DayOfWeek.TUESDAY, "08:30") { // 2:30h to 11h
+            testCase(
+                hideClosedMarginInMinutes = 3*60, // Margin 3h!
+                stations = listOf(
+                    dummyStation(index=1, distance=10.0, price=0.5),
+                    dummyStation(index=2, distance=15.0, price=0.3, hours="L-D: 11:00-23:00"),
+                ),
+                expected = listOf(
+                    "Station 1 at 10.0 km, 0.5 €",
+                    "Station 2 at 15.0 km, 0.3 €", // Closed but opens in less than 3h
+                ),
+            )
+        }
     }
 
 }
