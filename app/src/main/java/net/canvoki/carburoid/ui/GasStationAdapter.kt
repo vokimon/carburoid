@@ -2,9 +2,7 @@ package net.canvoki.carburoid.ui
 
 import java.time.Instant
 import java.time.ZoneId
-import java.time.temporal.ChronoUnit
 import android.content.Context
-import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +14,8 @@ import net.canvoki.carburoid.model.OpeningStatus
 import net.canvoki.carburoid.json.toSpanishFloat
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.log
+
+
 
 
 class GasStationAdapter(
@@ -45,19 +45,6 @@ class GasStationAdapter(
         return ViewHolder(view)
     }
 
-    fun formatUntilHuman(until: Instant, zoneId: ZoneId): String {
-        val now = Instant.now()
-        val untilMillis = until.atZone(zoneId).toInstant().toEpochMilli()
-        val nowMillis = now.atZone(zoneId).toInstant().toEpochMilli()
-
-        return DateUtils.getRelativeTimeSpanString(
-            untilMillis,
-            nowMillis,
-            DateUtils.MINUTE_IN_MILLIS,
-            DateUtils.FORMAT_ABBREV_RELATIVE
-        ).toString()
-    }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val station = stations[position]
 
@@ -80,56 +67,10 @@ class GasStationAdapter(
         holder.distance.text = distance?.let { "%.1f km".format(it / 1000) } ?: "?? km"
 
         val status = station.openStatus(Instant.now())
-        holder.openStatus.text = formatOpeningStatus(status, ZoneId.of("Europe/Madrid"))
+        // TODO: Take the threshod from settings
+        holder.openStatus.text = status.forHumans(context)
     }
 
-    fun formatOpeningStatus(
-        status: OpeningStatus?,
-        zoneId: ZoneId,
-        thresholdMinutes: Long = 24*60
-    ): String {
-        val now = Instant.now()
-        val untilThreshold = now.plus(thresholdMinutes, ChronoUnit.MINUTES)
-
-        return when {
-            status==null -> {
-                context.getString(R.string.station_status_unknown)
-            }
-            !status.isOpen && status.until == null -> {
-                context.getString(R.string.station_status_permanently_closed)
-            }
-            !status.isOpen && status.until != null -> {
-                val relative = getRelativeTimeSpan(status.until, now, zoneId)
-                context.getString(R.string.station_status_opens_at, relative)
-            }
-            status.until == null -> {
-                context.getString(R.string.station_status_247)
-            }
-            status.until < untilThreshold -> {
-                val relative = getRelativeTimeSpan(status.until, now, zoneId)
-                context.getString(R.string.station_status_closes_at, relative)
-            }
-            else -> {
-                context.getString(R.string.station_status_open)
-            }
-        }
-    }
-
-    private fun getRelativeTimeSpan(
-        until: Instant,
-        now: Instant,
-        zoneId: ZoneId
-    ): String {
-        val untilMillis = until.atZone(zoneId).toInstant().toEpochMilli()
-        val nowMillis = now.atZone(zoneId).toInstant().toEpochMilli()
-
-        return DateUtils.getRelativeTimeSpanString(
-            untilMillis,
-            nowMillis,
-            DateUtils.MINUTE_IN_MILLIS,
-            DateUtils.FORMAT_ABBREV_RELATIVE
-        ).toString().lowercase()
-    }
 
 
     override fun getItemCount() = stations.size

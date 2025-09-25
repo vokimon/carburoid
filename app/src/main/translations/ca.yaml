@@ -34,7 +34,7 @@ station_status_closed: Tancat
 station_status_opens_at: Obre %s
 station_status_closes_at: Tanca %s
 station_status_open: Obert
-station_status_247: 24h
+station_status_247: Obert 24h
 warning_location_not_available: Ubicació no detectada; fent servir Madrid.
 warning_location_error: S'ha produit un error en obtindre la ubicació; fent servir Madrid.
 warning_location_forbidden: No s'ha donat permisos per obtindre la ubicació; fent servir Madrid.

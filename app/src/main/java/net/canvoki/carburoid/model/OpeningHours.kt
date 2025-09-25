@@ -1,11 +1,14 @@
 package net.canvoki.carburoid.model
 
+import android.content.Context
+import android.text.format.DateUtils
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.LocalDateTime
 import java.time.Instant
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
+import net.canvoki.carburoid.R
 
 val END_OF_DAY = LocalTime.of(23, 59)
 typealias TimeSpec = Pair<Int,Int>
@@ -17,7 +20,56 @@ typealias ScheduleEntry = Pair<DayRange, Intervals>
 data class OpeningStatus(
     val isOpen: Boolean,
     val until: Instant?,
-)
+) {
+
+    fun forHumans(
+        context: Context,
+        thresholdMinutes: Long = 24*60
+    ): String {
+        val now = Instant.now()
+        val untilThreshold = now.plus(thresholdMinutes, ChronoUnit.MINUTES)
+
+        return when {
+            //status==null -> {
+            //    context.getString(R.string.station_status_unknown)
+            //}
+            !isOpen && until == null -> {
+                context.getString(R.string.station_status_permanently_closed)
+            }
+            !isOpen && until != null -> {
+                val relative = getRelativeTimeSpan(until, now)
+                context.getString(R.string.station_status_opens_at, relative)
+            }
+            until == null -> {
+                context.getString(R.string.station_status_247)
+            }
+            until < untilThreshold -> {
+                val relative = getRelativeTimeSpan(until, now)
+                context.getString(R.string.station_status_closes_at, relative)
+            }
+            else -> {
+                context.getString(R.string.station_status_open)
+            }
+        }
+    }
+
+    private fun getRelativeTimeSpan(
+        until: Instant,
+        now: Instant,
+    ): String {
+        val untilMillis = until.toEpochMilli()
+        val nowMillis = now.toEpochMilli()
+
+        return DateUtils.getRelativeTimeSpanString(
+            untilMillis,
+            nowMillis,
+            DateUtils.MINUTE_IN_MILLIS,
+            DateUtils.FORMAT_ABBREV_RELATIVE
+        ).toString().lowercase()
+    }
+}
+
+
 
 fun toLocal(instant: Instant, zoneId: ZoneId = ZoneId.of("Europe/Madrid")): Pair<DayOfWeek, LocalTime> {
     val localDateTime = instant.atZone(zoneId).toLocalDateTime()
