@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
         app:key="dark_mode"
-        app:title="Theme"
+        app:title="@string/settings_theme"
         app:summary="%s"
         app:entries="@array/theme_entries"
         app:entryValues="@array/theme_values"
@@ -11,20 +11,22 @@
 
     <SwitchPreferenceCompat
         app:key="hide_expensive_further"
-        app:title="Show only nearer or cheaper stations"
-        app:summary="Filters out stations more expensive than nearer ones (Recommended)"
+        app:title="@string/settings_filter_expensive"
+        app:summary="@string/settings_filter_expensive_summary"
         app:defaultValue="true" />
 
     <SwitchPreferenceCompat
         app:key="only_public_prices"
-        app:title="Show only public prices"
-        app:summary="Hide prices for members only"
+        app:title="@string/settings_filter_non_public"
+        app:summary="@string/settings_filter_non_public_summary"
         app:defaultValue="true" />
 
-    <SwitchPreferenceCompat
-        app:key="filter_by_opening_hours"
-        app:title="Hide closed stations"
-        app:summary="Do not show stations not open right now."
-        app:defaultValue="true" />
+    <ListPreference
+        android:key="open_soon_tolerance_minutes"
+        android:title="@string/settings_filter_closed"
+        android:summary="@string/settings_filter_closed_summary"
+        android:defaultValue="30"
+        android:entries="@array/settings_filter_closed_labels"
+        android:entryValues="@array/settings_filter_closed_values" />
 
 </PreferenceScreen>

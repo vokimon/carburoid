@@ -17,45 +17,45 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         style="@style/TextAppearance.Material3.TitleMedium"
-        android:textStyle="bold"
-        android:textColor="?attr/colorOnBackground"
-        android:text="Station Name Example"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/price_distance_container"
         app:layout_constraintTop_toTopOf="parent"
         android:maxLines="1"
-        android:ellipsize="end" />
+        android:ellipsize="end"
+        android:textStyle="bold"
+        android:textColor="?attr/colorOnBackground"
+        android:text="Station Name Example" />
 
     <!-- Address -->
     <TextView
         android:id="@+id/text_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.Material3.BodySmall"
-        android:textStyle="italic"
-        android:textColor="?attr/colorOutline"
-        android:text="123 Example St."
         android:layout_marginTop="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/price_distance_container"
         app:layout_constraintTop_toBottomOf="@id/text_location"
         android:maxLines="1"
-        android:ellipsize="end" />
+        android:ellipsize="end"
+        style="@style/TextAppearance.Material3.BodySmall"
+        android:textStyle="italic"
+        android:textColor="?attr/colorOutline"
+        android:text="123 Example St." />
 
     <!-- Location (City - State) -->
     <TextView
         android:id="@+id/text_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.Material3.BodyMedium"
-        android:textColor="?attr/colorSecondary"
-        android:text="City, State"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/price_distance_container"
         app:layout_constraintTop_toBottomOf="@id/text_name"
         android:layout_marginTop="2dp"
         android:maxLines="1"
-        android:ellipsize="end" />
+        android:ellipsize="end"
+        style="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?attr/colorSecondary"
+        android:text="City, State" />
 
     <!-- Right-side Container for Price + Distance -->
     <LinearLayout
@@ -73,11 +73,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
+            android:layout_marginBottom="2dp"
             style="@style/TextAppearance.Material3.HeadlineMedium"
             android:textColor="?attr/colorError"
             android:textStyle="bold"
-            android:text="1,529 €"
-            android:layout_marginBottom="2dp" />
+            android:text="1,529 €" />
 
         <!-- Distance -->
         <TextView
@@ -96,10 +96,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
+            android:layout_marginBottom="4dp"
             style="@style/TextAppearance.Material3.LabelSmall"
             android:textColor="?attr/colorOnBackground"
-            android:text="OPEN until 13:30"
-            android:layout_marginBottom="4dp" />
+            android:text="OPEN until 13:30" />
 
     </LinearLayout>
 

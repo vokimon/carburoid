@@ -1,0 +1,25 @@
+app_name: Carburoid
+menu_settings: Configuració
+settings_theme: Tema
+theme_light: Clar
+theme_dark: Fosc
+theme_system: Automàtic (El del sistema)
+settings_filter_expensive: Oculta estacions cares i llunyanes
+settings_filter_expensive_summary: No mostris estacions si n'hi ha de més properes o barates. (Recomanat)
+settings_filter_non_public: Només preus públics
+settings_filter_non_public_summary: Oculta preus que demanin afiliació.
+settings_filter_closed: Filtra estacions tancades
+settings_filter_closed_summary: Poden donar un marge de temps a les que obren aviat
+settings_filter_closed_tolerance_none: Sense marge, filtra sempre
+settings_filter_closed_tolerance_half_hour: Mitja hora
+settings_filter_closed_tolerance_one_hour: Una hora
+settings_filter_closed_tolerance_two_hours: Dues hores
+settings_filter_closed_tolerance_twelve_hours: Mig dia
+settings_filter_closed_tolerance_one_day: Un dia
+settings_filter_closed_tolerance_never: Mostra sempre
+no_gas_stations: No han estat trobades estacions de servei amb l'actual criteri
+product: Producte
+price_not_public: ✱ Preu condicionat
+detail_location: Ubicació
+detail_opening_hours: Horari de servei
+detail_other_products: Altres Productes

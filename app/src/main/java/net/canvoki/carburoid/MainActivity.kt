@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         gasStationAdapter = GasStationAdapter(this, emptyList(), ::onItemClicked)
         recyclerView.adapter = gasStationAdapter
 
-        showEmpty("No stations")
+        showEmpty(getString(R.string.no_gas_stations))
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 

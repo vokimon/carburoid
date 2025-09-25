@@ -96,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/TextAppearance.Material3.TitleMedium"
-            android:text="Location"
+            android:text="@string/detail_location"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
 
@@ -122,7 +122,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/TextAppearance.Material3.TitleMedium"
-            android:text="Opening Hours"
+            android:text="@string/detail_opening_hours"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
 
@@ -141,7 +141,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/TextAppearance.Material3.TitleMedium"
-            android:text="Other Products"
+            android:text="@string/detail_other_products"
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
             android:visibility="gone" />

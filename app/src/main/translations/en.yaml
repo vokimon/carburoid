@@ -1,0 +1,25 @@
+app_name: Carburoid
+menu_settings: Settings
+settings_theme: Theme
+theme_light: Light
+theme_dark: Dark
+theme_system: Auto (System Default)
+settings_filter_expensive: Hide expensive and further stations
+settings_filter_expensive_summary: Do not show an station if another nearer and cheaper exist. (Recommended)
+settings_filter_non_public: Show only public prices
+settings_filter_non_public_summary: Hide prices requiring membership or anything else.
+settings_filter_closed: Filtra estacions tancades
+settings_filter_closed_summary: Poden donar un marge de temps a les que obren aviat
+settings_filter_closed_tolerance_none: No margin, always filter
+settings_filter_closed_tolerance_half_hour: Half an hour
+settings_filter_closed_tolerance_one_hour: One hour
+settings_filter_closed_tolerance_two_hours: Two hours
+settings_filter_closed_tolerance_twelve_hours: Half a day
+settings_filter_closed_tolerance_one_day: A day
+settings_filter_closed_tolerance_never: Show always
+no_gas_stations: No matching gas station
+product: Product
+price_not_public: ✱ Conditional price
+detail_location: Location
+detail_opening_hours: Hours
+detail_other_products: Other Products
