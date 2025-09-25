@@ -10,8 +10,8 @@
     <string name="settings_filter_expensive_summary">Do not show an station if another nearer and cheaper exist. (Recommended)</string>
     <string name="settings_filter_non_public">Show only public prices</string>
     <string name="settings_filter_non_public_summary">Hide prices requiring membership or anything else.</string>
-    <string name="settings_filter_closed">Filtra estacions tancades</string>
-    <string name="settings_filter_closed_summary">Poden donar un marge de temps a les que obren aviat</string>
+    <string name="settings_filter_closed">Show closed stations</string>
+    <string name="settings_filter_closed_summary">Set a time margin for stations that will open soon</string>
     <string name="settings_filter_closed_tolerance_none">No margin, always filter</string>
     <string name="settings_filter_closed_tolerance_half_hour">Half an hour</string>
     <string name="settings_filter_closed_tolerance_one_hour">One hour</string>
