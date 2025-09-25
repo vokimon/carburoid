@@ -173,14 +173,9 @@ def processYamlMap(map, prefix, resourcesElement) {
             def escapedValue = escapeAndroidString(value)
             stringElement.setTextContent(escapedValue)
             resourcesElement.appendChild(stringElement)
-
-            println("Generated: ${finalKey}")
         }
     }
 }
-
-// Run the conversion before build
-preBuild.dependsOn yamlToAndroidStrings
 
 // Run the conversion before build
 preBuild.dependsOn yamlToAndroidStrings
