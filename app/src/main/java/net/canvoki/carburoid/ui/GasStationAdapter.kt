@@ -66,12 +66,12 @@ class GasStationAdapter(
             onStationClick(station)
         }
 
-        holder.name.text = station.name ?: context.getString(R.string.item_no_name)
-        holder.address.text = station.address ?: context.getString(R.string.item_no_address)
+        holder.name.text = station.name ?: context.getString(R.string.station_no_name)
+        holder.address.text = station.address ?: context.getString(R.string.station_no_address)
 
         // Combine city and province
         val location = listOfNotNull(station.city, station.state).joinToString(" - ")
-        holder.location.text = if (location.isNotEmpty()) location else context.getString(R.string.item_no_city)
+        holder.location.text = if (location.isNotEmpty()) location else context.getString(R.string.station_no_city)
 
         val price = station.price?.let { "%.3f €".format(it)}
         holder.price.text = if (station.isPublicPrice) price else "*" + price

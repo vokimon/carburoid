@@ -12,6 +12,7 @@ import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.databinding.ActivityStationDetailBinding
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.product.ProductManager
+import net.canvoki.carburoid.R
 import net.canvoki.carburoid.repository.GasStationRepository
 
 class StationDetailActivity : AppCompatActivity() {
@@ -34,8 +35,8 @@ class StationDetailActivity : AppCompatActivity() {
 
         binding.textName.text = station.name
         binding.textCurrentProduct.text = ProductManager.getCurrent()
-        binding.textPrice.text = station.price?.let { "${String.format("%.3f", it)} €" } ?: getString(R.station_no_price)
-        binding.textDistance.text = station.distanceInMeters?.let { "%.1f km".format(it / 1000f) } ?: getString(R.station_no_distance)
+        binding.textPrice.text = station.price?.let { "${String.format("%.3f", it)} €" } ?: getString(R.string.station_no_price)
+        binding.textDistance.text = station.distanceInMeters?.let { "%.1f km".format(it / 1000f) } ?: getString(R.string.station_no_distance)
 
         val status = station.openStatus(Instant.now())
         if (status != null) {
@@ -56,7 +57,7 @@ class StationDetailActivity : AppCompatActivity() {
         binding.textAddress.text = station.address
         binding.textCityState.text = "${station.city}, ${station.state}"
 
-        binding.textOpeningHours.text = station.openingHours?.toString() ?: getString(R.station_status_permanently_closed)
+        binding.textOpeningHours.text = station.openingHours?.toString() ?: getString(R.string.station_status_permanently_closed)
 
         binding.textExclusivePriceWarning.visibility = if (station.isPublicPrice) View.GONE else View.VISIBLE
 

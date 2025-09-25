@@ -57,7 +57,7 @@ class StationFilter (
             }
 
             if (mayCutoffPrice) {
-                log("Updating price to ${stationPrice} ${station.isPublicPrice}")
+                //log("Updating price to ${stationPrice} ${station.isPublicPrice}")
                 minPrice = stationPrice
             }
             result.add(station)

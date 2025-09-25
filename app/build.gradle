@@ -117,13 +117,20 @@ task yamlToAndroidStrings {
 
 // Android-specific string escaping
 def escapeAndroidString(input) {
-    return input
+    def escaped = input
         .replace("\\", "\\\\")  // Backslash
         .replace("'", "\\'")    // Single quote
         .replace("\"", "\\\"")  // Double quote
         .replace("\n", "\\n")   // Newline
         .replace("\t", "\\t")   // Tab
         .replace("\r", "\\r")   // Carriage return
+    if (escaped.startsWith("??")) {
+        escaped = "\\?" + escaped.substring(1)  // Escapa el primer ?
+    } else if (escaped.contains("??")) {
+        escaped = escaped.replace("??", "\\?\\?")  // Escapa tots els ??
+    }
+
+    return escaped
 }
 
 // Helper method for YAML to XML conversion
