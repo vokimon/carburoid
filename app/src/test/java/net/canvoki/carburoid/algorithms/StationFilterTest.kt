@@ -15,9 +15,6 @@ import org.junit.After
 import org.junit.Test
 
 
-// TODO: Ignore private gas stations
-// TODO: Configurable product
-
 /**
  * Distance is the absolute value of the longitude.
  * We cannot use a Location based solution since
@@ -211,7 +208,7 @@ class StationFilterTest {
         )
     }
 
-   @Test
+    @Test
     fun `non public prices do not lower the cutoff price`() {
         testCase(
             onlyPublicPrices=false,
@@ -228,7 +225,7 @@ class StationFilterTest {
         )
     }
 
-   @Test
+    @Test
     fun `closed station`() {
         testCase(
             stations = listOf(
@@ -305,6 +302,25 @@ class StationFilterTest {
                 expected = listOf(
                     "Station 1 at 10.0 km, 0.5 €",
                     "Station 2 at 15.0 km, 0.3 €", // Infinite margin
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `closed stations do not lower the cutoff price`() {
+        atMadridInstant(DayOfWeek.TUESDAY, "10:30") { // 0:30h to 11h
+            testCase(
+                hideClosedMarginInMinutes = 2*60, // Margin 2h
+                stations = listOf(
+                    dummyStation(index=1, distance=10.0, price=0.5),
+                    dummyStation(index=2, distance=15.0, price=0.3, hours="L-D: 11:00-23:00"),
+                    dummyStation(index=3, distance=20.0, price=0.4),
+                ),
+                expected = listOf(
+                    "Station 1 at 10.0 km, 0.5 €",
+                    "Station 2 at 15.0 km, 0.3 €",
+                    "Station 3 at 20.0 km, 0.4 €", // Should be filtered if 2 were open
                 ),
             )
         }

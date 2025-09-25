@@ -20,7 +20,7 @@ class StationFilter (
         val result = mutableListOf<GasStation>()
         val deadLine = Instant.now().plus(Duration.ofMinutes(config.hideClosedMarginInMinutes.toLong()))
         for (station in sortedStations) {
-            var canLimit = true
+            var mayCutoffPrice = true
             val stationPrice = station.price
             if (stationPrice == null) {
                 //log("Filtered non number ${station.price}")
@@ -31,15 +31,17 @@ class StationFilter (
                     //log("Filtered non public price")
                     continue
                 }
-                canLimit = false
+                // Non-public prices may be shown but don't lower the bar
+                mayCutoffPrice = false
             }
+
             if (config.hideExpensiveFurther && stationPrice > minPrice) {
                 //log("Filtered $stationPrice vs $minPrice")
                 continue
             }
 
             var status = station.openStatus(Instant.now())
-            if (config.hideClosedMarginInMinutes.toLong()<7*24*60) {
+            if (config.hideClosedMarginInMinutes < 7*24*60) {
                 if (status?.isOpen != true) {
                     if (status.until == null) {
                         //log("Filtered permanently closed station ${station.name} ${station.city}")
@@ -49,11 +51,13 @@ class StationFilter (
                         //log("Filtered currently closed station ${station.name} ${station.city}, opens at ${status.until}")
                         continue
                     }
+                    // A closed station does not lower the bar
+                    mayCutoffPrice = false
                 }
             }
 
-            if (canLimit) {
-                //log("Updating price to ${stationPrice} ${station.isPublicPrice}")
+            if (mayCutoffPrice) {
+                log("Updating price to ${stationPrice} ${station.isPublicPrice}")
                 minPrice = stationPrice
             }
             result.add(station)
