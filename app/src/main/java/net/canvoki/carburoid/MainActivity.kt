@@ -220,13 +220,15 @@ class MainActivity : AppCompatActivity() {
                     CurrentDistancePolicy.setMethod(DistanceFromCurrentPosition(location))
                 } else {
                     setFallbackLocation()
-                    showToast("Location not available — using Madrid")
+                    showToast(getString(R.string.warning_location_not_available))
                 }
                 loadGasStations()
             }
-            .addOnFailureListener {
+            .addOnFailureListener { e->
                 setFallbackLocation()
-                showToast("Failed to get location — using Madrid")
+                log("Obtaining location: {e.message}")
+                showToast(getString(R.string.warning_location_error))
+                loadGasStations()
             }
     }
 
@@ -235,7 +237,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val config = FilterSettings.config(this@MainActivity)
             try {
-                showProgress("Refreshing data...")
+                showProgress(getString(R.string.refreshing_data))
 
                 // 🚧 Do heavy work in IO (or Default) dispatcher
                 val stations = repository.getData()?.stations ?: emptyList()
@@ -245,7 +247,7 @@ class MainActivity : AppCompatActivity() {
 
                 timeit("UPDATING CONTENT") {
                     if (sortedStations.isEmpty()) {
-                        showEmpty("No stations")
+                        showEmpty(getString(R.string.no_gas_stations))
                     } else {
                         gasStationAdapter.updateData(sortedStations)
                         showContent()
@@ -254,7 +256,7 @@ class MainActivity : AppCompatActivity() {
 
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    showToast("Download failed: ${e.message}")
+                    showToast(getString(R.string.failed_download, e.message))
                     showEmpty("Error loading stations: ${e.message}")
                 }
                 e.printStackTrace()
@@ -279,7 +281,7 @@ class MainActivity : AppCompatActivity() {
                 getLastLocation()
             } else {
                 setFallbackLocation()
-                showToast("Location permission denied — using Madrid")
+                showToast(getString(R.string.warning_location_forbidden))
                 loadGasStations()
             }
         }

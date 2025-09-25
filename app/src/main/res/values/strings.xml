@@ -37,4 +37,9 @@
     <string name="station_status_closes_at">Closes %s</string>
     <string name="station_status_open">Open</string>
     <string name="station_status_247">24-7</string>
+    <string name="warning_location_not_available">No location detected; using Madrid as default.</string>
+    <string name="warning_location_error">Error detecting location; using Madrid as default.</string>
+    <string name="warning_location_forbidden">Location access denied; using Madrid as default.</string>
+    <string name="refreshing_data">Refreshing data...</string>
+    <string name="failed_download">Download failed: %s</string>
 </resources>
