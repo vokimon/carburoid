@@ -77,8 +77,6 @@ class StationDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun findStationById(id: String): GasStation? {
-        // ← Implement this — e.g., from repository or passed as Parcelable
-        return null
-    }
+
+
 }
