@@ -3,18 +3,17 @@ package net.canvoki.carburoid.product
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.AttributeSet
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.AdapterView
 import android.view.View
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView
+import android.widget.ArrayAdapter
+import android.widget.AdapterView
 import net.canvoki.carburoid.product.ProductManager
 
-
-class ProductSpinner @JvmOverloads constructor(
+class ProductSelector @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = android.R.attr.spinnerStyle
-) : Spinner(context, attrs, defStyleAttr) {
+    defStyleAttr: Int = 0
+) : AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
 
     private var listener: ((String) -> Unit)? = null
     private var suppressCallback = false
@@ -32,37 +31,33 @@ class ProductSpinner @JvmOverloads constructor(
 
     private fun setupProducts() {
         val products = ProductManager.available()
-        adapter = ArrayAdapter(
+        setAdapter(ArrayAdapter(
             context,
-            android.R.layout.simple_spinner_item,
-            products,
-        ).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
+            android.R.layout.simple_dropdown_item_1line,
+            products
+        ))
 
         val selected = loadLastSelectedProduct()
-        val index = products.indexOf(selected).takeIf { it >= 0 } ?: 0
-
-        suppressCallback = true
-        setSelection(index)
-        suppressCallback = false
+        setText(selected, false)
     }
 
     private fun setupListener() {
-        onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>, view: View?, position: Int, id: Long
-            ) {
-                val product = adapter.getItem(position) as String? ?: return
-                if (!suppressCallback) {
-                    saveLastSelectedProduct(product)
-                    ProductManager.setCurrent(product) // Optional
-                    listener?.invoke(product)
-                }
+        setOnItemClickListener { parent, view, position, id ->
+            val product = parent.getItemAtPosition(position) as String
+            if (!suppressCallback) {
+                saveLastSelectedProduct(product)
+                ProductManager.setCurrent(product)
+                listener?.invoke(product)
             }
+        }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // no-op
+        setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val currentText = text.toString()
+                val products = ProductManager.available()
+                if (currentText !in products) {
+                    setText(loadLastSelectedProduct(), false)
+                }
             }
         }
     }
@@ -71,8 +66,14 @@ class ProductSpinner @JvmOverloads constructor(
         this.listener = callback
     }
 
-    val selectedProduct: String?
-        get() = selectedItem as? String
+    val selectedProduct: String
+        get() = text.toString()
+
+    fun setSelectedProduct(product: String) {
+        suppressCallback = true
+        setText(product, false)
+        suppressCallback = false
+    }
 
     private fun saveLastSelectedProduct(product: String) {
         preferences().edit().putString(PREF_LAST_SELECTED, product).apply()
@@ -82,7 +83,7 @@ class ProductSpinner @JvmOverloads constructor(
         return preferences().getString(PREF_LAST_SELECTED, DEFAULT_PRODUCT) ?: DEFAULT_PRODUCT
     }
 
-    private fun preferences() : SharedPreferences {
+    private fun preferences(): SharedPreferences {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 }

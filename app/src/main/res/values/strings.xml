@@ -20,7 +20,8 @@
     <string name="settings_filter_closed_tolerance_one_day">A day</string>
     <string name="settings_filter_closed_tolerance_never">Show always</string>
     <string name="no_gas_stations">No matching gas station</string>
-    <string name="product">Product</string>
+    <string name="product_selector_hint">Product</string>
+    <string name="product_selector_icon_description">Product selector</string>
     <string name="price_not_public">✱ Conditional price</string>
     <string name="detail_location">Location</string>
     <string name="detail_opening_hours">Hours</string>

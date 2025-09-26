@@ -1,7 +1,7 @@
 app_name: Carburoid
 menu_settings: Ajustes
 settings_theme: Tema
-theme_light: 
+theme_light: Claro
 theme_dark: Oscuro
 theme_system: Automático (Sistema)
 settings_filter_expensive: Oculta estaciones caras i lejanas
@@ -18,7 +18,8 @@ settings_filter_closed_tolerance_twelve_hours: Medio dia
 settings_filter_closed_tolerance_one_day: Un dia
 settings_filter_closed_tolerance_never: Mstra sempre
 no_gas_stations: No se encontraron estaciones de servicio con el criterio actual
-product: Producto
+product_selector_hint: Producto
+product_selector_icon_description: Selector de producto
 price_not_public: ✱ Precio condicionado
 detail_location: Ubicación
 detail_opening_hours: Horario de servicio

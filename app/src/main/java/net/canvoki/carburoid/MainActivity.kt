@@ -39,7 +39,7 @@ import net.canvoki.carburoid.ui.StationDetailActivity
 import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.CarburoidApplication
-import net.canvoki.carburoid.product.ProductSpinner
+import net.canvoki.carburoid.product.ProductSelector
 
 
 class MainActivity : AppCompatActivity() {
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         get() = app.repository
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var productSpinner: ProductSpinner
+    private lateinit var productSelector: ProductSelector
     private lateinit var recyclerView: RecyclerView
     private lateinit var spinner: ProgressBar
     private lateinit var emptyView: TextView
@@ -64,8 +64,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val productSpinner = findViewById<ProductSpinner>(R.id.product_spinner)
-        productSpinner.setOnProductSelectedListener { selectedProduct ->
+        val productSelector = findViewById<ProductSelector>(R.id.product_selector)
+        productSelector.setOnProductSelectedListener { selectedProduct ->
             loadGasStations()
         }
 
