@@ -12,13 +12,22 @@ import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.distances.DistanceFromAddress
 import net.canvoki.carburoid.distances.DistanceFromCurrentPosition
 import net.canvoki.carburoid.log
+import net.canvoki.carburoid.timeit
 import net.canvoki.carburoid.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.withContext
+import android.location.Geocoder
+import java.util.Locale
 
 class LocationService(
     private val activity: Activity,
     private val notify: (String) -> Unit,
     private val updateUi: () -> Unit,
-) {
+) : CoroutineScope by MainScope() {
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(activity)
 
@@ -73,6 +82,7 @@ class LocationService(
         }
         currentLocation = madrid
         CurrentDistancePolicy.setMethod(DistanceFromAddress(madrid))
+        updateDescription()
     }
 
     private fun requestLastLocation() {
@@ -93,6 +103,7 @@ class LocationService(
     private fun handleLocationSuccess(location: Location?) {
         if (location != null) {
             currentLocation = location
+            updateDescription()
             CurrentDistancePolicy.setMethod(DistanceFromCurrentPosition(location))
         } else {
             setFallback()
@@ -114,9 +125,53 @@ class LocationService(
         updateUi()
     }
 
+
+
+    private var description: String? = null
+    private var geocodingJob: Job? = null  // Per cancel·lar tasques
+
+    private fun updateDescription() {
+        geocodingJob?.cancel()
+        description = null
+        val location: Location = currentLocation ?: return
+        description = "(${location.latitude}, ${location.longitude})" // Provisional
+        geocodingJob = launch {
+            description = geocodeLocation(location) ?: description
+            updateUi() // TODO: Should update just the location field, location is the same
+        }
+    }
+
     fun getCurrentLocationDescription(): String {
-        return currentLocation?.let { location ->
-            "(${location.latitude}, ${location.longitude})"
-        } ?: "Location not available"
+        return description ?: "Location not available"
+    }
+
+    private suspend fun geocodeLocation(location: Location): String? {
+        return withContext(Dispatchers.IO) {
+            if (!Geocoder.isPresent()) {
+                return@withContext null
+            }
+
+            try {
+                timeit("GEOCODING ${location}") {
+                    val geocoder = Geocoder(activity, Locale.getDefault())
+                    val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                    if (addresses == null || addresses.isEmpty()){
+                        null
+                    } else {
+                        val address = addresses[0]
+                        listOfNotNull(
+                            address.thoroughfare,
+                            address.subThoroughfare,
+                            address.locality,
+                            address.adminArea,
+                            address.countryName
+                        ).filter { it?.isNotBlank() == true }.joinToString(", ")
+                    }
+                }
+            } catch (e: Exception) {
+                log("Error getting address: ${e.message}")
+                null
+            }
+        }
     }
 }
