@@ -27,10 +27,10 @@ class LocationService(
     }
 
     init {
-        initializeLocation()
+        refreshLocation()
     }
 
-    private fun initializeLocation() {
+    fun refreshLocation() {
         if (hasPermission()) {
             requestLastLocation()
         } else {
