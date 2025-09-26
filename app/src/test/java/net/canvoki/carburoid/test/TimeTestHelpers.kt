@@ -1,14 +1,13 @@
 package net.canvoki.carburoid.test
 
+import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import io.mockk.every
 import java.time.DayOfWeek
-import java.time.LocalTime
-import java.time.LocalDateTime
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
-
 
 val BASE_MONDAY = Instant.parse("2025-09-01T00:00:00Z") // Monday
 val MADRID_ZONE = ZoneId.of("Europe/Madrid")
@@ -39,6 +38,5 @@ fun <T> atMadridInstant(day: DayOfWeek, localtime: String, weekOffset: Int, bloc
 }
 
 fun <T> atMadridInstant(day: DayOfWeek, localtime: String, block: () -> T): T {
-    return atMadridInstant(day, localtime, weekOffset=0, block)
+    return atMadridInstant(day, localtime, weekOffset = 0, block)
 }
-

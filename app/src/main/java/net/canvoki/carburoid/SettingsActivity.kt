@@ -1,15 +1,10 @@
 package net.canvoki.carburoid
 
 import android.os.Bundle
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.fragment.app.Fragment
-import androidx.preference.ListPreference
-import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import net.canvoki.carburoid.ui.settings.ThemeSettings
 import net.canvoki.carburoid.algorithms.FilterSettings
+import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

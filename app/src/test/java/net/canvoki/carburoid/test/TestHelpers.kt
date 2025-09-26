@@ -10,4 +10,3 @@ import kotlinx.coroutines.test.runCurrent
 fun TestScope.yieldUntilIdle() {
     repeat(5) { runCurrent() }
 }
-

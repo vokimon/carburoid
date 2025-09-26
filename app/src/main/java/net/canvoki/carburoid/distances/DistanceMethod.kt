@@ -1,6 +1,5 @@
 package net.canvoki.carburoid.distances
 
-import android.location.Location
 import net.canvoki.carburoid.model.GasStation
 
 /**

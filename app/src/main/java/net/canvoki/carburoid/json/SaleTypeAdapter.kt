@@ -1,18 +1,19 @@
 package net.canvoki.carburoid.json
 
 import com.google.gson.TypeAdapter
-import com.google.gson.stream.JsonWriter
 import com.google.gson.stream.JsonReader
-import com.google.gson.JsonParseException
 import com.google.gson.stream.JsonToken
+import com.google.gson.stream.JsonWriter
 
 class SaleTypeAdapter : TypeAdapter<Boolean>() {
     override fun write(out: JsonWriter, value: Boolean?) {
-        out.value(when(value) {
-            true -> "P"
-            false -> "R"
-            else -> ""
-        })
+        out.value(
+            when (value) {
+                true -> "P"
+                false -> "R"
+                else -> ""
+            },
+        )
     }
 
     override fun read(`in`: JsonReader): Boolean? {

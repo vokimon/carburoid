@@ -2,16 +2,16 @@ package net.canvoki.carburoid.model
 
 import android.content.Context
 import android.text.format.DateUtils
+import net.canvoki.carburoid.R
 import java.time.DayOfWeek
-import java.time.LocalTime
-import java.time.LocalDateTime
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
-import net.canvoki.carburoid.R
 
 val END_OF_DAY = LocalTime.of(23, 59)
-typealias TimeSpec = Pair<Int,Int>
+typealias TimeSpec = Pair<Int, Int>
 typealias Interval = Pair<TimeSpec, TimeSpec>
 typealias Intervals = List<Interval>
 typealias DayRange = List<DayOfWeek>
@@ -24,7 +24,7 @@ data class OpeningStatus(
 
     fun forHumans(
         context: Context,
-        thresholdMinutes: Long = 24*60
+        thresholdMinutes: Long = 24 * 60,
     ): String {
         val now = Instant.now()
         val untilThreshold = now.plus(thresholdMinutes, ChronoUnit.MINUTES)
@@ -64,20 +64,16 @@ data class OpeningStatus(
             untilMillis,
             nowMillis,
             DateUtils.MINUTE_IN_MILLIS,
-            DateUtils.FORMAT_ABBREV_RELATIVE
+            DateUtils.FORMAT_ABBREV_RELATIVE,
         ).toString().lowercase()
     }
 }
-
-
 
 fun toLocal(instant: Instant, zoneId: ZoneId = ZoneId.of("Europe/Madrid")): Pair<DayOfWeek, LocalTime> {
     val localDateTime = instant.atZone(zoneId).toLocalDateTime()
     val truncatedTime = localDateTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES)
     return localDateTime.dayOfWeek to truncatedTime
 }
-
-
 
 fun toInstant(reference: Instant, day: DayOfWeek, time: LocalTime, zoneId: ZoneId): Instant {
     val refZoned = reference.atZone(zoneId)
@@ -87,7 +83,9 @@ fun toInstant(reference: Instant, day: DayOfWeek, time: LocalTime, zoneId: ZoneI
     val refTime = refZoned.toLocalTime()
     val targetDayValue = day.value
 
-    val daysToAdd = if (day==refDay && time < refTime) 7 else {
+    val daysToAdd = if (day == refDay && time < refTime) {
+        7
+    } else {
         (targetDayValue - refDayValue + 7) % 7
     }
 
@@ -104,10 +102,10 @@ class OpeningHours() {
         val interval = LocalTime.of(startHour, startMinute) to LocalTime.of(endHour, endMinute)
         val intervals = dayIntervals.getOrPut(day) { mutableListOf() }
 
-        val mergeStart = intervals.indexOfFirst { interval.first <= it.second  }.let{ if (it<0) intervals.size else it}
-        val mergeEnd = intervals.indexOfFirst { interval.second < it.first  }.let{ if (it<0) intervals.size else it}
+        val mergeStart = intervals.indexOfFirst { interval.first <= it.second }.let { if (it < 0) intervals.size else it }
+        val mergeEnd = intervals.indexOfFirst { interval.second < it.first }.let { if (it < 0) intervals.size else it }
 
-        if (mergeStart==mergeEnd) {
+        if (mergeStart == mergeEnd) {
             intervals.add(mergeStart, interval)
             return
         }
@@ -115,8 +113,8 @@ class OpeningHours() {
         // merge
         val merged = (
             minOf(intervals[mergeStart].first, interval.first) to
-            maxOf(intervals[mergeEnd-1].second, interval.second)
-        )
+                maxOf(intervals[mergeEnd - 1].second, interval.second)
+            )
         intervals.subList(mergeStart, mergeEnd).clear()
         intervals.add(mergeStart, merged)
     }
@@ -125,7 +123,7 @@ class OpeningHours() {
         val (day, time) = toLocal(instant, zoneId)
 
         fun openUntil(until: Pair<DayOfWeek, LocalTime>?): OpeningStatus {
-            if (until==null) return OpeningStatus(isOpen=true, null)
+            if (until == null) return OpeningStatus(isOpen = true, null)
 
             var (untilDay, untilTime) = until
 
@@ -136,10 +134,9 @@ class OpeningHours() {
 
             val untilInstant = toInstant(instant, untilDay, untilTime, zoneId)
             return OpeningStatus(isOpen = true, until = untilInstant)
-
         }
         fun closedUntil(until: Pair<DayOfWeek, LocalTime>?): OpeningStatus {
-            if (until==null) return OpeningStatus(isOpen=false, null)
+            if (until == null) return OpeningStatus(isOpen = false, null)
             val (untilDay, untilTime) = until
             val untilInstant = toInstant(instant, untilDay, untilTime, zoneId)
             return OpeningStatus(isOpen = false, until = untilInstant)
@@ -155,8 +152,7 @@ class OpeningHours() {
                     // We are closed until that interval
                     return closedUntil(day to start)
                 }
-            }
-            else { // Looking for closure
+            } else { // Looking for closure
                 // A gap is there
                 if (start > closingAt.plusMinutes(1)) {
                     return openUntil(day to closingAt)
@@ -209,30 +205,31 @@ class OpeningHours() {
     }
 
     override fun toString(): String {
-        val dayStrings: List<Pair<String,String>> = DayOfWeek.values().map { day ->
-            spanishWeekDayShort(day)  to formatIntervals(dayIntervals[day] ?: emptyList())
+        val dayStrings: List<Pair<String, String>> = DayOfWeek.values().map { day ->
+            spanishWeekDayShort(day) to formatIntervals(dayIntervals[day] ?: emptyList())
         }
 
         var pivot = ""
-        val result = mutableListOf<Pair<String,String>>()
-        for (window in dayStrings.windowed(2, partialWindows=true)) {
+        val result = mutableListOf<Pair<String, String>>()
+        for (window in dayStrings.windowed(2, partialWindows = true)) {
             val (currentDay, currentInterval) = window[0]
             val nextInterval = window.getOrNull(1)?.second
             if (currentInterval.isEmpty()) continue
             if (nextInterval == currentInterval) {
                 // repeated interval detected
                 // set pivot if not set
-                if (pivot.isEmpty())
-                    pivot = "${currentDay}-"
+                if (pivot.isEmpty()) {
+                    pivot = "$currentDay-"
+                }
                 // Do not output yet
                 continue
             }
-            result.add(pivot+currentDay to currentInterval)
+            result.add(pivot + currentDay to currentInterval)
             pivot = "" // reset pivot
         }
 
         return result
-            .map {(day, str) -> "$day: $str" }
+            .map { (day, str) -> "$day: $str" }
             .joinToString("; ")
     }
 
@@ -240,7 +237,7 @@ class OpeningHours() {
         return intervals.map { formatInterval(it) }.joinToString(" y ")
     }
 
-    private fun formatInterval(interval: Pair<LocalTime, LocalTime>) : String {
+    private fun formatInterval(interval: Pair<LocalTime, LocalTime>): String {
         val (start, end) = interval
         if (start == LocalTime.MIDNIGHT && end == END_OF_DAY) {
             return "24H"
@@ -269,7 +266,7 @@ class OpeningHours() {
             if (parts.size != 2) return null
 
             val hours = parts[0].toIntOrNull() ?: return null
-            val minutes= parts[1].toIntOrNull() ?: return null
+            val minutes = parts[1].toIntOrNull() ?: return null
 
             if (hours !in 0..23) return null
             if (minutes !in 0..59) return null
@@ -311,7 +308,7 @@ class OpeningHours() {
         fun parseDayRange(spec: String): DayRange? {
             val parts = spec.split("-")
             val start = parts.getOrNull(0)?.let { parseDayShort(it) }
-            if (start==null) return null
+            if (start == null) return null
 
             if (parts.size == 1) return listOf(start)
 
@@ -319,10 +316,11 @@ class OpeningHours() {
             val allDays = DayOfWeek.values().toList()
             val startIndex = allDays.indexOf(start)
             val endIndex = allDays.indexOf(end)
-            if (startIndex < endIndex)
-                return allDays.subList(startIndex, endIndex+1)
+            if (startIndex < endIndex) {
+                return allDays.subList(startIndex, endIndex + 1)
+            }
             // Crossed? cycle through end
-            return allDays.subList(startIndex, allDays.size) + allDays.subList(0, endIndex+1)
+            return allDays.subList(startIndex, allDays.size) + allDays.subList(0, endIndex + 1)
         }
 
         fun parseScheduleEntry(spec: String): ScheduleEntry? {
@@ -338,20 +336,21 @@ class OpeningHours() {
             val oh = OpeningHours()
             val entries = spec.split("; ")
             for (entrySpec in entries) {
-                //println("Entry: '$entrySpec'")
+                // println("Entry: '$entrySpec'")
                 val (days, times) = parseScheduleEntry(entrySpec) ?: return null
                 for (day in days) {
                     for (time in times) {
                         val (start, end) = time
                         val (sh, sm) = start
                         val (eh, em) = end
-                        if (sh<eh || (sh==eh && sm<=em)) {
+                        if (sh < eh || (sh == eh && sm <= em)) {
                             oh.add(day, sh, sm, eh, em)
                             continue
                         }
                         oh.add(day, sh, sm, 23, 59)
-                        if ((eh to em) == (0 to 0))
+                        if ((eh to em) == (0 to 0)) {
                             continue
+                        }
                         val nextDay = day + 1
                         oh.add(nextDay, 0, 0, eh, em)
                     }

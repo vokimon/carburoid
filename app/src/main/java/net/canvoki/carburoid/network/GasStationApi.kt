@@ -1,6 +1,5 @@
 package net.canvoki.carburoid.network
 
-import net.canvoki.carburoid.model.GasStationResponse
 import retrofit2.http.GET
 
 // https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/
@@ -9,7 +8,6 @@ interface GasStationApi {
 
     @GET("PreciosCarburantes/EstacionesTerrestres/")
     suspend fun getGasStations(): String
-
 }
 
 object GasStationApiFactory {
@@ -21,4 +19,3 @@ object GasStationApiFactory {
         .addConverterFactory(retrofit2.converter.scalars.ScalarsConverterFactory.create())
         .build()
 }
-

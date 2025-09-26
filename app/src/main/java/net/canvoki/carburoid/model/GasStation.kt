@@ -1,27 +1,33 @@
 package net.canvoki.carburoid.model
 
-import com.google.gson.annotations.SerializedName
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
 import com.google.gson.annotations.JsonAdapter
-import com.google.gson.*
+import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
+import net.canvoki.carburoid.distances.CurrentDistancePolicy
+import net.canvoki.carburoid.json.OpeningHoursAdapter
+import net.canvoki.carburoid.json.SaleTypeAdapter
+import net.canvoki.carburoid.json.SpanishDateTypeAdapter
+import net.canvoki.carburoid.json.SpanishFloatTypeAdapter
+import net.canvoki.carburoid.json.fromSpanishFloat
+import net.canvoki.carburoid.json.toSpanishFloat
+import net.canvoki.carburoid.product.ProductManager
 import java.lang.reflect.Type
 import java.time.Instant
 import java.time.ZoneId
-import net.canvoki.carburoid.distances.CurrentDistancePolicy
-import net.canvoki.carburoid.json.SpanishDateTypeAdapter
-import net.canvoki.carburoid.json.SpanishFloatTypeAdapter
-import net.canvoki.carburoid.json.OpeningHoursAdapter
-import net.canvoki.carburoid.json.toSpanishFloat
-import net.canvoki.carburoid.json.fromSpanishFloat
-import net.canvoki.carburoid.json.SaleTypeAdapter
-import net.canvoki.carburoid.product.ProductManager
 
 // Serialization
 private val gson: Gson by lazy {
     GsonBuilder()
         .registerTypeAdapter(
             GasStation::class.java,
-            GasStationJsonAdapter(GsonBuilder().create())
+            GasStationJsonAdapter(GsonBuilder().create()),
         )
         .create()
 }
@@ -33,7 +39,7 @@ data class GasStationResponse(
 
     @SerializedName("Fecha")
     @JsonAdapter(SpanishDateTypeAdapter::class)
-    val downloadDate: Instant? = null
+    val downloadDate: Instant? = null,
 ) {
     companion object {
         fun parse(json: String): GasStationResponse {
@@ -75,7 +81,7 @@ data class GasStation(
     @JsonAdapter(OpeningHoursAdapter::class)
     val openingHours: OpeningHours? = OpeningHours.parse("L-D: 24H"),
 
-    val prices: Map<String, Double?> = emptyMap()
+    val prices: Map<String, Double?> = emptyMap(),
 ) {
     var distanceInMeters: Float? = null
         private set
@@ -85,13 +91,14 @@ data class GasStation(
     }
 
     fun timeZone(): ZoneId {
-        return if ((longitude?:0.0) > -10.0)
+        return if ((longitude ?: 0.0) > -10.0) {
             ZoneId.of("Europe/Madrid")
-        else
+        } else {
             ZoneId.of("Atlantic/Canary")
+        }
     }
 
-    fun openStatus(instant: Instant) = openingHours?.getStatus(instant, timeZone()) ?: OpeningStatus(isOpen=false, until=null)
+    fun openStatus(instant: Instant) = openingHours?.getStatus(instant, timeZone()) ?: OpeningStatus(isOpen = false, until = null)
 
     val price: Double?
         get() = prices[ProductManager.getCurrent()]
@@ -105,13 +112,13 @@ data class GasStation(
 
 // ✅ Custom Adapter that reuses Gson’s default adapter and adds `prices` field
 class GasStationJsonAdapter(
-    private val gson: Gson
+    private val gson: Gson,
 ) : JsonDeserializer<GasStation>, JsonSerializer<GasStation> {
 
     override fun deserialize(
         json: JsonElement,
         typeOfT: Type,
-        context: JsonDeserializationContext
+        context: JsonDeserializationContext,
     ): GasStation {
         val jsonObject = json.asJsonObject
 
@@ -134,7 +141,7 @@ class GasStationJsonAdapter(
     override fun serialize(
         src: GasStation,
         typeOfSrc: Type,
-        context: JsonSerializationContext
+        context: JsonSerializationContext,
     ): JsonElement {
         // ✅ Use default serialization
         val jsonObject = gson.toJsonTree(src).asJsonObject

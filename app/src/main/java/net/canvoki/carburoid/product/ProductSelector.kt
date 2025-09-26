@@ -3,16 +3,13 @@ package net.canvoki.carburoid.product
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.AttributeSet
-import android.view.View
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import android.widget.ArrayAdapter
-import android.widget.AdapterView
-import net.canvoki.carburoid.product.ProductManager
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 
 class ProductSelector @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
 ) : AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
 
     private var listener: ((String) -> Unit)? = null
@@ -31,11 +28,13 @@ class ProductSelector @JvmOverloads constructor(
 
     private fun setupProducts() {
         val products = ProductManager.available()
-        setAdapter(ArrayAdapter(
-            context,
-            android.R.layout.simple_dropdown_item_1line,
-            products
-        ))
+        setAdapter(
+            ArrayAdapter(
+                context,
+                android.R.layout.simple_dropdown_item_1line,
+                products,
+            ),
+        )
 
         val selected = loadLastSelectedProduct()
         setText(selected, false)

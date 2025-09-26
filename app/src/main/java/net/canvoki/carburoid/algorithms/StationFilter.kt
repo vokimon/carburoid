@@ -1,13 +1,11 @@
 package net.canvoki.carburoid.algorithms
 
-import java.time.Instant
-import java.time.Duration
 import net.canvoki.carburoid.model.GasStation
-import net.canvoki.carburoid.distances.CurrentDistancePolicy
-import net.canvoki.carburoid.log
+import java.time.Duration
+import java.time.Instant
 
-class StationFilter (
-    var config : FilterConfig = FilterConfig()
+class StationFilter(
+    var config: FilterConfig = FilterConfig(),
 ) {
     fun filter(stations: List<GasStation>): List<GasStation> {
         for (station in stations) {
@@ -41,13 +39,12 @@ class StationFilter (
             }
 
             var status = station.openStatus(Instant.now())
-            if (config.hideClosedMarginInMinutes < 7*24*60) {
+            if (config.hideClosedMarginInMinutes < 7 * 24 * 60) {
                 if (status?.isOpen != true) {
                     if (status.until == null) {
                         //log("Filtered permanently closed station ${station.name} ${station.city}")
                         continue
-                    }
-                    else if (status.until > deadLine) {
+                    } else if (status.until > deadLine) {
                         //log("Filtered currently closed station ${station.name} ${station.city}, opens at ${status.until}")
                         continue
                     }

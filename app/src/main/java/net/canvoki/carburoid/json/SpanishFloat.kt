@@ -1,8 +1,8 @@
 package net.canvoki.carburoid.json
 
 import com.google.gson.TypeAdapter
-import com.google.gson.stream.JsonWriter
 import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
 
 fun toSpanishFloat(value: Double?): String? {
     return value?.toString()?.replace(".", ",")

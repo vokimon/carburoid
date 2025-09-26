@@ -1,20 +1,20 @@
 package net.canvoki.carburoid.repository
 
-import com.google.gson.Gson
-import java.util.concurrent.atomic.AtomicBoolean
-import java.io.File
-import java.time.Instant
-import java.time.Duration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import net.canvoki.carburoid.*
+import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
+import net.canvoki.carburoid.timeit
+import java.io.File
+import java.time.Duration
+import java.time.Instant
+import java.util.concurrent.atomic.AtomicBoolean
 
 typealias Parser = (String) -> GasStationResponse
 
@@ -49,8 +49,7 @@ class GasStationRepository(
                     parsed = parser?.invoke(it)
                     log("REUSING PREVIOUS CACHE")
                 }
-            }
-            catch(e: Exception) {
+            } catch (e: Exception) {
                 cache = null
                 parsed = null
                 cacheFile.delete()
@@ -68,7 +67,7 @@ class GasStationRepository(
     }
 
     fun getStationById(id: Int): GasStation? {
-        return getData()?.stations?.find { it.id==id }
+        return getData()?.stations?.find { it.id == id }
     }
 
     fun launchFetch() {
@@ -80,23 +79,20 @@ class GasStationRepository(
             _events.emit(RepositoryEvent.UpdateStarted)
             try {
                 log("STARTING FETCH")
-                val response =  api.getGasStations()
+                val response = api.getGasStations()
 
-                if (parser != null)  {
-
+                if (parser != null) {
                     parsed = timeit("PARSING FETCH") {
                         parser(response)
                     }
                 }
                 saveToCache(response)
                 _events.emit(RepositoryEvent.UpdateReady)
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 val message = e.message ?: e::class.simpleName ?: "Unknown"
                 log("FETCH ERROR $message")
                 _events.emit(RepositoryEvent.UpdateFailed(message))
-            }
-            finally {
+            } finally {
                 isBackgroundUpdateRunning.set(false)
             }
         }
@@ -104,13 +100,13 @@ class GasStationRepository(
 
     fun isFetchInProgress() = isBackgroundUpdateRunning.get()
 
-    fun isExpired() : Boolean {
+    fun isExpired(): Boolean {
         val p = parsed ?: return true
         val date = p.downloadDate ?: return true
 
         val deadline = Instant.now().minus(Duration.ofMinutes(minutesToExpire))
         if (date <= deadline) return true
-        //up-to-date cache
+        // up-to-date cache
         return false
     }
 

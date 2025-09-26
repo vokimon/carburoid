@@ -1,7 +1,6 @@
 package net.canvoki.carburoid.location
 
 import android.content.Context
-import android.location.Location
 import net.canvoki.carburoid.R
 
 class LocationHelper {

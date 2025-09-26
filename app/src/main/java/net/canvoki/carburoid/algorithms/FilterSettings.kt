@@ -5,12 +5,11 @@ import android.content.SharedPreferences
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.Flow
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
-
 
 object FilterSettings {
 
@@ -33,13 +32,13 @@ object FilterSettings {
         val context = screen.context
         val prefs = preferences(context)
 
-        //unregister(context) // ✅ Safe unregister in case it's already registered
+        // unregister(context) // ✅ Safe unregister in case it's already registered
 
         updateSummary(screen, prefs, context, KEY_HIDE_CLOSED_MARGIN_MINUTES)
 
         listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             log("Changed $key")
-            updateSummary(screen, prefs, context, key?:"")
+            updateSummary(screen, prefs, context, key ?: "")
             if (key in relevantKeys) {
                 _changes.tryEmit(Unit)
             }
@@ -55,14 +54,14 @@ object FilterSettings {
         }
     }
 
-    val DEFAULT_CLOSED_MARGIN = 2*60
+    val DEFAULT_CLOSED_MARGIN = 2 * 60
 
     fun config(context: Context): FilterConfig {
         val prefs = preferences(context)
         return FilterConfig(
             hideExpensiveFurther = prefs.getBoolean(KEY_HIDE_EXPENSIVE, false),
             onlyPublicPrices = prefs.getBoolean(KEY_ONLY_PUBLIC_PRICES, false),
-            hideClosedMarginInMinutes = prefs.getString(KEY_HIDE_CLOSED_MARGIN_MINUTES, null)?.toInt()?:DEFAULT_CLOSED_MARGIN,
+            hideClosedMarginInMinutes = prefs.getString(KEY_HIDE_CLOSED_MARGIN_MINUTES, null)?.toInt() ?: DEFAULT_CLOSED_MARGIN,
         )
     }
 
@@ -81,7 +80,7 @@ object FilterSettings {
             val index = values.indexOf(selectedValue)
             val selectedLabel = if (index >= 0 && index < labels.size) labels[index] else selectedValue
 
-            it.summary = "${originalSummary}\n - ${selectedLabel}"
+            it.summary = "${originalSummary}\n - $selectedLabel"
         }
     }
 

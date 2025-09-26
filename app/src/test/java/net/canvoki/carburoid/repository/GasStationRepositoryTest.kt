@@ -1,29 +1,26 @@
 package net.canvoki.carburoid.repository
 
 import com.google.gson.Gson
-import io.mockk.mockk
-import io.mockk.coEvery
 import io.mockk.coVerify
-import java.io.File
-import java.nio.file.Files
-import java.time.Instant
-import java.time.Duration
-import kotlinx.coroutines.test.runTest
+import io.mockk.mockk
 import kotlinx.coroutines.launch
-import org.junit.Before
-import org.junit.Ignore
-import org.junit.Test
-import org.junit.Assert.assertTrue
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import kotlinx.coroutines.test.runTest
 import net.canvoki.carburoid.json.toSpanishFloat
-import net.canvoki.carburoid.test.yieldUntilIdle
-import net.canvoki.carburoid.test.deferredCalls
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
-
+import net.canvoki.carburoid.test.deferredCalls
+import net.canvoki.carburoid.test.yieldUntilIdle
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
+import java.io.File
+import java.nio.file.Files
+import java.time.Duration
+import java.time.Instant
 
 class GasStationRepositoryTest {
 
@@ -33,10 +30,10 @@ class GasStationRepositoryTest {
     private lateinit var repository: GasStationRepository
 
     fun jsonResponse(
-        stations: List<Map<String, Any>> = emptyList()
+        stations: List<Map<String, Any>> = emptyList(),
     ): String {
         return Gson().toJson(
-            mapOf("ListaEESSPrecio" to stations)
+            mapOf("ListaEESSPrecio" to stations),
         )
     }
 
@@ -55,21 +52,21 @@ class GasStationRepositoryTest {
     }
 
     private fun dataExample() = GasStationResponse(
-        stations=listOf(
+        stations = listOf(
             GasStation(
-                id=666,
-                name="Station 1",
-                address="Address 1",
-                city="City",
-                state="State",
-                prices=mapOf(
+                id = 666,
+                name = "Station 1",
+                address = "Address 1",
+                city = "City",
+                state = "State",
+                prices = mapOf(
                     "Gasoleo A" to 1.5,
                 ),
-                latitude=40.0,
-                longitude=-3.0,
-                isPublicPrice=true,
+                latitude = 40.0,
+                longitude = -3.0,
+                isPublicPrice = true,
             ),
-        )
+        ),
     )
 
     @Before
@@ -80,7 +77,7 @@ class GasStationRepositoryTest {
 
         api = mockk()
         cacheFile = File(tempDir, "test_cache.json")
-        repository = GasStationRepository(api, cacheFile, parser=null)
+        repository = GasStationRepository(api, cacheFile, parser = null)
     }
 
     @Test
@@ -90,9 +87,11 @@ class GasStationRepositoryTest {
 
     @Test
     fun `getCache after setting it`() = runTest {
-        val response = jsonResponse(stations=listOf(
-            station(index=1, distance=10.0, price=0.3),
-        ))
+        val response = jsonResponse(
+            stations = listOf(
+                station(index = 1, distance = 10.0, price = 0.3),
+            ),
+        )
         repository.saveToCache(response)
 
         assertEquals(response, repository.getCache())
@@ -100,9 +99,11 @@ class GasStationRepositoryTest {
 
     @Test
     fun `getCache after clear`() = runTest {
-        val response = jsonResponse(stations=listOf(
-            station(index=1, distance=10.0, price=0.3),
-        ))
+        val response = jsonResponse(
+            stations = listOf(
+                station(index = 1, distance = 10.0, price = 0.3),
+            ),
+        )
         repository.saveToCache(response)
         repository.clearCache()
 
@@ -111,20 +112,24 @@ class GasStationRepositoryTest {
 
     @Test
     fun `cache content survives repository recreation`() = runTest {
-        val response = jsonResponse(listOf(
-            station(index = 1, distance = 10.0, price = 0.3)
-        ))
+        val response = jsonResponse(
+            listOf(
+                station(index = 1, distance = 10.0, price = 0.3),
+            ),
+        )
         repository.saveToCache(response)
 
-        val repository2 = GasStationRepository(api, cacheFile, parser=null)
+        val repository2 = GasStationRepository(api, cacheFile, parser = null)
         assertEquals(response, repository2.getCache())
     }
 
     @Test
     fun `cache clearing survives repository recreation`() = runTest {
-        val response = jsonResponse(listOf(
-            station(index = 1, distance = 10.0, price = 0.3)
-        ))
+        val response = jsonResponse(
+            listOf(
+                station(index = 1, distance = 10.0, price = 0.3),
+            ),
+        )
         repository.saveToCache(response)
         repository.clearCache()
 
@@ -151,13 +156,13 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch emits UpdateStarted when called`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
-        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
+        val repository = GasStationRepository(api, cacheFile, scope = this, parser = null)
 
         val events = mutableListOf<RepositoryEvent>()
         val eventCollector = launch {
             repository.events.collect { events.add(it) }
         }
-        yieldUntilIdle()  // Let collector start
+        yieldUntilIdle() // Let collector start
 
         repository.launchFetch()
         yieldUntilIdle()
@@ -172,7 +177,7 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch api called`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
-        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
+        val repository = GasStationRepository(api, cacheFile, scope = this, parser = null)
 
         // We don't care about events in this test — but we must collect them to avoid suspending forever
         coVerify(exactly = 0) { api.getGasStations() }
@@ -184,13 +189,12 @@ class GasStationRepositoryTest {
 
         deferred.complete("Value")
         yieldUntilIdle()
-
     }
 
     @Test
     fun `launchFetch on success, flag unset and sets cache`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
-        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
+        val repository = GasStationRepository(api, cacheFile, scope = this, parser = null)
 
         repository.launchFetch()
         yieldUntilIdle()
@@ -208,7 +212,7 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch on failure, flag unset and no cache`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
-        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
+        val repository = GasStationRepository(api, cacheFile, scope = this, parser = null)
 
         repository.launchFetch()
         yieldUntilIdle()
@@ -226,7 +230,7 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch on failure, flag unset and cache kept`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
-        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
+        val repository = GasStationRepository(api, cacheFile, scope = this, parser = null)
         repository.saveToCache("Previous value")
 
         repository.launchFetch()
@@ -245,13 +249,13 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch emits UpdateReady on success`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
-        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
+        val repository = GasStationRepository(api, cacheFile, scope = this, parser = null)
 
         val events = mutableListOf<RepositoryEvent>()
         val eventCollector = launch {
             repository.events.collect { events.add(it) }
         }
-        yieldUntilIdle()  // Let collector start
+        yieldUntilIdle() // Let collector start
 
         repository.launchFetch()
         yieldUntilIdle()
@@ -259,10 +263,13 @@ class GasStationRepositoryTest {
         deferred.complete("Fetched Value")
         yieldUntilIdle()
 
-        assertEquals(listOf(
-            RepositoryEvent.UpdateStarted,
-            RepositoryEvent.UpdateReady,
-        ), events)
+        assertEquals(
+            listOf(
+                RepositoryEvent.UpdateStarted,
+                RepositoryEvent.UpdateReady,
+            ),
+            events,
+        )
 
         eventCollector.cancel()
     }
@@ -270,13 +277,13 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch emits UpdateFailed on failure`() = runTest {
         val (deferred) = deferredCalls({ api.getGasStations() }, 1)
-        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
+        val repository = GasStationRepository(api, cacheFile, scope = this, parser = null)
 
         val events = mutableListOf<RepositoryEvent>()
         val eventCollector = launch {
             repository.events.collect { events.add(it) }
         }
-        yieldUntilIdle()  // Let collector start
+        yieldUntilIdle() // Let collector start
 
         repository.launchFetch()
         yieldUntilIdle()
@@ -284,10 +291,13 @@ class GasStationRepositoryTest {
         deferred.completeExceptionally(RuntimeException("Emulated error"))
         yieldUntilIdle()
 
-        assertEquals(listOf(
-            RepositoryEvent.UpdateStarted,
-            RepositoryEvent.UpdateFailed("Emulated error"),
-        ), events)
+        assertEquals(
+            listOf(
+                RepositoryEvent.UpdateStarted,
+                RepositoryEvent.UpdateFailed("Emulated error"),
+            ),
+            events,
+        )
 
         eventCollector.cancel()
     }
@@ -295,7 +305,7 @@ class GasStationRepositoryTest {
     @Test
     fun `launchFetch api skipped if pending api`() = runTest {
         val (deferred1, deferred2) = deferredCalls({ api.getGasStations() }, 2)
-        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
+        val repository = GasStationRepository(api, cacheFile, scope = this, parser = null)
 
         // We don't care about events in this test — but we must collect them to avoid suspending forever
         coVerify(exactly = 0) { api.getGasStations() }
@@ -313,13 +323,12 @@ class GasStationRepositoryTest {
         deferred1.complete("Value1")
         deferred2.complete("Value2")
         yieldUntilIdle()
-
     }
 
     @Test
     fun `launchFetch api called if previous finished, is ok`() = runTest {
         val (deferred1, deferred2) = deferredCalls({ api.getGasStations() }, 2)
-        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
+        val repository = GasStationRepository(api, cacheFile, scope = this, parser = null)
 
         // We don't care about events in this test — but we must collect them to avoid suspending forever
         coVerify(exactly = 0) { api.getGasStations() }
@@ -343,7 +352,7 @@ class GasStationRepositoryTest {
 
     @Test
     fun `launchFetch fails if the serialization fails`() = runTest {
-        val parser: Parser  = { json ->
+        val parser: Parser = { json ->
             throw Exception("Invalid JSON")
         }
         val repository = GasStationRepository(
@@ -369,7 +378,7 @@ class GasStationRepositoryTest {
                 RepositoryEvent.UpdateStarted,
                 RepositoryEvent.UpdateFailed("Invalid JSON"),
             ),
-            events
+            events,
         )
         assertNull(repository.getCache())
         assertFalse(repository.isFetchInProgress())
@@ -404,7 +413,7 @@ class GasStationRepositoryTest {
                 RepositoryEvent.UpdateStarted,
                 RepositoryEvent.UpdateReady,
             ),
-            events
+            events,
         )
         assertEquals("Fetched content", repository.getCache())
         assertFalse(repository.isFetchInProgress())
@@ -415,7 +424,7 @@ class GasStationRepositoryTest {
 
     @Test
     fun `before any fetch, getData returns null`() = runTest {
-        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
+        val repository = GasStationRepository(api, cacheFile, scope = this, parser = null)
 
         val stations = repository.getData()
 
@@ -454,13 +463,14 @@ class GasStationRepositoryTest {
         assertEquals(null, repository.getData())
         assertEquals(
             "Cache file should have been deleted",
-            false, cacheFile.exists()
+            false,
+            cacheFile.exists(),
         )
     }
 
-    private fun writeCache(downloadDate: Instant?, stations: List<GasStation>?=null) {
+    private fun writeCache(downloadDate: Instant?, stations: List<GasStation>? = null) {
         val response = GasStationResponse(
-            stations = stations?:emptyList(),
+            stations = stations ?: emptyList(),
             downloadDate = downloadDate,
         )
         cacheFile.writeText(Gson().toJson(response))
@@ -468,7 +478,7 @@ class GasStationRepositoryTest {
 
     @Test
     fun `isExpired, true if missing cache`() = runTest {
-        val repository = GasStationRepository(api, cacheFile, scope=this, parser=null)
+        val repository = GasStationRepository(api, cacheFile, scope = this, parser = null)
 
         assertEquals(true, repository.isExpired())
     }
@@ -497,17 +507,19 @@ class GasStationRepositoryTest {
         assertEquals(true, repository.isExpired())
     }
 
-    suspend fun setupStations(stations: List<Map<String,Any>>) {
-        val response = jsonResponse(stations=stations)
+    suspend fun setupStations(stations: List<Map<String, Any>>) {
+        val response = jsonResponse(stations = stations)
         repository.saveToCache(response)
     }
 
     @Test
     fun `getStationById with a match`() = runTest {
-        setupStations(listOf(
-            station(index=1, distance=10.0, price=0.3),
-            station(index=2, distance=20.0, price=0.3),
-        ))
+        setupStations(
+            listOf(
+                station(index = 1, distance = 10.0, price = 0.3),
+                station(index = 2, distance = 20.0, price = 0.3),
+            ),
+        )
 
         val repository = GasStationRepository(api, cacheFile, this)
         var station = repository.getStationById(2)
@@ -516,10 +528,12 @@ class GasStationRepositoryTest {
 
     @Test
     fun `getStationById with no match`() = runTest {
-        setupStations(listOf(
-            station(index=1, distance=10.0, price=0.3),
-            station(index=2, distance=20.0, price=0.3),
-        ))
+        setupStations(
+            listOf(
+                station(index = 1, distance = 10.0, price = 0.3),
+                station(index = 2, distance = 20.0, price = 0.3),
+            ),
+        )
 
         val repository = GasStationRepository(api, cacheFile, this)
         var station = repository.getStationById(3)

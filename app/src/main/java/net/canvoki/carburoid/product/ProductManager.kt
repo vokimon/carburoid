@@ -1,7 +1,5 @@
 package net.canvoki.carburoid.product
 
-import net.canvoki.carburoid.model.GasStation
-
 object ProductManager {
     private val products = listOf(
         "Gasoleo A",

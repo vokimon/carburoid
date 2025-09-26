@@ -3,19 +3,18 @@ package net.canvoki.carburoid.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
-import android.util.TypedValue
 import androidx.appcompat.app.AppCompatActivity
+import net.canvoki.carburoid.CarburoidApplication
+import net.canvoki.carburoid.R
+import net.canvoki.carburoid.databinding.ActivityStationDetailBinding
+import net.canvoki.carburoid.product.ProductManager
+import net.canvoki.carburoid.repository.GasStationRepository
+import java.time.Instant
 import androidx.appcompat.R as AppCompatR
 import com.google.android.material.R as MaterialR
-import java.time.Instant
-import net.canvoki.carburoid.CarburoidApplication
-import net.canvoki.carburoid.databinding.ActivityStationDetailBinding
-import net.canvoki.carburoid.model.GasStation
-import net.canvoki.carburoid.product.ProductManager
-import net.canvoki.carburoid.R
-import net.canvoki.carburoid.repository.GasStationRepository
 
 class StationDetailActivity : AppCompatActivity() {
 
@@ -32,7 +31,7 @@ class StationDetailActivity : AppCompatActivity() {
         binding = ActivityStationDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val stationId = intent.getIntExtra("station_id", 0);
+        val stationId = intent.getIntExtra("station_id", 0)
         val station = repository.getStationById(stationId) ?: return // TODO: blank page
 
         binding.textName.text = station.name
@@ -44,10 +43,11 @@ class StationDetailActivity : AppCompatActivity() {
         if (status != null) {
             val statusText = status.forHumans(this)
             binding.textOpenStatus.text = statusText
-            val colorAttr = if (status.isOpen)
-                    MaterialR.attr.colorSecondary
-                else
-                    AppCompatR.attr.colorError
+            val colorAttr = if (status.isOpen) {
+                MaterialR.attr.colorSecondary
+            } else {
+                AppCompatR.attr.colorError
+            }
             val typedValue = TypedValue()
             theme.resolveAttribute(colorAttr, typedValue, true)
             binding.textOpenStatus.setTextColor(typedValue.data)
@@ -63,7 +63,6 @@ class StationDetailActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:${station?.latitude},${station?.longitude}"))
             startActivity(intent)
         }
-
 
         binding.textOpeningHours.text = station.openingHours?.toString() ?: getString(R.string.station_status_permanently_closed)
 
@@ -84,7 +83,4 @@ class StationDetailActivity : AppCompatActivity() {
             }
         }
     }
-
-
-
 }

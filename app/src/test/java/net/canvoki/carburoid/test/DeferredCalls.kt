@@ -5,7 +5,7 @@ import kotlinx.coroutines.CompletableDeferred
 
 fun <T> deferredCalls(
     mockedCall: suspend () -> T,
-    count: Int
+    count: Int,
 ): List<CompletableDeferred<T>> {
     require(count > 0) { "You must request at least one deferred" }
 
@@ -13,8 +13,11 @@ fun <T> deferredCalls(
     val iterator = deferreds.iterator()
 
     coEvery { mockedCall() } coAnswers {
-        if (iterator.hasNext()) iterator.next().await()
-        else throw IllegalStateException("No more deferreds available")
+        if (iterator.hasNext()) {
+            iterator.next().await()
+        } else {
+            throw IllegalStateException("No more deferreds available")
+        }
     }
 
     return deferreds

@@ -15,22 +15,22 @@ val isTestEnvironment: Boolean by lazy {
 }
 
 fun log(message: String) {
-    if (!isTestEnvironment)
+    if (!isTestEnvironment) {
         Log.d("Carburoid", message)
-    else
+    } else {
         println("Carburoid: $message")
+    }
 }
 
 /** quick replacement to disable a log line */
 fun nolog(message: String) {}
 
-suspend fun <T> timeit(label: String, block: suspend ()->T): T {
+suspend fun <T> timeit(label: String, block: suspend () -> T): T {
     log("$label > ⏱️ start timing ")
     val start = System.nanoTime()
-    val result  = block()
+    val result = block()
     val end = System.nanoTime()
     val durationMs = (end - start) / 1_000_000.0
     log("$label < ⏱️ took %.3f ms".format(durationMs))
     return result
 }
-

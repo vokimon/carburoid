@@ -1,7 +1,5 @@
 package net.canvoki.carburoid.ui
 
-import java.time.Instant
-import java.time.ZoneId
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -9,20 +7,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import net.canvoki.carburoid.R
-import net.canvoki.carburoid.model.GasStation
-import net.canvoki.carburoid.model.OpeningStatus
-import net.canvoki.carburoid.json.toSpanishFloat
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
-import net.canvoki.carburoid.log
-
-
-
+import net.canvoki.carburoid.model.GasStation
+import java.time.Instant
 
 class GasStationAdapter(
     private var context: Context,
     private var stations: List<GasStation>,
     private val onStationClick: (GasStation) -> Unit = {},
-):
+) :
     RecyclerView.Adapter<GasStationAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -60,7 +53,7 @@ class GasStationAdapter(
         val location = listOfNotNull(station.city, station.state).joinToString(" - ")
         holder.location.text = if (location.isNotEmpty()) location else context.getString(R.string.station_no_city)
 
-        val price = station.price?.let { "%.3f €".format(it)}
+        val price = station.price?.let { "%.3f €".format(it) }
         holder.price.text = if (station.isPublicPrice) price else "*" + price
 
         val distance = CurrentDistancePolicy.getDistance(station)
@@ -70,8 +63,6 @@ class GasStationAdapter(
         // TODO: Take the threshod from settings
         holder.openStatus.text = status.forHumans(context)
     }
-
-
 
     override fun getItemCount() = stations.size
 }

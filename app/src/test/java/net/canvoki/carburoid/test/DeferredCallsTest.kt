@@ -1,17 +1,12 @@
 package net.canvoki.carburoid.test
 
-import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
-import kotlin.test.assertFailsWith
 import org.junit.Test
-import org.junit.Ignore
-import net.canvoki.carburoid.test.yieldUntilIdle
-
+import kotlin.test.assertFailsWith
 
 class DeferredCallsTest {
 
@@ -24,7 +19,7 @@ class DeferredCallsTest {
         // Mock the API
         val api = mockk<Api>()
 
-        val (deferred1, deferred2) = deferredCalls({api()}, 2)
+        val (deferred1, deferred2) = deferredCalls({ api() }, 2)
 
         val call1 = async { api() }
         val call2 = async { api() }
@@ -41,7 +36,7 @@ class DeferredCallsTest {
     fun `exhausting deferreds, throws`() = runTest {
         val api = mockk<Api>()
 
-        val (deferred1, deferred2) = deferredCalls({api()}, 2)
+        val (deferred1, deferred2) = deferredCalls({ api() }, 2)
         deferred1.complete("Done 1")
         deferred2.complete("Done 2")
 
@@ -77,6 +72,4 @@ class DeferredCallsTest {
         yieldUntilIdle()
         assertEquals("done: Hello", sideEffect)
     }
-
-
 }

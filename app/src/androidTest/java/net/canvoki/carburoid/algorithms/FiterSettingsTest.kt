@@ -1,21 +1,19 @@
 import android.content.Context
 import androidx.preference.PreferenceScreen
-import androidx.preference.PreferenceManager
 import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import net.canvoki.carburoid.algorithms.FilterSettings
-import net.canvoki.carburoid.algorithms.FilterConfig
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 val screen = mock<PreferenceScreen> {
     on { context } doReturn ApplicationProvider.getApplicationContext()
 }
-
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class FilterSettingsTest {

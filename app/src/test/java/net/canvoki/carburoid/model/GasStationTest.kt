@@ -1,12 +1,9 @@
 package net.canvoki.carburoid.model
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import org.junit.Assert.assertEquals
+import net.canvoki.carburoid.product.ProductManager
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.junit.After
-import net.canvoki.carburoid.product.ProductManager
 
 class GasStationTest {
 
@@ -99,14 +96,18 @@ class GasStationTest {
 
         val station = GasStation.parse(json)
 
-        assertEquals(mapOf(
-            "Gasoleo A" to 1.670,
-            "My product" to 2.000,
-        ), station.prices)
+        assertEquals(
+            mapOf(
+                "Gasoleo A" to 1.670,
+                "My product" to 2.000,
+            ),
+            station.prices,
+        )
     }
 
-    fun twoProductsStation() : GasStation {
-        return GasStation.parse("""
+    fun twoProductsStation(): GasStation {
+        return GasStation.parse(
+            """
             {
                 "Rótulo": "CEPSA",
                 "Dirección": "Gran Vía 2",
@@ -117,7 +118,8 @@ class GasStationTest {
                 "Latitud": "",
                 "Longitud (WGS84)": "   ",
                 "Tipo Venta": "P"
-            }""")
+            }""",
+        )
     }
 
     @After
@@ -145,8 +147,6 @@ class GasStationTest {
 
         assertEquals(gasoleoAPrice, station.price) // Back to default Gasoleo A
     }
-
-
 
     @Test
     fun `parse station list`() {
@@ -194,7 +194,5 @@ class GasStationTest {
 
         // Verify computed properties
         assertEquals(null, station.openingHours)
-
     }
-
 }
