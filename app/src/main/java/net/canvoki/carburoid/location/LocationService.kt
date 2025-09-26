@@ -33,14 +33,14 @@ class LocationService(
         }
     }
 
-    fun hasPermission(): Boolean {
+    private fun hasPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             activity,
             Manifest.permission.ACCESS_FINE_LOCATION,
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    fun requestPermission() {
+    private fun requestPermission() {
         ActivityCompat.requestPermissions(
             activity,
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -61,7 +61,7 @@ class LocationService(
         }
     }
 
-    fun setFallback() {
+    private fun setFallback() {
         val madrid = android.location.Location("").apply {
             latitude = 40.4168
             longitude = -3.7038
