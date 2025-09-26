@@ -1,45 +1,29 @@
 package net.canvoki.carburoid
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.content.Intent
-import android.location.Location
-import androidx.lifecycle.lifecycleScope
 import android.os.Bundle
-import android.view.View
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ArrayAdapter
-import android.widget.AdapterView
-import android.widget.Toast
-import android.widget.TextView
+import android.view.View
 import android.widget.ProgressBar
-import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import java.io.File
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.Dispatchers
+import net.canvoki.carburoid.algorithms.FilterSettings
+import net.canvoki.carburoid.algorithms.StationFilter
+import net.canvoki.carburoid.location.LocationService
 import net.canvoki.carburoid.model.GasStation
-import net.canvoki.carburoid.model.GasStationResponse
+import net.canvoki.carburoid.product.ProductSelector
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
-import net.canvoki.carburoid.network.GasStationApiFactory
 import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.ui.StationDetailActivity
-import net.canvoki.carburoid.algorithms.StationFilter
-import net.canvoki.carburoid.algorithms.FilterSettings
-import net.canvoki.carburoid.CarburoidApplication
-import net.canvoki.carburoid.product.ProductSelector
-import net.canvoki.carburoid.location.LocationHelper
-import net.canvoki.carburoid.location.LocationService
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -81,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         showEmpty(getString(R.string.no_gas_stations))
 
-        locationService = LocationService(this, notify=::showToast, updateUi=::loadGasStations)
+        locationService = LocationService(this, notify = ::showToast, updateUi = ::loadGasStations)
 
         swipeRefreshLayout.setOnRefreshListener {
             lifecycleScope.launch {
@@ -93,8 +77,6 @@ class MainActivity : AppCompatActivity() {
             repository.events.collect { event ->
                 when (event) {
                     is RepositoryEvent.UpdateStarted -> {
-                        // Show loading, disable refresh, etc.
-                        //showLoading()
                         swipeRefreshLayout.isRefreshing = true
                         log("EVENT UpdateStarted")
                     }
@@ -119,7 +101,6 @@ class MainActivity : AppCompatActivity() {
                 loadGasStations()
             }
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -197,7 +178,6 @@ class MainActivity : AppCompatActivity() {
                         showContent()
                     }
                 }
-
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     showToast(getString(R.string.failed_download, e.message))
@@ -217,7 +197,7 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         locationService.processPermission(requestCode, grantResults)
