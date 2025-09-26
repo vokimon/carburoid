@@ -27,8 +27,12 @@ class LocationService(
     }
 
     init {
+        initializeLocation()
+    }
+
+    private fun initializeLocation() {
         if (hasPermission()) {
-            getLastLocation()
+            requestLastLocation()
         } else {
             requestPermission()
         }
@@ -54,43 +58,55 @@ class LocationService(
             return
         }
         if (results.isNotEmpty() && results[0] == PackageManager.PERMISSION_GRANTED) {
-            getLastLocation()
+            requestLastLocation()
         } else {
-            setFallback()
-            notify(activity.getString(R.string.location_forbidden))
-            updateUi()
+            handlePermissionDenied()
         }
     }
 
     private fun setFallback() {
-        val madrid = android.location.Location("").apply {
+        val madrid = Location("").apply {
             latitude = 40.4168
             longitude = -3.7038
         }
         CurrentDistancePolicy.setMethod(DistanceFromAddress(madrid))
     }
 
-    fun getLastLocation() {
+    private fun requestLastLocation() {
         if (!hasPermission()) {
-            setFallback() // ✅ Set fallback if permission not granted
+            setFallback()
             updateUi()
             return
         }
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
-                if (location != null) {
-                    CurrentDistancePolicy.setMethod(DistanceFromCurrentPosition(location))
-                } else {
-                    setFallback()
-                    notify(activity.getString(R.string.location_not_available))
-                }
-                updateUi()
+                handleLocationSuccess(location)
             }
-            .addOnFailureListener { e ->
-                setFallback()
-                log("Obtaining location: {e.message}")
-                notify(activity.getString(R.string.location_error))
-                updateUi()
+            .addOnFailureListener { exception ->
+                handleLocationError(exception)
             }
+    }
+
+    private fun handleLocationSuccess(location: Location?) {
+        if (location != null) {
+            CurrentDistancePolicy.setMethod(DistanceFromCurrentPosition(location))
+        } else {
+            setFallback()
+            notify(activity.getString(R.string.location_not_available))
+        }
+        updateUi()
+    }
+
+    private fun handlePermissionDenied() {
+        setFallback()
+        notify(activity.getString(R.string.location_forbidden))
+        updateUi()
+    }
+
+    private fun handleLocationError(exception: Exception) {
+        setFallback()
+        log("Obtaining location: ${exception.message}")
+        notify(activity.getString(R.string.location_error))
+        updateUi()
     }
 }
