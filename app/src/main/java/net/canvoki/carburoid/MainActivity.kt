@@ -41,6 +41,7 @@ import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.product.ProductSelector
 import net.canvoki.carburoid.location.LocationHelper
+import net.canvoki.carburoid.location.LocationService
 
 
 class MainActivity : AppCompatActivity() {
@@ -145,18 +146,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkLocationPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
+        return LocationService.hasLocationPermission(this)
     }
 
     private fun requestLocationPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            LOCATION_PERMISSION_REQUEST_CODE
-        )
+        LocationService.requestLocationPermission(this)
     }
 
     private fun setFallbackLocation() {
@@ -289,6 +283,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
+        // TODO: Remove when all uses moved to LocationService
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
         private var currentLocation: Location? = null
     }
