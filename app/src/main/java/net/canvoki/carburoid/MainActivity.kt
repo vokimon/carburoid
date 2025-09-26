@@ -40,6 +40,7 @@ import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.product.ProductSelector
+import net.canvoki.carburoid.location.LocationHelper
 
 
 class MainActivity : AppCompatActivity() {
@@ -220,14 +221,14 @@ class MainActivity : AppCompatActivity() {
                     CurrentDistancePolicy.setMethod(DistanceFromCurrentPosition(location))
                 } else {
                     setFallbackLocation()
-                    showToast(getString(R.string.warning_location_not_available))
+                    showToast(LocationHelper.getNotAvailableMessage(this))
                 }
                 loadGasStations()
             }
             .addOnFailureListener { e->
                 setFallbackLocation()
                 log("Obtaining location: {e.message}")
-                showToast(getString(R.string.warning_location_error))
+                showToast(LocationHelper.getErrorMessage(this))
                 loadGasStations()
             }
     }
@@ -281,7 +282,7 @@ class MainActivity : AppCompatActivity() {
                 getLastLocation()
             } else {
                 setFallbackLocation()
-                showToast(getString(R.string.warning_location_forbidden))
+                showToast(LocationHelper.getForbiddenMessage(this))
                 loadGasStations()
             }
         }

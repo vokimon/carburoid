@@ -36,9 +36,9 @@ station_status_opens_at: Opens %s
 station_status_closes_at: Closes %s
 station_status_open: Open
 station_status_247: 24-7
-warning_location_not_available: No location detected; using Madrid as default.
-warning_location_error: Error detecting location; using Madrid as default.
-warning_location_forbidden: Location access denied; using Madrid as default.
+location_not_available: No location detected; using Madrid as default.
+location_error: Error detecting location; using Madrid as default.
+location_forbidden: Location access denied; using Madrid as default.
 refreshing_data: Refreshing data...
 failed_download: "Download failed: %s"
 open_in_maps: Open in a map
