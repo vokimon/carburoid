@@ -81,12 +81,8 @@ class MainActivity : AppCompatActivity() {
 
         showEmpty(getString(R.string.no_gas_stations))
 
-        locationService = LocationService(this, notify=::showToast)
-        if (locationService.hasPermission()) {
-            getLastLocation()
-        } else {
-            locationService.requestPermission()
-        }
+        locationService = LocationService(this, notify=::showToast, updateUi=::loadGasStations)
+
         swipeRefreshLayout.setOnRefreshListener {
             lifecycleScope.launch {
                 repository.launchFetch() // Triggers background fetch if needed
@@ -181,13 +177,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getLastLocation() {
-        locationService.lastLocation {
-            loadGasStations()
-        }
-    }
-
-
     private fun loadGasStations() {
         lifecycleScope.launch {
             val config = FilterSettings.config(this@MainActivity)
@@ -231,19 +220,6 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLastLocation()
-            } else {
-                locationService.setFallback()
-                showToast(LocationHelper.getForbiddenMessage(this))
-                loadGasStations()
-            }
-        }
-    }
-
-    companion object {
-        // TODO: Remove when all uses moved to LocationService
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
+        locationService.processPermission(requestCode, grantResults)
     }
 }

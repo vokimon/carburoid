@@ -19,6 +19,7 @@ import net.canvoki.carburoid.log
 class LocationService(
     private val activity: Activity,
     private val notify: (String) -> Unit,
+    private val updateUi: () -> Unit,
 ) {
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(activity)
@@ -26,6 +27,15 @@ class LocationService(
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
     }
+
+    init {
+        if (hasPermission()) {
+            getLastLocation()
+        } else {
+            requestPermission()
+        }
+    }
+
 
     fun hasPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -42,6 +52,19 @@ class LocationService(
         )
     }
 
+    fun processPermission(requestCode: Int, results: IntArray) {
+        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
+            return
+        }
+        if (results.isNotEmpty() && results[0] == PackageManager.PERMISSION_GRANTED) {
+            getLastLocation()
+        } else {
+            setFallback()
+            notify(LocationHelper.getForbiddenMessage(activity))
+            updateUi()
+        }
+    }
+
     fun setFallback() {
         val madrid = android.location.Location("").apply {
             latitude = 40.4168
@@ -49,11 +72,11 @@ class LocationService(
         }
         CurrentDistancePolicy.setMethod(DistanceFromAddress(madrid))
     }
-    fun lastLocation(block: ()->Unit) {
 
+    fun getLastLocation() {
         if (!hasPermission()) {
             setFallback() // ✅ Set fallback if permission not granted
-            block()
+            updateUi()
             return
         }
         fusedLocationClient.lastLocation
@@ -64,13 +87,13 @@ class LocationService(
                     setFallback()
                     notify(LocationHelper.getNotAvailableMessage(activity))
                 }
-                block()
+                updateUi()
             }
             .addOnFailureListener { e->
                 setFallback()
                 log("Obtaining location: {e.message}")
                 notify(LocationHelper.getErrorMessage(activity))
-                block()
+                updateUi()
             }
     }
 }
