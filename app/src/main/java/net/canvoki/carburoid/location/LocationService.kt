@@ -1,20 +1,17 @@
 package net.canvoki.carburoid.location
 
+import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
-import android.Manifest
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.Task
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.distances.DistanceFromAddress
 import net.canvoki.carburoid.distances.DistanceFromCurrentPosition
 import net.canvoki.carburoid.log
-
 
 class LocationService(
     private val activity: Activity,
@@ -36,11 +33,10 @@ class LocationService(
         }
     }
 
-
     fun hasPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             activity,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
         ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -48,7 +44,7 @@ class LocationService(
         ActivityCompat.requestPermissions(
             activity,
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            LOCATION_PERMISSION_REQUEST_CODE
+            LOCATION_PERMISSION_REQUEST_CODE,
         )
     }
 
@@ -89,7 +85,7 @@ class LocationService(
                 }
                 updateUi()
             }
-            .addOnFailureListener { e->
+            .addOnFailureListener { e ->
                 setFallback()
                 log("Obtaining location: {e.message}")
                 notify(LocationHelper.getErrorMessage(activity))
