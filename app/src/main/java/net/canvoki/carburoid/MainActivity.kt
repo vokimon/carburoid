@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     private val repository: GasStationRepository
         get() = app.repository
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationService: LocationService
     private lateinit var productSelector: ProductSelector
     private lateinit var recyclerView: RecyclerView
     private lateinit var spinner: ProgressBar
@@ -84,12 +84,12 @@ class MainActivity : AppCompatActivity() {
 
         showEmpty(getString(R.string.no_gas_stations))
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        locationService = LocationService(this)
 
-        if (checkLocationPermission()) {
+        if (locationService.hasLocationPermission()) {
             getLastLocation()
         } else {
-            requestLocationPermission()
+            locationService.requestLocationPermission()
         }
         swipeRefreshLayout.setOnRefreshListener {
             lifecycleScope.launch {
@@ -145,14 +145,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkLocationPermission(): Boolean {
-        return LocationService.hasLocationPermission(this)
-    }
-
-    private fun requestLocationPermission() {
-        LocationService.requestLocationPermission(this)
-    }
-
     private fun setFallbackLocation() {
         val madrid = Location("").apply {
             latitude = 40.4168
@@ -202,13 +194,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getLastLocation() {
-        if (!checkLocationPermission()) {
+        if (!locationService.hasLocationPermission()) {
             setFallbackLocation() // ✅ Set fallback if permission not granted
             loadGasStations()
             return
         }
 
-        fusedLocationClient.lastLocation
+        locationService.getFusedLocationClient().lastLocation
             .addOnSuccessListener { location: Location? ->
                 if (location != null) {
                     currentLocation = location
