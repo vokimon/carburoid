@@ -26,9 +26,6 @@ import java.io.File
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Dispatchers
-import net.canvoki.carburoid.distances.CurrentDistancePolicy
-import net.canvoki.carburoid.distances.DistanceFromAddress
-import net.canvoki.carburoid.distances.DistanceFromCurrentPosition
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.repository.GasStationRepository
@@ -84,12 +81,11 @@ class MainActivity : AppCompatActivity() {
 
         showEmpty(getString(R.string.no_gas_stations))
 
-        locationService = LocationService(this)
-
-        if (locationService.hasLocationPermission()) {
+        locationService = LocationService(this, notify=::showToast)
+        if (locationService.hasPermission()) {
             getLastLocation()
         } else {
-            locationService.requestLocationPermission()
+            locationService.requestPermission()
         }
         swipeRefreshLayout.setOnRefreshListener {
             lifecycleScope.launch {
@@ -145,14 +141,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setFallbackLocation() {
-        val madrid = Location("").apply {
-            latitude = 40.4168
-            longitude = -3.7038
-        }
-        CurrentDistancePolicy.setMethod(DistanceFromAddress(madrid))
-    }
-
     private fun showToast(message: String) {
         log(message)
         Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
@@ -194,29 +182,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getLastLocation() {
-        if (!locationService.hasLocationPermission()) {
-            setFallbackLocation() // ✅ Set fallback if permission not granted
+        locationService.lastLocation {
             loadGasStations()
-            return
         }
-
-        locationService.getFusedLocationClient().lastLocation
-            .addOnSuccessListener { location: Location? ->
-                if (location != null) {
-                    currentLocation = location
-                    CurrentDistancePolicy.setMethod(DistanceFromCurrentPosition(location))
-                } else {
-                    setFallbackLocation()
-                    showToast(LocationHelper.getNotAvailableMessage(this))
-                }
-                loadGasStations()
-            }
-            .addOnFailureListener { e->
-                setFallbackLocation()
-                log("Obtaining location: {e.message}")
-                showToast(LocationHelper.getErrorMessage(this))
-                loadGasStations()
-            }
     }
 
 
@@ -267,7 +235,7 @@ class MainActivity : AppCompatActivity() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLastLocation()
             } else {
-                setFallbackLocation()
+                locationService.setFallback()
                 showToast(LocationHelper.getForbiddenMessage(this))
                 loadGasStations()
             }
@@ -277,6 +245,5 @@ class MainActivity : AppCompatActivity() {
     companion object {
         // TODO: Remove when all uses moved to LocationService
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
-        private var currentLocation: Location? = null
     }
 }
