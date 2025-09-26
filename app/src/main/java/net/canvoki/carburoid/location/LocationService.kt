@@ -22,6 +22,8 @@ class LocationService(
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(activity)
 
+    private var currentLocation: Location? = null
+
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
     }
@@ -69,6 +71,7 @@ class LocationService(
             latitude = 40.4168
             longitude = -3.7038
         }
+        currentLocation = madrid
         CurrentDistancePolicy.setMethod(DistanceFromAddress(madrid))
     }
 
@@ -89,6 +92,7 @@ class LocationService(
 
     private fun handleLocationSuccess(location: Location?) {
         if (location != null) {
+            currentLocation = location
             CurrentDistancePolicy.setMethod(DistanceFromCurrentPosition(location))
         } else {
             setFallback()
@@ -108,5 +112,11 @@ class LocationService(
         log("Obtaining location: ${exception.message}")
         notify(activity.getString(R.string.location_error))
         updateUi()
+    }
+
+    fun getCurrentLocationDescription(): String {
+        return currentLocation?.let { location ->
+            "(${location.latitude}, ${location.longitude})"
+        } ?: "Location not available"
     }
 }

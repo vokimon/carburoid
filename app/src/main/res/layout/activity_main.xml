@@ -30,6 +30,12 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <net.canvoki.carburoid.location.LocationSelector
+            android:id="@+id/location_selector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
     </LinearLayout>
 
     <ProgressBar

@@ -12,11 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.algorithms.StationFilter
+import net.canvoki.carburoid.location.LocationSelector
 import net.canvoki.carburoid.location.LocationService
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.product.ProductSelector
@@ -47,10 +49,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        var locationSelector = findViewById<LocationSelector>(R.id.location_selector)
+        locationService = LocationService(this, notify = ::showToast, updateUi = {
+            loadGasStations()
+            locationSelector.setLocationDescription(locationService.getCurrentLocationDescription())
+        })
+        locationSelector.setLocationDescription(locationService.getCurrentLocationDescription())
+
         val productSelector = findViewById<ProductSelector>(R.id.product_selector)
         productSelector.setOnProductSelectedListener { selectedProduct ->
             loadGasStations()
         }
+
 
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -64,8 +74,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = gasStationAdapter
 
         showEmpty(getString(R.string.no_gas_stations))
-
-        locationService = LocationService(this, notify = ::showToast, updateUi = ::loadGasStations)
 
         swipeRefreshLayout.setOnRefreshListener {
             lifecycleScope.launch {
