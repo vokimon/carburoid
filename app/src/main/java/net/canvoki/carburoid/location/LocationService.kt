@@ -12,6 +12,7 @@ import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.distances.DistanceFromAddress
 import net.canvoki.carburoid.distances.DistanceFromCurrentPosition
 import net.canvoki.carburoid.log
+import net.canvoki.carburoid.R
 
 class LocationService(
     private val activity: Activity,
@@ -56,7 +57,7 @@ class LocationService(
             getLastLocation()
         } else {
             setFallback()
-            notify(LocationHelper.getForbiddenMessage(activity))
+            notify(activity.getString(R.string.location_forbidden))
             updateUi()
         }
     }
@@ -81,14 +82,14 @@ class LocationService(
                     CurrentDistancePolicy.setMethod(DistanceFromCurrentPosition(location))
                 } else {
                     setFallback()
-                    notify(LocationHelper.getNotAvailableMessage(activity))
+                    notify(activity.getString(R.string.location_not_available))
                 }
                 updateUi()
             }
             .addOnFailureListener { e ->
                 setFallback()
                 log("Obtaining location: {e.message}")
-                notify(LocationHelper.getErrorMessage(activity))
+                notify(activity.getString(R.string.location_error))
                 updateUi()
             }
     }
