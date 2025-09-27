@@ -14,6 +14,7 @@ task yamlToAndroidStrings {
     doLast {
         def yamlDir = file('src/main/translations/')
         def resDir = file('src/main/res/')
+        def defaultLanguage = 'en'
 
         if (!yamlDir.exists()) {
             println "Translations directory not found: ${yamlDir.absolutePath}"
@@ -24,7 +25,7 @@ task yamlToAndroidStrings {
             def langCode = yamlFile.name - '.yml' - '.yaml'  // Elimina l'extensió
             langCode = langCode.toLowerCase()
 
-            def qualifier = (langCode == 'en' || langCode == 'default') ? 'values' : "values-${langCode}"
+            def qualifier = (langCode == defaultLanguage || langCode == 'default') ? 'values' : "values-${langCode}"
             def targetDir = new File(resDir, qualifier)
             targetDir.mkdirs()
 
