@@ -5,6 +5,9 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonNull
+import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import com.google.gson.annotations.JsonAdapter
@@ -17,12 +20,13 @@ import net.canvoki.carburoid.json.SpanishDateTypeAdapter
 import net.canvoki.carburoid.json.SpanishFloatTypeAdapter
 import net.canvoki.carburoid.json.fromSpanishFloat
 import net.canvoki.carburoid.json.toSpanishFloat
+import net.canvoki.carburoid.log
+import net.canvoki.carburoid.timeits
 import net.canvoki.carburoid.product.ProductManager
 import java.lang.reflect.Type
 import java.time.Instant
 import java.time.ZoneId
 
-// Serialization
 private val gson: Gson by lazy {
     GsonBuilder()
         .registerTypeAdapter(
@@ -32,7 +36,10 @@ private val gson: Gson by lazy {
         .create()
 }
 
-// ✅ GasStationResponse with parser using the enhanced Gson
+fun preprocessSpanishNumbers(json: String): String {
+    return Regex("\"([+-]?\\d+),(\\d+)\"").replace(json, "$1.$2")
+}
+
 data class GasStationResponse(
     @SerializedName("ListaEESSPrecio")
     val stations: List<GasStation>,
@@ -41,14 +48,21 @@ data class GasStationResponse(
     @JsonAdapter(SpanishDateTypeAdapter::class)
     val downloadDate: Instant? = null,
 ) {
+    fun toJson(): String {
+        return gson.toJson(this)
+    }
     companion object {
         fun parse(json: String): GasStationResponse {
-            return gson.fromJson(json, GasStationResponse::class.java)
+            val preprocessed = timeits("PREPROCESSAT") {
+                preprocessSpanishNumbers(json)
+            }
+            return timeits("PARSE") {
+                gson.fromJson(preprocessed, GasStationResponse::class.java)
+            }
         }
     }
 }
 
-// ✅ GasStation data class
 data class GasStation(
     @SerializedName("IDEESS")
     val id: Int,
@@ -103,9 +117,13 @@ data class GasStation(
     val price: Double?
         get() = prices[ProductManager.getCurrent()]
 
+    fun toJson(): String {
+        return gson.toJson(this)
+    }
+
     companion object {
         fun parse(json: String): GasStation {
-            return gson.fromJson(json, GasStation::class.java)
+            return gson.fromJson(preprocessSpanishNumbers(json), GasStation::class.java)
         }
     }
 }
@@ -121,20 +139,22 @@ class GasStationJsonAdapter(
         context: JsonDeserializationContext,
     ): GasStation {
         val jsonObject = json.asJsonObject
-
-        // ✅ Use Gson’s default adapter (no recursion)
-        val delegate = gson.getDelegateAdapter(null, object : TypeToken<GasStation>() {})
-        val base = delegate.fromJsonTree(jsonObject)
-
-        // ✅ Extract dynamic price fields
-        val prices = jsonObject.entrySet()
-            .filter { (key, _) -> key.startsWith("Precio ") }
-            .associate { (key, value) ->
+        // Price processing
+        val prices = mutableMapOf<String, Double?>()
+        for (key in jsonObject.keySet()) {
+            if (key.startsWith("Precio ")) {
+                val value = jsonObject.get(key)
+                val price = when {
+                    value.isJsonNull -> null
+                    value.isJsonPrimitive && value.asJsonPrimitive.isNumber -> value.asDouble
+                    else -> null
+                }
                 val product = key.removePrefix("Precio ")
-                val price = fromSpanishFloat(value.asString)
-                product to price
+                prices[product] = price
             }
+        }
 
+        val base = gson.fromJson(jsonObject, GasStation::class.java)
         return base.copy(prices = prices)
     }
 
@@ -143,7 +163,6 @@ class GasStationJsonAdapter(
         typeOfSrc: Type,
         context: JsonSerializationContext,
     ): JsonElement {
-        // ✅ Use default serialization
         val jsonObject = gson.toJsonTree(src).asJsonObject
 
         // ✅ Add dynamic price fields

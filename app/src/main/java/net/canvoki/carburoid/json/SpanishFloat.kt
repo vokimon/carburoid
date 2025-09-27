@@ -11,17 +11,22 @@ fun fromSpanishFloat(value: String?): Double? {
     return value?.replace(',', '.')?.toDoubleOrNull()
 }
 
+
 class SpanishFloatTypeAdapter : TypeAdapter<Double?>() {
-    override fun write(out: JsonWriter, value: Double?) {
-        if (value == null) {
-            out.nullValue()
-        } else {
-            out.value(toSpanishFloat(value))
+    override fun read(reader: JsonReader): Double? {
+        return try {
+            reader.nextDouble()
+        } catch (e: Exception) {
+            reader.skipValue()
+            null
         }
     }
 
-    override fun read(`in`: JsonReader): Double? {
-        val raw = `in`.nextString()
-        return fromSpanishFloat(raw)
+    override fun write(writer: JsonWriter, value: Double?) {
+        if (value != null) {
+            writer.value(toSpanishFloat(value))
+        } else {
+            writer.nullValue()
+        }
     }
 }

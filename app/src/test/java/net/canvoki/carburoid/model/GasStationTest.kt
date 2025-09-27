@@ -2,10 +2,20 @@ package net.canvoki.carburoid.model
 
 import net.canvoki.carburoid.product.ProductManager
 import org.junit.After
+import org.junit.Ignore
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class GasStationTest {
+
+    @Test
+    fun `preprocessSpanishNumbers`() {
+        assertEquals("23.323", preprocessSpanishNumbers("\"23,323\""))
+    }
+
+    fun `preprocessSpanishNumbers with negative numbers`() {
+        assertEquals("-23.323", preprocessSpanishNumbers("\"-23,323\""))
+    }
 
     @Test
     fun `parse station with valid coordinates`() {
@@ -16,7 +26,7 @@ class GasStationTest {
                 "Dirección": "Calle Mayor 1",
                 "Localidad": "Madrid",
                 "Provincia": "Madrid",
-                "Precio Gasoleo A": "1.659",
+                "Precio Gasoleo A": "1,659",
                 "Latitud": "40,4168",
                 "Longitud (WGS84)": "-3,7038",
                 "Horario": "L-D: 10:00-20:00",
@@ -195,4 +205,69 @@ class GasStationTest {
         // Verify computed properties
         assertEquals(null, station.openingHours)
     }
+
+    @Test
+    fun `toJson with data`() {
+        val gasStation = GasStation(
+            id = 1234,
+            name = "Test Station",
+            address = "Calle Principal 123",
+            city = "Madrid",
+            state = "Madrid",
+            latitude = 40.4168,
+            longitude = -3.7038,
+            isPublicPrice = true,
+            prices = mapOf("Gasolina 95" to 1.234)
+        )
+
+        val json = gasStation.toJson()
+
+        //println("JSON serialitzat: $json")
+        assertEquals("""{"IDEESS":1234,"Rótulo":"Test Station","Dirección":"Calle Principal 123","Localidad":"Madrid","Provincia":"Madrid","Latitud":"40,4168","Longitud (WGS84)":"-3,7038","Tipo Venta":"P","Horario":"L-D: 24H","prices":{"Gasolina 95":1.234},"Precio Gasolina 95":"1,234"}""", json)
+    }
+
+    @Test
+    fun `toJson with nulls`() {
+        val gasStation = GasStation(
+            id = 1234, // Not null
+            name = null,
+            address = null,
+            city = null,
+            state = null,
+            latitude = null,
+            longitude = null,
+            isPublicPrice = false, // Not null
+            prices = mapOf("Gasolina 95" to null)
+        )
+
+        val json = gasStation.toJson()
+
+        //println("JSON serialitzat: $json")
+        assertEquals("""{"IDEESS":1234,"Tipo Venta":"R","Horario":"L-D: 24H","prices":{}}""", json)
+    }
+
+    @Test
+    fun testRoundTrip() {
+        val originalStation = GasStation(
+            id = 1234,
+            name = "Test Station",
+            address = "Calle Principal 123",
+            city = "Madrid",
+            state = "Madrid",
+            latitude = 40.4168,
+            longitude = -3.7038,
+            isPublicPrice = true,
+            prices = mapOf("Gasolina 95" to 1.234)
+        )
+
+        val json = originalStation.toJson()
+        //println("JSON serialitzat: $json")
+        val deserializedStation = GasStation.parse(json)
+
+        assertEquals(originalStation.id, deserializedStation.id)
+        assertEquals(originalStation.latitude, deserializedStation.latitude)
+        assertEquals(originalStation.longitude, deserializedStation.longitude)
+        assertEquals(originalStation.prices, deserializedStation.prices)
+    }
+
 }

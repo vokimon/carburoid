@@ -78,8 +78,9 @@ class GasStationRepository(
         scope.launch {
             _events.emit(RepositoryEvent.UpdateStarted)
             try {
-                log("STARTING FETCH")
-                val response = api.getGasStations()
+                val response = timeit("FETCH") {
+                    api.getGasStations()
+                }
 
                 if (parser != null) {
                     parsed = timeit("PARSING FETCH") {
