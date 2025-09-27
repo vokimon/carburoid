@@ -17,4 +17,4 @@ run ./gradlew assembleDebug &&
 
 # adb shell cmd uimode night no
 # adb shell cmd uimode night yes
-
+# ./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.canvoki.carburoid.LoadBenchmarkTest
