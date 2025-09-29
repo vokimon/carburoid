@@ -59,8 +59,8 @@ object FilterSettings {
     fun config(context: Context): FilterConfig {
         val prefs = preferences(context)
         return FilterConfig(
-            hideExpensiveFurther = prefs.getBoolean(KEY_HIDE_EXPENSIVE, false),
-            onlyPublicPrices = prefs.getBoolean(KEY_ONLY_PUBLIC_PRICES, false),
+            hideExpensiveFurther = prefs.getBoolean(KEY_HIDE_EXPENSIVE, true),
+            onlyPublicPrices = prefs.getBoolean(KEY_ONLY_PUBLIC_PRICES, true),
             hideClosedMarginInMinutes = prefs.getString(KEY_HIDE_CLOSED_MARGIN_MINUTES, null)?.toInt() ?: DEFAULT_CLOSED_MARGIN,
         )
     }
