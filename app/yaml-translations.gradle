@@ -25,9 +25,7 @@ task yamlToAndroidStrings {
         yamlDir.eachFileMatch(groovy.io.FileType.FILES, ~/.*\.(yml|yaml)/) { yamlFile ->
             def langCode = yamlFile.name - '.yml' - '.yaml'  // Elimina l'extensió
             langCode = langCode.toLowerCase()
-            if (langCode != defaultLanguage && langCode != 'default') {
-                languageCodes.add(langCode)
-            }
+            languageCodes.add(langCode)
         }
 
         // Genera el fitxer arrays_languages.xml
