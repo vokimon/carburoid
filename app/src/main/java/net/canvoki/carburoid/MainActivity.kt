@@ -5,13 +5,14 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -129,7 +130,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun showToast(message: String) {
         log(message)
-        Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+        val snackbar = Snackbar.make(
+            findViewById<ViewGroup>(android.R.id.content),
+            message,
+            Snackbar.LENGTH_LONG
+        )
+        snackbar.show()
+    }
+
+    private fun suggestAction(message: String, actionText: String, action: ()->Unit ) {
+        log(message)
+        val snackbar = Snackbar.make(
+            findViewById<ViewGroup>(android.R.id.content),
+            message,
+            Snackbar.LENGTH_LONG
+        ).setAction(actionText) {
+            action()
+        }
+        snackbar.show()
     }
 
     private fun showEmpty(message: String) {
