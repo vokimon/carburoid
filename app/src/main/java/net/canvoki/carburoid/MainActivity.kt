@@ -51,10 +51,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         var locationSelector = findViewById<LocationSelector>(R.id.location_selector)
-        locationService = LocationService(this, notify = ::showToast, updateUi = {
-            loadGasStations()
-            locationSelector.setLocationDescription(locationService.getCurrentLocationDescription())
-        })
+        locationService = LocationService(this,
+            notify = ::showToast,
+            suggestAction = ::suggestAction,
+            updateUi = {
+                loadGasStations()
+                locationSelector.setLocationDescription(locationService.getCurrentLocationDescription())
+            },
+        )
         locationSelector.setLocationDescription(locationService.getCurrentLocationDescription())
 
         val productSelector = findViewById<ProductSelector>(R.id.product_selector)

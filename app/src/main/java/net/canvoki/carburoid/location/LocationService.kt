@@ -31,6 +31,7 @@ import java.util.Locale
 class LocationService(
     private val activity: Activity,
     private val notify: (String) -> Unit,
+    private val suggestAction: (String, String, ()->Unit) -> Unit,
     private val updateUi: () -> Unit,
 ) : CoroutineScope by MainScope() {
     private val fusedLocationClient: FusedLocationProviderClient =
