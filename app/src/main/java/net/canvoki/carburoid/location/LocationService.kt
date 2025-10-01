@@ -1,9 +1,14 @@
 package net.canvoki.carburoid.location
 
-import android.Manifest
 import android.app.Activity
+import android.content.Intent
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationManager
+import android.Manifest
+import android.net.Uri
+import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -46,11 +51,11 @@ class LocationService(
     }
 
     fun refreshLocation() {
-        if (hasPermission()) {
-            requestLastLocation()
-        } else {
+        if (!hasPermission()) {
             requestPermission()
+            return
         }
+        requestDeviceLocation()
     }
 
     private fun hasPermission(): Boolean {
@@ -66,6 +71,8 @@ class LocationService(
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
             LOCATION_PERMISSION_REQUEST_CODE,
         )
+        // result is asynchronously retrieved by processPermission
+        // called from onRequestPermissionsResult in the main activity
     }
 
     fun processPermission(requestCode: Int, results: IntArray) {
@@ -73,7 +80,7 @@ class LocationService(
             return
         }
         if (results.isNotEmpty() && results[0] == PackageManager.PERMISSION_GRANTED) {
-            requestLastLocation()
+            requestDeviceLocation()
         } else {
             handlePermissionDenied()
         }
@@ -89,7 +96,7 @@ class LocationService(
         updateDescription()
     }
 
-    private fun requestLastLocation() {
+    private fun requestDeviceLocation() {
         if (!hasPermission()) {
             setFallback()
             updateUi()
@@ -97,14 +104,14 @@ class LocationService(
         }
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
-                handleLocationSuccess(location)
+                handleDeviceLocationSuccess(location)
             }
             .addOnFailureListener { exception ->
-                handleLocationError(exception)
+                handleDeviceLocationError(exception)
             }
     }
 
-    private fun handleLocationSuccess(location: Location?) {
+    private fun handleDeviceLocationSuccess(location: Location?) {
         if (location != null) {
             currentLocation = location
             updateDescription()
@@ -122,14 +129,12 @@ class LocationService(
         updateUi()
     }
 
-    private fun handleLocationError(exception: Exception) {
+    private fun handleDeviceLocationError(exception: Exception) {
         setFallback()
         log("Obtaining location: ${exception.message}")
         notify(activity.getString(R.string.location_error))
         updateUi()
     }
-
-
 
     private fun updateDescription() {
         geocodingJob?.cancel()
