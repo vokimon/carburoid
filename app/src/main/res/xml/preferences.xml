@@ -2,6 +2,12 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
+        android:key="app_language"
+        android:title="@string/settings_language_title"
+        android:summary="@string/settings_language_summary"
+        android:defaultValue="system" />
+
+    <ListPreference
         app:key="dark_mode"
         app:title="@string/settings_theme"
         app:summary="%s"

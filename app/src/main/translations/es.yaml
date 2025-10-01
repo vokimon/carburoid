@@ -1,17 +1,20 @@
+language_code: es
+language_name: Español
 app_name: Carburoid
 menu_settings: Ajustes
+settings_language_title: Idioma
+settings_language_summary: Canvia el idioma de la aplicación
+language_system_default: Sistema
 settings_theme: Tema
 theme_light: Claro
 theme_dark: Oscuro
 theme_system: Automático (Sistema)
 settings_filter_expensive: Oculta estaciones caras i lejanas
-settings_filter_expensive_summary: No muestres estaciones cuando las haya más 
-  cercanas o más baratas. (Recomendado)
+settings_filter_expensive_summary: No muestres estaciones cuando las haya más cercanas o más baratas. (Recomendado)
 settings_filter_non_public: Solo precios públicos
 settings_filter_non_public_summary: Oculta los precios que requieran afiliación.
 settings_filter_closed: Muestra estaciones cerradas
-settings_filter_closed_summary: Establece un margen de tiempo para estaciones 
-  que abrirán pronto
+settings_filter_closed_summary: Establece un margen de tiempo para estaciones que abrirán pronto
 settings_filter_closed_tolerance_none: Sin margen, filtra siempre
 settings_filter_closed_tolerance_half_hour: Media hora
 settings_filter_closed_tolerance_one_hour: Una hora

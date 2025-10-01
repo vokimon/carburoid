@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.ui.settings.ThemeSettings
+import net.canvoki.carburoid.ui.settings.LanguageSettings
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,5 +25,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preferences, rootKey)
         ThemeSettings.registerIn(preferenceScreen)
         FilterSettings.registerIn(preferenceScreen)
+        LanguageSettings.registerIn(preferenceScreen)
     }
 }
