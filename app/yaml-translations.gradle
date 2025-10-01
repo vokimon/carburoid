@@ -8,7 +8,6 @@ buildscript {
     }
 }
 
-
 // Custom task to convert YAML to Android strings
 task yamlToAndroidStrings {
     doLast {
@@ -21,6 +20,32 @@ task yamlToAndroidStrings {
             return
         }
 
+        // Cerca tots els idiomes disponibles
+        def languageCodes = []
+        yamlDir.eachFileMatch(groovy.io.FileType.FILES, ~/.*\.(yml|yaml)/) { yamlFile ->
+            def langCode = yamlFile.name - '.yml' - '.yaml'  // Elimina l'extensió
+            langCode = langCode.toLowerCase()
+            if (langCode != defaultLanguage && langCode != 'default') {
+                languageCodes.add(langCode)
+            }
+        }
+
+        // Genera el fitxer arrays_languages.xml
+        def arraysFile = new File(resDir, 'values/arrays_languages.xml')
+        def xmlContent = """<?xml version="1.0" encoding="utf-8"?>
+<!-- AUTO-GENERATED FILE. DO NOT EDIT MANUALLY. -->
+<!-- This file is generated automatically from YAML translations. -->
+<!-- Any manual changes will be overwritten. -->
+<resources>
+    <string-array name="supported_language_codes">
+${languageCodes.collect { "        <item>$it</item>" }.join('\n')}
+    </string-array>
+</resources>"""
+
+        arraysFile.write(xmlContent)
+        println "Generated language arrays: ${languageCodes.join(', ')}"
+
+        // Processa els fitxers YAML existents
         yamlDir.eachFileMatch(groovy.io.FileType.FILES, ~/.*\.(yml|yaml)/) { yamlFile ->
             def langCode = yamlFile.name - '.yml' - '.yaml'  // Elimina l'extensió
             langCode = langCode.toLowerCase()
@@ -111,4 +136,3 @@ def processYamlMap(map, prefix, resourcesElement) {
 
 // Run the conversion before build
 preBuild.dependsOn yamlToAndroidStrings
-

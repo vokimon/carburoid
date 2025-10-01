@@ -32,11 +32,4 @@
         <item>10080</item>
     </string-array>
 
-    <string-array name="supported_language_codes">
-        <item>ca</item>
-        <item>es</item>
-        <item>en</item>
-        <item>an</item>
-    </string-array>
-
 </resources>

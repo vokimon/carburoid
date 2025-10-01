@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- AUTO-GENERATED FILE. DO NOT EDIT MANUALLY. -->
+<!-- This file is generated automatically from YAML translations. -->
+<!-- Any manual changes will be overwritten. -->
+<resources>
+    <string-array name="supported_language_codes">
+        <item>es</item>
+        <item>ca</item>
+        <item>an</item>
+    </string-array>
+</resources>
