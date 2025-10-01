@@ -33,6 +33,10 @@ class LocationService(
 
     private var currentLocation: Location? = null
 
+    private var description: String? = null
+
+    private var geocodingJob: Job? = null
+
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
     }
@@ -126,9 +130,6 @@ class LocationService(
     }
 
 
-
-    private var description: String? = null
-    private var geocodingJob: Job? = null  // Per cancel·lar tasques
 
     private fun updateDescription() {
         geocodingJob?.cancel()
