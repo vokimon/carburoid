@@ -36,6 +36,8 @@ class LocationService(
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(activity)
 
+    private val prefs = activity.getSharedPreferences("location_prefs", Context.MODE_PRIVATE)
+
     private var currentLocation: Location? = null
 
     private var description: String? = null
@@ -87,12 +89,21 @@ class LocationService(
     }
 
     private fun setFallback() {
+        val location: Location = getSavedLocation() ?: getLastResortLocation()
+        setLocation(location)
+    }
+
+    private fun getLastResortLocation(): Location {
         val madrid = Location("").apply {
             latitude = 40.4168
             longitude = -3.7038
         }
-        currentLocation = madrid
-        CurrentDistancePolicy.setMethod(DistanceFromAddress(madrid))
+        return madrid
+    }
+
+    private fun setLocation(location: Location) {
+        currentLocation = location
+        CurrentDistancePolicy.setMethod(DistanceFromAddress(location))
         updateDescription()
     }
 
@@ -113,9 +124,8 @@ class LocationService(
 
     private fun handleDeviceLocationSuccess(location: Location?) {
         if (location != null) {
-            currentLocation = location
-            updateDescription()
-            CurrentDistancePolicy.setMethod(DistanceFromCurrentPosition(location))
+            saveLastRealLocation(location)
+            setLocation(location)
         } else {
             setFallback()
             notify(activity.getString(R.string.location_not_available))
@@ -179,5 +189,26 @@ class LocationService(
                 null
             }
         }
+    }
+
+    private fun saveLastRealLocation(location: Location) {
+        prefs.edit()
+            .putLong("last_lat", java.lang.Double.doubleToRawLongBits(location.latitude))
+            .putLong("last_lng", java.lang.Double.doubleToRawLongBits(location.longitude))
+            .apply()
+    }
+
+    private fun getSavedLocation(): Location? {
+        val latBits = prefs.getLong("last_lat", Long.MIN_VALUE)
+        val lngBits = prefs.getLong("last_lng", Long.MIN_VALUE)
+
+        if (latBits == Long.MIN_VALUE || lngBits == Long.MIN_VALUE) {
+            return null
+        }
+
+        val location = Location("")
+        location.latitude = java.lang.Double.longBitsToDouble(latBits)
+        location.longitude = java.lang.Double.longBitsToDouble(lngBits)
+        return location
     }
 }
