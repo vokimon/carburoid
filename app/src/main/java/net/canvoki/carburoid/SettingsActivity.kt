@@ -23,8 +23,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
+        LanguageSettings.registerIn(preferenceScreen)
         ThemeSettings.registerIn(preferenceScreen)
         FilterSettings.registerIn(preferenceScreen)
-        LanguageSettings.registerIn(preferenceScreen)
     }
 }
