@@ -45,9 +45,9 @@
     <string name="station_status_closes_at">Closes %s</string>
     <string name="station_status_open">Open</string>
     <string name="station_status_247">24-7</string>
-    <string name="location_not_available">Unable to get locations. Using fallback</string>
-    <string name="location_error">Error detecting location; using Madrid as default</string>
-    <string name="location_forbidden">Location access denied; using Madrid as default</string>
+    <string name="location_not_available">Unable to get locations</string>
+    <string name="location_error">Error detecting location</string>
+    <string name="location_forbidden">Location access denied</string>
     <string name="location_deactivated">Location is disabled</string>
     <string name="location_activate">Enable</string>
     <string name="location_permisions_concede">Allow</string>

@@ -42,9 +42,9 @@ station_status_opens_at: Abre %s
 station_status_closes_at: Zarra %s
 station_status_open: Obierto
 station_status_247: Obierto 24h
-location_not_available: Ubicación no detectada; fendo servir Madrid.
-location_error: S'ha produciu un error en obtener a ubicación; fendo servir Madrid.
-location_forbidden: No s'ha dato permiso pa obtener a ubicación; fendo servir Madrid.
+location_not_available: Ubicación no detectada
+location_error: S'ha produciu un error en obtener a ubicación
+location_forbidden: No s'ha dato permiso pa obtener a ubicación
 location_deactivated: A ubicación ye desactivada
 location_activate: Activa
 location_permisions_concede: Permite

@@ -45,9 +45,9 @@
     <string name="station_status_closes_at">Tanca %s</string>
     <string name="station_status_open">Obert</string>
     <string name="station_status_247">Obert 24h</string>
-    <string name="location_not_available">Ubicació no detectada; fent servir Madrid.</string>
-    <string name="location_error">S\'ha produit un error en obtindre la ubicació; fent servir Madrid.</string>
-    <string name="location_forbidden">No s\'ha donat permisos per obtindre la ubicació; fent servir Madrid.</string>
+    <string name="location_not_available">Ubicació no detectada</string>
+    <string name="location_error">S\'ha produit un error en obtindre la ubicació</string>
+    <string name="location_forbidden">No tenim permís per obtindre la ubicació</string>
     <string name="location_deactivated">La ubicació està desactivada</string>
     <string name="location_activate">Activa</string>
     <string name="location_permisions_concede">Permet</string>

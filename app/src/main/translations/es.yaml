@@ -42,9 +42,9 @@ station_status_opens_at: Abre %s
 station_status_closes_at: Cierra %s
 station_status_open: Abierto
 station_status_247: Abierto 24h
-location_not_available: No se detectó la ubicación; usando Madrid por defecto.
-location_error: Error detectando la ubicación; usando Madrid por defecto.
-location_forbidden: Denegado acceso a la ubicación; usando Madrid por defecto.
+location_not_available: No se detectó la ubicación
+location_error: Error detectando la ubicación
+location_forbidden: Denegado acceso a la ubicación
 location_deactivated: La ubicación está desactivada
 location_activate: Activa
 location_permisions_concede: Permite

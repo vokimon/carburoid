@@ -44,9 +44,9 @@
     <string name="station_status_closes_at">Cierra %s</string>
     <string name="station_status_open">Abierto</string>
     <string name="station_status_247">Abierto 24h</string>
-    <string name="location_not_available">No se detectó la ubicación; usando Madrid por defecto.</string>
-    <string name="location_error">Error detectando la ubicación; usando Madrid por defecto.</string>
-    <string name="location_forbidden">Denegado acceso a la ubicación; usando Madrid por defecto.</string>
+    <string name="location_not_available">No se detectó la ubicación</string>
+    <string name="location_error">Error detectando la ubicación</string>
+    <string name="location_forbidden">Denegado acceso a la ubicación</string>
     <string name="location_deactivated">La ubicación está desactivada</string>
     <string name="location_activate">Activa</string>
     <string name="location_permisions_concede">Permite</string>

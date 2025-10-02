@@ -43,9 +43,9 @@ station_status_opens_at: Opens %s
 station_status_closes_at: Closes %s
 station_status_open: Open
 station_status_247: 24-7
-location_not_available: Unable to get locations. Using fallback
-location_error: Error detecting location; using Madrid as default
-location_forbidden: Location access denied; using Madrid as default
+location_not_available: Unable to get locations
+location_error: Error detecting location
+location_forbidden: Location access denied
 location_deactivated: Location is disabled
 location_activate: Enable
 location_permisions_concede: Allow

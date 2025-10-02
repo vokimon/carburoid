@@ -44,9 +44,9 @@
     <string name="station_status_closes_at">Zarra %s</string>
     <string name="station_status_open">Obierto</string>
     <string name="station_status_247">Obierto 24h</string>
-    <string name="location_not_available">Ubicación no detectada; fendo servir Madrid.</string>
-    <string name="location_error">S\'ha produciu un error en obtener a ubicación; fendo servir Madrid.</string>
-    <string name="location_forbidden">No s\'ha dato permiso pa obtener a ubicación; fendo servir Madrid.</string>
+    <string name="location_not_available">Ubicación no detectada</string>
+    <string name="location_error">S\'ha produciu un error en obtener a ubicación</string>
+    <string name="location_forbidden">No s\'ha dato permiso pa obtener a ubicación</string>
     <string name="location_deactivated">A ubicación ye desactivada</string>
     <string name="location_activate">Activa</string>
     <string name="location_permisions_concede">Permite</string>
