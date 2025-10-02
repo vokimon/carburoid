@@ -11,11 +11,13 @@ theme_light: Claro
 theme_dark: Fosco
 theme_system: Automatico (O d'o sistema)
 settings_filter_expensive: Amagar estacions cara y lejanas
-settings_filter_expensive_summary: No amostrar estacions si n'i ha d'as más cercanas u baratas. (Recomendau)
+settings_filter_expensive_summary: No amostrar estacions si n'i ha d'as más 
+  cercanas u baratas. (Recomendau)
 settings_filter_non_public: Nomás preus públicos
 settings_filter_non_public_summary: Amagar preus que demanden afiliación.
 settings_filter_closed: Amostrar estacions zarraus
-settings_filter_closed_summary: Establir un margen de tiempo pa estacions que abrirán avoro
+settings_filter_closed_summary: Establir un margen de tiempo pa estacions que 
+  abrirán avoro
 settings_filter_closed_tolerance_none: Sin margen, amagar siempre
 settings_filter_closed_tolerance_half_hour: Mitá hora
 settings_filter_closed_tolerance_one_hour: Una hora
@@ -51,3 +53,4 @@ location_permisions_concede: Permite
 refreshing_data: S'están actualizando las datos…
 failed_download: "Ha fallau a descarga de datos: %s"
 open_in_maps: Ubrir en o mapa
+settings_category_station_filters: Filtro de gasolineras
