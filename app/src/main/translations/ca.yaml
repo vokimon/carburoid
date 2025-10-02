@@ -27,6 +27,8 @@ settings_filter_closed_tolerance_never: Mostra sempre
 no_gas_stations: No s'han trobat benzineres coincidents
 product_selector_hint: Producte
 product_selector_icon_description: Selector de producte
+location_selector_hint: Ubicació
+location_selector_locate_device: Ubica el dispositiu
 price_not_public: ✱ Preu condicionat
 detail_location: Ubicació
 detail_opening_hours: Horari de servei

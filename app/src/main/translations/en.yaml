@@ -27,6 +27,8 @@ settings_filter_closed_tolerance_never: Show always
 no_gas_stations: No matching gas station
 product_selector_hint: Product
 product_selector_icon_description: Product selector
+location_selector_hint: Location
+location_selector_locate_device: Locate device
 price_not_public: ✱ Conditional price
 detail_location: Location
 detail_opening_hours: Hours
@@ -43,7 +45,7 @@ station_status_opens_at: Opens %s
 station_status_closes_at: Closes %s
 station_status_open: Open
 station_status_247: 24-7
-location_not_available: Unable to get locations
+location_not_available: No location data detected
 location_error: Error detecting location
 location_forbidden: Location access denied
 location_deactivated: Location is disabled

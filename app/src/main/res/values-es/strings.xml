@@ -12,6 +12,7 @@
     <string name="theme_light">Claro</string>
     <string name="theme_dark">Oscuro</string>
     <string name="theme_system">Automático (Sistema)</string>
+    <string name="settings_category_station_filters">Filtrado de gasolineras</string>
     <string name="settings_filter_expensive">Oculta estaciones caras i lejanas</string>
     <string name="settings_filter_expensive_summary">No muestres estaciones cuando las haya más cercanas o más baratas. (Recomendado)</string>
     <string name="settings_filter_non_public">Solo precios públicos</string>
@@ -28,6 +29,8 @@
     <string name="no_gas_stations">No se encontraron gasolineras coincidentes</string>
     <string name="product_selector_hint">Producto</string>
     <string name="product_selector_icon_description">Selector de producto</string>
+    <string name="location_selector_hint">Ubicación</string>
+    <string name="location_selector_locate_device">Ubica el dispositivo</string>
     <string name="price_not_public">✱ Precio condicionado</string>
     <string name="detail_location">Ubicación</string>
     <string name="detail_opening_hours">Horario de servicio</string>

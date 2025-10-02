@@ -12,6 +12,7 @@
     <string name="theme_light">Claro</string>
     <string name="theme_dark">Fosco</string>
     <string name="theme_system">Automatico (O d\'o sistema)</string>
+    <string name="settings_category_station_filters">Filtro de gasolineras</string>
     <string name="settings_filter_expensive">Amagar estacions cara y lejanas</string>
     <string name="settings_filter_expensive_summary">No amostrar estacions si n\'i ha d\'as más cercanas u baratas. (Recomendau)</string>
     <string name="settings_filter_non_public">Nomás preus públicos</string>
@@ -28,6 +29,7 @@
     <string name="no_gas_stations">No s\'han trobau estacions de servicio con l\'actual criterio</string>
     <string name="product_selector_hint">Producto</string>
     <string name="product_selector_icon_description">Selector de producto</string>
+    <string name="location_selector_hint">Ubicación</string>
     <string name="price_not_public">✱ Preu condicionau</string>
     <string name="detail_location">Ubicación</string>
     <string name="detail_opening_hours">Horario de servicio</string>

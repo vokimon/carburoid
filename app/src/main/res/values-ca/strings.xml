@@ -29,6 +29,8 @@
     <string name="no_gas_stations">No s\'han trobat benzineres coincidents</string>
     <string name="product_selector_hint">Producte</string>
     <string name="product_selector_icon_description">Selector de producte</string>
+    <string name="location_selector_hint">Ubicació</string>
+    <string name="location_selector_locate_device">Ubica el dispositiu</string>
     <string name="price_not_public">✱ Preu condicionat</string>
     <string name="detail_location">Ubicació</string>
     <string name="detail_opening_hours">Horari de servei</string>

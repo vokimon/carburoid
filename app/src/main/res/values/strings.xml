@@ -29,6 +29,8 @@
     <string name="no_gas_stations">No matching gas station</string>
     <string name="product_selector_hint">Product</string>
     <string name="product_selector_icon_description">Product selector</string>
+    <string name="location_selector_hint">Location</string>
+    <string name="location_selector_locate_device">Locate device</string>
     <string name="price_not_public">✱ Conditional price</string>
     <string name="detail_location">Location</string>
     <string name="detail_opening_hours">Hours</string>
@@ -45,7 +47,7 @@
     <string name="station_status_closes_at">Closes %s</string>
     <string name="station_status_open">Open</string>
     <string name="station_status_247">24-7</string>
-    <string name="location_not_available">Unable to get locations</string>
+    <string name="location_not_available">No location data detected</string>
     <string name="location_error">Error detecting location</string>
     <string name="location_forbidden">Location access denied</string>
     <string name="location_deactivated">Location is disabled</string>
