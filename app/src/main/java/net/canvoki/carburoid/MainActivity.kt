@@ -50,6 +50,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        recyclerView = findViewById(R.id.recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        spinner = findViewById(R.id.progress_bar)
+        emptyView = findViewById(R.id.text_empty)
+        progressText = findViewById(R.id.text_progress)
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
+
+        gasStationAdapter = GasStationAdapter(this, emptyList(), ::onItemClicked)
+        recyclerView.adapter = gasStationAdapter
+
+        showEmpty(getString(R.string.no_gas_stations))
+
         var locationSelector = findViewById<LocationSelector>(R.id.location_selector)
         locationService = LocationService(this,
             notify = ::showToast,
@@ -65,20 +78,6 @@ class MainActivity : AppCompatActivity() {
         productSelector.setOnProductSelectedListener { selectedProduct ->
             loadGasStations()
         }
-
-
-        recyclerView = findViewById(R.id.recycler_view)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        spinner = findViewById(R.id.progress_bar)
-        emptyView = findViewById(R.id.text_empty)
-        progressText = findViewById(R.id.text_progress)
-        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
-
-        gasStationAdapter = GasStationAdapter(this, emptyList(), ::onItemClicked)
-        recyclerView.adapter = gasStationAdapter
-
-        showEmpty(getString(R.string.no_gas_stations))
 
         swipeRefreshLayout.setOnRefreshListener {
             lifecycleScope.launch {
