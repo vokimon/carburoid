@@ -29,10 +29,12 @@ class LocationSelector @JvmOverloads constructor(
     }
 
     private fun setupView() {
-        textInputLayout.hint = "Location"
-        textInputLayout.startIconDrawable = ContextCompat.getDrawable(context, R.drawable.ic_my_location)
+        textInputLayout.setHint(R.string.location_selector_hint)
+        textInputLayout.setStartIconDrawable(R.drawable.ic_my_location)
+        textInputLayout.setStartIconContentDescription(R.string.location_selector_locate_device)
         textInputLayout.endIconMode = TextInputLayout.END_ICON_CUSTOM
         textInputLayout.setEndIconDrawable(R.drawable.ic_edit)
+        textInputLayout.setEndIconContentDescription(R.string.location_selector_locate_device)
     }
 
     fun setLocationDescription(description: String) {
