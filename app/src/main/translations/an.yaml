@@ -2,6 +2,7 @@ language_code: an
 language_name: Aragonés
 app_name: Carburoid
 menu_settings: Configuración
+settings_category_language_apperance: Luenga y apariencia
 settings_language_title: Idioma
 settings_language_summary: Cambia l'idioma de l'aplicación
 language_system_default: Sistema
@@ -44,6 +45,9 @@ station_status_247: Obierto 24h
 location_not_available: Ubicación no detectada; fendo servir Madrid.
 location_error: S'ha produciu un error en obtener a ubicación; fendo servir Madrid.
 location_forbidden: No s'ha dato permiso pa obtener a ubicación; fendo servir Madrid.
+location_deactivated: A ubicación ye desactivada
+location_activate: Activa
+location_permisions_concede: Permite
 refreshing_data: S'están actualizando las datos…
 failed_download: "Ha fallau a descarga de datos: %s"
 open_in_maps: Ubrir en o mapa

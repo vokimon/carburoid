@@ -4,6 +4,7 @@
     <string name="language_name">Español</string>
     <string name="app_name">Carburoid</string>
     <string name="menu_settings">Ajustes</string>
+    <string name="settings_category_language_apperance">Idioma y apariencia</string>
     <string name="settings_language_title">Idioma</string>
     <string name="settings_language_summary">Canvia el idioma de la aplicación</string>
     <string name="language_system_default">Sistema</string>
@@ -24,7 +25,7 @@
     <string name="settings_filter_closed_tolerance_twelve_hours">Medio dia</string>
     <string name="settings_filter_closed_tolerance_one_day">Un dia</string>
     <string name="settings_filter_closed_tolerance_never">Mstra sempre</string>
-    <string name="no_gas_stations">No se encontraron estaciones de servicio con el criterio actual</string>
+    <string name="no_gas_stations">No se encontraron gasolineras coincidentes</string>
     <string name="product_selector_hint">Producto</string>
     <string name="product_selector_icon_description">Selector de producto</string>
     <string name="price_not_public">✱ Precio condicionado</string>
@@ -46,6 +47,9 @@
     <string name="location_not_available">No se detectó la ubicación; usando Madrid por defecto.</string>
     <string name="location_error">Error detectando la ubicación; usando Madrid por defecto.</string>
     <string name="location_forbidden">Denegado acceso a la ubicación; usando Madrid por defecto.</string>
+    <string name="location_deactivated">La ubicación está desactivada</string>
+    <string name="location_activate">Activa</string>
+    <string name="location_permisions_concede">Permite</string>
     <string name="refreshing_data">Se estan actualitzando los datos…</string>
     <string name="failed_download">Ha fallado la descarga de datos: %s</string>
     <string name="open_in_maps">Abre en el mapa</string>

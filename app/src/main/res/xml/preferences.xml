@@ -1,38 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Grup: Filtratge -->
+    <PreferenceCategory
+        android:title="@string/settings_category_language_apperance"
+        android:key="category_filtering">
 
-    <ListPreference
-        android:key="app_language"
-        android:title="@string/settings_language_title"
-        android:summary="@string/settings_language_summary"
-        android:defaultValue="system" />
+        <ListPreference
+            android:key="app_language"
+            android:title="@string/settings_language_title"
+            android:summary="@string/settings_language_summary"
+            android:defaultValue="system" />
 
-    <ListPreference
-        app:key="dark_mode"
-        app:title="@string/settings_theme"
-        app:summary="%s"
-        app:entries="@array/theme_entries"
-        app:entryValues="@array/theme_values"
-        app:defaultValue="auto" />
+        <ListPreference
+            app:key="dark_mode"
+            app:title="@string/settings_theme"
+            app:summary="%s"
+            app:entries="@array/theme_entries"
+            app:entryValues="@array/theme_values"
+            app:defaultValue="auto" />
 
-    <SwitchPreferenceCompat
-        app:key="hide_expensive_further"
-        app:title="@string/settings_filter_expensive"
-        app:summary="@string/settings_filter_expensive_summary"
-        app:defaultValue="true" />
+    </PreferenceCategory>
 
-    <SwitchPreferenceCompat
-        app:key="only_public_prices"
-        app:title="@string/settings_filter_non_public"
-        app:summary="@string/settings_filter_non_public_summary"
-        app:defaultValue="true" />
+    <PreferenceCategory
+        android:title="@string/settings_category_station_filters"
+        android:key="category_filtering">
 
-    <ListPreference
-        android:key="hide_closed_margin_minutes"
-        android:title="@string/settings_filter_closed"
-        android:summary="@string/settings_filter_closed_summary"
-        android:defaultValue="30"
-        android:entries="@array/settings_filter_closed_labels"
-        android:entryValues="@array/settings_filter_closed_values" />
+        <SwitchPreferenceCompat
+            app:key="hide_expensive_further"
+            app:title="@string/settings_filter_expensive"
+            app:summary="@string/settings_filter_expensive_summary"
+            app:defaultValue="true" />
+
+        <SwitchPreferenceCompat
+            app:key="only_public_prices"
+            app:title="@string/settings_filter_non_public"
+            app:summary="@string/settings_filter_non_public_summary"
+            app:defaultValue="true" />
+
+        <ListPreference
+            android:key="hide_closed_margin_minutes"
+            android:title="@string/settings_filter_closed"
+            android:summary="@string/settings_filter_closed_summary"
+            android:defaultValue="30"
+            android:entries="@array/settings_filter_closed_labels"
+            android:entryValues="@array/settings_filter_closed_values" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

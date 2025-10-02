@@ -58,6 +58,10 @@ class LocationService(
             requestPermission()
             return
         }
+        if (!isLocationEnabled()) {
+            handleLocationDisabled()
+            return
+        }
         requestDeviceLocation()
     }
 
@@ -106,12 +110,12 @@ class LocationService(
         currentLocation = location
         CurrentDistancePolicy.setMethod(DistanceFromAddress(location))
         updateDescription()
+        updateUi()
     }
 
     private fun requestDeviceLocation() {
         if (!hasPermission()) {
             setFallback()
-            updateUi()
             return
         }
         fusedLocationClient.lastLocation
@@ -124,27 +128,39 @@ class LocationService(
     }
 
     private fun handleDeviceLocationSuccess(location: Location?) {
-        if (location != null) {
-            saveLastRealLocation(location)
-            setLocation(location)
-        } else {
+        if (location == null) {
             setFallback()
             notify(activity.getString(R.string.location_not_available))
+            return
         }
-        updateUi()
+        saveLastRealLocation(location)
+        setLocation(location)
     }
 
     private fun handlePermissionDenied() {
         setFallback()
-        notify(activity.getString(R.string.location_forbidden))
-        updateUi()
+        suggestAction(
+            activity.getString(R.string.location_forbidden),
+            activity.getString(R.string.location_permisions_concede),
+        ) {
+            openSystemPermissionsSettings()
+        }
     }
 
     private fun handleDeviceLocationError(exception: Exception) {
         setFallback()
         log("Obtaining location: ${exception.message}")
         notify(activity.getString(R.string.location_error))
-        updateUi()
+    }
+
+    private fun handleLocationDisabled() {
+        setFallback()
+        suggestAction(
+            activity.getString(R.string.location_deactivated),
+            activity.getString(R.string.location_activate),
+        ) {
+            openLocationSettings()
+        }
     }
 
     private fun updateDescription() {
@@ -211,5 +227,31 @@ class LocationService(
         location.latitude = java.lang.Double.longBitsToDouble(latBits)
         location.longitude = java.lang.Double.longBitsToDouble(lngBits)
         return location
+    }
+
+    fun isLocationEnabled(): Boolean {
+        val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return (
+            locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+            locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        )
+    }
+
+    private fun openSystemPermissionsSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", activity.packageName, null)
+        }
+        activity.startActivity(intent)
+    }
+
+    private fun openLocationSettings() {
+        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        if (intent.resolveActivity(activity.packageManager) != null) {
+            activity.startActivity(intent)
+        } else {
+            // Si no es pot obrir la configuració de localització, obre la configuració general
+            val settingsIntent = Intent(Settings.ACTION_SETTINGS)
+            activity.startActivity(settingsIntent)
+        }
     }
 }

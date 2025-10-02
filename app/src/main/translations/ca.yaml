@@ -2,6 +2,7 @@ language_code: ca
 language_name: Català
 app_name: Carburoid
 menu_settings: Configuració
+settings_category_language_apperance: Llengua i aparença
 settings_language_title: Llengua
 settings_language_summary: Canvia la llengua de l'aplicació
 language_system_default: Sistema
@@ -9,20 +10,21 @@ settings_theme: Tema
 theme_light: Clar
 theme_dark: Fosc
 theme_system: Automàtic (El del sistema)
-settings_filter_expensive: Oculta estacions cares i llunyanes
-settings_filter_expensive_summary: No mostris estacions si n'hi ha de més properes o barates. (Recomanat)
+settings_category_station_filters: Filtrat de benzineres
+settings_filter_expensive: Oculta les cares i llunyanes
+settings_filter_expensive_summary: No les mostris si n'hi ha de més properes o barates. (Recomanat)
 settings_filter_non_public: Només preus públics
 settings_filter_non_public_summary: Oculta preus que demanin afiliació.
-settings_filter_closed: Mostra estacions tancades
+settings_filter_closed: Mostra tancades si obren
 settings_filter_closed_summary: Establir un marge de temps per estacions que obriran aviat
 settings_filter_closed_tolerance_none: Sense marge, oculta sempre
-settings_filter_closed_tolerance_half_hour: Mitja hora
-settings_filter_closed_tolerance_one_hour: Una hora
-settings_filter_closed_tolerance_two_hours: Dues hores
-settings_filter_closed_tolerance_twelve_hours: Mig dia
-settings_filter_closed_tolerance_one_day: Un dia
+settings_filter_closed_tolerance_half_hour: En mitja hora
+settings_filter_closed_tolerance_one_hour: En una hora
+settings_filter_closed_tolerance_two_hours: En dues hores
+settings_filter_closed_tolerance_twelve_hours: En mig dia
+settings_filter_closed_tolerance_one_day: En un dia
 settings_filter_closed_tolerance_never: Mostra sempre
-no_gas_stations: No han estat trobades estacions de servei amb l'actual criteri
+no_gas_stations: No s'han trobat benzineres coincidents
 product_selector_hint: Producte
 product_selector_icon_description: Selector de producte
 price_not_public: ✱ Preu condicionat
@@ -44,6 +46,9 @@ station_status_247: Obert 24h
 location_not_available: Ubicació no detectada; fent servir Madrid.
 location_error: S'ha produit un error en obtindre la ubicació; fent servir Madrid.
 location_forbidden: No s'ha donat permisos per obtindre la ubicació; fent servir Madrid.
+location_deactivated: La ubicació està desactivada
+location_activate: Activa
+location_permisions_concede: Permet
 refreshing_data: S'estan actualitzant les dades…
 failed_download: "Ha fallat la descarrega de dades: %s"
 open_in_maps: Obre al mapa

@@ -2,6 +2,7 @@ language_code: es
 language_name: Español
 app_name: Carburoid
 menu_settings: Ajustes
+settings_category_language_apperance: Idioma y apariencia
 settings_language_title: Idioma
 settings_language_summary: Canvia el idioma de la aplicación
 language_system_default: Sistema
@@ -22,7 +23,7 @@ settings_filter_closed_tolerance_two_hours: Dos hores
 settings_filter_closed_tolerance_twelve_hours: Medio dia
 settings_filter_closed_tolerance_one_day: Un dia
 settings_filter_closed_tolerance_never: Mstra sempre
-no_gas_stations: No se encontraron estaciones de servicio con el criterio actual
+no_gas_stations: No se encontraron gasolineras coincidentes
 product_selector_hint: Producto
 product_selector_icon_description: Selector de producto
 price_not_public: ✱ Precio condicionado
@@ -44,6 +45,9 @@ station_status_247: Abierto 24h
 location_not_available: No se detectó la ubicación; usando Madrid por defecto.
 location_error: Error detectando la ubicación; usando Madrid por defecto.
 location_forbidden: Denegado acceso a la ubicación; usando Madrid por defecto.
+location_deactivated: La ubicación está desactivada
+location_activate: Activa
+location_permisions_concede: Permite
 refreshing_data: Se estan actualitzando los datos…
 failed_download: "Ha fallado la descarga de datos: %s"
 open_in_maps: Abre en el mapa

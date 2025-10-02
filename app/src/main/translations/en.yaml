@@ -2,6 +2,7 @@ language_code: en
 language_name: English
 app_name: Carburoid
 menu_settings: Settings
+settings_category_language_apperance: Language and apperance
 settings_language_title: Language
 settings_language_summary: Change the app language
 language_system_default: System default
@@ -9,6 +10,7 @@ settings_theme: Theme
 theme_light: Light
 theme_dark: Dark
 theme_system: Auto (System Default)
+settings_category_station_filters: Station filters
 settings_filter_expensive: Hide expensive and further stations
 settings_filter_expensive_summary: Do not show an station if another nearer and cheaper exist. (Recommended)
 settings_filter_non_public: Show only public prices
@@ -41,9 +43,12 @@ station_status_opens_at: Opens %s
 station_status_closes_at: Closes %s
 station_status_open: Open
 station_status_247: 24-7
-location_not_available: No location detected; using Madrid as default.
-location_error: Error detecting location; using Madrid as default.
-location_forbidden: Location access denied; using Madrid as default.
+location_not_available: Unable to get locations. Using fallback
+location_error: Error detecting location; using Madrid as default
+location_forbidden: Location access denied; using Madrid as default
+location_deactivated: Location is disabled
+location_activate: Enable
+location_permisions_concede: Allow
 refreshing_data: Refreshing data…
 failed_download: "Download failed: %s"
 open_in_maps: Open in a map
