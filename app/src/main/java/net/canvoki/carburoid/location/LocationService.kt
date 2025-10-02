@@ -53,6 +53,10 @@ class LocationService(
         refreshLocation()
     }
 
+    private fun tr(stringId: Int): String {
+        return activity.getString(stringId)
+    }
+
     fun refreshLocation() {
         if (!hasPermission()) {
             requestPermission()
@@ -130,7 +134,7 @@ class LocationService(
     private fun handleDeviceLocationSuccess(location: Location?) {
         if (location == null) {
             setFallback()
-            notify(activity.getString(R.string.location_not_available))
+            notify(tr(R.string.location_not_available))
             return
         }
         saveLastRealLocation(location)
@@ -140,8 +144,8 @@ class LocationService(
     private fun handlePermissionDenied() {
         setFallback()
         suggestAction(
-            activity.getString(R.string.location_forbidden),
-            activity.getString(R.string.location_permisions_concede),
+            tr(R.string.location_forbidden),
+            tr(R.string.location_permisions_concede),
         ) {
             openSystemPermissionsSettings()
         }
@@ -150,14 +154,14 @@ class LocationService(
     private fun handleDeviceLocationError(exception: Exception) {
         setFallback()
         log("Obtaining location: ${exception.message}")
-        notify(activity.getString(R.string.location_error))
+        notify(tr(R.string.location_error))
     }
 
     private fun handleLocationDisabled() {
         setFallback()
         suggestAction(
-            activity.getString(R.string.location_deactivated),
-            activity.getString(R.string.location_activate),
+            tr(R.string.location_deactivated),
+            tr(R.string.location_activate),
         ) {
             openLocationSettings()
         }
