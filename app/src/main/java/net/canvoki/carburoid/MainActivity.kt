@@ -114,6 +114,8 @@ class MainActivity : AppCompatActivity() {
                 loadGasStations()
             }
         }
+
+        locationService.refreshLocation()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -49,10 +49,6 @@ class LocationService(
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
     }
 
-    init {
-        refreshLocation()
-    }
-
     private fun tr(stringId: Int): String {
         return activity.getString(stringId)
     }
