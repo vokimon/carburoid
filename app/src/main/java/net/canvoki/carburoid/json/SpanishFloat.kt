@@ -11,7 +11,6 @@ fun fromSpanishFloat(value: String?): Double? {
     return value?.replace(',', '.')?.toDoubleOrNull()
 }
 
-
 class SpanishFloatTypeAdapter : TypeAdapter<Double?>() {
     override fun read(reader: JsonReader): Double? {
         return try {

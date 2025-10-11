@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceFragmentCompat
 import net.canvoki.carburoid.algorithms.FilterSettings
-import net.canvoki.carburoid.ui.settings.ThemeSettings
 import net.canvoki.carburoid.ui.settings.LanguageSettings
+import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

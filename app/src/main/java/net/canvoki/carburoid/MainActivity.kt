@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -70,7 +69,8 @@ class MainActivity : AppCompatActivity() {
         showEmpty(getString(R.string.no_gas_stations))
 
         var locationSelector = findViewById<LocationSelector>(R.id.location_selector)
-        locationService = LocationService(this,
+        locationService = LocationService(
+            this,
             notify = ::showToast,
             suggestAction = ::suggestAction,
             updateUi = {
@@ -132,7 +132,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
@@ -153,17 +152,17 @@ class MainActivity : AppCompatActivity() {
         val snackbar = Snackbar.make(
             findViewById<ViewGroup>(android.R.id.content),
             message,
-            Snackbar.LENGTH_LONG
+            Snackbar.LENGTH_LONG,
         )
         snackbar.show()
     }
 
-    private fun suggestAction(message: String, actionText: String, action: ()->Unit ) {
+    private fun suggestAction(message: String, actionText: String, action: () -> Unit) {
         log(message)
         val snackbar = Snackbar.make(
             findViewById<ViewGroup>(android.R.id.content),
             message,
-            Snackbar.LENGTH_LONG
+            Snackbar.LENGTH_LONG,
         ).setAction(actionText) {
             action()
         }

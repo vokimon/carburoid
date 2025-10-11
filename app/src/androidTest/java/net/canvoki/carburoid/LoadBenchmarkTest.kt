@@ -1,12 +1,10 @@
 package net.canvoki.carburoid
 
+import net.canvoki.carburoid.model.GasStationResponse
 import org.junit.Test
 import java.io.File
 import java.time.Instant
-import java.time.format.DateTimeFormatter
-import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.log as println
-import net.canvoki.carburoid.R
 
 class LoadBenchmarkTest {
 
@@ -26,7 +24,7 @@ class LoadBenchmarkTest {
             val endTime = System.currentTimeMillis()
             size = response?.stations?.size ?: 0
             times.add(endTime - startTime)
-            println("Iteration $it: ${endTime - startTime}ms, stations: ${size}")
+            println("Iteration $it: ${endTime - startTime}ms, stations: $size")
         }
 
         val avgTime = times.average()
@@ -37,7 +35,7 @@ class LoadBenchmarkTest {
         println("  Average: ${avgTime}ms")
         println("  Min: ${minTime}ms")
         println("  Max: ${maxTime}ms")
-        println("  Stations: ${size}")
+        println("  Stations: $size")
 
         // Escriu els resultats a un fitxer
 

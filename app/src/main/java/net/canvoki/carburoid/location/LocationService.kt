@@ -1,37 +1,36 @@
 package net.canvoki.carburoid.location
 
+import android.Manifest
 import android.app.Activity
-import android.content.Intent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
-import android.Manifest
 import android.net.Uri
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import net.canvoki.carburoid.distances.CurrentDistancePolicy
-import net.canvoki.carburoid.distances.DistanceFromAddress
-import net.canvoki.carburoid.distances.DistanceFromCurrentPosition
-import net.canvoki.carburoid.log
-import net.canvoki.carburoid.timeit
-import net.canvoki.carburoid.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import android.location.Geocoder
+import net.canvoki.carburoid.R
+import net.canvoki.carburoid.distances.CurrentDistancePolicy
+import net.canvoki.carburoid.distances.DistanceFromAddress
+import net.canvoki.carburoid.log
+import net.canvoki.carburoid.timeit
 import java.util.Locale
 
 class LocationService(
     private val activity: Activity,
     private val notify: (String) -> Unit,
-    private val suggestAction: (String, String, ()->Unit) -> Unit,
+    private val suggestAction: (String, String, () -> Unit) -> Unit,
     private val updateUi: () -> Unit,
 ) : CoroutineScope by MainScope() {
     private val fusedLocationClient: FusedLocationProviderClient =
@@ -185,10 +184,10 @@ class LocationService(
             }
 
             try {
-                timeit("GEOCODING ${location}") {
+                timeit("GEOCODING $location") {
                     val geocoder = Geocoder(activity, Locale.getDefault())
                     val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                    if (addresses == null || addresses.isEmpty()){
+                    if (addresses == null || addresses.isEmpty()) {
                         null
                     } else {
                         val address = addresses[0]
@@ -197,7 +196,7 @@ class LocationService(
                             address.subThoroughfare,
                             address.locality,
                             address.adminArea,
-                            address.countryName
+                            address.countryName,
                         ).filter { it?.isNotBlank() == true }.joinToString(", ")
                     }
                 }

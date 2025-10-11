@@ -2,7 +2,6 @@ package net.canvoki.carburoid.model
 
 import net.canvoki.carburoid.product.ProductManager
 import org.junit.After
-import org.junit.Ignore
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -217,7 +216,7 @@ class GasStationTest {
             latitude = 40.4168,
             longitude = -3.7038,
             isPublicPrice = true,
-            prices = mapOf("Gasolina 95" to 1.234)
+            prices = mapOf("Gasolina 95" to 1.234),
         )
 
         val json = gasStation.toJson()
@@ -237,7 +236,7 @@ class GasStationTest {
             latitude = null,
             longitude = null,
             isPublicPrice = false, // Not null
-            prices = mapOf("Gasolina 95" to null)
+            prices = mapOf("Gasolina 95" to null),
         )
 
         val json = gasStation.toJson()
@@ -257,7 +256,7 @@ class GasStationTest {
             latitude = 40.4168,
             longitude = -3.7038,
             isPublicPrice = true,
-            prices = mapOf("Gasolina 95" to 1.234)
+            prices = mapOf("Gasolina 95" to 1.234),
         )
 
         val json = originalStation.toJson()
@@ -269,5 +268,4 @@ class GasStationTest {
         assertEquals(originalStation.longitude, deserializedStation.longitude)
         assertEquals(originalStation.prices, deserializedStation.prices)
     }
-
 }

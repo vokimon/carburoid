@@ -1,21 +1,15 @@
 package net.canvoki.carburoid.ui.settings
 
 import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import android.content.res.Resources
 import android.content.res.Configuration
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
-import java.util.Locale
 import net.canvoki.carburoid.R
-import net.canvoki.carburoid.log
-
-
+import java.util.Locale
 
 object LanguageSettings {
     private const val KEY = "app_language"
@@ -25,7 +19,7 @@ object LanguageSettings {
 
     data class LanguageOption(
         val code: String,
-        val name: String  // Nom en el seu propi idioma
+        val name: String, // Nom en el seu propi idioma
     )
 
     fun initializeLanguage(context: Context) {
@@ -56,7 +50,7 @@ object LanguageSettings {
 
     private fun getAvailableLanguages(context: Context): List<LanguageOption> {
         val availableLanguages = availableLanguagesCache
-        if (availableLanguages!= null) {
+        if (availableLanguages != null) {
             return availableLanguages
         }
 
@@ -134,5 +128,4 @@ object LanguageSettings {
     fun getApplicationLanguage(): String {
         return Locale.getDefault().language
     }
-
 }

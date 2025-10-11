@@ -4,16 +4,15 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
-import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
 
 class LocationSelector @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val textInputLayout: TextInputLayout
@@ -39,7 +38,7 @@ class LocationSelector @JvmOverloads constructor(
 
     fun setLocationDescription(description: String) {
         textInputEditText.setText(description)
-        log("Updating description to ${description}")
+        log("Updating description to $description")
     }
 
     fun setOnEditClickListener(listener: () -> Unit) {
