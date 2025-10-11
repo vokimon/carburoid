@@ -16,7 +16,8 @@ Features:
 - Translations to Spanish, Catalan, Aragonese and more to come
 - Dark and Light themes
 
-<img width="20%" alt="Gas station list" src="media/01-gas-station-list-dark.png" />
-<img width="20%" alt="Gas station details" src="media/02-gas-station-detail.png" />
-<img width="20%" alt="Settings" src="media/03-settings.png" />
+<img width="20%" alt="Gas station list (dark theme)" src="media/01-gas-station-list-dark.png" />
+<img width="20%" alt="Gas station list (light theme)" src="media/02-gas-station-list-light.png" />
+<img width="20%" alt="Gas station details" src="media/03-gas-station-detail.png" />
+<img width="20%" alt="Settings" src="media/04-settings.png" />
 
