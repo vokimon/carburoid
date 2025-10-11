@@ -19,6 +19,12 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    bundle {
+        language {
+            // Because user may change the language, all should be present
+            enableSplit = false
+        }
+    }
 
     buildTypes {
         release {
