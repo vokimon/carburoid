@@ -18,3 +18,8 @@ run ./gradlew assembleDebug &&
 # adb shell cmd uimode night no
 # adb shell cmd uimode night yes
 # ./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=net.canvoki.carburoid.LoadBenchmarkTest
+
+# Generate the launcher icon
+# curl https://material-icons.github.io/material-icons/svg/local_gas_station/baseline.svg > launcher_icon.svg
+# python ../android-scripts/app-icon-generator.py launcher_icon.svg --out app/src/main/res/
+
