@@ -28,7 +28,7 @@ no_gas_stations: No s'han trobau estacions de servicio con l'actual criterio
 product_selector_hint: Producto
 product_selector_icon_description: Selector de producto
 location_selector_hint: Ubicación
-location_selector_locate_device: 
+location_selector_locate_device: Ubica o dispositivo
 price_not_public: ✱ Preu condicionau
 detail_location: Ubicación
 detail_opening_hours: Horario de servicio
