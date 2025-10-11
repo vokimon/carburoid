@@ -44,7 +44,7 @@ station_status_closed: Closed
 station_status_opens_at: Opens %s
 station_status_closes_at: Closes %s
 station_status_open: Open
-station_status_247: 24-7
+station_status_247: 24/7
 location_not_available: No location data detected
 location_error: Error detecting location
 location_forbidden: Location access denied

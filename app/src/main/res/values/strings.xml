@@ -46,7 +46,7 @@
     <string name="station_status_opens_at">Opens %s</string>
     <string name="station_status_closes_at">Closes %s</string>
     <string name="station_status_open">Open</string>
-    <string name="station_status_247">24-7</string>
+    <string name="station_status_247">24/7</string>
     <string name="location_not_available">No location data detected</string>
     <string name="location_error">Error detecting location</string>
     <string name="location_forbidden">Location access denied</string>
