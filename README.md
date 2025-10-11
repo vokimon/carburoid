@@ -1,8 +1,8 @@
 # Carburoid
 
-Search Gas Stations in Spain
+Search Spanish Gas Stations
 
-Find the nearest and cheaper gas stations in Spain using your Android device.
+Find the nearest and cheaper Spanish gas stations with your Android device.
 
 Features:
 
@@ -13,7 +13,9 @@ Features:
 - Configuration to disable any of the previous settings
 - Station details page
 - Open a station in your chosen map application
-- Translations to Spanish, Catalan and more to come
+- Translations to Spanish, Catalan, Aragonese and more to come
 - Dark and Light themes
 
-
+![Gas station list](media/01-gas-station-list-dark.png)
+![Gas station details](media/02-gas-station-detail.png)
+![Settings](media/03-settings.png)
