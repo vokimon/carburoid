@@ -1,3 +1,7 @@
+[![CI Status](https://github.com/vokimon/carburoid/actions/workflows/main.yaml/badge.svg)](https://github.com/vokimon/carburoid/actions/workflows/main.yaml)
+<!--[![Last Release](https://img.shields.io/github/release/vokimon/carburoid.svg?logo=github)](https://github.com/vokimon/carburoid/releases/latest)-->
+<!--[![Get it on F-Droid](https://img.shields.io/f-droid/v/net.canvoki.carburoid.svg?logo=F-Droid)](https://f-droid.org/packages/net.canvoki.carburoid)-->
+
 # Carburoid
 
 Search Spanish Gas Stations
