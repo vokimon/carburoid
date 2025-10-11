@@ -30,6 +30,7 @@
     <string name="product_selector_hint">Producto</string>
     <string name="product_selector_icon_description">Selector de producto</string>
     <string name="location_selector_hint">Ubicación</string>
+    <string name="location_selector_locate_device">Ubica o dispositivo</string>
     <string name="price_not_public">✱ Preu condicionau</string>
     <string name="detail_location">Ubicación</string>
     <string name="detail_opening_hours">Horario de servicio</string>
