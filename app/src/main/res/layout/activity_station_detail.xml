@@ -119,7 +119,7 @@
                 android:layout_marginEnd="8dp"
                 android:contentDescription="@string/open_in_maps"
                 android:src="@drawable/ic_location_on"
-                android:tint="?attr/colorPrimary" />
+                app:tint="?attr/colorPrimary" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -151,7 +151,7 @@
                 android:src="@drawable/ic_arrow_outward"
                 android:contentDescription="@string/open_in_maps"
                 android:layout_marginStart="8dp"
-                android:tint="?attr/colorPrimary" />
+                app:tint="?attr/colorPrimary" />
 
         </LinearLayout>
 
@@ -180,7 +180,7 @@
                 android:src="@drawable/ic_schedule"
                 android:contentDescription="@string/open_in_maps"
                 android:layout_marginEnd="8dp"
-                android:tint="?attr/colorPrimary" />
+                app:tint="?attr/colorPrimary" />
 
             <TextView
                 android:id="@+id/text_opening_hours"
