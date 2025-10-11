@@ -27,6 +27,7 @@ import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.ui.StationDetailActivity
+import net.canvoki.carburoid.ui.settings.LanguageSettings
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,9 +46,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var swipeRefreshLayout: androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     private lateinit var gasStationAdapter: GasStationAdapter
 
+    private var language: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         log("onCreate")
         super.onCreate(savedInstanceState)
+
+        LanguageSettings.initializeLanguage(this)
+        language = LanguageSettings.getApplicationLanguage()
         setContentView(R.layout.activity_main)
 
         recyclerView = findViewById(R.id.recycler_view)
@@ -117,6 +123,15 @@ class MainActivity : AppCompatActivity() {
 
         locationService.refreshLocation()
     }
+
+    override fun onResume() {
+        super.onResume()
+        val configuredLanguage = LanguageSettings.getApplicationLanguage()
+        if (language != configuredLanguage) {
+            recreate()
+        }
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
