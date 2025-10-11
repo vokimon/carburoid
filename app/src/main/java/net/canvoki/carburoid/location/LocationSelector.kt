@@ -23,17 +23,6 @@ class LocationSelector @JvmOverloads constructor(
 
         textInputLayout = findViewById(R.id.text_input_layout)
         textInputEditText = findViewById(R.id.text_input_edit_text)
-
-        setupView()
-    }
-
-    private fun setupView() {
-        textInputLayout.setHint(R.string.location_selector_hint)
-        textInputLayout.setStartIconDrawable(R.drawable.ic_my_location)
-        textInputLayout.setStartIconContentDescription(R.string.location_selector_locate_device)
-        textInputLayout.endIconMode = TextInputLayout.END_ICON_CUSTOM
-        textInputLayout.setEndIconDrawable(R.drawable.ic_edit)
-        textInputLayout.setEndIconContentDescription(R.string.location_selector_locate_device)
     }
 
     fun setLocationDescription(description: String) {
