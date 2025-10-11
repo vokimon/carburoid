@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Grup: Filtratge -->
+
+    <!-- Group: Language Appearance -->
     <PreferenceCategory
-        android:title="@string/settings_category_language_apperance"
+        android:title="@string/settings_category_language_appearance"
         android:key="category_filtering">
 
         <ListPreference
@@ -21,6 +22,7 @@
 
     </PreferenceCategory>
 
+    <!-- Group: Station Filtering -->
     <PreferenceCategory
         android:title="@string/settings_category_station_filters"
         android:key="category_filtering">

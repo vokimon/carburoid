@@ -4,7 +4,7 @@
     <string name="language_name">Aragonés</string>
     <string name="app_name">Carburoid</string>
     <string name="menu_settings">Configuración</string>
-    <string name="settings_category_language_apperance">Luenga y apariencia</string>
+    <string name="settings_category_language_appearance">Luenga y apariencia</string>
     <string name="settings_language_title">Idioma</string>
     <string name="settings_language_summary">Cambia l\'idioma de l\'aplicación</string>
     <string name="language_system_default">Sistema</string>

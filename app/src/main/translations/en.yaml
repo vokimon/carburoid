@@ -2,7 +2,7 @@ language_code: en
 language_name: English
 app_name: Carburoid
 menu_settings: Settings
-settings_category_language_apperance: Language and apperance
+settings_category_language_appearance: Language and appearance
 settings_language_title: Language
 settings_language_summary: Change the app language
 language_system_default: System default
