@@ -9,13 +9,17 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Carburoid"
         tools:targetApi="31">
 
+        <!-- Android 12+ themed icon declaration -->
+        <meta-data
+            android:name="android.graphics.drawable.themedIcon"
+            android:resource="@mipmap/ic_launcher_themed" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
