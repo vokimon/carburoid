@@ -1,10 +1,11 @@
+import tasks.YamlToAndroidStringsTask
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
 
-apply from: 'yaml-translations.gradle'
-
+//apply from: 'yaml-translations.gradle'
 
 android {
     namespace = 'net.canvoki.carburoid'
@@ -55,6 +56,7 @@ android {
         }
     }
 }
+
 tasks.withType(Test) {
     testLogging {
         events "failed", "skipped"//, "standardOut", "standardError", "passed", "started" 
@@ -65,6 +67,20 @@ tasks.withType(Test) {
         showStackTraces = true
     }
 }
+
+tasks.register("yamlToAndroidStrings") {
+    group = "build"
+    description = "Generates strings.xml files from YAML translations"
+
+    doLast {
+        def yamlDir = file("$projectDir/src/main/translations")
+        def resDir = file("$projectDir/src/main/res")
+        YamlToAndroidStringsTask.INSTANCE.run(yamlDir, resDir)
+    }
+}
+preBuild.dependsOn("yamlToAndroidStrings")
+
+
 dependencies {
     implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'androidx.appcompat:appcompat:1.7.1'
@@ -92,3 +108,4 @@ dependencies {
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:latest"
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test:1.9.24"
 }
+
