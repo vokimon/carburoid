@@ -1,5 +1,6 @@
 package net.canvoki.carburoid.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +30,7 @@ class GasStationAdapter(
 
     fun updateData(newData: List<GasStation>) {
         stations = newData
+        @SuppressLint("NotifyDataSetChanged") // We updated the whole list
         notifyDataSetChanged() // Rebind all items
     }
 
