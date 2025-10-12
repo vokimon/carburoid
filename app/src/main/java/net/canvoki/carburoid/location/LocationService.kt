@@ -1,6 +1,6 @@
 package net.canvoki.carburoid.location
 
-import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
+import android.Manifest
 import android.net.Uri
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
@@ -118,6 +119,8 @@ class LocationService(
             setFallback()
             return
         }
+        // Linter is unable to see that we are checking in hasPermission
+        @SuppressLint("MissingPermission")
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
                 handleDeviceLocationSuccess(location)
