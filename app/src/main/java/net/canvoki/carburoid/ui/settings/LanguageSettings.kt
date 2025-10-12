@@ -70,7 +70,7 @@ object LanguageSettings {
     }
 
     private fun createLocalizedContext(context: Context, languageCode: String): Context {
-        val locale = Locale(languageCode)
+        val locale = Locale.forLanguageTag(languageCode)
         val config = Configuration(context.resources.configuration)
         config.setLocale(locale)
 
@@ -104,7 +104,7 @@ object LanguageSettings {
     private fun setApplicationLanguage(languageCode: String): Locale {
         val locale = when (languageCode) {
             "system" -> getDeviceLocale()
-            else -> Locale(languageCode)
+            else -> Locale.forLanguageTag(languageCode)
         }
         Locale.setDefault(locale)
         return locale
