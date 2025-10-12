@@ -190,6 +190,7 @@ class LocationService(
             try {
                 timeit("GEOCODING $location") {
                     val geocoder = Geocoder(activity, Locale.getDefault())
+                    @Suppress("DEPRECATION")
                     val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
                     if (addresses == null || addresses.isEmpty()) {
                         null
