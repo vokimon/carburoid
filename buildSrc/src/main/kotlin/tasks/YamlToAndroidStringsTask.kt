@@ -27,11 +27,18 @@ fun escapeAndroidString(input: String): String {
 }
 
 fun extractParams(template: String): List<Pair<String, String>> {
-    val regex = "\\{([^}:]+)}".toRegex()
-    val match = regex.find(template)
-    val paramName = match?.groupValues?.get(1) ?: return emptyList()
-    return listOf(paramName to "s")
+    val regex = "\\{\\s*([^}:\\s]+)\\s*(?::\\s*([^}\\s]+)\\s*)?}".toRegex()
+    return regex.findAll(template).map { match ->
+        val paramName = match.groupValues[1].trim()
+        val format = match.groupValues.getOrNull(2)?.takeIf { it.isNotEmpty() } ?: "s"
+        paramName to format
+    }.toList()
 }
+
+fun parametersToXml(template: String, params: List<Pair<String, String>>): String {
+    return template.replace(Regex("""\{[^}]+\}"""), "%1\\\$s")
+}
+
 
 object YamlToAndroidStringsTask {
     private val defaultLanguage = "en"
