@@ -50,7 +50,7 @@ class OpeningHoursTest {
 
     @Test
     fun `toString uses neutral formatting regardless of system locale`() {
-        Locale.setDefault(Locale("ar")) // Arabic
+        Locale.setDefault(Locale.forLanguageTag("ar")) // Arabic serializes its own numbers
 
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)

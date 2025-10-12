@@ -1,17 +1,33 @@
 package net.canvoki.carburoid.model
 
+import java.util.Locale
 import net.canvoki.carburoid.product.ProductManager
 import org.junit.After
+import org.junit.Before
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class GasStationTest {
+
+    private lateinit var originalLocale: Locale
+
+    @Before
+    fun saveLocale() {
+        originalLocale = Locale.getDefault()
+        Locale.setDefault(Locale.ROOT)
+    }
+
+    @After
+    fun restoreLocale() {
+        Locale.setDefault(originalLocale)
+    }
 
     @Test
     fun `preprocessSpanishNumbers`() {
         assertEquals("23.323", preprocessSpanishNumbers("\"23,323\""))
     }
 
+    @Test
     fun `preprocessSpanishNumbers with negative numbers`() {
         assertEquals("-23.323", preprocessSpanishNumbers("\"-23,323\""))
     }
@@ -243,6 +259,27 @@ class GasStationTest {
 
         //println("JSON serialitzat: $json")
         assertEquals("""{"IDEESS":1234,"Tipo Venta":"R","Horario":"L-D: 24H","prices":{}}""", json)
+    }
+
+    @Test
+    fun `toJson with exotic locale, arab`() {
+        Locale.setDefault(Locale.forLanguageTag("ar")) // Arabic serializes its own numbers
+        val gasStation = GasStation(
+            id = 1234,
+            name = "Test Station",
+            address = "Calle Principal 123",
+            city = "Madrid",
+            state = "Madrid",
+            latitude = 40.4168,
+            longitude = -3.7038,
+            isPublicPrice = true,
+            prices = mapOf("Gasolina 95" to 1.234),
+        )
+
+        val json = gasStation.toJson()
+
+        //println("JSON serialitzat: $json")
+        assertEquals("""{"IDEESS":1234,"Rótulo":"Test Station","Dirección":"Calle Principal 123","Localidad":"Madrid","Provincia":"Madrid","Latitud":"40,4168","Longitud (WGS84)":"-3,7038","Tipo Venta":"P","Horario":"L-D: 24H","prices":{"Gasolina 95":1.234},"Precio Gasolina 95":"1,234"}""", json)
     }
 
     @Test
