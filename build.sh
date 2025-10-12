@@ -23,3 +23,5 @@ run ./gradlew assembleDebug &&
 # curl https://material-icons.github.io/material-icons/svg/local_gas_station/baseline.svg > launcher_icon.svg
 # python ../android-scripts/app-icon-generator.py launcher_icon.svg --out app/src/main/res/
 
+# Change gradle version
+# ./gradlew wrapper --gradle-version=8.14.3 --distribution-type=all
