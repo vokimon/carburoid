@@ -3,15 +3,31 @@ package net.canvoki.carburoid.model
 import net.canvoki.carburoid.test.madridInstant
 import org.junit.Ignore
 import org.junit.Test
+import org.junit.Before
+import org.junit.After
 import java.io.File
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalTime
 import java.time.ZoneId
+import java.util.Locale
 import kotlin.test.assertEquals
 import kotlin.test.fail
 
 class OpeningHoursTest {
+
+    private lateinit var originalLocale: Locale
+
+    @Before
+    fun saveLocale() {
+        originalLocale = Locale.getDefault()
+        Locale.setDefault(Locale.ROOT)
+    }
+
+    @After
+    fun restoreLocale() {
+        Locale.setDefault(originalLocale)
+    }
 
     @Test
     fun `toString for no range`() {
@@ -24,6 +40,18 @@ class OpeningHoursTest {
 
     @Test
     fun `toString for single day single range`() {
+        val openingHours = OpeningHours()
+        openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)
+
+        val result = openingHours.toString()
+
+        assertEquals("L: 08:00-13:30", result)
+    }
+
+    @Test
+    fun `toString uses neutral formatting regardless of system locale`() {
+        Locale.setDefault(Locale("ar")) // Arabic
+
         val openingHours = OpeningHours()
         openingHours.add(DayOfWeek.MONDAY, 8, 0, 13, 30)
 

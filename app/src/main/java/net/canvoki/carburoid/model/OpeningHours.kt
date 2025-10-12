@@ -9,6 +9,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
+import java.util.Locale
 
 val END_OF_DAY = LocalTime.of(23, 59)
 typealias TimeSpec = Pair<Int, Int>
@@ -246,7 +247,7 @@ class OpeningHours() {
     }
 
     private fun formatTime(time: LocalTime): String {
-        return String.format("%02d:%02d", time.hour, time.minute)
+        return String.format(Locale.ROOT, "%02d:%02d", time.hour, time.minute)
     }
 
     private fun spanishWeekDayShort(day: DayOfWeek): String = when (day) {
