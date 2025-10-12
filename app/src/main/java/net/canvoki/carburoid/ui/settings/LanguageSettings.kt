@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
@@ -93,7 +94,9 @@ object LanguageSettings {
 
     private fun setLanguagePreference(context: Context, languageCode: String) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        prefs.edit().putString(KEY, languageCode).apply()
+        prefs.edit {
+            putString(KEY, languageCode)
+        }
     }
 
     private fun getLanguagePreference(context: Context): String {

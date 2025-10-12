@@ -7,6 +7,7 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.databinding.ActivityStationDetailBinding
@@ -60,7 +61,7 @@ class StationDetailActivity : AppCompatActivity() {
         binding.textCityState.text = "${station.city}, ${station.state}"
 
         binding.layoutAddressMap.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:${station?.latitude},${station?.longitude}"))
+            val intent = Intent(Intent.ACTION_VIEW, "geo:${station?.latitude},${station?.longitude}".toUri())
             startActivity(intent)
         }
 

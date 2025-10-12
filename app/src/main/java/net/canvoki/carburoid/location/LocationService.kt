@@ -12,6 +12,7 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
@@ -208,10 +209,10 @@ class LocationService(
     }
 
     private fun saveLastRealLocation(location: Location) {
-        prefs.edit()
-            .putLong("last_lat", java.lang.Double.doubleToRawLongBits(location.latitude))
-            .putLong("last_lng", java.lang.Double.doubleToRawLongBits(location.longitude))
-            .apply()
+        prefs.edit {
+            putLong("last_lat", java.lang.Double.doubleToRawLongBits(location.latitude))
+            putLong("last_lng", java.lang.Double.doubleToRawLongBits(location.longitude))
+        }
     }
 
     private fun getSavedLocation(): Location? {

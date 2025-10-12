@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.util.AttributeSet
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
+import androidx.core.content.edit
 
 class ProductSelector @JvmOverloads constructor(
     context: Context,
@@ -75,7 +76,9 @@ class ProductSelector @JvmOverloads constructor(
     }
 
     private fun saveLastSelectedProduct(product: String) {
-        preferences().edit().putString(PREF_LAST_SELECTED, product).apply()
+        preferences().edit {
+            putString(PREF_LAST_SELECTED, product)
+        }
     }
 
     private fun loadLastSelectedProduct(): String {

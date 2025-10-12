@@ -3,6 +3,7 @@ package net.canvoki.carburoid.ui.settings
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
@@ -47,7 +48,9 @@ object ThemeSettings {
 
     private fun setCurrentValue(context: Context, value: String) {
         val prefs = preferences(context)
-        prefs.edit().putString(KEY, value).apply()
+        prefs.edit {
+            putString(KEY, value)
+        }
     }
 
     private fun saveAndApplyTheme(context: Context, mode: String) {
