@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="16dp"
@@ -24,6 +25,7 @@
         android:ellipsize="end"
         android:textStyle="bold"
         android:textColor="?attr/colorOnBackground"
+        tools:ignore="HardcodedText"
         android:text="Station Name Example" />
 
     <!-- Address -->
@@ -40,6 +42,7 @@
         style="@style/TextAppearance.Material3.BodySmall"
         android:textStyle="italic"
         android:textColor="?attr/colorOutline"
+        tools:ignore="HardcodedText"
         android:text="123 Example St." />
 
     <!-- Location (City - State) -->
@@ -55,6 +58,7 @@
         android:ellipsize="end"
         style="@style/TextAppearance.Material3.BodyMedium"
         android:textColor="?attr/colorSecondary"
+        tools:ignore="HardcodedText"
         android:text="City, State" />
 
     <!-- Right-side Container for Price + Distance -->
@@ -77,6 +81,7 @@
             style="@style/TextAppearance.Material3.HeadlineMedium"
             android:textColor="?attr/colorError"
             android:textStyle="bold"
+            tools:ignore="HardcodedText"
             android:text="1,529 €" />
 
         <!-- Distance -->
@@ -87,6 +92,7 @@
             android:gravity="end"
             style="@style/TextAppearance.Material3.BodyMedium"
             android:textColor="?attr/colorPrimary"
+            tools:ignore="HardcodedText"
             android:text="3,2 km" />
 
         <!-- Opening status -->
@@ -99,6 +105,7 @@
             android:layout_marginBottom="4dp"
             style="@style/TextAppearance.Material3.LabelSmall"
             android:textColor="?attr/colorOnBackground"
+            tools:ignore="HardcodedText"
             android:text="OPEN until 13:30" />
 
     </LinearLayout>

@@ -2,6 +2,7 @@
 <com.google.android.material.textfield.TextInputLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/text_input_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -19,6 +20,7 @@
         android:layout_height="wrap_content"
         android:inputType="none"
         android:focusable="false"
+        tools:ignore="HardcodedText"
         android:text="(40.4168, -3.7038)" />
 
 </com.google.android.material.textfield.TextInputLayout>

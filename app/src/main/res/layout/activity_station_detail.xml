@@ -2,6 +2,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
@@ -21,6 +22,7 @@
             style="@style/TextAppearance.Material3.HeadlineLarge"
             android:textStyle="bold"
             android:textColor="?attr/colorOnBackground"
+            tools:ignore="HardcodedText"
             android:text="Station Name" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,6 +57,7 @@
                 style="@style/TextAppearance.Material3.DisplayLarge"
                 android:textColor="?attr/colorError"
                 android:textStyle="bold"
+                tools:ignore="HardcodedText"
                 android:text="1,529 €" />
 
             <TextView
@@ -68,6 +71,7 @@
                 android:gravity="bottom|end"
                 style="@style/TextAppearance.Material3.BodyMedium"
                 android:textColor="?attr/colorSecondary"
+                tools:ignore="HardcodedText"
                 android:text="Gasoleo A" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -81,6 +85,7 @@
             android:layout_gravity="end"
             style="@style/TextAppearance.Material3.BodyMedium"
             android:textColor="?attr/colorPrimary"
+            tools:ignore="HardcodedText"
             android:text="3,2 km" />
 
         <TextView
@@ -91,6 +96,7 @@
             android:layout_marginBottom="16dp"
             style="@style/TextAppearance.Material3.LabelLarge"
             android:textColor="?attr/colorSecondary"
+            tools:ignore="HardcodedText"
             android:text="Closes in 2 hours" />
 
 
@@ -133,6 +139,7 @@
                     android:layout_height="wrap_content"
                     style="@style/TextAppearance.Material3.BodyMedium"
                     android:textColor="?attr/colorOnBackground"
+                    tools:ignore="HardcodedText"
                     android:text="123 Example St." />
 
                 <TextView
@@ -141,6 +148,7 @@
                     android:layout_height="wrap_content"
                     style="@style/TextAppearance.Material3.BodyMedium"
                     android:textColor="?attr/colorSecondary"
+                    tools:ignore="HardcodedText"
                     android:text="Sant Joan Despí, BARCELONA" />
 
             </LinearLayout>
@@ -189,6 +197,7 @@
                 android:layout_width="0dp"
                 style="@style/TextAppearance.Material3.BodyMedium"
                 android:textColor="?attr/colorOnBackground"
+                tools:ignore="HardcodedText"
                 android:text="L-V: 08:00-13:30 y 15:30-20:00; S: 08:00-13:30"/>
 
         </LinearLayout>
