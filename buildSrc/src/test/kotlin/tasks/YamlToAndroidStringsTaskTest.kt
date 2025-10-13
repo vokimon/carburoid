@@ -107,13 +107,10 @@ class YamlToAndroidStringsTaskTest {
         val result = parametersToXml(template, params)
         assertEquals(expected, result, "Template: '$template'\nExpected: '$expected'\nActual: '$result'\n")
     }
-    private fun assertParametersToXmlOld(template: String, params: List<Pair<String, String>>, expected: String) {
-        assertParametersToXml(template, params.map {it.first}, expected)
-    }
 
     @Test
     fun `parametersToXml with no params returns original string`() {
-        assertParametersToXmlOld(
+        assertParametersToXml(
             template = "Just a plain string",
             params = emptyList(),
             expected = "Just a plain string"
@@ -122,27 +119,27 @@ class YamlToAndroidStringsTaskTest {
 
     @Test
     fun `parametersToXml replaces one param with numbered format`() {
-        assertParametersToXmlOld(
+        assertParametersToXml(
             template = "Hello {name}",
-            params = listOf("name" to "s"),
+            params = listOf("name"),
             expected = "Hello %1\$s"
         )
     }
 
     @Test
     fun `parametersToXml replaces other param with numbered format`() {
-        assertParametersToXmlOld(
+        assertParametersToXml(
             template = "Bye {user}",
-            params = listOf("user" to "s"),
+            params = listOf("user"),
             expected = "Bye %1\$s"
         )
     }
 
     @Test
     fun `parametersToXml with format spect, use that`() {
-        assertParametersToXmlOld(
+        assertParametersToXml(
             template = "Hello {user:d}",
-            params = listOf("user" to "d"),
+            params = listOf("user"),
             expected = "Hello %1\$d",
         )
     }
@@ -162,54 +159,54 @@ class YamlToAndroidStringsTaskTest {
 
     @Test
     fun `parametersToXml trims spaces before name`() {
-        assertParametersToXmlOld(
+        assertParametersToXml(
             template = "Hello { name}",
-            params = listOf("name" to "s"),
+            params = listOf("name"),
             expected = "Hello %1\$s"
         )
     }
 
     @Test
     fun `parametersToXml trims spaces after name`() {
-        assertParametersToXmlOld(
+        assertParametersToXml(
             template = "Hello {name }",
-            params = listOf("name" to "s"),
+            params = listOf("name"),
             expected = "Hello %1\$s"
         )
     }
 
     @Test
     fun `parametersToXml trims spaces around format spec`() {
-        assertParametersToXmlOld(
+        assertParametersToXml(
             template = "Hello {name : spec }",
-            params = listOf("name" to "spec"),
+            params = listOf("name"),
             expected = "Hello %1\$spec"
         )
     }
 
     @Test
     fun `parametersToXml replaces multiple params with numbered format`() {
-        assertParametersToXmlOld(
+        assertParametersToXml(
             template = "Hello {first}, you are {age:d} years old",
-            params = listOf("first" to "s", "age" to "d"),
+            params = listOf("first", "age"),
             expected = "Hello %1\$s, you are %2\$d years old"
         )
     }
 
     @Test
     fun `parametersToXml with escapped braces do not substitute`() {
-        assertParametersToXmlOld(
+        assertParametersToXml(
             template = "Hello {{name}}",
-            params = listOf("name" to "s"),
+            params = listOf("name"),
             expected = "Hello {name}"
         )
     }
 
     @Test
     fun `parametersToXml with triple braces takes inner`() {
-        assertParametersToXmlOld(
+        assertParametersToXml(
             template = "Hello {{{name}}}",
-            params = listOf("name" to "s"),
+            params = listOf("name"),
             expected = "Hello {%1\$s}"
         )
     }
