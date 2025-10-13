@@ -42,7 +42,7 @@ station_status_unknown: Itxita??
 station_status_permanently_closed: Behin betiko itxita
 station_status_closed: Itxita
 station_status_opens_at: '{when} irekitzen du'
-station_status_closes_at: Itxi {noiz}
+station_status_closes_at: Itxi {when}
 station_status_open: Irekia
 station_status_247: 24/7
 location_not_available: Ez da kokapen-daturik detektatu
