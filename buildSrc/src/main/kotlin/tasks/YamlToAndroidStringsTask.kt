@@ -53,6 +53,22 @@ fun parametersToXml(template: String, params: List<String>): String {
     }.replace("<escaped_open>", "{").replace("}}", "}")
 }
 
+fun parameterOrderFromYaml(yamlFile: File): Map<String, List<String>> {
+    val mapper = ObjectMapper(YAMLFactory())
+    val yamlContent = mapper.readValue(yamlFile, Map::class.java) as Map<*, *>
+
+    val result = mutableMapOf<String, List<String>>()
+
+    yamlContent.forEach { (key, value) ->
+        if (value is String) {
+            // Extract parameters for each string
+            val parameters = extractParams(value as String)
+            result[key as String] = parameters
+        }
+    }
+    return result
+}
+
 object YamlToAndroidStringsTask {
     private val defaultLanguage = "en"
 

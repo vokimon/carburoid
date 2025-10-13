@@ -211,6 +211,75 @@ class YamlToAndroidStringsTaskTest {
         )
     }
 
+    fun assertParameterOrderFromYaml(yamlContent: String, expected: Map<String, List<String>>) {
+        val yamlFile = createTempFile(suffix = ".yaml")
+        yamlFile.writeText(yamlContent)
+
+        val result = parameterOrderFromYaml(yamlFile)
+
+        assertEquals(expected, result)
+    }
+
+
+    @Test
+    fun `parameterOrderFromYaml single parameter`() {
+        assertParameterOrderFromYaml(
+            yamlContent = """
+                greeting: "Hello {name}"
+                """,
+            expected = mapOf("greeting" to listOf("name")),
+        )
+    }
+    @Test
+    fun `parameterOrderFromYaml multiple parameters`() {
+        assertParameterOrderFromYaml(
+            yamlContent = """
+                greeting: "Hello {name}, welcome to {place}"
+            """,
+            expected = mapOf("greeting" to listOf("name", "place")),
+        )
+    }
+    @Test
+    fun `parameterOrderFromYaml strings with no parameters`() {
+        assertParameterOrderFromYaml(
+            yamlContent = """
+                farewell: "Goodbye"
+            """,
+            expected = mapOf("farewell" to emptyList<String>()),
+        )
+    }
+    @Test
+    fun `parameterOrderFromYaml ignores escaped curly braces`() {
+        assertParameterOrderFromYaml(
+            yamlContent = """
+                info: "This is a {{escaped}} text."
+            """,
+            expected = mapOf("info" to emptyList<String>()),
+        )
+
+    }
+    @Test
+    fun `parameterOrderFromYaml ignores format specifiers`() {
+        val yamlContent = """
+        info: "This is a {param:number} text."
+        """
+        val expected = mapOf("info" to listOf("param"))
+
+        assertParameterOrderFromYaml(yamlContent, expected)
+    }
+    @Test
+    fun `parameterOrderFromYaml multiple texts`() {
+        assertParameterOrderFromYaml(
+            yamlContent = """
+                greeting: "Hello {name}, welcome to {place}"
+                farewell: "Bye {name}"
+            """,
+            expected = mapOf(
+                "greeting" to listOf("name", "place"),
+                "farewell" to listOf("name"),
+            ),
+        )
+    }
 
 }
 
