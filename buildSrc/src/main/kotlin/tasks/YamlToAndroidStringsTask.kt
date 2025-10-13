@@ -32,9 +32,10 @@ fun extractParams(template: String): List<String> {
     val tempTemplate = template.replace("{{", "<escaped_open>")
     val regex = "\\{([^}:]+)(?::([^}]+))?}".toRegex()
 
-    return regex.findAll(tempTemplate).map { match ->
-        match.groupValues[1].trim()
-    }.distinct().toList()
+    return regex.findAll(tempTemplate)
+        .map { it.groupValues[1].trim() }
+        .toSet()
+        .toList()
 }
 
 fun parametersToXml(template: String, params: List<String>): String {
