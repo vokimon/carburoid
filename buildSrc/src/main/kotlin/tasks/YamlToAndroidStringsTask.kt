@@ -34,7 +34,7 @@ fun extractParams(template: String): List<String> {
 
     return regex.findAll(tempTemplate)
         .map { it.groupValues[1].trim() }
-        .toSet()
+        .distinct()
         .toList()
 }
 
@@ -45,11 +45,11 @@ fun parametersToXml(template: String, params: List<String>): String {
     return regex.replace(tempTemplate) { match ->
         val paramName = match.groupValues[1].trim()
         val format = match.groupValues.getOrNull(2)?.trim()?.takeIf { it.isNotEmpty() } ?: "s"
-        val index = params.indexOfFirst { it == paramName } + 1
-        if (index <= 0) {
+        val index = params.indexOf(paramName)
+        if (index < 0) {
             throw MismatchedParamException(paramName)
         }
-        "%${index}\$${format}"
+        "%${index+1}\$${format}"
     }.replace("<escaped_open>", "{").replace("}}", "}")
 }
 
@@ -75,6 +75,8 @@ object YamlToAndroidStringsTask {
             buildString {
                 appendLine("""<?xml version="1.0" encoding="utf-8"?>""")
                 appendLine("<!-- AUTO-GENERATED FILE. DO NOT EDIT MANUALLY. -->")
+                appendLine("<!-- This file is generated automatically from YAML translations. -->")
+                appendLine("<!-- Any manual changes will be overwritten. -->")
                 appendLine("<resources>")
                 appendLine("    <string-array name=\"supported_language_codes\">")
                 languageCodes.forEach {
