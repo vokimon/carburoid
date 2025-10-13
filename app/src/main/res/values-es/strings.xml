@@ -42,7 +42,7 @@
     <string name="station_no_distance">\?? km</string>
     <string name="station_status_unknown">Cerrado\?\?</string>
     <string name="station_status_permanently_closed">Cerrado Permanentmente</string>
-    <string name="station_status_closed">Cerradp</string>
+    <string name="station_status_closed">Cerrado</string>
     <string name="station_status_opens_at">Abre %1$s</string>
     <string name="station_status_closes_at">Cierra %1$s</string>
     <string name="station_status_open">Abierto</string>

@@ -40,7 +40,7 @@ station_no_price: No disponible
 station_no_distance: ?? km
 station_status_unknown: Cerrado??
 station_status_permanently_closed: Cerrado Permanentmente
-station_status_closed: Cerradp
+station_status_closed: Cerrado
 station_status_opens_at: Abre {when}
 station_status_closes_at: Cierra {when}
 station_status_open: Abierto
