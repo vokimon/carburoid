@@ -1,1 +1,56 @@
-{}
+language_code: eu
+language_name: Ingelesa
+app_name: Carburoid
+menu_settings: Doikuntzak
+settings_category_language_appearance: Hizkuntza eta itxura
+settings_language_title: Hizkuntza
+settings_language_summary: Aplikazioaren hizkuntza aldatzeko
+language_system_default: Sistema lehenetsia
+settings_theme: Gaia
+theme_light: Argia
+theme_dark: Iluna
+theme_system: Auto (Sistema lehenetsia)
+settings_category_station_filters: Estazioko iragazkiak
+settings_filter_expensive: Ezkutatu geltoki garestiak eta urrunago
+settings_filter_expensive_summary: Ez erakutsi geltokirik hurbilago eta merkeago dagoen beste bat baldin badago. (Gomendatua)
+settings_filter_non_public: Prezio publikoak bakarrik erakutsi
+settings_filter_non_public_summary: Ezkutatu bazkidetza edo beste edozer eskatzen duten prezioak.
+settings_filter_closed: Erakutsi itxitako estazioak
+settings_filter_closed_summary: Ezarri denbora-tarte bat laster irekiko diren geltokietarako
+settings_filter_closed_tolerance_none: Marjinarik gabe, beti filtro
+settings_filter_closed_tolerance_half_hour: Ordu erdi
+settings_filter_closed_tolerance_one_hour: Ordubete
+settings_filter_closed_tolerance_two_hours: Bi ordu
+settings_filter_closed_tolerance_twelve_hours: Egun erdia
+settings_filter_closed_tolerance_one_day: Egun bat
+settings_filter_closed_tolerance_never: Erakutsi beti
+no_gas_stations: Ez dago bat datorren gasolindegirik
+product_selector_hint: Produktua
+product_selector_icon_description: Produktu-hautagailua
+location_selector_hint: Kokalekua
+location_selector_locate_device: Kokatu gailua
+price_not_public: ✱ Prezio baldintzatua
+detail_location: Kokalekua
+detail_opening_hours: Orduak
+detail_other_products: Beste produktu batzuk
+station_no_name: Izengabe
+station_no_address: Helbiderik ez
+station_no_city: Hiririk ez
+station_no_price: E/A
+station_no_distance: ?? km
+station_status_unknown: Itxita??
+station_status_permanently_closed: Behin betiko itxita
+station_status_closed: Itxita
+station_status_opens_at: '{when} irekitzen du'
+station_status_closes_at: Itxi {noiz}
+station_status_open: Irekia
+station_status_247: 24/7
+location_not_available: Ez da kokapen-daturik detektatu
+location_error: Errorea kokalekua detektatzean
+location_forbidden: Kokalekurako sarbidea ukatuta
+location_deactivated: Kokalekua desgaituta dago
+location_activate: Gaitu
+location_permisions_concede: Baimendu
+refreshing_data: Datuak eguneratzen…
+failed_download: 'Deskargak huts egin du: {error}'
+open_in_maps: Mapa batean ireki
