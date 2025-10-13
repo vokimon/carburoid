@@ -26,6 +26,8 @@ fun escapeAndroidString(input: String): String {
     return escaped
 }
 
+class MismatchedParamException(val paramName: String) : Exception("Parameter '$paramName' not found in provided params.")
+
 fun extractParams(template: String): List<Pair<String, String>> {
     val regex = "\\{\\s*([^}:\\s]+)\\s*(?::\\s*([^}\\s]+)\\s*)?}".toRegex()
     return regex.findAll(template).map { match ->
@@ -36,22 +38,17 @@ fun extractParams(template: String): List<Pair<String, String>> {
 }
 
 fun parametersToXml(template: String, params: List<Pair<String, String>>): String {
-    val regex = "\\{([^}:]+)(?::([^}]+))?}".toRegex()
+    //val regex = "\\{\\s*([^}:]+)(?::\\s*([^}]+))?}".toRegex()
+    val regex = "\\{([^}:]+)(?::([^}]+))?}".toRegex()  // Updated regex to allow spaces around format
 
     return regex.replace(template) { match ->
-        val paramName = match.groupValues[1]  // Extract the parameter name
-        val format = match.groupValues.getOrNull(2)?.takeIf { it.isNotEmpty() } ?: "s"  // Extract the format specifier, defaulting to 's'
-
-        // Find the index of the param in the provided params list
+        val paramName = match.groupValues[1].trim()
+        val format = match.groupValues.getOrNull(2)?.trim()?.takeIf { it.isNotEmpty() } ?: "s"
         val index = params.indexOfFirst { it.first == paramName } + 1
-
-        if (index > 0) {
-            // If the parameter exists, replace with the format specifier and index
-            "%${index}\$${format}"
-        } else {
-            // If not found, return the placeholder
-            "BULL***T"
+        if (index <= 0) {
+            throw MismatchedParamException(paramName)
         }
+        "%${index}\$${format}"
     }
 }
 

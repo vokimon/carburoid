@@ -3,6 +3,7 @@ package tasks
 import kotlin.test.Test
 import kotlin.test.Ignore
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.fail
 
 class YamlToAndroidStringsTaskTest {
@@ -117,7 +118,47 @@ class YamlToAndroidStringsTaskTest {
             expected = "Hello %1\$d",
         )
     }
-    
+
+    @Test
+    fun `parametersToXml with missing param throws MismatchedParamException`() {
+        val template = "Hello {second}"
+        val params = listOf("first" to "s") // Missing "second"
+
+        val exception = assertFailsWith<MismatchedParamException> {
+            parametersToXml(template, params)
+        }
+
+        assertEquals(exception.paramName, "second")
+    }
+
+
+    @Test
+    fun `parametersToXml trims spaces before name`() {
+        assertParametersToXml(
+            template = "Hello { name}",
+            params = listOf("name" to "s"),
+            expected = "Hello %1\$s"
+        )
+    }
+
+    @Test
+    fun `parametersToXml trims spaces after name`() {
+        assertParametersToXml(
+            template = "Hello {name }",
+            params = listOf("name" to "s"),
+            expected = "Hello %1\$s"
+        )
+    }
+
+    @Test
+    fun `parametersToXml trims spaces around format spec`() {
+        assertParametersToXml(
+            template = "Hello {name : spec }",
+            params = listOf("name" to "spec"),
+            expected = "Hello %1\$spec"
+        )
+    }
+
 
 }
 
