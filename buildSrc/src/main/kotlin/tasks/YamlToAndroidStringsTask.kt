@@ -9,6 +9,11 @@ import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.TaskAction
 
 typealias ParamList = List<String>
 typealias ParamCatalog = Map<String, ParamList>
@@ -80,8 +85,16 @@ fun parameterOrderFromYaml(yamlFile: File): ParamCatalog {
     return result
 }
 
-object YamlToAndroidStringsTask {
-    private val defaultLanguage = "en"
+open class YamlToAndroidStringsTask : DefaultTask() {
+
+    @InputDirectory
+    var yamlDir: File = project.projectDir.resolve("src/main/translations")
+
+    @OutputDirectory
+    var resDir: File = project.projectDir.resolve("src/main/res")
+
+    @Input
+    var defaultLanguage: String = "en"
 
     private fun writeArraysFile(resDir: File, languageCodes: Set<String>) {
         val arraysFile = File(resDir, "values/arrays_languages.xml")
@@ -118,8 +131,8 @@ object YamlToAndroidStringsTask {
 
     }
 
-
-    fun run(yamlDir: File, resDir: File) {
+    @TaskAction
+    fun run() {
         if (!yamlDir.exists()) {
             println("Translations directory not found: ${yamlDir.absolutePath}")
             return

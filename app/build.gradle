@@ -68,18 +68,8 @@ tasks.withType(Test) {
     }
 }
 
-tasks.register("yamlToAndroidStrings") {
-    group = "build"
-    description = "Generates strings.xml files from YAML translations"
-
-    doLast {
-        def yamlDir = file("$projectDir/src/main/translations")
-        def resDir = file("$projectDir/src/main/res")
-        YamlToAndroidStringsTask.INSTANCE.run(yamlDir, resDir)
-    }
-}
-preBuild.dependsOn("yamlToAndroidStrings")
-
+task yamlToAndroidStrings(type: YamlToAndroidStringsTask)
+preBuild.dependsOn yamlToAndroidStrings
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.17.0'
