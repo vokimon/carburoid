@@ -172,9 +172,9 @@ object YamlToAndroidStringsTask {
     private fun processYamlMap(map: Map<*, *>, prefix: String, resources: org.w3c.dom.Element, paramCatalog: ParamCatalog) {
         val doc = resources.ownerDocument
         map.forEach { (key, value) ->
-            val fullKey = if (prefix.isEmpty()) "$key" else "${prefix}__$key"
+            val fullKey = "$prefix$key"
             when (value) {
-                is Map<*, *> -> processYamlMap(value as Map<*, *>, fullKey, resources, paramCatalog)
+                is Map<*, *> -> processYamlMap(value as Map<*, *>, "${fullKey}__", resources, paramCatalog)
                 is String -> {
                     val stringElem = doc.createElement("string")
                     stringElem.setAttribute("name", fullKey.lowercase(Locale.ROOT))
