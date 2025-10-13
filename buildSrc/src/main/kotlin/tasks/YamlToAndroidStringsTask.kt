@@ -32,28 +32,19 @@ fun extractParams(template: String): List<String> {
     val tempTemplate = template.replace("{{", "<escaped_open>")
     val regex = "\\{([^}:]+)(?::([^}]+))?}".toRegex()
 
-    val paramMap = mutableMapOf<String, String>()
-
-    regex.findAll(tempTemplate).forEach { match ->
-        val paramName = match.groupValues[1].trim()
-        val format = match.groupValues.getOrNull(2)?.trim()?.takeIf { it.isNotEmpty() }  ?: "s"
-
-        // Store the first encountered format specifier for each parameter
-        if (!paramMap.containsKey(paramName)) {
-            paramMap[paramName] = format
-        }
-    }
-    return paramMap.entries.map { it.key }
+    return regex.findAll(tempTemplate).map { match ->
+        match.groupValues[1].trim()
+    }.distinct().toList()
 }
 
-fun parametersToXml(template: String, params: List<Pair<String, String>>): String {
+fun parametersToXml(template: String, params: List<String>): String {
     val tempTemplate = template.replace("{{", "<escaped_open>")
     val regex = "\\{([^}:]+)(?::([^}]+))?}".toRegex()
 
     return regex.replace(tempTemplate) { match ->
         val paramName = match.groupValues[1].trim()
         val format = match.groupValues.getOrNull(2)?.trim()?.takeIf { it.isNotEmpty() } ?: "s"
-        val index = params.indexOfFirst { it.first == paramName } + 1
+        val index = params.indexOfFirst { it == paramName } + 1
         if (index <= 0) {
             throw MismatchedParamException(paramName)
         }

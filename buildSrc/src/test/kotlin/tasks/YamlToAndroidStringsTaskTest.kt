@@ -103,14 +103,17 @@ class YamlToAndroidStringsTaskTest {
 
     // format params
 
-    private fun assertParametersToXml(template: String, params: List<Pair<String, String>>, expected: String) {
+    private fun assertParametersToXml(template: String, params: List<String>, expected: String) {
         val result = parametersToXml(template, params)
         assertEquals(expected, result, "Template: '$template'\nExpected: '$expected'\nActual: '$result'\n")
+    }
+    private fun assertParametersToXmlOld(template: String, params: List<Pair<String, String>>, expected: String) {
+        assertParametersToXml(template, params.map {it.first}, expected)
     }
 
     @Test
     fun `parametersToXml with no params returns original string`() {
-        assertParametersToXml(
+        assertParametersToXmlOld(
             template = "Just a plain string",
             params = emptyList(),
             expected = "Just a plain string"
@@ -119,7 +122,7 @@ class YamlToAndroidStringsTaskTest {
 
     @Test
     fun `parametersToXml replaces one param with numbered format`() {
-        assertParametersToXml(
+        assertParametersToXmlOld(
             template = "Hello {name}",
             params = listOf("name" to "s"),
             expected = "Hello %1\$s"
@@ -128,7 +131,7 @@ class YamlToAndroidStringsTaskTest {
 
     @Test
     fun `parametersToXml replaces other param with numbered format`() {
-        assertParametersToXml(
+        assertParametersToXmlOld(
             template = "Bye {user}",
             params = listOf("user" to "s"),
             expected = "Bye %1\$s"
@@ -137,7 +140,7 @@ class YamlToAndroidStringsTaskTest {
 
     @Test
     fun `parametersToXml with format spect, use that`() {
-        assertParametersToXml(
+        assertParametersToXmlOld(
             template = "Hello {user:d}",
             params = listOf("user" to "d"),
             expected = "Hello %1\$d",
@@ -147,7 +150,7 @@ class YamlToAndroidStringsTaskTest {
     @Test
     fun `parametersToXml with missing param throws MismatchedParamException`() {
         val template = "Hello {second}"
-        val params = listOf("first" to "s") // Missing "second"
+        val params = listOf("first") // Missing "second"
 
         val exception = assertFailsWith<MismatchedParamException> {
             parametersToXml(template, params)
@@ -159,7 +162,7 @@ class YamlToAndroidStringsTaskTest {
 
     @Test
     fun `parametersToXml trims spaces before name`() {
-        assertParametersToXml(
+        assertParametersToXmlOld(
             template = "Hello { name}",
             params = listOf("name" to "s"),
             expected = "Hello %1\$s"
@@ -168,7 +171,7 @@ class YamlToAndroidStringsTaskTest {
 
     @Test
     fun `parametersToXml trims spaces after name`() {
-        assertParametersToXml(
+        assertParametersToXmlOld(
             template = "Hello {name }",
             params = listOf("name" to "s"),
             expected = "Hello %1\$s"
@@ -177,7 +180,7 @@ class YamlToAndroidStringsTaskTest {
 
     @Test
     fun `parametersToXml trims spaces around format spec`() {
-        assertParametersToXml(
+        assertParametersToXmlOld(
             template = "Hello {name : spec }",
             params = listOf("name" to "spec"),
             expected = "Hello %1\$spec"
@@ -186,7 +189,7 @@ class YamlToAndroidStringsTaskTest {
 
     @Test
     fun `parametersToXml replaces multiple params with numbered format`() {
-        assertParametersToXml(
+        assertParametersToXmlOld(
             template = "Hello {first}, you are {age:d} years old",
             params = listOf("first" to "s", "age" to "d"),
             expected = "Hello %1\$s, you are %2\$d years old"
@@ -195,7 +198,7 @@ class YamlToAndroidStringsTaskTest {
 
     @Test
     fun `parametersToXml with escapped braces do not substitute`() {
-        assertParametersToXml(
+        assertParametersToXmlOld(
             template = "Hello {{name}}",
             params = listOf("name" to "s"),
             expected = "Hello {name}"
@@ -204,7 +207,7 @@ class YamlToAndroidStringsTaskTest {
 
     @Test
     fun `parametersToXml with triple braces takes inner`() {
-        assertParametersToXml(
+        assertParametersToXmlOld(
             template = "Hello {{{name}}}",
             params = listOf("name" to "s"),
             expected = "Hello {%1\$s}"
