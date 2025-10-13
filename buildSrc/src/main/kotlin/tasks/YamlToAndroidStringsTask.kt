@@ -53,22 +53,10 @@ fun parametersToXml(template: String, params: List<String>): String {
     }.replace("<escaped_open>", "{").replace("}}", "}")
 }
 
-
 object YamlToAndroidStringsTask {
     private val defaultLanguage = "en"
 
-    fun run(yamlDir: File, resDir: File) {
-        if (!yamlDir.exists()) {
-            println("Translations directory not found: ${yamlDir.absolutePath}")
-            return
-        }
-
-        val languageCodes = yamlDir
-            .listFiles { file -> file.extension in listOf("yml", "yaml") }
-            ?.map { it.nameWithoutExtension.lowercase(Locale.ROOT) }
-            ?.toSortedSet()
-            ?: emptySet()
-
+    private fun writeArraysFile(resDir: File, languageCodes: Set<String>) {
         val arraysFile = File(resDir, "values/arrays_languages.xml")
         arraysFile.parentFile.mkdirs()
         arraysFile.writeText(
@@ -87,6 +75,22 @@ object YamlToAndroidStringsTask {
             }
         )
         println("Generated language arrays: ${languageCodes.joinToString(", ")}")
+    }
+
+
+    fun run(yamlDir: File, resDir: File) {
+        if (!yamlDir.exists()) {
+            println("Translations directory not found: ${yamlDir.absolutePath}")
+            return
+        }
+
+        val languageCodes = yamlDir
+            .listFiles { file -> file.extension in listOf("yml", "yaml") }
+            ?.map { it.nameWithoutExtension.lowercase(Locale.ROOT) }
+            ?.toSortedSet()
+            ?: emptySet()
+
+        writeArraysFile(resDir, languageCodes)
 
         languageCodes.forEach { langCode ->
             val file = yamlDir.resolve("$langCode.yaml").takeIf { it.exists() }
