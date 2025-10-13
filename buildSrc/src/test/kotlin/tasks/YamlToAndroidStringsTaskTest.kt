@@ -1,5 +1,7 @@
 package tasks
 
+import kotlin.io.path.createTempFile
+import kotlin.io.path.writeText
 import kotlin.test.Test
 import kotlin.test.Ignore
 import kotlin.test.assertEquals
@@ -212,10 +214,10 @@ class YamlToAndroidStringsTaskTest {
     }
 
     fun assertParameterOrderFromYaml(yamlContent: String, expected: Map<String, List<String>>) {
-        val yamlFile = createTempFile(suffix = ".yaml")
+        val yamlFile = createTempFile(prefix = "tempYaml", suffix = ".yaml")
         yamlFile.writeText(yamlContent)
 
-        val result = parameterOrderFromYaml(yamlFile)
+        val result = parameterOrderFromYaml(yamlFile.toFile())
 
         assertEquals(expected, result)
     }
