@@ -159,6 +159,13 @@ class YamlToAndroidStringsTaskTest {
         )
     }
 
-
+    @Test
+    fun `parametersToXml replaces multiple params with numbered format`() {
+        assertParametersToXml(
+            template = "Hello {first}, you are {age:d} years old",
+            params = listOf("first" to "s", "age" to "d"),
+            expected = "Hello %1\$s, you are %2\$d years old"
+        )
+    }
 }
 

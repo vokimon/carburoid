@@ -38,8 +38,7 @@ fun extractParams(template: String): List<Pair<String, String>> {
 }
 
 fun parametersToXml(template: String, params: List<Pair<String, String>>): String {
-    //val regex = "\\{\\s*([^}:]+)(?::\\s*([^}]+))?}".toRegex()
-    val regex = "\\{([^}:]+)(?::([^}]+))?}".toRegex()  // Updated regex to allow spaces around format
+    val regex = "\\{([^}:]+)(?::([^}]+))?}".toRegex()
 
     return regex.replace(template) { match ->
         val paramName = match.groupValues[1].trim()
