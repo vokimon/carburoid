@@ -18,7 +18,7 @@ Features:
 - Configuration to disable any of the previous settings
 - Station details page
 - Open a station in your chosen map application
-- Translations to Spanish, Catalan, Aragonese and more to come
+- Translations to Spanish, Catalan, Basque, Aragonese and more to come
 - Dark and Light themes
 
 <p>
