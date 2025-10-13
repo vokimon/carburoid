@@ -282,6 +282,31 @@ class YamlToAndroidStringsTaskTest {
             ),
         )
     }
+    @Test
+    fun `parameterOrderFromYaml hierarchical keys`() {
+        assertParameterOrderFromYaml(
+            yamlContent = """
+                parent:
+                   greeting: "Hello {name}"
+            """,
+            expected = mapOf(
+                "parent__greeting" to listOf("name"),
+            ),
+        )
+    }
+    @Test
+    fun `parameterOrderFromYaml deep hierarchical keys`() {
+        assertParameterOrderFromYaml(
+            yamlContent = """
+                grandpa:
+                    parent:
+                        greeting: "Hello {name}"
+            """,
+            expected = mapOf(
+                "grandpa__parent__greeting" to listOf("name"),
+            ),
+        )
+    }
 
 }
 

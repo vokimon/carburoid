@@ -10,6 +10,9 @@ import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
 
+typealias ParamList = List<String>
+typealias ParamCatalog = Map<String, ParamList>
+
 fun escapeAndroidString(input: String): String {
     var escaped = input
         .replace("\\", "\\\\")
@@ -28,7 +31,7 @@ fun escapeAndroidString(input: String): String {
 
 class MismatchedParamException(val paramName: String) : Exception("Parameter '$paramName' not found in provided params.")
 
-fun extractParams(template: String): List<String> {
+fun extractParams(template: String): ParamList {
     val tempTemplate = template.replace("{{", "<escaped_open>")
     val regex = "\\{([^}:]+)(?::([^}]+))?}".toRegex()
 
@@ -38,7 +41,7 @@ fun extractParams(template: String): List<String> {
         .toList()
 }
 
-fun parametersToXml(template: String, params: List<String>): String {
+fun parametersToXml(template: String, params: ParamList): String {
     val tempTemplate = template.replace("{{", "<escaped_open>")
     val regex = "\\{([^}:]+)(?::([^}]+))?}".toRegex()
 
@@ -53,19 +56,27 @@ fun parametersToXml(template: String, params: List<String>): String {
     }.replace("<escaped_open>", "{").replace("}}", "}")
 }
 
-fun parameterOrderFromYaml(yamlFile: File): Map<String, List<String>> {
+fun parameterOrderFromYaml(yamlFile: File): ParamCatalog {
     val mapper = ObjectMapper(YAMLFactory())
     val yamlContent = mapper.readValue(yamlFile, Map::class.java) as Map<*, *>
+    val result = mutableMapOf<String, ParamList>()
 
-    val result = mutableMapOf<String, List<String>>()
+    fun processKey(content: Map<*, *>, prefix: String="") {
+        content.forEach { (key, value) ->
+            val fullKey = prefix + (key as String)
+            when (value) {
+                is Map<*, *> -> {
+                    processKey(value, prefix="${fullKey}__")
 
-    yamlContent.forEach { (key, value) ->
-        if (value is String) {
-            // Extract parameters for each string
-            val parameters = extractParams(value as String)
-            result[key as String] = parameters
+                }
+                is String -> {
+                    val parameters = extractParams(value as String)
+                    result[fullKey] = parameters
+                }
+            }
         }
     }
+    processKey(yamlContent)
     return result
 }
 
@@ -93,6 +104,20 @@ object YamlToAndroidStringsTask {
         println("Generated language arrays: ${languageCodes.joinToString(", ")}")
     }
 
+    fun getLanguageCodes(yamlDir: File): SortedSet<String> {
+        return yamlDir
+            .listFiles { it -> it.extension in listOf("yml", "yaml") }
+            ?.map { it.nameWithoutExtension.lowercase(Locale.ROOT) }
+            ?.toSortedSet()
+            ?: emptySet<String>().toSortedSet()
+    }
+
+    private fun yamlForLanguage(yamlDir: File, langCode: String): File {
+        return yamlDir.resolve("$langCode.yaml").takeIf { it.exists() }
+            ?: yamlDir.resolve("$langCode.yml")
+
+    }
+
 
     fun run(yamlDir: File, resDir: File) {
         if (!yamlDir.exists()) {
@@ -100,17 +125,12 @@ object YamlToAndroidStringsTask {
             return
         }
 
-        val languageCodes = yamlDir
-            .listFiles { file -> file.extension in listOf("yml", "yaml") }
-            ?.map { it.nameWithoutExtension.lowercase(Locale.ROOT) }
-            ?.toSortedSet()
-            ?: emptySet()
-
+        val paramCatalog = parameterOrderFromYaml(yamlForLanguage(yamlDir, defaultLanguage))
+        val languageCodes = getLanguageCodes(yamlDir)
         writeArraysFile(resDir, languageCodes)
 
         languageCodes.forEach { langCode ->
-            val file = yamlDir.resolve("$langCode.yaml").takeIf { it.exists() }
-                ?: yamlDir.resolve("$langCode.yml")
+            val file = yamlForLanguage(yamlDir, langCode)
 
             if (!file.exists()) return@forEach
 
@@ -119,12 +139,12 @@ object YamlToAndroidStringsTask {
             targetDir.mkdirs()
 
             val xmlFile = File(targetDir, "strings.xml")
-            convertYamlToAndroidXml(file, xmlFile)
+            convertYamlToAndroidXml(file, xmlFile, paramCatalog)
             println("Generated: ${xmlFile.absolutePath}")
         }
     }
 
-    private fun convertYamlToAndroidXml(yamlFile: File, xmlFile: File) {
+    private fun convertYamlToAndroidXml(yamlFile: File, xmlFile: File, paramCatalog: ParamCatalog) {
         val mapper = ObjectMapper(YAMLFactory())
         val yamlContent = mapper.readValue(yamlFile, Map::class.java) as Map<*, *>
 
@@ -137,7 +157,7 @@ object YamlToAndroidStringsTask {
         val resources = doc.createElement("resources")
         doc.appendChild(resources)
 
-        processYamlMap(yamlContent, "", resources)
+        processYamlMap(yamlContent, "", resources, paramCatalog)
 
         val transformer = TransformerFactory.newInstance().newTransformer().apply {
             setOutputProperty(OutputKeys.INDENT, "yes")
@@ -149,16 +169,18 @@ object YamlToAndroidStringsTask {
         transformer.transform(DOMSource(doc), StreamResult(xmlFile))
     }
 
-    private fun processYamlMap(map: Map<*, *>, prefix: String, resources: org.w3c.dom.Element) {
+    private fun processYamlMap(map: Map<*, *>, prefix: String, resources: org.w3c.dom.Element, paramCatalog: ParamCatalog) {
         val doc = resources.ownerDocument
         map.forEach { (key, value) ->
             val fullKey = if (prefix.isEmpty()) "$key" else "${prefix}__$key"
             when (value) {
-                is Map<*, *> -> processYamlMap(value as Map<*, *>, fullKey, resources)
+                is Map<*, *> -> processYamlMap(value as Map<*, *>, fullKey, resources, paramCatalog)
                 is String -> {
                     val stringElem = doc.createElement("string")
                     stringElem.setAttribute("name", fullKey.lowercase(Locale.ROOT))
-                    stringElem.textContent = escapeAndroidString(value)
+                    val paramList = paramCatalog[fullKey] ?: emptyList()
+                    val valueWithPositionalParameters = parametersToXml(value, paramList)
+                    stringElem.textContent = escapeAndroidString(valueWithPositionalParameters)
                     resources.appendChild(stringElem)
                 }
             }
