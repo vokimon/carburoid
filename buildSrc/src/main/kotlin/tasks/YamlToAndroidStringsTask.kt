@@ -9,6 +9,7 @@ import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
+import org.gradle.api.GradleException
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
@@ -86,7 +87,6 @@ fun parameterOrderFromYaml(yamlFile: File): ParamCatalog {
 }
 
 open class YamlToAndroidStringsTask : DefaultTask() {
-
     @InputDirectory
     var yamlDir: File = project.projectDir.resolve("src/main/translations")
 
@@ -95,6 +95,8 @@ open class YamlToAndroidStringsTask : DefaultTask() {
 
     @Input
     var defaultLanguage: String = "en"
+
+    private val errors = mutableListOf<String>()
 
     private fun writeArraysFile(resDir: File, languageCodes: Set<String>) {
         val arraysFile = File(resDir, "values/arrays_languages.xml")
@@ -155,9 +157,41 @@ open class YamlToAndroidStringsTask : DefaultTask() {
             convertYamlToAndroidXml(file, xmlFile, paramCatalog)
             println("Generated: ${xmlFile.absolutePath}")
         }
+        if (errors.isNotEmpty()) {
+            throw GradleException("Errors found:\n${errors.joinToString("\n")}")
+        }
     }
 
     private fun convertYamlToAndroidXml(yamlFile: File, xmlFile: File, paramCatalog: ParamCatalog) {
+
+        fun processYamlMap(map: Map<*, *>, prefix: String, resources: org.w3c.dom.Element, paramCatalog: ParamCatalog) {
+            val doc = resources.ownerDocument
+            map.forEach { (key, value) ->
+                val fullKey = "$prefix$key"
+                when (value) {
+                    is Map<*, *> -> processYamlMap(value as Map<*, *>, "${fullKey}__", resources, paramCatalog)
+                    is String -> {
+                        val stringElem = doc.createElement("string")
+                        stringElem.setAttribute("name", fullKey.lowercase(Locale.ROOT))
+                        val paramList = paramCatalog[fullKey] ?: emptyList()
+                        val valueWithPositionalParameters = try {
+                            parametersToXml(value, paramList)
+                        } catch(e: MismatchedParamException) {
+                            errors.add(
+                                """
+                                Key "${fullKey}" has a parameter "${e.paramName}" not present the original string.
+                                    File: ${yamlFile}
+                                """.trimIndent()
+                            )
+                            value // keep the old string and continue
+                        }
+                        stringElem.textContent = escapeAndroidString(valueWithPositionalParameters)
+                        resources.appendChild(stringElem)
+                    }
+                }
+            }
+        }
+
         val mapper = ObjectMapper(YAMLFactory())
         val yamlContent = mapper.readValue(yamlFile, Map::class.java) as Map<*, *>
 
@@ -180,24 +214,8 @@ open class YamlToAndroidStringsTask : DefaultTask() {
         }
 
         transformer.transform(DOMSource(doc), StreamResult(xmlFile))
+
     }
 
-    private fun processYamlMap(map: Map<*, *>, prefix: String, resources: org.w3c.dom.Element, paramCatalog: ParamCatalog) {
-        val doc = resources.ownerDocument
-        map.forEach { (key, value) ->
-            val fullKey = "$prefix$key"
-            when (value) {
-                is Map<*, *> -> processYamlMap(value as Map<*, *>, "${fullKey}__", resources, paramCatalog)
-                is String -> {
-                    val stringElem = doc.createElement("string")
-                    stringElem.setAttribute("name", fullKey.lowercase(Locale.ROOT))
-                    val paramList = paramCatalog[fullKey] ?: emptyList()
-                    val valueWithPositionalParameters = parametersToXml(value, paramList)
-                    stringElem.textContent = escapeAndroidString(valueWithPositionalParameters)
-                    resources.appendChild(stringElem)
-                }
-            }
-        }
-    }
 }
 
