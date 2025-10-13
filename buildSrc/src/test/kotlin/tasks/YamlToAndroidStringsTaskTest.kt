@@ -76,6 +76,31 @@ class YamlToAndroidStringsTaskTest {
         )
     }
 
+    @Test
+    fun `extractParams with repeated param collects it just once`() {
+        assertExtractParams(
+            "Hello {name}, your age is {age}, {name} again.",
+            listOf("name" to "s", "age" to "s"),
+        )
+    }
+
+    @Test
+    fun `extractParams ignores escaped curly braces`() {
+        assertExtractParams(
+            "Hello {{user}}",
+             emptyList(),
+        )
+    }
+
+    @Test
+    fun `extractParams triple curly braces`() {
+        assertExtractParams(
+            "Hello {{{user}}}",
+             listOf("user" to "s"),
+        )
+    }
+
+
     // format params
 
     private fun assertParametersToXml(template: String, params: List<Pair<String, String>>, expected: String) {
@@ -167,5 +192,25 @@ class YamlToAndroidStringsTaskTest {
             expected = "Hello %1\$s, you are %2\$d years old"
         )
     }
+
+    @Test
+    fun `parametersToXml with escapped braces do not substitute`() {
+        assertParametersToXml(
+            template = "Hello {{name}}",
+            params = listOf("name" to "s"),
+            expected = "Hello {name}"
+        )
+    }
+
+    @Test
+    fun `parametersToXml with triple braces takes inner`() {
+        assertParametersToXml(
+            template = "Hello {{{name}}}",
+            params = listOf("name" to "s"),
+            expected = "Hello {%1\$s}"
+        )
+    }
+
+
 }
 

@@ -29,18 +29,28 @@ fun escapeAndroidString(input: String): String {
 class MismatchedParamException(val paramName: String) : Exception("Parameter '$paramName' not found in provided params.")
 
 fun extractParams(template: String): List<Pair<String, String>> {
-    val regex = "\\{\\s*([^}:\\s]+)\\s*(?::\\s*([^}\\s]+)\\s*)?}".toRegex()
-    return regex.findAll(template).map { match ->
+    val tempTemplate = template.replace("{{", "<escaped_open>")
+    val regex = "\\{([^}:]+)(?::([^}]+))?}".toRegex()
+
+    val paramMap = mutableMapOf<String, String>()
+
+    regex.findAll(tempTemplate).forEach { match ->
         val paramName = match.groupValues[1].trim()
-        val format = match.groupValues.getOrNull(2)?.takeIf { it.isNotEmpty() } ?: "s"
-        paramName to format
-    }.toList()
+        val format = match.groupValues.getOrNull(2)?.trim()?.takeIf { it.isNotEmpty() }  ?: "s"
+
+        // Store the first encountered format specifier for each parameter
+        if (!paramMap.containsKey(paramName)) {
+            paramMap[paramName] = format
+        }
+    }
+    return paramMap.entries.map { it.key to it.value }
 }
 
 fun parametersToXml(template: String, params: List<Pair<String, String>>): String {
+    val tempTemplate = template.replace("{{", "<escaped_open>")
     val regex = "\\{([^}:]+)(?::([^}]+))?}".toRegex()
 
-    return regex.replace(template) { match ->
+    return regex.replace(tempTemplate) { match ->
         val paramName = match.groupValues[1].trim()
         val format = match.groupValues.getOrNull(2)?.trim()?.takeIf { it.isNotEmpty() } ?: "s"
         val index = params.indexOfFirst { it.first == paramName } + 1
@@ -48,7 +58,7 @@ fun parametersToXml(template: String, params: List<Pair<String, String>>): Strin
             throw MismatchedParamException(paramName)
         }
         "%${index}\$${format}"
-    }
+    }.replace("<escaped_open>", "{").replace("}}", "}")
 }
 
 
