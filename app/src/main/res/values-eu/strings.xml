@@ -8,6 +8,8 @@
     <string name="settings_language_title">Hizkuntza</string>
     <string name="settings_language_summary">Aplikazioaren hizkuntza aldatzeko</string>
     <string name="language_system_default">Sistema lehenetsia</string>
+    <string name="settings_translate_title">Itzuli</string>
+    <string name="settings_translate_summary">Lagundu zure hizkuntza Weblate-n itzultzen</string>
     <string name="settings_theme">Gaia</string>
     <string name="theme_light">Argia</string>
     <string name="theme_dark">Iluna</string>
