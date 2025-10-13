@@ -8,6 +8,8 @@
     <string name="settings_language_title">Llengua</string>
     <string name="settings_language_summary">Canvia la llengua de l\'aplicació</string>
     <string name="language_system_default">Sistema</string>
+    <string name="settings_translate_title">Tradueix</string>
+    <string name="settings_translate_summary">Ajuda a traduir la teva llengua a Weblate</string>
     <string name="settings_theme">Tema</string>
     <string name="theme_light">Clar</string>
     <string name="theme_dark">Fosc</string>

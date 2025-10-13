@@ -12,6 +12,15 @@
             android:summary="@string/settings_language_summary"
             android:defaultValue="system" />
 
+        <Preference
+            android:key="translate_link"
+            android:title="@string/settings_translate_title"
+            android:summary="@string/settings_translate_summary">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://hosted.weblate.org/projects/carburoid/carburoid-ui/" />
+        </Preference>
+
         <ListPreference
             app:key="dark_mode"
             app:title="@string/settings_theme"

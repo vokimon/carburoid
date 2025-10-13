@@ -8,6 +8,8 @@
     <string name="settings_language_title">Idioma</string>
     <string name="settings_language_summary">Cambia l\'idioma de l\'aplicación</string>
     <string name="language_system_default">Sistema</string>
+    <string name="settings_translate_title">Traduix</string>
+    <string name="settings_translate_summary">Ayuda a traducir o tuyo idioma en Weblate</string>
     <string name="settings_theme">Tema</string>
     <string name="theme_light">Claro</string>
     <string name="theme_dark">Fosco</string>
