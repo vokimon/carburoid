@@ -109,5 +109,15 @@ class YamlToAndroidStringsTaskTest {
         )
     }
 
+    @Test
+    fun `parametersToXml with format spect, use that`() {
+        assertParametersToXml(
+            template = "Hello {user:d}",
+            params = listOf("user" to "d"),
+            expected = "Hello %1\$d",
+        )
+    }
+    
+
 }
 
