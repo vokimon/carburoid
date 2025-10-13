@@ -28,7 +28,7 @@ fun escapeAndroidString(input: String): String {
 
 class MismatchedParamException(val paramName: String) : Exception("Parameter '$paramName' not found in provided params.")
 
-fun extractParams(template: String): List<Pair<String, String>> {
+fun extractParams(template: String): List<String> {
     val tempTemplate = template.replace("{{", "<escaped_open>")
     val regex = "\\{([^}:]+)(?::([^}]+))?}".toRegex()
 
@@ -43,7 +43,7 @@ fun extractParams(template: String): List<Pair<String, String>> {
             paramMap[paramName] = format
         }
     }
-    return paramMap.entries.map { it.key to it.value }
+    return paramMap.entries.map { it.key }
 }
 
 fun parametersToXml(template: String, params: List<Pair<String, String>>): String {

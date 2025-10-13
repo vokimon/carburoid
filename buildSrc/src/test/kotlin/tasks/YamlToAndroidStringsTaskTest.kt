@@ -24,7 +24,7 @@ class YamlToAndroidStringsTaskTest {
         assertEquals(expected, actual)
     }
 
-    private fun assertExtractParams(input: String, expected: List<Pair<String, String>>) {
+    private fun assertExtractParams(input: String, expected: List<String>) {
         val result = extractParams(input)
         assertEquals(
             expected,
@@ -45,7 +45,7 @@ class YamlToAndroidStringsTaskTest {
     fun `extractParams with one param without format returns one name with s`() {
         assertExtractParams(
             "Hello {name}",
-            listOf("name" to "s"),
+            listOf("name"),
         )
     }
 
@@ -53,26 +53,26 @@ class YamlToAndroidStringsTaskTest {
     fun `extractParams with one param with format returns name and format`() {
         assertExtractParams(
             "Hello {name:d}",
-            listOf("name" to "d"),
+            listOf("name"),
         )
     }
 
     @Test
     fun `extractParams with spaces inside brackets`() {
-        assertExtractParams("{ name }", listOf("name" to "s"))
-        assertExtractParams("{ name:d }", listOf("name" to "d"))
+        assertExtractParams("{ name }", listOf("name"))
+        assertExtractParams("{ name:d }", listOf("name"))
     }
 
     @Test
     fun `extractParams with spaces around colon`() {
-        assertExtractParams("{name : d}", listOf("name" to "d"))
+        assertExtractParams("{name : d}", listOf("name"))
     }
 
     @Test
     fun `extractParams with multiple params returns correct list`() {
         assertExtractParams(
             "Hello {param1} and {param2:d}",
-            listOf("param1" to "s", "param2" to "d")
+            listOf("param1", "param2")
         )
     }
 
@@ -80,7 +80,7 @@ class YamlToAndroidStringsTaskTest {
     fun `extractParams with repeated param collects it just once`() {
         assertExtractParams(
             "Hello {name}, your age is {age}, {name} again.",
-            listOf("name" to "s", "age" to "s"),
+            listOf("name", "age"),
         )
     }
 
@@ -96,7 +96,7 @@ class YamlToAndroidStringsTaskTest {
     fun `extractParams triple curly braces`() {
         assertExtractParams(
             "Hello {{{user}}}",
-             listOf("user" to "s"),
+             listOf("user"),
         )
     }
 
