@@ -4,9 +4,9 @@
 <!-- Any manual changes will be overwritten. -->
 <resources>
     <string-array name="supported_language_codes">
-        <item>es</item>
-        <item>ca</item>
         <item>an</item>
+        <item>ca</item>
         <item>en</item>
+        <item>es</item>
     </string-array>
 </resources>
