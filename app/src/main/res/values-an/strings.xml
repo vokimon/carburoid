@@ -43,8 +43,8 @@
     <string name="station_status_unknown">Zarrau\?\?</string>
     <string name="station_status_permanently_closed">Zarrau permanentment</string>
     <string name="station_status_closed">Zarrau</string>
-    <string name="station_status_opens_at">Abre %s</string>
-    <string name="station_status_closes_at">Zarra %s</string>
+    <string name="station_status_opens_at">Abre %1$s</string>
+    <string name="station_status_closes_at">Zarra %1$s</string>
     <string name="station_status_open">Obierto</string>
     <string name="station_status_247">Obierto 24h</string>
     <string name="location_not_available">Ubicación no detectada</string>
@@ -54,6 +54,6 @@
     <string name="location_activate">Activa</string>
     <string name="location_permisions_concede">Permite</string>
     <string name="refreshing_data">S\'están actualizando las datos…</string>
-    <string name="failed_download">Ha fallau a descarga de datos: %s</string>
+    <string name="failed_download">Ha fallau a descarga de datos: %1$s</string>
     <string name="open_in_maps">Ubrir en o mapa</string>
 </resources>

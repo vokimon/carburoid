@@ -41,8 +41,8 @@ station_no_distance: ?? km
 station_status_unknown: Tancat??
 station_status_permanently_closed: Tancat Permanentment
 station_status_closed: Tancat
-station_status_opens_at: Obre %s
-station_status_closes_at: Tanca %s
+station_status_opens_at: Obre {when}
+station_status_closes_at: Tanca {when}
 station_status_open: Obert
 station_status_247: Obert 24h
 location_not_available: Ubicació no detectada
@@ -52,5 +52,5 @@ location_deactivated: La ubicació està desactivada
 location_activate: Activa
 location_permisions_concede: Permet
 refreshing_data: S'estan actualitzant les dades…
-failed_download: "Ha fallat la descarrega de dades: %s"
+failed_download: "Ha fallat la descarrega de dades: {error}"
 open_in_maps: Obre al mapa

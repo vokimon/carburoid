@@ -41,8 +41,8 @@ station_no_distance: ?? km
 station_status_unknown: Closed??
 station_status_permanently_closed: Permanently closed
 station_status_closed: Closed
-station_status_opens_at: Opens %s
-station_status_closes_at: Closes %s
+station_status_opens_at: Opens {when}
+station_status_closes_at: Closes {when}
 station_status_open: Open
 station_status_247: 24/7
 location_not_available: No location data detected
@@ -52,5 +52,5 @@ location_deactivated: Location is disabled
 location_activate: Enable
 location_permisions_concede: Allow
 refreshing_data: Refreshing data…
-failed_download: "Download failed: %s"
+failed_download: "Download failed: {error}"
 open_in_maps: Open in a map

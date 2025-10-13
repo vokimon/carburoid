@@ -41,8 +41,8 @@ station_no_distance: ?? km
 station_status_unknown: Cerrado??
 station_status_permanently_closed: Cerrado Permanentmente
 station_status_closed: Cerradp
-station_status_opens_at: Abre %s
-station_status_closes_at: Cierra %s
+station_status_opens_at: Abre {when}
+station_status_closes_at: Cierra {when}
 station_status_open: Abierto
 station_status_247: Abierto 24h
 location_not_available: No se detectó la ubicación
@@ -52,5 +52,5 @@ location_deactivated: La ubicación está desactivada
 location_activate: Activa
 location_permisions_concede: Permite
 refreshing_data: Se están actualitzando los datos…
-failed_download: "Ha fallado la descarga de datos: %s"
+failed_download: "Ha fallado la descarga de datos: {error}"
 open_in_maps: Abre en el mapa

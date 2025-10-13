@@ -43,8 +43,8 @@
     <string name="station_status_unknown">Tancat\?\?</string>
     <string name="station_status_permanently_closed">Tancat Permanentment</string>
     <string name="station_status_closed">Tancat</string>
-    <string name="station_status_opens_at">Obre %s</string>
-    <string name="station_status_closes_at">Tanca %s</string>
+    <string name="station_status_opens_at">Obre %1$s</string>
+    <string name="station_status_closes_at">Tanca %1$s</string>
     <string name="station_status_open">Obert</string>
     <string name="station_status_247">Obert 24h</string>
     <string name="location_not_available">Ubicació no detectada</string>
@@ -54,6 +54,6 @@
     <string name="location_activate">Activa</string>
     <string name="location_permisions_concede">Permet</string>
     <string name="refreshing_data">S\'estan actualitzant les dades…</string>
-    <string name="failed_download">Ha fallat la descarrega de dades: %s</string>
+    <string name="failed_download">Ha fallat la descarrega de dades: %1$s</string>
     <string name="open_in_maps">Obre al mapa</string>
 </resources>

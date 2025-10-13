@@ -43,8 +43,8 @@
     <string name="station_status_unknown">Cerrado\?\?</string>
     <string name="station_status_permanently_closed">Cerrado Permanentmente</string>
     <string name="station_status_closed">Cerradp</string>
-    <string name="station_status_opens_at">Abre %s</string>
-    <string name="station_status_closes_at">Cierra %s</string>
+    <string name="station_status_opens_at">Abre %1$s</string>
+    <string name="station_status_closes_at">Cierra %1$s</string>
     <string name="station_status_open">Abierto</string>
     <string name="station_status_247">Abierto 24h</string>
     <string name="location_not_available">No se detectó la ubicación</string>
@@ -54,6 +54,6 @@
     <string name="location_activate">Activa</string>
     <string name="location_permisions_concede">Permite</string>
     <string name="refreshing_data">Se están actualitzando los datos…</string>
-    <string name="failed_download">Ha fallado la descarga de datos: %s</string>
+    <string name="failed_download">Ha fallado la descarga de datos: %1$s</string>
     <string name="open_in_maps">Abre en el mapa</string>
 </resources>
