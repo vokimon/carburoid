@@ -41,21 +41,17 @@ class StationDetailActivity : AppCompatActivity() {
         binding.textDistance.text = station.distanceInMeters?.let { "%.1f km".format(it / 1000f) } ?: getString(R.string.station_no_distance)
 
         val status = station.openStatus(Instant.now())
-        if (status != null) {
-            val statusText = status.forHumans(this)
-            binding.textOpenStatus.text = statusText
-            val colorAttr = if (status.isOpen) {
-                MaterialR.attr.colorSecondary
-            } else {
-                AppCompatR.attr.colorError
-            }
-            val typedValue = TypedValue()
-            theme.resolveAttribute(colorAttr, typedValue, true)
-            binding.textOpenStatus.setTextColor(typedValue.data)
-            binding.textOpenStatus.visibility = View.VISIBLE
+        val statusText = status.forHumans(this)
+        binding.textOpenStatus.text = statusText
+        val colorAttr = if (status.isOpen) {
+            MaterialR.attr.colorSecondary
         } else {
-            binding.textOpenStatus.visibility = View.GONE
+            AppCompatR.attr.colorError
         }
+        val typedValue = TypedValue()
+        theme.resolveAttribute(colorAttr, typedValue, true)
+        binding.textOpenStatus.setTextColor(typedValue.data)
+        binding.textOpenStatus.visibility = View.VISIBLE
 
         binding.textAddress.text = station.address
         binding.textCityState.text = "${station.city}, ${station.state}"
