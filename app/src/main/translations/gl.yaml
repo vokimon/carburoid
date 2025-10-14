@@ -1,1 +1,58 @@
-{}
+language_name: Galego
+app_name: Carburoid
+menu_settings: Axustes
+settings_category_language_appearance: Linguaxe e aparencia
+settings_language_title: Linguaxe
+settings_language_summary: Cambia o idioma da aplicación
+language_system_default: Sistema
+settings_translate_title: Traduce
+settings_translate_summary: Axuda a traducir o teu idioma en Weblate
+settings_theme: Tema
+theme_light: Claro
+theme_dark: Escuro
+theme_system: Automático (Sistema)
+settings_category_station_filters: Filtrado de gasolineiras
+language_code: gl
+settings_filter_expensive: Oculta estacións caras e afastadas
+settings_filter_expensive_summary: Non amosar unha estación se existe outra máis próxima e máis barata. (Recomendado)
+settings_filter_non_public: Só prezos públicos
+settings_filter_non_public_summary: Oculta os prezos que requiran subscrición.
+settings_filter_closed: Mostrar estacións pechadas
+settings_filter_closed_summary: Establece unha marxe de tempo para as estacións que abrirán en breve
+settings_filter_closed_tolerance_none: Sen marxe, filtra sempre
+settings_filter_closed_tolerance_half_hour: Media hora
+settings_filter_closed_tolerance_one_hour: Unha hora
+settings_filter_closed_tolerance_two_hours: Dúas horas
+settings_filter_closed_tolerance_twelve_hours: Medio día
+settings_filter_closed_tolerance_one_day: Un día
+settings_filter_closed_tolerance_never: Amosar sempre
+no_gas_stations: Non se atoparon gasolineiras coincidentes
+product_selector_hint: Produto
+product_selector_icon_description: Selector de produto
+location_selector_hint: Localización
+location_selector_locate_device: Localiza o dispositivo
+price_not_public: ✱ Prezo condicionado
+detail_location: Localización
+detail_opening_hours: Horario de servizo
+detail_other_products: Outros produtos
+station_no_name: Sen rótulo
+station_no_address: Sen enderezo
+station_no_city: Sen municipio
+station_no_price: Non dispoñible
+station_no_distance: ?? km
+station_status_unknown: Pechado??
+station_status_permanently_closed: Pechado permanentemente
+station_status_closed: Pechado
+station_status_opens_at: Abre {when}
+station_status_closes_at: Pechado {when}
+station_status_open: Aberto
+station_status_247: Aberto 24/7
+location_not_available: Non se detectou a localización
+location_error: Erro detectando a localización
+location_forbidden: Denegado o acceso á localización
+location_deactivated: A localización está desactivada
+location_activate: Activa
+location_permisions_concede: Permite
+refreshing_data: Estanse actualizando os datos…
+failed_download: 'Fallou a descarga: {error}'
+open_in_maps: Abrir no mapa
