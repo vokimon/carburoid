@@ -2,6 +2,7 @@ package net.canvoki.carburoid.model
 
 import android.content.Context
 import android.text.format.DateUtils
+import androidx.annotation.StringRes
 import net.canvoki.carburoid.R
 import java.time.DayOfWeek
 import java.time.Instant
@@ -18,40 +19,75 @@ typealias Intervals = List<Interval>
 typealias DayRange = List<DayOfWeek>
 typealias ScheduleEntry = Pair<DayRange, Intervals>
 
+
 data class OpeningStatus(
     val isOpen: Boolean,
     val until: Instant?,
 ) {
 
+    enum class OpeningStatusUiState(
+        @StringRes val stringRes: Int,
+        val usesRelativeTime: Boolean = false,
+    ) {
+        PERMANENTLY_CLOSED(
+            stringRes = R.string.station_status_permanently_closed,
+        ) {
+            override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
+                !status.isOpen && status.until == null
+        },
+        OPENS_AT(
+            stringRes = R.string.station_status_opens_at,
+            usesRelativeTime = true,
+        ) {
+            override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
+                !status.isOpen && status.until != null
+        },
+        OPEN_24H(
+            stringRes = R.string.station_status_247,
+        ) {
+            override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
+                status.isOpen && status.until == null
+        },
+        CLOSES_SOON(
+            stringRes = R.string.station_status_closes_at,
+            usesRelativeTime = true,
+        ) {
+            override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
+                status.isOpen && status.until != null && status.until < deadline
+        },
+        OPEN(
+            stringRes = R.string.station_status_open,
+        ) {
+            override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
+                status.isOpen && status.until != null && status.until >= deadline
+        };
+
+        abstract fun matches(status: OpeningStatus, deadline: Instant): Boolean
+
+        fun forHumans(context: Context, status: OpeningStatus): String {
+            return if (usesRelativeTime) {
+                val relative = status.getRelativeTimeSpan(status.until!!, Instant.now())
+                context.getString(stringRes, relative)
+            } else {
+                context.getString(stringRes)
+            }
+        }
+    }
+
+    private fun resolveState(thresholdMinutes: Long): OpeningStatusUiState {
+        val deadline = getDeadline(thresholdMinutes)
+        return OpeningStatusUiState.entries.first { it.matches(this, deadline) }
+    }
+
     fun forHumans(
         context: Context,
         thresholdMinutes: Long = 24 * 60,
     ): String {
-        val now = Instant.now()
-        val untilThreshold = now.plus(thresholdMinutes, ChronoUnit.MINUTES)
+        return resolveState(thresholdMinutes).forHumans(context, this)
+    }
 
-        return when {
-            //status==null -> {
-            //    context.getString(R.string.station_status_unknown)
-            //}
-            !isOpen && until == null -> {
-                context.getString(R.string.station_status_permanently_closed)
-            }
-            !isOpen && until != null -> {
-                val relative = getRelativeTimeSpan(until, now)
-                context.getString(R.string.station_status_opens_at, relative)
-            }
-            until == null -> {
-                context.getString(R.string.station_status_247)
-            }
-            until < untilThreshold -> {
-                val relative = getRelativeTimeSpan(until, now)
-                context.getString(R.string.station_status_closes_at, relative)
-            }
-            else -> {
-                context.getString(R.string.station_status_open)
-            }
-        }
+    private fun getDeadline(thresholdMinutes: Long): Instant {
+        return Instant.now().plus(thresholdMinutes, ChronoUnit.MINUTES)
     }
 
     private fun getRelativeTimeSpan(
