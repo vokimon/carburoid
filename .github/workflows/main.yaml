@@ -32,9 +32,17 @@ jobs:
       
     - name: Build APK
       run: ./gradlew assembleDebug
-      
+
+    - name: Rename APKs for clarity
+      run: |
+        mkdir -p upload-apks
+        cp app/build/outputs/apk/floss/debug/app-floss-debug.apk upload-apks/Carburoid-floss-debug.apk
+        cp app/build/outputs/apk/floss/debug/app-nonfree-debug.apk upload-apks/Carburoid-nonfree-debug.apk
+
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: Carburoid-debug.apk
-        path: app/build/outputs/apk/debug/app-debug.apk
+        name: Carburoid-apk
+        path: |
+           upload-apks/Carburoid-floss-debug.apk
+           upload-apks/Carburoid-nonfree-debug.apk
