@@ -2,7 +2,6 @@ package net.canvoki.carburoid.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,10 +64,7 @@ class GasStationAdapter(
         val status = station.openStatus(Instant.now())
         // TODO: Take the threshod from settings
         holder.openStatus.text = status.forHumans(context)
-
-        val typedValue = TypedValue()
-        context.theme.resolveAttribute(status.color(), typedValue, true)
-        holder.openStatus.setTextColor(typedValue.data)
+        holder.openStatus.setTextColor(status.color(context))
     }
 
     override fun getItemCount() = stations.size

@@ -2,7 +2,9 @@ package net.canvoki.carburoid.model
 
 import android.content.Context
 import android.text.format.DateUtils
+import android.util.TypedValue
 import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import com.google.android.material.R as MaterialR
 import androidx.appcompat.R as AppCompatR
@@ -95,11 +97,15 @@ data class OpeningStatus(
         return resolveState(thresholdMinutes).forHumans(context, this)
     }
 
-    @AttrRes
+    @ColorInt
     fun color(
+        context: Context,
         thresholdMinutes: Long = 24 * 60,
     ): Int {
-        return resolveState(thresholdMinutes).colorAttr
+        val typedValue = TypedValue()
+        @AttrRes val colorAttr = resolveState(thresholdMinutes).colorAttr
+        context.theme.resolveAttribute(colorAttr, typedValue, true)
+        return typedValue.data
     }
 
     private fun getDeadline(thresholdMinutes: Long): Instant {
