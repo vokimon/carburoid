@@ -5,6 +5,10 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+def versionPropsFile = rootProject.file("version.properties")
+def versionProps = new Properties()
+versionProps.load(new FileInputStream(versionPropsFile))
+
 //apply from: 'yaml-translations.gradle'
 
 android {
@@ -15,8 +19,8 @@ android {
         applicationId "net.canvoki.carburoid"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1000000
-        versionName = "1.0.0"
+        versionCode = Integer.parseInt(versionProps['versionCode'])
+        versionName = versionProps['versionName']
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
