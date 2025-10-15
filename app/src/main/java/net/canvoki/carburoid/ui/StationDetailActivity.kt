@@ -1,6 +1,7 @@
 package net.canvoki.carburoid.ui
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
@@ -42,15 +43,11 @@ class StationDetailActivity : AppCompatActivity() {
 
         val status = station.openStatus(Instant.now())
         val statusText = status.forHumans(this)
+        val statusColor = status.color(this)
         binding.textOpenStatus.text = statusText
-        val colorAttr = if (status.isOpen) {
-            MaterialR.attr.colorSecondary
-        } else {
-            AppCompatR.attr.colorError
-        }
-        val typedValue = TypedValue()
-        theme.resolveAttribute(colorAttr, typedValue, true)
-        binding.textOpenStatus.setTextColor(typedValue.data)
+        binding.textOpenStatus.setTextColor(statusColor)
+        binding.iconOpenStatus.setImageResource(status.icon())
+        binding.iconOpenStatus.imageTintList = ColorStateList.valueOf(statusColor)
         binding.textOpenStatus.visibility = View.VISIBLE
 
         binding.textAddress.text = station.address

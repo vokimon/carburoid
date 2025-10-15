@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="bottom|end"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="0dp"
             >
 
             <!-- Warning for non-public prices -->
@@ -77,27 +77,57 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <TextView
-            android:id="@+id/text_distance"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_gravity="end"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:textColor="?attr/colorPrimary"
-            tools:ignore="HardcodedText"
-            android:text="3,2 km" />
+            android:layout_marginBottom="@dimen/space_l"
+            android:gravity="end|bottom">
 
-        <TextView
-            android:id="@+id/text_open_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginBottom="16dp"
-            style="@style/TextAppearance.Material3.LabelLarge"
-            android:textColor="?attr/colorSecondary"
-            tools:ignore="HardcodedText"
-            android:text="Closes in 2 hours" />
+            <LinearLayout
+                android:id="@+id/open_status"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/space_l"
+                android:paddingVertical="@dimen/space_s"
+                android:layout_marginEnd="@dimen/space_xl"
+                android:background="@drawable/bg_status_pill"
+                android:gravity="start|center">
+
+                <ImageView
+                    android:id="@+id/icon_open_status"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="start"
+                    tools:tint="?attr/colorOnBackground"
+                    tools:visibility="visible"
+                    android:src="@drawable/ic_schedule" />
+
+                <TextView
+                    android:id="@+id/text_open_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="@dimen/space_m"
+                    style="@style/TextAppearance.Material3.LabelLarge"
+                    android:textColor="?attr/colorOnBackground"
+                    tools:ignore="HardcodedText"
+                    android:text="Closes in 2 hours" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|bottom"
+                style="@style/TextAppearance.Material3.TitleLarge"
+                android:textColor="?attr/colorPrimary"
+                tools:ignore="HardcodedText"
+                android:text="3,2 km" />
+
+        </LinearLayout>
 
 
         <!-- Location Section -->
