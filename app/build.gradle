@@ -9,8 +9,6 @@ def versionPropsFile = rootProject.file("version.properties")
 def versionProps = new Properties()
 versionProps.load(new FileInputStream(versionPropsFile))
 
-//apply from: 'yaml-translations.gradle'
-
 android {
     namespace = 'net.canvoki.carburoid'
     compileSdk = 36
@@ -38,6 +36,15 @@ android {
         }
     }
 
+    flavorDimensions "freeness"
+
+    productFlavors {
+        floss {
+            dimension "freeness"
+            isDefault true
+        }
+        nonfree { dimension "freeness" }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -79,7 +86,6 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.13.0'
-    implementation 'com.google.android.gms:play-services-location:21.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.9.4'
     implementation 'androidx.preference:preference-ktx:1.2.1'
@@ -88,6 +94,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
     implementation 'com.squareup.retrofit2:converter-scalars:3.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:latest'
+
+    nonfreeImplementation 'com.google.android.gms:play-services-location:21.3.0'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'com.google.code.gson:gson:2.13.2'

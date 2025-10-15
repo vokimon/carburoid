@@ -1,6 +1,5 @@
 package net.canvoki.carburoid.location
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -14,8 +13,6 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -23,6 +20,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.canvoki.carburoid.R
+import net.canvoki.carburoid.location.LocationProvider
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.distances.DistanceFromAddress
 import net.canvoki.carburoid.log
@@ -35,8 +33,7 @@ class LocationService(
     private val suggestAction: (String, String, () -> Unit) -> Unit,
     private val updateUi: () -> Unit,
 ) : CoroutineScope by MainScope() {
-    private val fusedLocationClient: FusedLocationProviderClient =
-        LocationServices.getFusedLocationProviderClient(activity)
+    private val provider = LocationProvider(activity)
 
     private val prefs = activity.getSharedPreferences("location_prefs", Context.MODE_PRIVATE)
 
@@ -119,15 +116,10 @@ class LocationService(
             setFallback()
             return
         }
-        // Linter is unable to see that we are checking in hasPermission
-        @SuppressLint("MissingPermission")
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                handleDeviceLocationSuccess(location)
-            }
-            .addOnFailureListener { exception ->
-                handleDeviceLocationError(exception)
-            }
+        provider.getLastKnownLocation(
+            onSuccess = { location -> handleDeviceLocationSuccess(location) },
+            onError = { e -> handleDeviceLocationError(e) }
+        )
     }
 
     private fun handleDeviceLocationSuccess(location: Location?) {
