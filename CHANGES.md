@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 🏗️ Using free location services, added a nonfree flavor
 - 🐛 After changing language, product list disappeared
 - 🐛 Settings title untranslated
 - 🌐 Galician translation. Thanks Beatriz Plana
