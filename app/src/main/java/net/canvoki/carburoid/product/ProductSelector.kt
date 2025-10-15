@@ -1,11 +1,13 @@
 package net.canvoki.carburoid.product
-
+import android.os.Parcelable
+import android.content.res.Configuration
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.AttributeSet
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.edit
+import net.canvoki.carburoid.log
 
 class ProductSelector @JvmOverloads constructor(
     context: Context,
@@ -88,4 +90,13 @@ class ProductSelector @JvmOverloads constructor(
     private fun preferences(): SharedPreferences {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        super.onRestoreInstanceState(state)
+        post {
+            setupProducts()
+        }
+    }
+
+
 }
