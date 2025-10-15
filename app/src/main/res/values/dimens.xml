@@ -1,0 +1,21 @@
+<resources>
+    <!-- 
+      Material 3 spacing scale (4dp baseline)
+      https://m3.material.io/foundations/layout/understanding-layout/spacing
+    -->
+    <dimen name="spacing_extra_small">2dp</dimen>
+    <dimen name="spacing_small">4dp</dimen>
+    <dimen name="spacing_medium">8dp</dimen>
+    <dimen name="spacing_large">16dp</dimen>
+    <dimen name="spacing_extra_large">24dp</dimen>
+    <dimen name="spacing_xx_large">32dp</dimen>
+
+    <!-- Short aliases -->
+    <dimen name="space_xs">@dimen/spacing_extra_small</dimen>
+    <dimen name="space_s">@dimen/spacing_small</dimen>
+    <dimen name="space_m">@dimen/spacing_medium</dimen>
+    <dimen name="space_l">@dimen/spacing_large</dimen>
+    <dimen name="space_xl">@dimen/spacing_extra_large</dimen>
+    <dimen name="space_xxl">@dimen/spacing_xx_large</dimen>
+
+</resources>
