@@ -11,7 +11,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
+        supportActionBar?.setTitle(R.string.menu_settings)
         supportFragmentManager
             .beginTransaction()
             .replace(android.R.id.content, SettingsFragment())
