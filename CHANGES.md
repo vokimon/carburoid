@@ -3,9 +3,10 @@
 ## Unreleased
 
 - 🐛 After changing language, product list disappeared
+- 🐛 Settings title untranslated
 - 🌐 Galician translation. Thanks Beatriz Plana
 - 🌐 Basque translation. Thanks Javier Calzado Sànchez (javikalsan)
-- 💄 Icons and colors for open status
+- 💄 Icons, colors and pill bg for open/closed status
 - 💄 Translate preference moved down
 - 💄 Better Material support
 - ♻️  Opening status more modular
