@@ -2,7 +2,10 @@ package net.canvoki.carburoid.model
 
 import android.content.Context
 import android.text.format.DateUtils
+import androidx.annotation.AttrRes
 import androidx.annotation.StringRes
+import com.google.android.material.R as MaterialR
+import androidx.appcompat.R as AppCompatR
 import net.canvoki.carburoid.R
 import java.time.DayOfWeek
 import java.time.Instant
@@ -25,18 +28,21 @@ data class OpeningStatus(
     val until: Instant?,
 ) {
 
-    enum class OpeningStatusUiState(
+    enum class UiValues(
         @StringRes val stringRes: Int,
+        @AttrRes val colorAttr: Int,
         val usesRelativeTime: Boolean = false,
     ) {
         PERMANENTLY_CLOSED(
             stringRes = R.string.station_status_permanently_closed,
+            colorAttr = AppCompatR.attr.colorError,
         ) {
             override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
                 !status.isOpen && status.until == null
         },
         OPENS_AT(
             stringRes = R.string.station_status_opens_at,
+            colorAttr = MaterialR.attr.colorOnSurfaceVariant,
             usesRelativeTime = true,
         ) {
             override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
@@ -44,12 +50,14 @@ data class OpeningStatus(
         },
         OPEN_24H(
             stringRes = R.string.station_status_247,
+            colorAttr = AppCompatR.attr.colorPrimary,
         ) {
             override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
                 status.isOpen && status.until == null
         },
         CLOSES_SOON(
             stringRes = R.string.station_status_closes_at,
+            colorAttr = AppCompatR.attr.colorError,
             usesRelativeTime = true,
         ) {
             override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
@@ -57,6 +65,7 @@ data class OpeningStatus(
         },
         OPEN(
             stringRes = R.string.station_status_open,
+            colorAttr = AppCompatR.attr.colorPrimary,
         ) {
             override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
                 status.isOpen && status.until != null && status.until >= deadline
@@ -74,9 +83,9 @@ data class OpeningStatus(
         }
     }
 
-    private fun resolveState(thresholdMinutes: Long): OpeningStatusUiState {
+    private fun resolveState(thresholdMinutes: Long): UiValues {
         val deadline = getDeadline(thresholdMinutes)
-        return OpeningStatusUiState.entries.first { it.matches(this, deadline) }
+        return UiValues.entries.first { it.matches(this, deadline) }
     }
 
     fun forHumans(
@@ -84,6 +93,13 @@ data class OpeningStatus(
         thresholdMinutes: Long = 24 * 60,
     ): String {
         return resolveState(thresholdMinutes).forHumans(context, this)
+    }
+
+    @AttrRes
+    fun color(
+        thresholdMinutes: Long = 24 * 60,
+    ): Int {
+        return resolveState(thresholdMinutes).colorAttr
     }
 
     private fun getDeadline(thresholdMinutes: Long): Instant {
