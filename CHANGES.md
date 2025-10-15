@@ -1,6 +1,16 @@
 # Change log
 
-## 1.0.0 (2025-10-11)
+## Unreleased
+
+- 🐛 After changing language, product list disappeared
+- 🌐 Galician translation. Thanks Beatriz Plana
+- 🌐 Basque translation. Thanks Javier Calzado Sànchez (javikalsan)
+- 💄 Icons and colors for open status
+- 💄 Translate preference moved down
+- 💄 Better Material support
+- ♻️  Opening status more modular
+
+## 1.0.0 (2025-10-13)
 
 First public release featuring:
 
@@ -11,6 +21,6 @@ First public release featuring:
 - ✨ Configuration to disable any of the previous settings
 - ✨ Gas station details page
 - ✨ Open a gas station in your chosen map application
-- 🌐 Translations to Spanish, Catalan, Aragonese, Basque and more to come
+- 🌐 Translations to Spanish, Catalan, Aragonese and more to come
 - 💄 Dark and Light themes
 
