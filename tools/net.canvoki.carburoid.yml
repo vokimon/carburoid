@@ -1,0 +1,41 @@
+Categories:
+  - Location Tracker & Sharer
+  - Money
+  - Navigation
+  - Public Transport
+License: AGPL-3.0-or-later
+AuthorName: David Garcia Garzón
+AuthorEmail: fdroid@canvoki.net
+AuthorWebSite: https://canvoki.net/coder
+WebSite: https://github.com/vokimon/carburoid
+SourceCode: https://github.com/vokimon/carburoid
+IssueTracker: https://github.com/vokimon/carburoid/issues
+Translation: https://hosted.weblate.org/projects/carburoid/
+Changelog: https://github.com/vokimon/carburoid/blob/HEAD/CHANGES.md
+
+Name: Carburoid
+Summary: Search Spanish Gas Stations
+Description: |+
+  Find the nearest and cheapest Spanish gas stations, for Android
+
+  Features:
+
+  - Show only relevant gas stations: either closer or cheaper than others
+  - Discards stations without your product
+  - Discards closed ones unless they open soon
+  - Stations that open or close soon are not used to discard others, just in case you get there late or early
+  - See discarded stations by disabling any filtering criteria
+  - List and detail views
+  - Open a station location in your chosen map application
+  - Translations to Spanish, Catalan, Basque, Aragonese and more to come
+  - Dark and Light themes
+
+
+RepoType: git
+Repo: https://github.com/vokimon/carburoid
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags carburoid-([\d.]+)
+UpdateCheckData: version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)
+CurrentVersion: 1.0.1
+CurrentVersionCode: 1000100

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import typer
 from pathlib import Path
 from PIL import Image

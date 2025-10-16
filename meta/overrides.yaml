@@ -1,4 +1,5 @@
 license: AGPL-3.0-or-later # or-later not autodetected
+translate_url: https://hosted.weblate.org/projects/carburoid/
 keywords:
 - gasstation
 - petrol
@@ -11,6 +12,7 @@ fdroid_categories:
 - Navigation
 - Public Transport
 fdroid_fields:
-  Gradle:
-  - floss
-translate_url: https://hosted.weblate.org/projects/carburoid/
+  #Gradle:
+  #- floss
+  UpdateCheckMode: Tags carburoid-([\d.]+)
+  UpdateCheckData: 'version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)'

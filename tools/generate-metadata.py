@@ -203,12 +203,12 @@ def generate_fdroid_metadata_file(metadata_path):
     meta.Summary = config.short_description
     meta.Categories = config.fdroid_categories
     meta.Description = config.full_description
-    meta.Icon = str(metadata_path / "en-US/images/icon.png")
-    meta.FeatureGraphic = str(metadata_path /  "en-US/images/featureGraphic.png")
-    meta.Screenshots = [str(p) for p in (metadata_path / "en-US/images/").glob("*/*png")]
+    #meta.Icon = str(metadata_path / "en-US/images/icon.png")
+    #meta.FeatureGraphic = str(metadata_path /  "en-US/images/featureGraphic.png")
+    #meta.Screenshots = [str(p) for p in (metadata_path / "en-US/images/").glob("*/*png")]
     meta.SourceCode = config.repo_url
     meta.IssueTracker = config.issues_url
-    meta.Changelog = config.repo_url+"/blob/master/CHANGES.md" # TODO: refactor into git.browse_url("CHANGES.md")
+    meta.Changelog = config.repo_url+"/blob/HEAD/CHANGES.md" # TODO: refactor into git.browse_url("CHANGES.md")
     meta.RepoType = "git" # TODO obtain it from config
     meta.Repo = config.repo_url # TODO: It works for github but others may differ checkout and browse url
     meta.AutoUpdateMode = "Version"
@@ -222,7 +222,7 @@ def generate_fdroid_metadata_file(metadata_path):
     if config.translate_url:
         meta.Translation = config.translate_url
     meta.update(config.fdroid_fields)
-    dump(Path('meta')/config.unique_name+".yaml", meta.dump())
+    dump(Path('tools')/(config.unique_name+".yml"), meta.dump())
 
 
 @dataclass
