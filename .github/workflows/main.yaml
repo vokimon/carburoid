@@ -37,7 +37,7 @@ jobs:
       run: |
         mkdir -p upload-apks
         cp app/build/outputs/apk/floss/debug/app-floss-debug.apk upload-apks/Carburoid-floss-debug.apk
-        cp app/build/outputs/apk/floss/debug/app-nonfree-debug.apk upload-apks/Carburoid-nonfree-debug.apk
+        cp app/build/outputs/apk/nonfree/debug/app-nonfree-debug.apk upload-apks/Carburoid-nonfree-debug.apk
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
