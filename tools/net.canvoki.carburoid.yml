@@ -1,8 +1,8 @@
 Categories:
-  - Location Tracker & Sharer
-  - Money
-  - Navigation
-  - Public Transport
+- Location Tracker & Sharer
+- Money
+- Navigation
+- Public Transport
 License: AGPL-3.0-or-later
 AuthorName: David Garcia Garzón
 AuthorEmail: fdroid@canvoki.net
@@ -12,7 +12,6 @@ SourceCode: https://github.com/vokimon/carburoid
 IssueTracker: https://github.com/vokimon/carburoid/issues
 Translation: https://hosted.weblate.org/projects/carburoid/
 Changelog: https://github.com/vokimon/carburoid/blob/HEAD/CHANGES.md
-
 Name: Carburoid
 Summary: Search Spanish Gas Stations
 Description: |+
@@ -30,12 +29,11 @@ Description: |+
   - Translations to Spanish, Catalan, Basque, Aragonese and more to come
   - Dark and Light themes
 
-
 RepoType: git
 Repo: https://github.com/vokimon/carburoid
-
 AutoUpdateMode: Version
 UpdateCheckMode: Tags carburoid-([\d.]+)
-UpdateCheckData: version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)
 CurrentVersion: 1.0.1
 CurrentVersionCode: 1000100
+UpdateCheckData: version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)
+...

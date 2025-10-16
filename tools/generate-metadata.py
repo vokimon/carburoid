@@ -192,23 +192,23 @@ def motto_from_splash(config):
 def generate_fdroid_metadata_file(metadata_path):
     meta = ns()
     # https://f-droid.org/docs/Build_Metadata_Reference/#Categories
-    meta.Name = config.project_name
-    meta.WebSite = config.repo_url  # TODO: get it from config so we can override it
+    meta.Categories = config.fdroid_categories
     meta.License = config.license
     meta.AuthorName = "David Garcia Garzón" # TODO: obtain it from somewhere
     meta.AuthorEmail = "fdroid@canvoki.net" # TODO: obtain it from somewhere
     meta.AuthorWebSite = "https://canvoki.net/coder" # TODO: obtain it from somewhere
-    meta.CurrentVersion = config.last_version
-    meta.CurrentVersionCode = version_to_code(config.last_version)
+    meta.WebSite = config.repo_url  # TODO: get it from config so we can override it
+    meta.SourceCode = config.repo_url
+    meta.IssueTracker = config.issues_url
+    if config.translate_url:
+        meta.Translation = config.translate_url
+    meta.Changelog = config.repo_url+"/blob/HEAD/CHANGES.md" # TODO: refactor into git.browse_url("CHANGES.md")
+    meta.Name = config.project_name
     meta.Summary = config.short_description
-    meta.Categories = config.fdroid_categories
     meta.Description = config.full_description
     #meta.Icon = str(metadata_path / "en-US/images/icon.png")
     #meta.FeatureGraphic = str(metadata_path /  "en-US/images/featureGraphic.png")
     #meta.Screenshots = [str(p) for p in (metadata_path / "en-US/images/").glob("*/*png")]
-    meta.SourceCode = config.repo_url
-    meta.IssueTracker = config.issues_url
-    meta.Changelog = config.repo_url+"/blob/HEAD/CHANGES.md" # TODO: refactor into git.browse_url("CHANGES.md")
     meta.RepoType = "git" # TODO obtain it from config
     meta.Repo = config.repo_url # TODO: It works for github but others may differ checkout and browse url
     meta.AutoUpdateMode = "Version"
@@ -219,8 +219,8 @@ def generate_fdroid_metadata_file(metadata_path):
         meta.Liberapay = config.liberapay_id
     if config.fdroid_antifeatures:
         meta.AntiFeatures = config.fdroid_antifeatures
-    if config.translate_url:
-        meta.Translation = config.translate_url
+    meta.CurrentVersion = config.last_version
+    meta.CurrentVersionCode = int(version_to_code(config.last_version))
     meta.update(config.fdroid_fields)
     dump(Path('tools')/(config.unique_name+".yml"), meta.dump())
 

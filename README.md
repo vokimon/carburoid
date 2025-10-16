@@ -7,19 +7,21 @@
 
 Search Spanish Gas Stations
 
-Find the nearest and cheaper Spanish gas stations with your Android device.
+Find the nearest and cheapest Spanish gas stations, for Android
 
 Features:
 
-- Sort stations by distance to your current position
-- Filter out stations more expensive than nearer ones
-- Filter out stations without your product
-- Filter out closed stations unless they open soon
-- Configuration to disable any of the previous settings
-- Station details page
-- Open a station in your chosen map application
+- Show only relevant gas stations: either closer or cheaper than others
+- Discards stations without your product
+- Discards closed ones unless they open soon
+- Stations that open or close soon are not used to discard others, just in case you get there late or early
+- See discarded stations by disabling any filtering criteria
+- List and detail views
+- Open a station location in your chosen map application
 - Translations to Spanish, Catalan, Basque, Aragonese and more to come
 - Dark and Light themes
+
+<!-- end-of-description -->
 
 <p>
 <img width="20%" alt="Gas station list (dark theme)" src="media/01-gas-station-list-dark.png" />
