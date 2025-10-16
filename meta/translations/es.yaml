@@ -1,0 +1,20 @@
+project_name: Carburoid
+splash_motto: Llena al mejor precio, más cerca
+short_description: Busca gasolineras en España
+full_description_md: |+
+  Encuentra la gasolinera más barata i cercana, para Android
+
+  Funcionalidades:
+
+  - Muestra solo las gasolineras relevantes: o más baratas o más cercanas que otras.
+  - No considera las que no tienen tu producto
+  - No considera las que están cerradas y no abrirán pronto
+  - Por si llegas más tarde o demasiado pronto, las que abren o c
+  - Las que cierran o abren pronto, no se usan para descartar a otras, por si llegas más tarde o demasiado pronto
+  - Muestra las gasolineras descartadas deshabilitando cada criterio
+  - Pantallas de lista y detalle
+  - Abre la gasolinera en tu aplicacion de mapas favorita
+  - Traducciones al Español, Catalan, Vasco, Gallego, Aragonés y más por venir.
+  - Temas oscuro y claro
+
+keywords: gasolinera, estación de servicio, combustible, carburante, gasoil, diesel, gasolina

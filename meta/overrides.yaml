@@ -1,0 +1,16 @@
+license: AGPL-3.0-or-later # or-later not autodetected
+keywords:
+- gasstation
+- petrol
+- gasoline
+- gasoil
+- diesel
+fdroid_categories:
+- Location Tracker & Sharer
+- Money
+- Navigation
+- Public Transport
+fdroid_fields:
+  Gradle:
+  - floss
+translate_url: https://hosted.weblate.org/projects/carburoid/
