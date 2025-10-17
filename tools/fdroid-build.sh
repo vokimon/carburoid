@@ -21,6 +21,5 @@ run fdroid readmeta -v
 run fdroid rewritemeta -v $APP_ID
 run fdroid lint -v $APP_ID
 run fdroid checkupdates -v --auto --allow-dirty $APP_ID
-run fdroid update -v --create-metadata net.canvoki.carburoid
 run fdroid build -vl $APP_ID
 

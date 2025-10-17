@@ -5,10 +5,10 @@ full_description_md: |+
 
   Funcionalidades:
 
+  - Datos oficiales que envian las gasolineras al Ministerio de Industria de España
   - Muestra solo las gasolineras relevantes: o más baratas o más cercanas que otras.
-  - No considera las que no tienen tu producto
-  - No considera las que están cerradas y no abrirán pronto
-  - Por si llegas más tarde o demasiado pronto, las que abren o c
+  - Descarta las que no tienen tu producto
+  - Descarta las que están cerradas y no abren pronto
   - Las que cierran o abren pronto, no se usan para descartar a otras, por si llegas más tarde o demasiado pronto
   - Muestra las gasolineras descartadas deshabilitando cada criterio
   - Pantallas de lista y detalle

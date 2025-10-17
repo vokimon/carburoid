@@ -10,6 +10,7 @@ Find Spanish gas stations by price and distance.
 
 Features:
 
+- Uses official data sent by gas stations to the Ministry of Industry of Spain
 - Show only relevant gas stations: either closer or cheaper than others
 - Discards stations without your product
 - Discards closed stations unless they open soon

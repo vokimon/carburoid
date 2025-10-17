@@ -1,11 +1,12 @@
 Funcionalitats:
 
+- Dades oficals que envien les benzineres al Ministeri d'Industria Espanyol
 - Mostra només les benzineres rellevants: o més properes o més barates que d'altres
-- No considera les que están tancades i no obriran en cert temps
-- No considera les que no tenen el teu producte
+- Descarta les que no tenen el teu producte
+- Descarta les que están tancades i no obriran aviat
 - Les que tanquen o obren aviat es mostren pero no serveixen per descartar d'altres, per si no hi arribes a temps o massa d'hora
 - Mostra les estacions descartades deshabilitant cada criteri
-- Pantalles de llista i detall
+- Pantalles de llistat i detall
 - Obre la benzinera amb l'aplicació de mapes que vulguis
 - Traduccions a l'Espanyol, Català, Basc, Gallec, Aragonés i properament d'altres.
 - Temes fosc i clar

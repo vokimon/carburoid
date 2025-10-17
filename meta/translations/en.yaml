@@ -7,6 +7,7 @@ short_description: Find Spanish gas stations by price and distance.
 full_description_md: |+
   Features:
 
+  - Uses official data sent by gas stations to the Ministry of Industry of Spain
   - Show only relevant gas stations: either closer or cheaper than others
   - Discards stations without your product
   - Discards closed stations unless they open soon
@@ -18,8 +19,8 @@ full_description_md: |+
   - Dark and Light themes
 
 keywords: gas station, petrol, gasoline, gasoil, diesel
-changes_1_0_1_md: "- \U0001F3D7️ First version on FDroid\n- \U0001F3D7️ floss and
-  nonfree flavors, to use privative GPlay location services or not\n- \U0001F310 Galician
+changes_1_0_1_md: "First version on FDroid, featuring:\n\n- \U0001F3D7️ floss and
+  nonfree flavors, using or not privative GPlay location services\n- \U0001F310 Galician
   translation. Thanks Beatriz Plana\n- \U0001F310 Basque translation. Thanks Javier
   Calzado Sànchez (javikalsan)\n- \U0001F41B After changing language, product list
   disappeared\n- \U0001F41B Settings title was untranslated\n- \U0001F484 Icons, colors

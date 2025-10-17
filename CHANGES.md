@@ -2,8 +2,9 @@
 
 ## 1.0.1 (2025-10-15)
 
-- 🏗️ First version on FDroid
-- 🏗️ floss and nonfree flavors, to use privative GPlay location services or not
+First version on FDroid, featuring:
+
+- 🏗️ floss and nonfree flavors, using or not privative GPlay location services
 - 🌐 Galician translation. Thanks Beatriz Plana
 - 🌐 Basque translation. Thanks Javier Calzado Sànchez (javikalsan)
 - 🐛 After changing language, product list disappeared
