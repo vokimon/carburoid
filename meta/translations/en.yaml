@@ -18,13 +18,13 @@ full_description_md: |+
   - Dark and Light themes
 
 keywords: gas station, petrol, gasoline, gasoil, diesel
-changes_1_0_1_md: "- \U0001F3D7️ floss and nonfree flavors, to use privative GPlay
-  location services or not\n- \U0001F310 Galician translation. Thanks Beatriz Plana\n-
-  \U0001F310 Basque translation. Thanks Javier Calzado Sànchez (javikalsan)\n- \U0001F41B
-  After changing language, product list disappeared\n- \U0001F41B Settings title untranslated\n-
-  \U0001F484 Icons, colors and pill bg for open/closed status\n- \U0001F484 Translate
-  preference moved down\n- \U0001F484 Better Material support\n- ♻️  Station \"open
-  status\" is more modular"
+changes_1_0_1_md: "- \U0001F3D7️ First version on FDroid\n- \U0001F3D7️ floss and
+  nonfree flavors, to use privative GPlay location services or not\n- \U0001F310 Galician
+  translation. Thanks Beatriz Plana\n- \U0001F310 Basque translation. Thanks Javier
+  Calzado Sànchez (javikalsan)\n- \U0001F41B After changing language, product list
+  disappeared\n- \U0001F41B Settings title was untranslated\n- \U0001F484 Icons, colors
+  and pill bg for open/closed status\n- \U0001F484 Translate preference moved down\n-
+  \U0001F484 Better Material support\n- ♻️  Station \"open status\" is more modular"
 changes_1_0_0_md: "First public release featuring:\n\n- ✨ Sort stations by distance
   to your current position\n- ✨ Filter out stations without your product\n- ✨ Filter
   out stations more expensive than nearest ones\n- ✨ Filter out closed stations unless

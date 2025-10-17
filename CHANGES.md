@@ -2,11 +2,12 @@
 
 ## 1.0.1 (2025-10-15)
 
+- 🏗️ First version on FDroid
 - 🏗️ floss and nonfree flavors, to use privative GPlay location services or not
 - 🌐 Galician translation. Thanks Beatriz Plana
 - 🌐 Basque translation. Thanks Javier Calzado Sànchez (javikalsan)
 - 🐛 After changing language, product list disappeared
-- 🐛 Settings title untranslated
+- 🐛 Settings title was untranslated
 - 💄 Icons, colors and pill bg for open/closed status
 - 💄 Translate preference moved down
 - 💄 Better Material support
