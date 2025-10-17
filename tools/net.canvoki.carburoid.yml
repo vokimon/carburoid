@@ -27,11 +27,20 @@ Description: |+
   - Translations to Spanish, Catalan, Basque, Galician, Aragonese...
   - Dark and Light themes
 
+
 RepoType: git
 Repo: https://github.com/vokimon/carburoid
+
+Builds:
+  - versionName: 1.0.1
+    versionCode: 1000100
+    commit: carburoid-1.0.1
+    subdir: app
+    gradle:
+      - floss
+
 AutoUpdateMode: Version
 UpdateCheckMode: Tags carburoid-([\d.]+)
+UpdateCheckData: version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)
 CurrentVersion: 1.0.1
 CurrentVersionCode: 1000100
-UpdateCheckData: version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)
-...

@@ -12,7 +12,12 @@ fdroid_categories:
 - Navigation
 - Public Transport
 fdroid_fields:
-  #Gradle:
-  #- floss
   UpdateCheckMode: Tags carburoid-([\d.]+)
   UpdateCheckData: 'version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)'
+  Builds:
+  - versionName: '1.0.1'
+    versionCode: 1000100
+    commit: carburoid-1.0.1
+    subdir: app
+    gradle:
+    - floss

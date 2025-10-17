@@ -766,7 +766,7 @@ def generate_gradle_version_properties():
     version = config.last_version
     code = version_to_code(version)
     dump("version.properties",
-        f"versionName=\"{version}\"\n"
+        f"versionName={version}\n"
         f"versionCode={code}\n"
     )
 
