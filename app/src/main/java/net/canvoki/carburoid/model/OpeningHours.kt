@@ -33,9 +33,9 @@ data class OpeningStatus(
     val defaultThresholdMinutes: Long = 24 * 60
 
     enum class UiValues(
-        @StringRes val stringRes: Int,
-        @AttrRes val colorAttr: Int,
-        @DrawableRes val iconRes: Int,
+        @field:StringRes val stringRes: Int,
+        @field:AttrRes val colorAttr: Int,
+        @field:DrawableRes val iconRes: Int,
         val usesRelativeTime: Boolean = false,
     ) {
         PERMANENTLY_CLOSED(
