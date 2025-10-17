@@ -1,1 +1,1 @@
-Search Spanish Gas Stations
+Find Spanish gas stations by price and distance.

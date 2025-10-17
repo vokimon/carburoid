@@ -399,9 +399,9 @@ def dump(file, content):
 def generate_metadata_translation_master():
     translation = ns()
     translation.project_name = config.project_name
+    translation.splash_motto = config.motto
     translation.short_description = config.short_description
     translation.full_description_md = config.full_description
-    translation.splash_motto = config.motto
     translation.keywords = ', '.join(config.keywords or [])
     for release in config.changes:
         translation[f'changes_{release.version_name.replace('.','_')}_md'] = release.notes_md

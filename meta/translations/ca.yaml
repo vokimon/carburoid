@@ -1,9 +1,7 @@
 project_name: Carburoid
-short_description: Cerca benzineres a l'Estat Espanyol
 splash_motto: Benzina al millor preu, més aprop
+short_description: Troba benzineres a l'Estat Espanyol per preu i distància
 full_description_md: |+
-  Troba la benzinera més barata i propera, per Android
-
   Funcionalitats:
 
   - Mostra només les benzineres rellevants: o més properes o més barates que d'altres

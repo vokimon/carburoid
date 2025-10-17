@@ -2,24 +2,22 @@
 # Scripts gather information around the project to build this
 # Edit other language translations, not this one.
 project_name: Carburoid
-short_description: Search Spanish Gas Stations
+splash_motto: Fill up cheaper, closer
+short_description: Find Spanish gas stations by price and distance.
 full_description_md: |+
-  Find the nearest and cheapest Spanish gas stations, for Android
-
   Features:
 
   - Show only relevant gas stations: either closer or cheaper than others
   - Discards stations without your product
-  - Discards closed ones unless they open soon
-  - Stations that open or close soon are not used to discard others, just in case you get there late or early
+  - Discards closed stations unless they open soon
+  - Stations opening or closing soon are not used to discard others, just in case you get there late or early
   - See discarded stations by disabling any filtering criteria
-  - List and detail views
+  - Station list and station detail views
   - Open a station location in your chosen map application
-  - Translations to Spanish, Catalan, Basque, Aragonese and more to come
+  - Translations to Spanish, Catalan, Basque, Galician, Aragonese...
   - Dark and Light themes
 
-splash_motto: Fill up cheaper, closer
-keywords: gasstation, petrol, gasoline, gasoil, diesel
+keywords: gas station, petrol, gasoline, gasoil, diesel
 changes_1_0_1_md: "- \U0001F3D7️ floss and nonfree flavors, to use privative GPlay
   location services or not\n- \U0001F310 Galician translation. Thanks Beatriz Plana\n-
   \U0001F310 Basque translation. Thanks Javier Calzado Sànchez (javikalsan)\n- \U0001F41B

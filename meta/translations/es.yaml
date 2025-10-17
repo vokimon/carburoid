@@ -1,8 +1,7 @@
 project_name: Carburoid
 splash_motto: Llena al mejor precio, más cerca
-short_description: Busca gasolineras en España
+short_description: Encuentra gasolineras en España por precio y distancia
 full_description_md: |+
-  Encuentra la gasolinera más barata i cercana, para Android
 
   Funcionalidades:
 

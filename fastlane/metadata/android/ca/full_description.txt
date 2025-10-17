@@ -1,5 +1,3 @@
-Troba la benzinera més barata i propera, per Android
-
 Funcionalitats:
 
 - Mostra només les benzineres rellevants: o més properes o més barates que d'altres

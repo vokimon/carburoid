@@ -1,4 +1,3 @@
-Encuentra la gasolinera más barata i cercana, para Android
 
 Funcionalidades:
 
