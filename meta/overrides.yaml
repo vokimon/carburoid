@@ -12,6 +12,10 @@ fdroid_categories:
 - Navigation
 - Public Transport
 fdroid_fields:
+  AuthorEmail: fdroid@canvoki.net
+  AuthorName: David García Gazón
+  AuthorEmail: voki@canvoki.net
+  AuthorWebSite: https://canvoki.net/coder
   UpdateCheckMode: Tags carburoid-([\d.]+)
   UpdateCheckData: 'version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)'
   Builds:

@@ -196,9 +196,9 @@ def generate_fdroid_metadata_file(metadata_path):
     # https://f-droid.org/docs/Build_Metadata_Reference/#Categories
     meta.Categories = config.fdroid_categories
     meta.License = config.license
-    meta.AuthorName = "David Garcia Garzón" # TODO: obtain it from somewhere
-    meta.AuthorEmail = "fdroid@canvoki.net" # TODO: obtain it from somewhere
-    meta.AuthorWebSite = "https://canvoki.net/coder" # TODO: obtain it from somewhere
+    meta.AuthorName = config.fdroid_fields["AuthorName"]
+    meta.AuthorEmail = config.fdroid_fields["AuthorEmail"]
+    meta.AuthorWebSite = config.fdroid_fields["AuthorWebSite"]
     meta.WebSite = config.repo_url  # TODO: get it from config so we can override it
     meta.SourceCode = config.repo_url
     meta.IssueTracker = config.issues_url
@@ -781,7 +781,7 @@ def generate_fastlane():
     translations = load_metadata_translations()
     metadata_path = Path("fastlane/metadata/android")
     mkdir(metadata_path)
-    dump(Path('fastlane/.gdignore'), '')
+    #dump(Path('fastlane/.gdignore'), '')
     generate_fastlane_descriptions(metadata_path, translations)
     generate_fastlane_changelogs(metadata_path, translations)
     generate_fastlane_screenshots(metadata_path)
