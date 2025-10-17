@@ -179,6 +179,8 @@ def find_highest_res_mipmap(drawable_name: str) -> Path | None:
 def generate_fastlane_icon(metadata_path):
     default_icon = Path('icon.png')
     fastlane_icon = metadata_path/'en-US'/'images'/'icon.png'
+    cp(default_icon, fastlane_icon)
+    return
     if default_icon.exists():
         padIconMargins('icon.png', fastlane_icon)
         return
@@ -206,9 +208,6 @@ def generate_fdroid_metadata_file(metadata_path):
     meta.Name = config.project_name
     meta.Summary = config.short_description
     meta.Description = config.full_description
-    #meta.Icon = str(metadata_path / "en-US/images/icon.png")
-    #meta.FeatureGraphic = str(metadata_path /  "en-US/images/featureGraphic.png")
-    #meta.Screenshots = [str(p) for p in (metadata_path / "en-US/images/").glob("*/*png")]
     meta.RepoType = "git" # TODO obtain it from config
     meta.Repo = config.repo_url # TODO: It works for github but others may differ checkout and browse url
     meta.AutoUpdateMode = "Version"
@@ -449,7 +448,7 @@ def generate_fastlane_changelogs(metadata_path: Path, translations):
 
 def generate_fastlane_featuredImages(metadata_path: Path, translations):
     from svg_template import SvgTemplate
-    template = SvgTemplate("media/promo/splash.svg")
+    template = SvgTemplate(config.splash_svg)
     for lang, trans in translations.items():
         featured_path = metadata_path/lang/'images'/'featureGraphic.png'
         motto = tr(translations, lang, 'splash_motto')
@@ -532,70 +531,17 @@ def adapt_android_preset(metadata_path):
     modified = presets_file.read_text().replace(" = ", "=")
     dump(presets_file, modified)
 
-def svg_to_png(svgfile: Path|str, pngfile:Path|str|None=None):
-    svgfile = Path(svgfile)
-    pngfile = pngfile or svgfile.with_suffix(".png")
-    print(f"Generating {pngfile}...")
-
-    if not program_exists("inkscape"):
-        print("WARNING: Inkscape not detected. Splash png not updated.")
-        return
-
-    import subprocess
-    subprocess.run([
-        'inkscape',
-        str(svgfile),
-        '--export-type=png',
-        '--export-filename='+str(pngfile)
-    ])
-
-
-
-def svg_replace(svgfile, dest, replacements):
-    splash_svgfile = Path(svgfile)
-
-    nsmap = dict(
-        svg='http://www.w3.org/2000/svg',
-        inkscape="http://www.inkscape.org/namespaces/inkscape",
-        sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd",
-        xlink="http://www.w3.org/1999/xlink",
-    )
-
-    parser = etree.XMLParser(remove_blank_text=True)
-    tree = etree.parse(splash_svgfile, parser)
-    root = tree.getroot()
-
-    for key, value in replacements.items():
-        el = root.xpath("//svg:text[@id='{key}']/svg:tspan", namespaces=nsmap)
-        if not el:
-            print(f"Warning: No element with id {key} found is splash screen svg")
-            return
-        if el[0].text == value:
-            print(f"Skipping splash screen '{key}' update, already {value}")
-            return
-
-        print(f"Updating splash screen version from {el[0].text} to {value}")
-        el[0].text = value
-
-    for prefix, nsurl in nsmap.items():
-        etree.register_namespace(prefix, nsurl)
-    print(f"Generating {splash_svgfile}...")
-    tree.write(splash_svgfile, encoding='utf-8', xml_declaration=True, pretty_print=True)
-
-
-def update_splash_version():
+def update_promo_images():
     from svg_template import SvgTemplate
-    splash_svgfile = Path(config.splash_svg)
-    if not splash_svgfile.exists():
-        warn("No splash found at {splash_svgfile}")
-        return
-    svg_template = SvgTemplate(splash_svgfile)
-    svg_template.generate(
-        replacements=dict(
-            version=config.last_version,
+    for promo_image in Path(config.splash_svg).parent.glob('*.svg'):
+        svg_template = SvgTemplate(promo_image)
+        svg_template.generate(
+            svg=promo_image,
+            png=promo_image.with_suffix('.png'),
+            replacements=dict(
+                version=config.last_version,
+            )
         )
-    )
-    svg_to_png(splash_svgfile)
 
 def insert_markdown_as_xhtml(parent, markdown_text):
     from markdown import markdown
@@ -846,7 +792,7 @@ def generate_fastlane():
     #adapt_android_preset(metadata_path)
 
 def generateMetadata():
-    update_splash_version()
+    update_promo_images()
     generate_fastlane()
     #update_flatpak_metainfo()
     #update_flatpak_desktop_file()

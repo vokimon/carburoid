@@ -127,8 +127,6 @@ class SvgTemplate:
             cairosvg.svg2png(
                 url=str(svg_out),
                 write_to=str(png_out),
-                output_width=1024,
-                output_height=500
             )
             # Clean up temp SVG if we created one
             if svg is None and png is not None:

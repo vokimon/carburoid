@@ -92,6 +92,35 @@ def rasterize_svg_to_png(svg_content: str, size: int, output: Path):
     )
 
 @app.command()
+def app_icon(
+    svg_path: Path = typer.Argument(..., help="Ruta al archivo SVG del ícono (foreground)"),
+    background_color: str = typer.Option("#d69999", "--bg", help="Color de fondo (ej: '#d69999')"),
+    foreground_color: str = typer.Option("#712b5e", "--fg", help="Color del icono (ej: '#712b5e')"),
+    output_svg: Path = typer.Option(Path("icon.svg"), "--out,-o", help="Output svg file"),
+    size: int = typer.Option(512, "-s,--size", help="Size in pixels"),
+):
+    """
+    Generates svg app icon from material icon
+    """
+    if not svg_path.exists():
+        typer.echo(f"❌ No se encontró el archivo: {svg_path}")
+        raise typer.Exit()
+
+    path_data, viewport_w, viewport_h = extract_svg_data(svg_path)
+    svg = material_icon_to_launcher_svg(
+        path_d=path_data,
+        original_viewbox_size=(viewport_w, viewport_h),
+        foreground_color=foreground_color,
+        background_color=background_color,
+    )
+    output_svg.write_text(svg)
+    rasterize_svg_to_png(
+        svg_content=svg,
+        size=size,
+        output=output_svg.with_suffix(".png")
+    )
+
+@app.command()
 def launcher_icon(
     svg_path: Path = typer.Argument(..., help="Ruta al archivo SVG del ícono (foreground)"),
     background_color: str = typer.Option("#d69999", "--bg", help="Color de fondo (ej: '#d69999')"),
