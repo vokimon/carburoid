@@ -13,3 +13,7 @@ app/debug/
 .*.sw?
 .*.kate-swp
 
+
+__pycache__
+fdroid-data
+fdroid-server
