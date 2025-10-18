@@ -9,11 +9,19 @@ captures/
 app/release/
 app/debug/
 
+# security
+*.jks
+*.p12
+.env
+local.properties
+
 # editors
 .*.sw?
 .*.kate-swp
 
+# Python scripts
 
 __pycache__
-fdroid-data
-fdroid-server
+tools/fdroid-data
+tools/fdroid-server
+
