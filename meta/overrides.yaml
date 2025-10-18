@@ -1,5 +1,6 @@
 license: AGPL-3.0-or-later # or-later not autodetected
 translate_url: https://hosted.weblate.org/projects/carburoid/
+version_tag_prefix: carburoid-
 keywords:
 - gas station
 - petrol
@@ -19,10 +20,3 @@ fdroid_fields:
   UpdateCheckMode: Tags carburoid-([\d.]+)
   Binaries: https://github.com/vokimon/carburoid/releases/download/carburoid-%v/net.canvoki.carburoid-floss-%v-release.apk
   UpdateCheckData: 'version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)'
-  Builds:
-  - versionName: '1.0.1'
-    versionCode: 1000100
-    commit: carburoid-1.0.1
-    subdir: app
-    gradle:
-    - floss
