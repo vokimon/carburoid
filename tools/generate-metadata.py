@@ -220,7 +220,7 @@ def generate_fdroid_metadata_file(metadata_path):
     meta.Binaries = f"{config.repo_url}/releases/download/{config.version_tag_prefix}%v/{config.unique_name}-%v-release.apk"
     meta.Builds = [ns(
         versionName = config.last_version,
-        versionCode = version_to_code(config.last_version),
+        versionCode = int(version_to_code(config.last_version)),
         commit = config.version_tag_prefix + config.last_version,
         subdir = "app", # TODO: app dir, needed?
         gradle = ['floss'], # TODO: flavors, if none, 'true'
