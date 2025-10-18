@@ -22,6 +22,16 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    // Override the default 'app' (module name) by the applicationId
+    applicationVariants.all { variant ->
+        outputs.all { output ->
+            def buildType = variant.buildType.name
+            def appId = variant.applicationId
+            def flavorInfix = android.productFlavors.size() > 1 ? "-${variant.flavorInfix}" : ""
+            output.outputFileName = "${appId}{flavorInfix}-${version}$-${buildType}.apk"
+
+        }
+    }
     bundle {
         language {
             // Because user may change the language, all should be present

@@ -17,6 +17,7 @@ fdroid_fields:
   AuthorEmail: voki@canvoki.net
   AuthorWebSite: https://canvoki.net/coder
   UpdateCheckMode: Tags carburoid-([\d.]+)
+  Binaries: https://github.com/vokimon/carburoid/releases/download/carburoid-%v/net.canvoki.carburoid-floss-%v-release.apk
   UpdateCheckData: 'version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)'
   Builds:
   - versionName: '1.0.1'
