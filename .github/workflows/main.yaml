@@ -31,18 +31,16 @@ jobs:
       run: ./gradlew test
       
     - name: Build APK
-      run: ./gradlew assembleDebug
+      run: ./gradlew assemble
 
     - name: Rename APKs for clarity
       run: |
         mkdir -p upload-apks
-        cp app/build/outputs/apk/floss/debug/app-floss-debug.apk upload-apks/Carburoid-floss-debug.apk
-        cp app/build/outputs/apk/nonfree/debug/app-nonfree-debug.apk upload-apks/Carburoid-nonfree-debug.apk
+        find . -type f -name "*.apk" -exec cp {} upload-apks/ \;
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: Carburoid-apk
         path: |
-           upload-apks/Carburoid-floss-debug.apk
-           upload-apks/Carburoid-nonfree-debug.apk
+          upload-apks/
