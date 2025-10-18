@@ -9,7 +9,31 @@ def versionPropsFile = rootProject.file("version.properties")
 def versionProps = new Properties()
 versionProps.load(new FileInputStream(versionPropsFile))
 
+def loadEnv() {
+    def envFile = rootProject.file(".env")
+    if (! envFile.exists()) return
+    envFile.eachLine { line ->
+        if (line.trim().isEmpty() || line.startsWith("#")) return
+        def (name, value) = line.split("=", 2)
+        if (name && value) {
+            project.ext.set(name.trim(), value.trim())
+        }
+    }
+}
+
+loadEnv()
+
+
 android {
+    signingConfigs {
+       release {
+           storeFile file(RELEASE_STORE_FILE)
+           storePassword RELEASE_STORE_PASSWORD
+           keyAlias RELEASE_KEY_ALIAS
+           keyPassword RELEASE_KEY_PASSWORD
+       }
+    }
+
     namespace = 'net.canvoki.carburoid'
     compileSdk = 36
 
@@ -43,6 +67,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
