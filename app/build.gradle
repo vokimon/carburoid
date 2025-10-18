@@ -27,7 +27,7 @@ android {
         outputs.all { output ->
             def buildType = variant.buildType.name
             def appId = variant.applicationId
-            def flavorInfix = android.productFlavors.size() > 1 ? "-${variant.flavorInfix}" : ""
+            def flavorInfix = android.productFlavors.size() > 1 ? "-${variant.flavorName}" : ""
             output.outputFileName = "${appId}${flavorInfix}-${version}-${buildType}.apk"
 
         }
