@@ -45,6 +45,57 @@ spdx2assetlib_license = {
     '': 'Proprietary',
 }
 
+def extract_fingerprint(keystore: Path|str, password: str, alias: str) -> str:
+
+    from cryptography.hazmat.primitives.serialization import pkcs12
+    from cryptography.hazmat.primitives import hashes
+
+    p12_data = Path(keystore).read_bytes()
+    
+    p12_content = pkcs12.load_pkcs12(p12_data, password.encode('utf-8'))
+    for cert  in [p12_content.cert] + p12_content.additional_certs:
+        if cert.friendly_name != alias.encode('utf8'): continue
+        fingerprint_bytes = cert.certificate.fingerprint(hashes.SHA256())
+        return "".join(f"{b:02x}" for b in fingerprint_bytes)
+
+    return warn(
+        f"Alias '{alias}' not found in {keystore}. "
+        "This could be a limitation of the library with multikey keystores."
+    )
+
+
+def extract_key_fingerprint():
+    from dotenv import load_dotenv
+
+    env_path = Path(".env")
+    if not env_path.exists():
+        return warn(".env file not found.")
+
+    load_dotenv(dotenv_path=env_path)
+
+    env_values = (
+        keystore_path,
+        keystore_password,
+        key_alias,
+    ) = [
+        os.getenv(var) or warn(f"{var} not found in .env")
+        for var in [
+            'RELEASE_STORE_FILE',
+            'RELEASE_STORE_PASSWORD',
+            'RELEASE_KEY_ALIAS',
+        ]
+    ]
+    if not all(env_values): return None
+
+    if not Path(keystore_path).exists():
+        return warn(f"Keystore file not found: {keystore_path}")
+
+    try:
+        return extract_fingerprint(keystore_path, keystore_password, key_alias)
+    except Exception as e:
+        return warn(f"Error reading keystore: {e}")
+
+
 def deduce_license():
     license_file = Path("LICENSE")
     if not license_file.exists():
@@ -225,7 +276,10 @@ def generate_fdroid_metadata_file(metadata_path):
         subdir = "app", # TODO: app dir, needed?
         gradle = ['floss'], # TODO: flavors, if none, 'true'
     )]
-    #meta.AllowedAPKSigningKeys #TODO: obtain it from the keystore
+    # TODO: Do it in the gathering phase with overridable value
+    fingerprint = extract_key_fingerprint()
+    if fingerprint:
+        meta.AllowedAPKSigningKeys = fingerprint
     meta.AutoUpdateMode = "Version"
     meta.UpdateCheckMode = "Tags"
     #UpdateCheckData = 'version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)'
