@@ -49,6 +49,7 @@ android {
     // Override the default 'app' (module name) by the applicationId
     applicationVariants.all { variant ->
         outputs.all { output ->
+            def version = variant.mergedFlavor.versionName
             def buildType = variant.buildType.name
             def appId = variant.applicationId
             def flavorInfix = android.productFlavors.size() > 1 ? "-${variant.flavorName}" : ""
