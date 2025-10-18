@@ -200,24 +200,40 @@ def generate_fdroid_metadata_file(metadata_path):
     meta.AuthorEmail = config.fdroid_fields["AuthorEmail"]
     meta.AuthorWebSite = config.fdroid_fields["AuthorWebSite"]
     meta.WebSite = config.repo_url  # TODO: get it from config so we can override it
+    if config.donate_url:
+        meta.Donate = config.donate_url
+    if config.liberapay_id:
+        meta.Liberapay = config.liberapay_id
+    if config.bitcoin_id:
+        meta.BitCoin = config.bitcoin_id
+    if config.fdroid_antifeatures:
+        meta.AntiFeatures = config.fdroid_antifeatures
     meta.SourceCode = config.repo_url
     meta.IssueTracker = config.issues_url
     if config.translate_url:
         meta.Translation = config.translate_url
     meta.Changelog = config.repo_url+"/blob/HEAD/CHANGES.md" # TODO: refactor into git.browse_url("CHANGES.md")
-    meta.Name = config.project_name
-    meta.Summary = config.short_description
-    meta.Description = config.full_description
+    meta.AutoName = config.project_name
     meta.RepoType = "git" # TODO obtain it from config
-    meta.Repo = config.repo_url # TODO: It works for github but others may differ checkout and browse url
+    meta.Repo = config.repo_url + '.git' # TODO: provider dependant derivation
+    # TODO: Consider flavors in the output name
+    meta.Binaries = f"{config.repo_url}/releases/download/{config.version_tag_prefix}%v/{config.unique_name}-%v-release.apk"
+    meta.Builds = [ns(
+        versionName = config.last_version,
+        versionCode = version_to_code(config.last_version),
+        commit = config.version_tag_prefix + config.last_version,
+        subdir = "app", # TODO: app dir, needed?
+        gradle = ['floss'], # TODO: flavors, if none, 'true'
+    )]
+    #meta.AllowedAPKSigningKeys #TODO: obtain it from the keystore
     meta.AutoUpdateMode = "Version"
     meta.UpdateCheckMode = "Tags"
-    if config.donate_url:
-        meta.Donate = config.donate_url
-    if config.liberapay_id:
-        meta.Liberapay = config.liberapay_id
-    if config.fdroid_antifeatures:
-        meta.AntiFeatures = config.fdroid_antifeatures
+    #UpdateCheckData = 'version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)'
+    # Altre aproximació
+    #   AutoUpdateMode: Version
+    #   UpdateCheckMode: Tags carburoid-([\d.]+)
+    #   VercodeOperation: '1000000 * %c.major + 10000 * %c.minor + 100 * %c.patch'
+
     meta.CurrentVersion = config.last_version
     meta.CurrentVersionCode = int(version_to_code(config.last_version))
     meta.update(config.fdroid_fields)
@@ -265,6 +281,8 @@ class Config():
     translate_url: str = ""
     donate_url: str = ""
     liberapay_id: str = ""
+    bitcoin_id: str = ""
+    version_tag_prefix: str = 'v'
 
 
     @property

@@ -1,8 +1,8 @@
 Categories:
-  - Location Tracker & Sharer
-  - Money
-  - Navigation
-  - Public Transport
+- Location Tracker & Sharer
+- Money
+- Navigation
+- Public Transport
 License: AGPL-3.0-or-later
 AuthorName: David García Gazón
 AuthorEmail: voki@canvoki.net
@@ -12,36 +12,19 @@ SourceCode: https://github.com/vokimon/carburoid
 IssueTracker: https://github.com/vokimon/carburoid/issues
 Translation: https://hosted.weblate.org/projects/carburoid/
 Changelog: https://github.com/vokimon/carburoid/blob/HEAD/CHANGES.md
-
-Name: Carburoid
-Summary: Find Spanish gas stations by price and distance.
-Description: |+
-  Features:
-
-  - Show only relevant gas stations: either closer or cheaper than others
-  - Discards stations without your product
-  - Discards closed stations unless they open soon
-  - Stations opening or closing soon are not used to discard others, just in case you get there late or early
-  - See discarded stations by disabling any filtering criteria
-  - Station list and station detail views
-  - Open a station location in your chosen map application
-  - Translations to Spanish, Catalan, Basque, Galician, Aragonese...
-  - Dark and Light themes
-
-
+AutoName: Carburoid
 RepoType: git
-Repo: https://github.com/vokimon/carburoid
-
+Repo: https://github.com/vokimon/carburoid.git
+Binaries: https://github.com/vokimon/carburoid/releases/download/carburoid-%v/Carburoid-%v-floss-debug.apk
 Builds:
-  - versionName: 1.0.1
-    versionCode: 1000100
-    commit: carburoid-1.0.1
-    subdir: app
-    gradle:
-      - floss
-
+- versionName: 1.0.1
+  versionCode: 1000100
+  commit: carburoid-1.0.1
+  subdir: app
+  gradle:
+  - floss
 AutoUpdateMode: Version
 UpdateCheckMode: Tags carburoid-([\d.]+)
-UpdateCheckData: version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)
 CurrentVersion: 1.0.1
 CurrentVersionCode: 1000100
+UpdateCheckData: version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)
