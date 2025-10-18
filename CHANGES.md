@@ -1,5 +1,11 @@
 # Change log
 
+## 1.0.2 (2025-10-19)
+
+- 🏗️ Signed packages and related automations
+- 🏗️ Informative apk names: appid-flavor-version-build.apk
+- 🏗️ bump to gradle 8.14
+
 ## 1.0.1 (2025-10-15)
 
 First version on FDroid, featuring:

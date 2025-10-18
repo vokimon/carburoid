@@ -19,6 +19,9 @@ full_description_md: |+
   - Dark and Light themes
 
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_0_2_md: "- \U0001F3D7️ Signed packages and related automations\n- \U0001F3D7️
+  Informative apk names: appid-flavor-version-build.apk\n- \U0001F3D7️ bump to gradle
+  8.14"
 changes_1_0_1_md: "First version on FDroid, featuring:\n\n- \U0001F3D7️ floss and
   nonfree flavors, using or not privative GPlay location services\n- \U0001F310 Galician
   translation. Thanks Beatriz Plana\n- \U0001F310 Basque translation. Thanks Javier
