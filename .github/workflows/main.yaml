@@ -9,6 +9,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      RELEASE_STORE_BASE64: ${{ secrets.RELEASE_STORE_BASE64 }}
+      RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+      RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+      RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
     steps:
     - uses: actions/checkout@v4
     
@@ -24,6 +29,20 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
+    - name: Set up signing keystore
+      run: |
+        KEYSTORE_PATH="$RUNNER_TEMP/release-keystore.p12"
+        ENV_PATH=".env"
+
+        echo "$RELEASE_STORE_BASE64" | base64 --decode > "$KEYSTORE_PATH"
+
+        cat <<EOF > "$ENV_PATH"
+        RELEASE_STORE_FILE=$KEYSTORE_PATH
+        RELEASE_STORE_PASSWORD=$RELEASE_STORE_PASSWORD
+        RELEASE_KEY_ALIAS=$RELEASE_KEY_ALIAS
+        RELEASE_KEY_PASSWORD=$RELEASE_KEY_PASSWORD
+        EOF
+
     - name: Build with Gradle
       run: ./gradlew build
       
@@ -44,3 +63,4 @@ jobs:
         name: Carburoid-apk
         path: |
           upload-apks/
+
