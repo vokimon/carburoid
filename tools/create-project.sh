@@ -14,6 +14,93 @@ run() {
     "$@"
 }
 
+load_dotenv() {
+    local dotenv_file="${1:-.env}"
+    if [ -f "$dotenv_file" ]; then
+        set -a
+        source "$dotenv_file"
+        set +a
+    fi
+}
+
+update_dotenv() {
+    local dotenv_file="$1"
+    shift
+    [ -f "$dotenv_file" ] || touch "$dotenv_file"
+
+    local content
+    content=$(<"$dotenv_file")
+
+    for var_name in "$@"; do
+        local value="${!var_name}"
+        # Escape sed special chars in value
+        local escaped_value
+        escaped_value=$(printf '%s\n' "$value" | sed 's/[\/&]/\\&/g')
+
+        if grep -qE "^$var_name=" "$dotenv_file"; then
+            # Replace line in content variable
+            content=$(printf '%s\n' "$content" | sed "s/^$var_name=.*/$var_name=$escaped_value/")
+        else
+            # Append new variable at end
+            content="${content}"$'\n'"$var_name=$value"
+        fi
+    done
+
+    # Write all at once to file
+    printf '%s\n' "$content" > "$dotenv_file"
+}
+
+
+parameter() {
+    local var_name="$1"
+    local cli_value="$2"
+    local prompt_text="$3"
+    local default_value="$4"
+
+    # Reference to the variable we want to assign to
+    declare -n ref="$var_name"
+
+    local current_value="${!var_name}"
+
+    if [ -n "$cli_value" ]; then
+        echo "$var_name taken from command line: '$cli_value'"
+        ref="$cli_value"
+    elif [ -n "$current_value" ]; then
+        echo "$var_name taken from .env"
+        :
+    else
+        # Else ask the user, providing a default value
+        read -p "$prompt_text ($var_name) [$default_value]: " user_input
+        ref="${user_input:-$default_value}"
+    fi
+}
+
+password_parameter() {
+    local var_name="$1"
+    local prompt_text="$2"
+
+    # Reference to the variable we want to assign to
+    declare -n ref="$var_name"
+
+    local current_value="${!var_name}"
+
+    if [ -n "$current_value" ]; then
+        echo "$var_name taken from .env"
+    else
+        # Else ask the user, providing a default value
+        read -sp "$prompt_text ($var_name): " user_input
+        echo # Needed to go next line
+        ref="${user_input}"
+    fi
+}
+
+package_to_name() {
+    local package="$1"
+    local name="${package##*.}"     # get last part after last dot
+    echo "${name^}"                 # capitalize first letter
+}
+
+
 install_system_dependencies() {
     run sudo apt install \
         gradle \
@@ -27,27 +114,6 @@ install_system_dependencies() {
     export ANDROID_HOME=/usr/lib/android-sdk
 }
 
-
-# --- Prompt with default — supports CLI override ---
-prompt_with_default() {
-    local prompt_text="$1"
-    local default_value="$2"
-    local cli_value="$3"
-
-    if [ -n "$cli_value" ]; then
-        echo "$cli_value"
-        return
-    fi
-
-    read -p "$prompt_text [$default_value]: " user_input
-    if [ -z "$user_input" ]; then
-        echo "$default_value"
-    else
-        echo "$user_input"
-    fi
-}
-
-# --- Detect if inside any Git repo (current or parent) ---
 in_git_repo() {
     if git rev-parse --git-dir > /dev/null 2>&1; then
         return 0
@@ -56,11 +122,36 @@ in_git_repo() {
     fi
 }
 
-install_system_dependencies
+load_dotenv
+parameter PACKAGE_NAME "$1" "Enter package name" "com.example.dummy"
+package_short_name=${PACKAGE_NAME##*.} # the last dotted separated part
+parameter PROJECT_NAME "$2" "Enter project name" "$(package_to_name $PACKAGE_NAME)"
+parameter RELEASE_STORE_FILE "" "Enter keystore path" "$(pwd)/${package_short_name}-release.p12"
+password_parameter RELEASE_STORE_PASSWORD "Enter key store password"
+parameter RELEASE_KEY_ALIAS "" "Enter key alias" "${package_short_name}"
+password_parameter RELEASE_KEY_PASSWORD "Enter key password"
 
-# --- Get project name and package name ---
-PROJECT_NAME=$(prompt_with_default "Enter project name" "MyAndroidApp" "$1")
-PACKAGE_NAME=$(prompt_with_default "Enter package name" "com.example.$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')" "$2")
+update_dotenv .env \
+    RELEASE_STORE_FILE \
+    RELEASE_STORE_PASSWORD \
+    RELEASE_KEY_ALIAS \
+    RELEASE_KEY_PASSWORD \
+
+load_dotenv
+
+run keytool -genkeypair \
+  -keystore $RELEASE_STORE_FILE \
+  -storetype PKCS12 \
+  -storepass:env RELEASE_STORE_PASSWORD \
+  -keypass:env RELEASE_KEY_PASSWORD \
+  -alias $RELEASE_KEY_ALIAS \
+  -keyalg RSA \
+  -keysize 4096 \
+  -validity 10000
+
+#RELEASE_KEY_CN="CN=David García Garzón, OU=Unknown, O=Unknown, L=Sant Joan Despí, ST=Barcelona, C=ES"
+
+install_system_dependencies
 
 echo ""
 echo "🚀 Creating Android Kotlin project: $PROJECT_NAME"
@@ -344,6 +435,8 @@ local.properties
 captures/
 app/release/
 app/debug/
+*.p12
+.env
 EOF
 
 # --- Add all files to Git ---
