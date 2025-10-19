@@ -282,7 +282,9 @@ def generate_fdroid_metadata_file(metadata_path):
         meta.AllowedAPKSigningKeys = fingerprint
     meta.AutoUpdateMode = "Version"
     meta.UpdateCheckMode = "Tags"
-    #UpdateCheckData = 'version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)'
+    # Reserve position
+    if 'UpdateCheckData' in config.fdroid_fields:
+        meta.UpdateCheckData = config.fdroid_fields.get("UpdateCheckData")
     # Altre aproximació
     #   AutoUpdateMode: Version
     #   UpdateCheckMode: Tags carburoid-([\d.]+)
