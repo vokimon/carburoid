@@ -66,9 +66,9 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            signingConfig = signingConfigs.release
         }
     }
 
@@ -77,7 +77,7 @@ android {
     productFlavors {
         floss {
             dimension "freeness"
-            isDefault true
+            isDefault = true
         }
         nonfree { dimension "freeness" }
     }
