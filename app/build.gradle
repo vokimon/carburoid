@@ -102,6 +102,11 @@ android {
             )
         }
     }
+    // Dependencies info is encrypted Google only to read block
+    dependenciesInfo {
+        includeInApk = false // APK
+        includeInBundle = false // AAB
+    }
 }
 
 tasks.withType(Test) {
