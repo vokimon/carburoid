@@ -1,8 +1,8 @@
 Categories:
-- Location Tracker & Sharer
-- Money
-- Navigation
-- Public Transport
+  - Location Tracker & Sharer
+  - Money
+  - Navigation
+  - Public Transport
 License: AGPL-3.0-or-later
 AuthorName: David García Gazón
 AuthorEmail: voki@canvoki.net
@@ -12,20 +12,25 @@ SourceCode: https://github.com/vokimon/carburoid
 IssueTracker: https://github.com/vokimon/carburoid/issues
 Translation: https://hosted.weblate.org/projects/carburoid/
 Changelog: https://github.com/vokimon/carburoid/blob/HEAD/CHANGES.md
+
 AutoName: Carburoid
+
 RepoType: git
 Repo: https://github.com/vokimon/carburoid.git
 Binaries: https://github.com/vokimon/carburoid/releases/download/carburoid-%v/net.canvoki.carburoid-floss-%v-release.apk
+
 Builds:
-- versionName: 1.0.2
-  versionCode: 1000200
-  commit: carburoid-1.0.2
-  subdir: app
-  gradle:
-  - floss
+  - versionName: 1.0.3
+    versionCode: 1000300
+    commit: carburoid-1.0.3
+    subdir: app
+    gradle:
+      - floss
+
 AllowedAPKSigningKeys: 8cdfd389b1a7979943201321188a416ed54dbdf1c432ed07e2bb44b5b3cea722
+
 AutoUpdateMode: Version
 UpdateCheckMode: Tags carburoid-([\d.]+)
 UpdateCheckData: version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)
-CurrentVersion: 1.0.2
-CurrentVersionCode: 1000200
+CurrentVersion: 1.0.3
+CurrentVersionCode: 1000300

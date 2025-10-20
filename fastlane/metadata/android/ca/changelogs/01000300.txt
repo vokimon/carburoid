@@ -1,0 +1,5 @@
+## 1.0.3 (2025-10-20)
+
+- 🏗️ Fdroid: Removed privative dependency info only readable by Google
+- 🏗️ Cleaned warnings on optin use of experimental api's on tests
+

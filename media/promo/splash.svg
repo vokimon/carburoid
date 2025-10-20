@@ -9,7 +9,7 @@
     Carburoid
   </text>
   <!-- Version -->
-  <text x="660" y="220" id="version" font-family="Google Sans, Helvetica Neue, sans-serif" font-size="52" font-weight="500" fill="#f0e0dd" text-anchor="start">1.0.2</text>
+  <text x="660" y="220" id="version" font-family="Google Sans, Helvetica Neue, sans-serif" font-size="52" font-weight="500" fill="#f0e0dd" text-anchor="start">1.0.3</text>
   <!-- Motto -->
   <text x="310" y="290" id="motto" font-family="Google Sans, Helvetica Neue, sans-serif" font-size="36" fill="#712b5e" fill-opacity="0.7" text-anchor="start">
     Fill up cheaper, closer

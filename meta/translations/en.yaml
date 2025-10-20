@@ -19,6 +19,9 @@ full_description_md: |+
   - Dark and Light themes
 
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_0_3_md: "- \U0001F3D7️ Fdroid: Removed privative dependency info only readable
+  by Google\n- \U0001F3D7️ Cleaned warnings on optin use of experimental api's on
+  tests"
 changes_1_0_2_md: "- \U0001F3D7️ Signed packages and related automations\n- \U0001F3D7️
   Informative apk names: appid-flavor-version-build.apk\n- \U0001F3D7️ bump to gradle
   8.14"
