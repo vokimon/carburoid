@@ -1,0 +1,10 @@
+godot_asset_library_client
+consolemsg
+yamlns
+asn1crypto
+requests
+rich
+typer
+lxml
+pillow
+cairosvg
