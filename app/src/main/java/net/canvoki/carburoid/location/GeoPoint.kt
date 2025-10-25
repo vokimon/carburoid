@@ -56,10 +56,11 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
 
         private fun parseOsmLink(text: String): GeoPoint? {
             // Match: https://www.openstreetmap.org/#map=15/40.4168/-3.7038
-            val regex = Regex("""openstreetmap\.org/#map=\d+/([+-]?\d+(?:\.\d+)?)/([+-]?\d+(?:\.\d+)?)""")
+            val regex = Regex("""https?://(?:www\.)?openstreetmap\.org/#map=\d+/([+-]?\d+(?:\.\d+)?)/([+-]?\d+(?:\.\d+)?)""")
             val match = regex.find(text) ?: return null
             val lat = match.groupValues[1].toDoubleOrNull() ?: return null
             val lon = match.groupValues[2].toDoubleOrNull() ?: return null
+            if (lat !in -90.0..90.0 || lon !in -180.0..180.0) return null
             return GeoPoint(lat, lon)
         }
     }

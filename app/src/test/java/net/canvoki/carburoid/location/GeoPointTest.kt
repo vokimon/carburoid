@@ -5,12 +5,11 @@ import net.canvoki.carburoid.location.GeoPoint
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
+fun locationStr(l: GeoPoint?): String? {
+    return l?.let { "GeoPoint<${"%.4f".format(Locale.ROOT, it.latitude)},${"%.4f".format(Locale.ROOT, it.longitude)}>" }
+}
+
 class GeoPointTest {
-
-    private fun locationStr(l: GeoPoint?): String? {
-        return l?.let { "GeoPoint<${"%.4f".format(Locale.ROOT, it.latitude)},${"%.4f".format(Locale.ROOT, it.longitude)}>" }
-    }
-
     private fun testGeoUri(uri: String, expected: String?) {
         val actual = GeoPoint.fromGeoUri(uri)
         assertEquals(expected, locationStr(actual))
@@ -96,5 +95,117 @@ class GeoPointTest {
     @Test
     fun `geo uri with empty coordinates returns null`() {
         testGeoUri("geo:,", null)
+    }
+}
+
+class GeoPoint_OpenStreetMap_Test {
+    private fun testCase(text: String, expected: String?) {
+        val actual = GeoPoint.fromText(text)
+        assertEquals(expected, locationStr(actual))
+    }
+
+    @Test
+    fun `osm link valid`() {
+        testCase(
+            "https://www.openstreetmap.org/#map=15/40.4168/-3.7038",
+            "GeoPoint<40.4168,-3.7038>"
+        )
+    }
+
+    @Test
+    fun `osm link with http`() {
+        testCase(
+            "http://www.openstreetmap.org/#map=10/39.2114/-1.5392",
+            "GeoPoint<39.2114,-1.5392>"
+        )
+    }
+
+    @Test
+    fun `osm link without subdomain`() {
+        testCase(
+            "https://openstreetmap.org/#map=12/41.3851/2.1734",
+            "GeoPoint<41.3851,2.1734>"
+        )
+    }
+
+    @Test
+    fun `osm link negative coordinates`() {
+        testCase(
+            "https://www.openstreetmap.org/#map=14/-33.4567/-70.6789",
+            "GeoPoint<-33.4567,-70.6789>"
+        )
+    }
+
+    @Test
+    fun `osm link invalid zoom level`() {
+        testCase(
+            "https://www.openstreetmap.org/#map=abc/40.4168/-3.7038",
+            null
+        )
+    }
+
+    @Test
+    fun `osm link missing coordinates`() {
+        testCase(
+            "https://www.openstreetmap.org/#map=15/",
+            null
+        )
+    }
+
+    @Test
+    fun `osm link extra path segments`() {
+        testCase(
+            "https://www.openstreetmap.org/directions?from=40.4168,-3.7038&to=41.3851,2.1734",
+            // TODO: This should end-up being a path
+            "GeoPoint<40.4168,-3.7038>"
+        )
+    }
+
+    @Test
+    fun `osm link malformed coordinates`() {
+        testCase(
+            "https://www.openstreetmap.org/#map=15/40.4168/",
+            null
+        )
+    }
+
+    @Test
+    fun `osm link out of bounds latitude`() {
+        testCase(
+            "https://www.openstreetmap.org/#map=15/95.0/-3.7038",
+            null
+        )
+    }
+
+    @Test
+    fun `osm link out of bounds negative latitude`() {
+        testCase(
+            "https://www.openstreetmap.org/#map=15/-95.0/-3.7038",
+            null
+        )
+    }
+
+    @Test
+    fun `osm link out of bounds longitude`() {
+        testCase(
+            "https://www.openstreetmap.org/#map=15/40.4168/200.0",
+            null
+        )
+    }
+
+    @Test
+    fun `osm link out of bounds negative longitude`() {
+        testCase(
+            "https://www.openstreetmap.org/#map=15/40.4168/-200.0",
+            null
+        )
+    }
+
+    @Test
+    fun `rejects fake osm link`() {
+        testCase(
+            "https://evil.com/openstreetmap.org/#map=15/40.4168/-3.7038",
+            null
+        )
     }
 }
