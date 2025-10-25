@@ -1,5 +1,13 @@
 # Change log
 
+## Unreleased
+
+Bidirectional connection to mapping apps
+
+- ✨ Carburoid as share target for locations
+- ✨ Carburoid as handler for geo uri
+- ✨ Carburoid as handler for http OSD links
+
 ## 1.0.3 (2025-10-20)
 
 - 🏗️ Fdroid: Removed privative dependency info only readable by Google

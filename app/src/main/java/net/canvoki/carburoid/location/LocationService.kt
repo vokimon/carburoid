@@ -39,6 +39,8 @@ class LocationService(
 
     private var currentLocation: Location? = null
 
+    private var fixedLocation: Location? = null
+
     private var description: String? = null
 
     private var geocodingJob: Job? = null
@@ -51,12 +53,22 @@ class LocationService(
         return activity.getString(stringId)
     }
 
+    fun setFixedLocation(location: Location) {
+        fixedLocation = location
+        setLocation(location)
+    }
+
+    fun useDeviceLocation() {
+        fixedLocation = null
+        refreshLocation()
+    }
+
     fun refreshLocation() {
         if (!hasPermission()) {
             requestPermission()
             return
         }
-        if (!isLocationEnabled()) {
+        if (!isLocationDeviceEnabled()) {
             handleLocationDisabled()
             return
         }
@@ -225,7 +237,7 @@ class LocationService(
         return location
     }
 
-    fun isLocationEnabled(): Boolean {
+    fun isLocationDeviceEnabled(): Boolean {
         val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return (
             locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||

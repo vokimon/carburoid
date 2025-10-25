@@ -5,7 +5,7 @@ import net.canvoki.carburoid.location.GeoPoint
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class GeoUriParserTest {
+class GeoPointTest {
 
     private fun locationStr(l: GeoPoint?): String? {
         return l?.let { "GeoPoint<${"%.4f".format(Locale.ROOT, it.latitude)},${"%.4f".format(Locale.ROOT, it.longitude)}>" }

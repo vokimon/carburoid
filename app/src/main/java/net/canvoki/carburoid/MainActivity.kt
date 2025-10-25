@@ -1,6 +1,7 @@
 package net.canvoki.carburoid
 
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -29,6 +30,11 @@ import net.canvoki.carburoid.ui.StationDetailActivity
 import net.canvoki.carburoid.ui.settings.LanguageSettings
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        const val EXTRA_LOCATION = "location"
+        const val EXTRA_SOURCE = "source"
+    }
 
     private val app: CarburoidApplication
         get() = application as CarburoidApplication
@@ -120,8 +126,8 @@ class MainActivity : AppCompatActivity() {
                 loadGasStations()
             }
         }
-
         locationService.refreshLocation()
+        handleDeepLink(intent)
     }
 
     override fun onResume() {
@@ -144,6 +150,18 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleDeepLink(intent)
+    }
+
+    private fun handleDeepLink(intent: Intent?) {
+        intent?.getParcelableExtra<Location>(MainActivity.EXTRA_LOCATION)?.let { location ->
+            locationService.setFixedLocation(location)
         }
     }
 

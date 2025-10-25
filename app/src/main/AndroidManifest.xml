@@ -25,6 +25,7 @@
         <meta-data
             android:name="android.graphics.drawable.themedIcon"
             android:resource="@mipmap/ic_launcher_themed" />
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
@@ -43,6 +44,39 @@
         <activity
             android:name=".ui.StationDetailActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".deeplink.DeepLinkHandler"
+            android:exported="true"
+            android:label="Gas stations nerarby"
+            android:theme="@android:style/Theme.NoDisplay">
+
+            <!-- Share text (geolocation, coords or uri) -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+
+            <!-- View geo URI -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="geo" />
+            </intent-filter>
+
+            <!-- View http uri to a mapping service -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="www.google.com" android:pathPrefix="/maps/dir/" />
+                <data android:scheme="https" android:host="www.openstreetmap.org" />
+            </intent-filter>
+
+        </activity>
+
     </application>
 
 </manifest>
