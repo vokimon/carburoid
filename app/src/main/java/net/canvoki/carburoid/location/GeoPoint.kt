@@ -75,20 +75,13 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
             return null
          }
 
-        private fun parseCoordinates(coordStr: String?): GeoPoint? {
-            if (coordStr == null || !coordStr.contains(",")) return null
-            val parts = coordStr.split(",", limit = 2)
-            return fromTextComponents(parts[0], parts[1])
-        }
-
-
          fun fromGoogleMapsLink(text: String): GeoPoint? {
             val uri = Uri.parse(text) ?: return null
 
             if (uri.host == "maps.google.com") {
                 // TODO: could also contain other elements
                 val q = uri.getQueryParameter("q")
-                return parseCoordinates(q)
+                return parseCoordinatesWithLabels(q)
             }
 
             if (uri.host != "www.google.com") {
@@ -98,7 +91,7 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
             // https://www.google.com/maps?q=lat,long
             if (uri.path == "/maps") {
                 val q = uri.getQueryParameter("q")
-                return parseCoordinates(q)
+                return parseCoordinatesWithLabels(q)
             }
             // https://www.google.com/maps/dir/40.4168,-3.7038/41.3851,2.1734/ (directions)
             if (uri.path?.startsWith("/maps/dir/")==true) {
@@ -129,10 +122,6 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
             return null
         }
 
-        private fun matchToCoords(match: MatchResult): GeoPoint? {
-            return fromTextComponents(match.groupValues[1], match.groupValues[2])
-        }
-
         private fun fromTextComponents(latString: String, lonString: String): GeoPoint? {
             val lat = latString.toDoubleOrNull() ?: return null
             val lon = lonString.toDoubleOrNull() ?: return null
@@ -141,5 +130,30 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
             }
             return null
         }
+
+        private fun parseCoordinates(coordStr: String?): GeoPoint? {
+            if (coordStr == null || !coordStr.contains(",")) return null
+            val parts = coordStr.split(",", limit = 2)
+            return fromTextComponents(parts[0], parts[1])
+        }
+
+        private fun parseCoordinatesWithLabels(input: String?): GeoPoint? {
+            if (input == null) return null
+
+            // Regex to find the LAST occurrence of "lat,lon" pattern in the string
+            val regex = Regex("""([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?)""")
+            val matches = regex.findAll(input).toList()
+
+            // Use the last match (most likely the actual coordinates)
+            if (matches.isNotEmpty()) {
+                return matchToCoords(matches.last())
+            }
+
+            return null
+        }
+        private fun matchToCoords(match: MatchResult): GeoPoint? {
+            return fromTextComponents(match.groupValues[1], match.groupValues[2])
+        }
+
     }
 }

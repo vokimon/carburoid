@@ -241,9 +241,17 @@ class GeoPointTest {
     }
 
     @Test
+    fun `gmaps subdomain integer`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=40,-3",
+            "GeoPoint<40.0000,-3.0000>"
+        )
+    }
+
+    @Test
     fun `gmaps subdomain invalid latitude`() {
         testGMapsUri(
-            "https://maps.google.com/?q=6.6.6,3",
+            "https://maps.google.com/?q=bad,3",
             null
         )
     }
@@ -251,7 +259,7 @@ class GeoPointTest {
     @Test
     fun `gmaps subdomain invalid longitude`() {
         testGMapsUri(
-            "https://maps.google.com/?q=100,1.1.1",
+            "https://maps.google.com/?q=40,bad",
             null
         )
     }
@@ -296,6 +304,22 @@ class GeoPointTest {
         )
     }
 
+    @Test
+    fun `gmaps subdomain with label and coords`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=Madrid%2040.4168,-3.7038",
+            "GeoPoint<40.4168,-3.7038>"
+        )
+    }
+
+    @Test
+    fun `gmaps subdomain with parentheses`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=Station+(40.4168,-3.7038)",
+            "GeoPoint<40.4168,-3.7038>"
+        )
+    }
+
     // Pattern: www.google.com/maps?q=lat,long
 
     @Test
@@ -330,6 +354,22 @@ class GeoPointTest {
         )
     }
 
+    @Test
+    fun `gmaps path with label and coords`() {
+        testGMapsUri(
+            "https://www.google.com/maps?q=Madrid%2040.4168,-3.7038",
+            "GeoPoint<40.4168,-3.7038>"
+        )
+    }
+
+    @Test
+    fun `gmaps path with parentheses`() {
+        testGMapsUri(
+            "https://www.google.com/maps?q=Station+(40.4168,-3.7038)",
+            "GeoPoint<40.4168,-3.7038>"
+        )
+    }
+
     // Pattern: https://www.google.com/maps/dir/lat1,lon1/lat2,lon2/...
 
     @Test
@@ -357,9 +397,16 @@ class GeoPointTest {
     }
  
     @Test
-    fun `gmaps dir bad lat`() {
+    fun `gmaps dir invalid number latitude`() {
         testGMapsUri(
             "https://www.google.com/maps/dir/6.6.6,-3.7038/41.3851,2.1734/",
+            null
+        )
+    }
+    @Test
+    fun `gmaps dir invalid number longitude`() {
+        testGMapsUri(
+            "https://www.google.com/maps/dir/40.4168,6.6.6/41.3851,2.1734/",
             null
         )
     }
@@ -424,4 +471,3 @@ class GeoPointTest {
     }
 
 }
-
