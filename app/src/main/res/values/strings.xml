@@ -58,4 +58,7 @@
     <string name="refreshing_data">Refreshing data…</string>
     <string name="failed_download">Download failed: %1$s</string>
     <string name="open_in_maps">Open in a map</string>
+    <string name="location_picker_title">Select location</string>
+    <string name="location_picker_search_location_hint">Search city or address</string>
+    <string name="location_picker_no_results">No locations found</string>
 </resources>

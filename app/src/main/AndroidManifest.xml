@@ -46,6 +46,12 @@
             android:exported="false" />
 
         <activity
+            android:name=".location.LocationPickerActivity"
+            android:exported="false"
+            android:label="@string/location_picker_title"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".deeplink.DeepLinkHandler"
             android:exported="true"
             android:label="Gas stations nerarby"

@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             notify = ::showToast,
             suggestAction = ::suggestAction,
         )
-        locationSelector.setService(locationService, lifecycleScope)
+        locationSelector.bind(this, locationService)
         lifecycleScope.launch {
             locationService.locationChanged.collect {
                 loadGasStations()
@@ -126,6 +126,7 @@ class MainActivity : AppCompatActivity() {
                 loadGasStations()
             }
         }
+
         locationService.refreshLocation()
         handleDeepLink(intent)
     }
@@ -161,7 +162,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleDeepLink(intent: Intent?) {
         intent?.getParcelableExtra(MainActivity.EXTRA_LOCATION, Location::class.java)?.let { location ->
-
             locationService.setFixedLocation(location)
         }
     }

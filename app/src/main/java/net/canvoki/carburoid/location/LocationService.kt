@@ -282,4 +282,8 @@ class LocationService(
             activity.startActivity(settingsIntent)
         }
     }
+
+    fun getCurrentLocation(): Location? {
+        return fixedLocation ?: currentLocation
+    }
 }
