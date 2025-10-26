@@ -29,39 +29,86 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
                 .trim()
             val coords = coordPart.split(',').map { it.trim() }
             if (coords.size < 2) return null
-            val lat = coords[0].toDoubleOrNull() ?: return null
-            val lon = coords[1].toDoubleOrNull() ?: return null
-            if (lat !in -90.0..90.0 || lon !in -180.0..180.0) return null
-            return GeoPoint(lat, lon)
+            return fromTextComponents(coords[0], coords[1])
         }
 
         /** Parse from free-form text (decimal, DMS, OSM links, etc.) */
         fun fromText(text: String?): GeoPoint? {
             if (text == null) return null
             return fromGeoUri(text)
-                ?: parseOsmLink(text)
-                ?: parseDecimalCoords(text)
+                ?: fromOsmLink(text)
+                ?: fromDecimalCoords(text)
         }
 
 
-        private fun parseDecimalCoords(text: String): GeoPoint? {
+        fun fromDecimalCoords(text: String): GeoPoint? {
             // Match: "40.4168, -3.7038" or "40.4168,-3.7038"
             val regex = Regex("""([+-]?\d+(?:\.\d+)?)[,\s]+([+-]?\d+(?:\.\d+)?)""")
             val match = regex.find(text) ?: return null
-            val lat = match.groupValues[1].toDoubleOrNull() ?: return null
-            val lon = match.groupValues[2].toDoubleOrNull() ?: return null
-            if (lat !in -90.0..90.0 || lon !in -180.0..180.0) return null
-            return GeoPoint(lat, lon)
+            return fromTextComponents(match.groupValues[1], match.groupValues[2])
         }
 
-        private fun parseOsmLink(text: String): GeoPoint? {
-            // Match: https://www.openstreetmap.org/#map=15/40.4168/-3.7038
-            val regex = Regex("""https?://(?:www\.)?openstreetmap\.org/#map=\d+/([+-]?\d+(?:\.\d+)?)/([+-]?\d+(?:\.\d+)?)""")
-            val match = regex.find(text) ?: return null
-            val lat = match.groupValues[1].toDoubleOrNull() ?: return null
-            val lon = match.groupValues[2].toDoubleOrNull() ?: return null
-            if (lat !in -90.0..90.0 || lon !in -180.0..180.0) return null
-            return GeoPoint(lat, lon)
+        fun fromOsmLink(text: String): GeoPoint? {
+            // https://www.openstreetmap.org/#map=15/40.4168/-3.7038
+            Regex("""https?://(?:www\.)?openstreetmap\.org/#map=\d+/([+-]?\d+(?:\.\d+)?)/([+-]?\d+(?:\.\d+)?)""")
+                .find(text)?.let { match ->
+                    return matchToCoords(match)
+                }
+
+            // https://www.openstreetmap.org/directions?from=40.4168,-3.7038&to=41.3851,2.1734
+            Regex("""https?://(?:www\.)?openstreetmap\.org/directions[^#]*[&?]from=([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?)""")
+                .find(text)?.let { match ->
+                    return matchToCoords(match)
+                }
+
+            return null
+         }
+
+         fun fromGoogleMapsLink(text: String): GeoPoint? {
+            // https://maps.google.com/?q=40.4168,-3.7038 (subdomain)
+            Regex("""https?://maps\.google\.com/\?(?:[^#]*?[&?])?q=([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?)""")
+                .find(text)?.let { match ->
+                    return matchToCoords(match)
+                }
+
+            // https://www.google.com/maps/dir/40.4168,-3.7038/41.3851,2.1734/ (directions)
+            Regex("""https?://(?:www\.)?google\.com/maps/dir/([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?)/""")
+                .find(text)?.let { match ->
+                    return matchToCoords(match)
+                }
+
+            // https://www.google.com/maps/place/Madrid/40.4168,-3.7038 (place)
+            Regex("""https?://(?:www\.)?google\.com/maps/place/[^/]+/([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?)""")
+                .find(text)?.let { match ->
+                    return matchToCoords(match)
+                }
+
+            // https://www.google.com/maps/@40.4168,-3.7038 (at)
+            Regex("""https?://(?:www\.)?google\.com/maps/@([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?),\d+z?""")
+                .find(text)?.let { match ->
+                    return matchToCoords(match)
+                }
+
+            // https://www.google.com/maps?q=40.4168,-3.7038 (path & query)
+            Regex("""https?://(?:www\.)?google\.com/maps\?(?:[^#]*?[&?])?q=([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?)""")
+                .find(text)?.let { match ->
+                    return matchToCoords(match)
+                }
+
+            return null
+        }
+
+        private fun matchToCoords(match: MatchResult): GeoPoint? {
+            return fromTextComponents(match.groupValues[1], match.groupValues[2])
+        }
+
+        private fun fromTextComponents(latString: String, lonString: String): GeoPoint? {
+            val lat = latString.toDoubleOrNull() ?: return null
+            val lon = lonString.toDoubleOrNull() ?: return null
+            if (lat in -90.0..90.0 && lon in -180.0..180.0) {
+                return GeoPoint(lat, lon)
+            }
+            return null
         }
     }
 }

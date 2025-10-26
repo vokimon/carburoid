@@ -10,6 +10,10 @@ fun locationStr(l: GeoPoint?): String? {
 }
 
 class GeoPointTest {
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // Geo URI (geo:...)
+
     private fun testGeoUri(uri: String, expected: String?) {
         val actual = GeoPoint.fromGeoUri(uri)
         assertEquals(expected, locationStr(actual))
@@ -96,17 +100,18 @@ class GeoPointTest {
     fun `geo uri with empty coordinates returns null`() {
         testGeoUri("geo:,", null)
     }
-}
 
-class GeoPoint_OpenStreetMap_Test {
-    private fun testCase(text: String, expected: String?) {
-        val actual = GeoPoint.fromText(text)
+    ////////////////////////////////////////////////////////////////////////////////
+    // Open Street Maps (OSM)
+
+    private fun testOsmLink(text: String, expected: String?) {
+        val actual = GeoPoint.fromOsmLink(text)
         assertEquals(expected, locationStr(actual))
     }
 
     @Test
     fun `osm link valid`() {
-        testCase(
+        testOsmLink(
             "https://www.openstreetmap.org/#map=15/40.4168/-3.7038",
             "GeoPoint<40.4168,-3.7038>"
         )
@@ -114,7 +119,7 @@ class GeoPoint_OpenStreetMap_Test {
 
     @Test
     fun `osm link with http`() {
-        testCase(
+        testOsmLink(
             "http://www.openstreetmap.org/#map=10/39.2114/-1.5392",
             "GeoPoint<39.2114,-1.5392>"
         )
@@ -122,7 +127,7 @@ class GeoPoint_OpenStreetMap_Test {
 
     @Test
     fun `osm link without subdomain`() {
-        testCase(
+        testOsmLink(
             "https://openstreetmap.org/#map=12/41.3851/2.1734",
             "GeoPoint<41.3851,2.1734>"
         )
@@ -130,7 +135,7 @@ class GeoPoint_OpenStreetMap_Test {
 
     @Test
     fun `osm link negative coordinates`() {
-        testCase(
+        testOsmLink(
             "https://www.openstreetmap.org/#map=14/-33.4567/-70.6789",
             "GeoPoint<-33.4567,-70.6789>"
         )
@@ -138,7 +143,7 @@ class GeoPoint_OpenStreetMap_Test {
 
     @Test
     fun `osm link invalid zoom level`() {
-        testCase(
+        testOsmLink(
             "https://www.openstreetmap.org/#map=abc/40.4168/-3.7038",
             null
         )
@@ -146,24 +151,24 @@ class GeoPoint_OpenStreetMap_Test {
 
     @Test
     fun `osm link missing coordinates`() {
-        testCase(
+        testOsmLink(
             "https://www.openstreetmap.org/#map=15/",
             null
         )
     }
 
+    // TODO: This should end-up being a path
     @Test
-    fun `osm link extra path segments`() {
-        testCase(
+    fun `osm link directions takes origin`() {
+        testOsmLink(
             "https://www.openstreetmap.org/directions?from=40.4168,-3.7038&to=41.3851,2.1734",
-            // TODO: This should end-up being a path
             "GeoPoint<40.4168,-3.7038>"
         )
     }
 
     @Test
     fun `osm link malformed coordinates`() {
-        testCase(
+        testOsmLink(
             "https://www.openstreetmap.org/#map=15/40.4168/",
             null
         )
@@ -171,7 +176,7 @@ class GeoPoint_OpenStreetMap_Test {
 
     @Test
     fun `osm link out of bounds latitude`() {
-        testCase(
+        testOsmLink(
             "https://www.openstreetmap.org/#map=15/95.0/-3.7038",
             null
         )
@@ -179,7 +184,7 @@ class GeoPoint_OpenStreetMap_Test {
 
     @Test
     fun `osm link out of bounds negative latitude`() {
-        testCase(
+        testOsmLink(
             "https://www.openstreetmap.org/#map=15/-95.0/-3.7038",
             null
         )
@@ -187,7 +192,7 @@ class GeoPoint_OpenStreetMap_Test {
 
     @Test
     fun `osm link out of bounds longitude`() {
-        testCase(
+        testOsmLink(
             "https://www.openstreetmap.org/#map=15/40.4168/200.0",
             null
         )
@@ -195,7 +200,7 @@ class GeoPoint_OpenStreetMap_Test {
 
     @Test
     fun `osm link out of bounds negative longitude`() {
-        testCase(
+        testOsmLink(
             "https://www.openstreetmap.org/#map=15/40.4168/-200.0",
             null
         )
@@ -203,9 +208,256 @@ class GeoPoint_OpenStreetMap_Test {
 
     @Test
     fun `rejects fake osm link`() {
-        testCase(
+        testOsmLink(
             "https://evil.com/openstreetmap.org/#map=15/40.4168/-3.7038",
             null
         )
     }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // Google Maps
+
+    private fun testGMapsUri(text: String, expected: String?) {
+        val actual = GeoPoint.fromGoogleMapsLink(text)
+        assertEquals(expected, locationStr(actual))
+    }
+
+    @Test
+    fun `gmaps subdomain`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=40.4168,-3.7038",
+            "GeoPoint<40.4168,-3.7038>"
+        )
+    }
+
+    @Test
+    fun `gmaps path`() {
+        testGMapsUri(
+            "https://www.google.com/maps?q=39.2114,-1.5392",
+            "GeoPoint<39.2114,-1.5392>"
+        )
+    }
+
+    @Test
+    fun `gmaps subdomain with extra params`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=41.3851,2.1734&z=15",
+            "GeoPoint<41.3851,2.1734>"
+        )
+    }
+
+    @Test
+    fun `gmaps invalid latitude`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=6.6.6,3",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps invalid longitude`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=100,1.1.1",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps out of bounds latitude`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=95.0,-3.7038",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps out of bounds negative latitude`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=-95.0,-3.7038",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps missing q param`() {
+        testGMapsUri(
+            "https://maps.google.com/?z=15",
+            null
+        )
+    }
+
+    @Test
+    fun `non-google url`() {
+        testGMapsUri(
+            "https://example.com/maps?q=40.4168,-3.7038",
+            null
+        )
+    }
+
+    @Test
+    fun `maps google subdomain q param valid`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=40.4168,-3.7038",
+            "GeoPoint<40.4168,-3.7038>"
+        )
+    }
+
+    @Test
+    fun `www gmaps q param valid`() {
+        testGMapsUri(
+            "https://www.google.com/maps?q=40.4168,-3.7038",
+            "GeoPoint<40.4168,-3.7038>"
+        )
+    }
+
+    // === Pattern 1: /maps?q=... (www.google.com) ===
+    @Test
+    fun `gmaps www q param valid`() {
+        testGMapsUri(
+            "https://www.google.com/maps?q=40.4168,-3.7038",
+            "GeoPoint<40.4168,-3.7038>"
+        )
+    }
+
+    @Test
+    fun `gmaps www q param bad lat`() {
+        testGMapsUri(
+            "https://www.google.com/maps?q=bad,-3.7038",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps www q param lat too low`() {
+        testGMapsUri(
+            "https://www.google.com/maps?q=-95.0,-3.7038",
+            null
+        )
+    }
+
+    // === Pattern 1b: maps.google.com/?q=... ===
+    @Test
+    fun `gmaps subdomain q param valid`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=39.2114,-1.5392",
+            "GeoPoint<39.2114,-1.5392>"
+        )
+    }
+
+    @Test
+    fun `gmaps subdomain q param with extra params`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=41.3851,2.1734&z=15",
+            "GeoPoint<41.3851,2.1734>"
+        )
+    }
+
+    @Test
+    fun `gmaps subdomain q param bad lon`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=40.4168,bad",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps subdomain q param lon too high`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=40.4168,200.0",
+            null
+        )
+    }
+
+    // === Pattern 2: /maps/dir/... ===
+    @Test
+    fun `gmaps dir takes route origin`() {
+        testGMapsUri(
+            "https://www.google.com/maps/dir/40.4168,-3.7038/41.3851,2.1734/",
+            "GeoPoint<40.4168,-3.7038>"
+        )
+    }
+
+    @Test
+    fun `gmaps dir with multiple waypoints`() {
+        testGMapsUri(
+            "https://www.google.com/maps/dir/39.2114,-1.5392/40.4168,-3.7038/41.3851,2.1734/42.8467,-1.2345/",
+            "GeoPoint<39.2114,-1.5392>"
+        )
+    }
+ 
+    @Test
+    fun `gmaps dir bad lat`() {
+        testGMapsUri(
+            "https://www.google.com/maps/dir/bad,-3.7038/41.3851,2.1734/",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps dir lat too low`() {
+        testGMapsUri(
+            "https://www.google.com/maps/dir/-95.0,-3.7038/41.3851,2.1734/",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps route incomplete`() {
+        testGMapsUri(
+            "https://www.google.com/maps/dir/40.4168/",
+            null
+        )
+    }
+
+    // === Pattern 3: /maps/place/... ===
+    @Test
+    fun `gmaps place with coords valid`() {
+        testGMapsUri(
+            "https://www.google.com/maps/place/Abengibre/39.2114,-1.5392",
+            "GeoPoint<39.2114,-1.5392>"
+        )
+    }
+
+    @Test
+    fun `gmaps place bad lon`() {
+        testGMapsUri(
+            "https://www.google.com/maps/place/Barcelona/41.3851,bad",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps place lon too low`() {
+        testGMapsUri(
+            "https://www.google.com/maps/place/Sevilla/37.3891,-200.0",
+            null
+        )
+    }
+
+    // === Pattern 4: /maps/@... ===
+    @Test
+    fun `gmaps map view center valid`() {
+        testGMapsUri(
+            "https://www.google.com/maps/@41.3851,2.1734,12z",
+            "GeoPoint<41.3851,2.1734>"
+        )
+    }
+
+    @Test
+    fun `gmaps map view bad lat`() {
+        testGMapsUri(
+            "https://www.google.com/maps/@6.6.6,2.1734,12z",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps map view lon too low`() {
+        testGMapsUri(
+            "https://www.google.com/maps/@41.3851,-200.0,12z",
+            null
+        )
+    }
+
 }
+
