@@ -1,6 +1,7 @@
 package net.canvoki.carburoid.location
 
 import android.location.Location
+import net.canvoki.carburoid.network.Uri
 
 /**
  * Represents of a geographic point (WGS84).
@@ -17,6 +18,14 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
 
     companion object {
 
+        /** Parse from free-form text (decimal, DMS, OSM links, etc.) */
+        fun fromText(text: String?): GeoPoint? {
+            if (text == null) return null
+            return fromGeoUri(text)
+                ?: fromOsmLink(text)
+                ?: fromDecimalCoords(text)
+        }
+
         /** Parse from geo: URI string (RFC 5870) */
         fun fromGeoUri(uriString: String?): GeoPoint? {
             if (uriString == null || !uriString.startsWith("geo:", ignoreCase = true)) {
@@ -32,15 +41,6 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
             return fromTextComponents(coords[0], coords[1])
         }
 
-        /** Parse from free-form text (decimal, DMS, OSM links, etc.) */
-        fun fromText(text: String?): GeoPoint? {
-            if (text == null) return null
-            return fromGeoUri(text)
-                ?: fromOsmLink(text)
-                ?: fromDecimalCoords(text)
-        }
-
-
         fun fromDecimalCoords(text: String): GeoPoint? {
             // Match: "40.4168, -3.7038" or "40.4168,-3.7038"
             val regex = Regex("""([+-]?\d+(?:\.\d+)?)[,\s]+([+-]?\d+(?:\.\d+)?)""")
@@ -49,17 +49,28 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
         }
 
         fun fromOsmLink(text: String): GeoPoint? {
-            // https://www.openstreetmap.org/#map=15/40.4168/-3.7038
-            Regex("""https?://(?:www\.)?openstreetmap\.org/#map=\d+/([+-]?\d+(?:\.\d+)?)/([+-]?\d+(?:\.\d+)?)""")
-                .find(text)?.let { match ->
-                    return matchToCoords(match)
-                }
+            val uri = Uri.parse(text) ?: return null
 
-            // https://www.openstreetmap.org/directions?from=40.4168,-3.7038&to=41.3851,2.1734
-            Regex("""https?://(?:www\.)?openstreetmap\.org/directions[^#]*[&?]from=([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?)""")
-                .find(text)?.let { match ->
-                    return matchToCoords(match)
+            if (uri.host != "www.openstreetmap.org" && uri.host != "openstreetmap.org") {
+                return null
+            }
+
+            if (uri.fragment?.startsWith("map=") == true) {
+                val parts = uri.fragment!!.substringAfter("map=").split("/")
+                if (parts.size >= 3 && parts[0].toDoubleOrNull() !== null) {
+                    return fromTextComponents(parts[1], parts[2])
                 }
+            }
+
+            if (uri.path == "/directions") {
+                val fromParam = uri.getQueryParameter("from")
+                if (fromParam != null && fromParam.contains(",")) {
+                    val coords = fromParam.split(",", limit = 2)
+                    if (coords.size == 2) {
+                        return fromTextComponents(coords[0], coords[1])
+                    }
+                }
+            }
 
             return null
          }
