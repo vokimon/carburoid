@@ -34,6 +34,12 @@ class LocationSelector @JvmOverloads constructor(
                 setLocationDescription(description)
             }
         }
+
+        textInputLayout.setStartIconOnClickListener {
+            log("REFRESHING ON ICON PRESS")
+            service.refreshLocation()
+        }
+
     }
 
     fun setLocationDescription(description: String) {
