@@ -160,7 +160,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleDeepLink(intent: Intent?) {
-        intent?.getParcelableExtra<Location>(MainActivity.EXTRA_LOCATION)?.let { location ->
+        intent?.getParcelableExtra(MainActivity.EXTRA_LOCATION, Location::class.java)?.let { location ->
+
             locationService.setFixedLocation(location)
         }
     }
