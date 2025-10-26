@@ -7,7 +7,7 @@ run() {
     "$@"
 }
 
-run ./gradlew assembleDebug &&
+run ./gradlew assembleFlossDebug &&
     run ./gradlew testFlossDebug &&
     (run adb uninstall net.canvoki.carburoid || true ) &&
     run ./gradlew installFlossDebug &&
