@@ -16,8 +16,10 @@ import androidx.core.content.edit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.withContext
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.location.LocationProvider
@@ -31,8 +33,14 @@ class LocationService(
     private val activity: Activity,
     private val notify: (String) -> Unit,
     private val suggestAction: (String, String, () -> Unit) -> Unit,
-    private val updateUi: () -> Unit,
 ) : CoroutineScope by MainScope() {
+
+    private val _locationChanged = MutableSharedFlow<Location>(replay = 0)
+    val locationChanged = _locationChanged.asSharedFlow()
+
+    private val _descriptionUpdated = MutableSharedFlow<String?>(replay = 0)
+    val descriptionUpdated = _descriptionUpdated.asSharedFlow()
+
     private val provider = LocationProvider(activity)
 
     private val prefs = activity.getSharedPreferences("location_prefs", Context.MODE_PRIVATE)
@@ -120,7 +128,9 @@ class LocationService(
         currentLocation = location
         CurrentDistancePolicy.setMethod(DistanceFromAddress(location))
         updateDescription()
-        updateUi()
+        CoroutineScope(Dispatchers.Main).launch {
+            _locationChanged.emit(location)
+        }
     }
 
     private fun requestDeviceLocation() {
@@ -172,12 +182,22 @@ class LocationService(
 
     private fun updateDescription() {
         geocodingJob?.cancel()
-        description = null
-        val location: Location = currentLocation ?: return
-        description = "(${location.latitude}, ${location.longitude})" // Provisional
+        val location = currentLocation
+        if (location==null) {
+            description = null
+            CoroutineScope(Dispatchers.Main).launch {
+                _descriptionUpdated.emit(description)
+            }
+            return
+        }
+        // Provisional description
+        description = "(${location.latitude}, ${location.longitude})"
+        CoroutineScope(Dispatchers.Main).launch {
+            _descriptionUpdated.emit(description)
+        }
         geocodingJob = launch {
             description = geocodeLocation(location) ?: description
-            updateUi() // TODO: Should update just the location field, location is the same
+            _descriptionUpdated.emit(description)
         }
     }
 
