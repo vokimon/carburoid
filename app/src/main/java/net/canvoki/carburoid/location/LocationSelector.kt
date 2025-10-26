@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import net.canvoki.carburoid.R
@@ -23,6 +25,15 @@ class LocationSelector @JvmOverloads constructor(
 
         textInputLayout = findViewById(R.id.text_input_layout)
         textInputEditText = findViewById(R.id.text_input_edit_text)
+    }
+
+    fun setService(service: LocationService, scope: CoroutineScope) {
+        setLocationDescription(service.getCurrentLocationDescription())
+        scope.launch {
+            service.descriptionUpdated.collect { description ->
+                setLocationDescription(description)
+            }
+        }
     }
 
     fun setLocationDescription(description: String) {

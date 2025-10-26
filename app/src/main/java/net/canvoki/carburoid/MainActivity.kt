@@ -80,18 +80,12 @@ class MainActivity : AppCompatActivity() {
             notify = ::showToast,
             suggestAction = ::suggestAction,
         )
+        locationSelector.setService(locationService, lifecycleScope)
         lifecycleScope.launch {
             locationService.locationChanged.collect {
                 loadGasStations()
             }
         }
-        locationSelector.setLocationDescription(locationService.getCurrentLocationDescription())
-        lifecycleScope.launch {
-            locationService.descriptionUpdated.collect {
-                locationSelector.setLocationDescription(locationService.getCurrentLocationDescription())
-            }
-        }
-
         val productSelector = findViewById<ProductSelector>(R.id.product_selector)
         productSelector.setOnProductSelectedListener { selectedProduct ->
             loadGasStations()

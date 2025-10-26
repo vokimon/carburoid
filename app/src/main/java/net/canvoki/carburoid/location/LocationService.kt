@@ -38,7 +38,7 @@ class LocationService(
     private val _locationChanged = MutableSharedFlow<Location>(replay = 0)
     val locationChanged = _locationChanged.asSharedFlow()
 
-    private val _descriptionUpdated = MutableSharedFlow<String?>(replay = 0)
+    private val _descriptionUpdated = MutableSharedFlow<String>(replay = 0)
     val descriptionUpdated = _descriptionUpdated.asSharedFlow()
 
     private val provider = LocationProvider(activity)
@@ -186,18 +186,18 @@ class LocationService(
         if (location==null) {
             description = null
             CoroutineScope(Dispatchers.Main).launch {
-                _descriptionUpdated.emit(description)
+                _descriptionUpdated.emit(description?:"")
             }
             return
         }
         // Provisional description
         description = "(${location.latitude}, ${location.longitude})"
         CoroutineScope(Dispatchers.Main).launch {
-            _descriptionUpdated.emit(description)
+            _descriptionUpdated.emit(description?:"")
         }
         geocodingJob = launch {
             description = geocodeLocation(location) ?: description
-            _descriptionUpdated.emit(description)
+            _descriptionUpdated.emit(description?:"")
         }
     }
 
