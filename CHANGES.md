@@ -1,12 +1,13 @@
 # Change log
 
-## Unreleased
+## 1.1.0 (2025-10-26)
 
 Bidirectional connection to mapping apps
 
 - ✨ Carburoid as share target for locations
 - ✨ Carburoid as handler for geo uri
 - ✨ Carburoid as handler for http OSD links
+- ✨ Carburoid as handler for http Google Maps links
 
 ## 1.0.3 (2025-10-20)
 

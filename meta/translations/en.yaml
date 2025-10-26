@@ -19,6 +19,13 @@ full_description_md: |+
   - Dark and Light themes
 
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_1_0_md: |-
+  Bidirectional connection to mapping apps
+
+  - ✨ Carburoid as share target for locations
+  - ✨ Carburoid as handler for geo uri
+  - ✨ Carburoid as handler for http OSD links
+  - ✨ Carburoid as handler for http Google Maps links
 changes_1_0_3_md: "- \U0001F3D7️ Fdroid: Removed privative dependency info only readable
   by Google\n- \U0001F3D7️ Cleaned warnings on optin use of experimental api's on
   tests"
@@ -39,4 +46,3 @@ changes_1_0_0_md: "First public release featuring:\n\n- ✨ Sort stations by dis
   station details page\n- ✨ Open a gas station in your chosen map application\n- \U0001F310
   Translations to Spanish, Catalan, Aragonese and more to come\n- \U0001F484 Dark
   and Light themes"
-...
