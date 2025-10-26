@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import com.google.android.material.textfield.TextInputEditText
@@ -19,6 +20,8 @@ class LocationSelector @JvmOverloads constructor(
 
     private val textInputLayout: TextInputLayout
     private val textInputEditText: TextInputEditText
+    private val locationIcon = ContextCompat.getDrawable(context, R.drawable.ic_my_location)
+    private val progressIcon = ContextCompat.getDrawable(context, R.drawable.ic_refresh)
 
     init {
         View.inflate(context, R.layout.location_selector, this)
@@ -37,12 +40,14 @@ class LocationSelector @JvmOverloads constructor(
 
         textInputLayout.setStartIconOnClickListener {
             log("REFRESHING ON ICON PRESS")
+            textInputLayout.startIconDrawable = progressIcon
             service.refreshLocation()
         }
 
     }
 
     fun setLocationDescription(description: String) {
+        textInputLayout.startIconDrawable = locationIcon
         textInputEditText.setText(description)
         log("Updating description to $description")
     }
