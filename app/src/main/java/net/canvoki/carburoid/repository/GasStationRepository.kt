@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import net.canvoki.carburoid.log
+import net.canvoki.carburoid.nolog
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
@@ -47,7 +48,7 @@ class GasStationRepository(
                 cache = cacheFile.readText()
                 cache?.let {
                     parsed = parser?.invoke(it)
-                    log("REUSING PREVIOUS CACHE")
+                    nolog("REUSING PREVIOUS CACHE")
                 }
             } catch (e: Exception) {
                 cache = null
@@ -72,7 +73,7 @@ class GasStationRepository(
 
     fun launchFetch() {
         if (!isBackgroundUpdateRunning.compareAndSet(false, true)) { // expected, new value
-            log("ALREADY FETCHING, QUIT")
+            nolog("ALREADY FETCHING, QUIT")
             return
         }
         scope.launch {
@@ -91,7 +92,7 @@ class GasStationRepository(
                 _events.emit(RepositoryEvent.UpdateReady)
             } catch (e: Exception) {
                 val message = e.message ?: e::class.simpleName ?: "Unknown"
-                log("FETCH ERROR $message")
+                nolog("FETCH ERROR $message")
                 _events.emit(RepositoryEvent.UpdateFailed(message))
             } finally {
                 isBackgroundUpdateRunning.set(false)

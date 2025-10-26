@@ -109,17 +109,17 @@ class MainActivity : AppCompatActivity() {
                 when (event) {
                     is RepositoryEvent.UpdateStarted -> {
                         swipeRefreshLayout.isRefreshing = true
-                        log("EVENT UpdateStarted")
+                        nolog("EVENT UpdateStarted")
                     }
                     is RepositoryEvent.UpdateReady -> {
                         swipeRefreshLayout.isRefreshing = false
                         showProgress("Processing Data...")
-                        log("EVENT UpdateReady")
+                        nolog("EVENT UpdateReady")
                         loadGasStations()
                     }
                     is RepositoryEvent.UpdateFailed -> {
                         swipeRefreshLayout.isRefreshing = false
-                        log("EVENT UpdateFailed")
+                        nolog("EVENT UpdateFailed")
                         showToast(event.error)
                     }
                 }
@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             FilterSettings.changes.collect {
-                log("EVENT Filter updated")
+                nolog("EVENT Filter updated")
                 loadGasStations()
             }
         }
