@@ -56,6 +56,6 @@ location_permisions_concede: Permite
 refreshing_data: Se están actualitzando los datos…
 failed_download: "Ha fallado la descarga de datos: {error}"
 open_in_maps: Abre en el mapa
-location_picker_title: Selecciona ubicación
-location_picker_search_location_hint: Busca ciudad o dirección
+location_picker_title: Selecciona una ubicación
+location_picker_search_location_hint: Busca una ciudad o dirección
 location_picker_no_results: No se encontraron ubicaciones

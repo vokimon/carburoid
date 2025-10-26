@@ -56,3 +56,6 @@ location_permisions_concede: Baimendu
 refreshing_data: Datuak eguneratzen…
 failed_download: 'Deskargak huts egin du: {error}'
 open_in_maps: Mapa batean ireki
+location_picker_title: Hautatu kokapen bat
+location_picker_search_location_hint: Bilatu hiri edo helbide bat
+location_picker_no_results: Ez da kokapenik aurkitu
