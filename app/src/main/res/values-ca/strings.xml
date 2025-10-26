@@ -59,6 +59,6 @@
     <string name="failed_download">Ha fallat la descarrega de dades: %1$s</string>
     <string name="open_in_maps">Obre al mapa</string>
     <string name="location_picker_title">Escull una ubicació</string>
-    <string name="location_picker_search_location_hint">Cerca ciutats o adreces</string>
-    <string name="location_picker_no_results">No s\'han trobat adreces</string>
+    <string name="location_picker_search_location_hint">Cerca una ciutat o adreça</string>
+    <string name="location_picker_no_results">No s\'han trobat ubicacions</string>
 </resources>

@@ -58,4 +58,7 @@
     <string name="refreshing_data">Datuak eguneratzen…</string>
     <string name="failed_download">Deskargak huts egin du: %1$s</string>
     <string name="open_in_maps">Mapa batean ireki</string>
+    <string name="location_picker_title">Hautatu kokapen bat</string>
+    <string name="location_picker_search_location_hint">Bilatu hiri edo helbide bat</string>
+    <string name="location_picker_no_results">Ez da kokapenik aurkitu</string>
 </resources>

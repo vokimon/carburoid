@@ -58,4 +58,7 @@
     <string name="refreshing_data">Estanse actualizando os datos…</string>
     <string name="failed_download">Fallou a descarga: %1$s</string>
     <string name="open_in_maps">Abrir no mapa</string>
+    <string name="location_picker_title">Seleccione unha ubicación</string>
+    <string name="location_picker_search_location_hint">Busca unha cidade ou enderezo</string>
+    <string name="location_picker_no_results">Non se atoparon ubicacións</string>
 </resources>
