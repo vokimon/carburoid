@@ -75,36 +75,56 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
             return null
          }
 
-         fun fromGoogleMapsLink(text: String): GeoPoint? {
-            // https://maps.google.com/?q=40.4168,-3.7038 (subdomain)
-            Regex("""https?://maps\.google\.com/\?(?:[^#]*?[&?])?q=([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?)""")
-                .find(text)?.let { match ->
-                    return matchToCoords(match)
-                }
+        private fun parseCoordinates(coordStr: String?): GeoPoint? {
+            if (coordStr == null || !coordStr.contains(",")) return null
+            val parts = coordStr.split(",", limit = 2)
+            return fromTextComponents(parts[0], parts[1])
+        }
 
+
+         fun fromGoogleMapsLink(text: String): GeoPoint? {
+            val uri = Uri.parse(text) ?: return null
+
+            if (uri.host == "maps.google.com") {
+                // TODO: could also contain other elements
+                val q = uri.getQueryParameter("q")
+                return parseCoordinates(q)
+            }
+
+            if (uri.host != "www.google.com") {
+                return null
+            }
+
+            // https://www.google.com/maps?q=lat,long
+            if (uri.path == "/maps") {
+                val q = uri.getQueryParameter("q")
+                return parseCoordinates(q)
+            }
             // https://www.google.com/maps/dir/40.4168,-3.7038/41.3851,2.1734/ (directions)
-            Regex("""https?://(?:www\.)?google\.com/maps/dir/([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?)/""")
-                .find(text)?.let { match ->
-                    return matchToCoords(match)
+            if (uri.path?.startsWith("/maps/dir/")==true) {
+                val points = uri.path!!.substringAfter("/maps/dir/").split("/")
+                if (points.size >= 2) {
+                    return parseCoordinates(points[0])
                 }
+            }
 
             // https://www.google.com/maps/place/Madrid/40.4168,-3.7038 (place)
-            Regex("""https?://(?:www\.)?google\.com/maps/place/[^/]+/([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?)""")
-                .find(text)?.let { match ->
-                    return matchToCoords(match)
+            if (uri.path?.startsWith("/maps/place/") == true) {
+                val segments = uri.path!!.substringAfter("/maps/place/").split("/")
+                if (segments.size >= 2) {
+                    val coords = segments[1]
+                    return parseCoordinates(coords)
                 }
+            }
 
-            // https://www.google.com/maps/@40.4168,-3.7038 (at)
-            Regex("""https?://(?:www\.)?google\.com/maps/@([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?),\d+z?""")
-                .find(text)?.let { match ->
-                    return matchToCoords(match)
+            // https://www.google.com/maps/@41.3851,2.1734,12z (Centered map)
+            if (uri.path?.startsWith("/maps/@") == true) {
+                val parts = uri.path!!.substringAfter("/maps/@").split(",")
+                if (parts.size >= 2) {
+                    val coords = "${parts[0]},${parts[1]}"
+                    return parseCoordinates(coords)
                 }
-
-            // https://www.google.com/maps?q=40.4168,-3.7038 (path & query)
-            Regex("""https?://(?:www\.)?google\.com/maps\?(?:[^#]*?[&?])?q=([+-]?\d+(?:\.\d+)?),([+-]?\d+(?:\.\d+)?)""")
-                .find(text)?.let { match ->
-                    return matchToCoords(match)
-                }
+            }
 
             return null
         }

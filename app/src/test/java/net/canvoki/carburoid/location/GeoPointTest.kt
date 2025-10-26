@@ -222,6 +222,8 @@ class GeoPointTest {
         assertEquals(expected, locationStr(actual))
     }
 
+    // Pattern: https://maps.google.coom?q=lat,long
+
     @Test
     fun `gmaps subdomain`() {
         testGMapsUri(
@@ -229,6 +231,72 @@ class GeoPointTest {
             "GeoPoint<40.4168,-3.7038>"
         )
     }
+
+    @Test
+    fun `gmaps subdomain with extra params ignored`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=41.3851,2.1734&z=15",
+            "GeoPoint<41.3851,2.1734>"
+        )
+    }
+
+    @Test
+    fun `gmaps subdomain invalid latitude`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=6.6.6,3",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps subdomain invalid longitude`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=100,1.1.1",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps subdomain latitude to high`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=95.0,-3.7038",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps subdomain latitude too low`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=-95.0,-3.7038",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps subdomain longitude too high`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=40.4168,200.0",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps subdomain longitude too low`() {
+        testGMapsUri(
+            "https://maps.google.com/?q=40.4168,-200.0",
+            null
+        )
+    }
+
+    @Test
+    fun `gmaps subdomain missing q param`() {
+        testGMapsUri(
+            "https://maps.google.com/?z=15",
+            null
+        )
+    }
+
+    // Pattern: www.google.com/maps?q=lat,long
 
     @Test
     fun `gmaps path`() {
@@ -239,55 +307,7 @@ class GeoPointTest {
     }
 
     @Test
-    fun `gmaps subdomain with extra params`() {
-        testGMapsUri(
-            "https://maps.google.com/?q=41.3851,2.1734&z=15",
-            "GeoPoint<41.3851,2.1734>"
-        )
-    }
-
-    @Test
-    fun `gmaps invalid latitude`() {
-        testGMapsUri(
-            "https://maps.google.com/?q=6.6.6,3",
-            null
-        )
-    }
-
-    @Test
-    fun `gmaps invalid longitude`() {
-        testGMapsUri(
-            "https://maps.google.com/?q=100,1.1.1",
-            null
-        )
-    }
-
-    @Test
-    fun `gmaps out of bounds latitude`() {
-        testGMapsUri(
-            "https://maps.google.com/?q=95.0,-3.7038",
-            null
-        )
-    }
-
-    @Test
-    fun `gmaps out of bounds negative latitude`() {
-        testGMapsUri(
-            "https://maps.google.com/?q=-95.0,-3.7038",
-            null
-        )
-    }
-
-    @Test
-    fun `gmaps missing q param`() {
-        testGMapsUri(
-            "https://maps.google.com/?z=15",
-            null
-        )
-    }
-
-    @Test
-    fun `non-google url`() {
+    fun `gmaps path but no google url`() {
         testGMapsUri(
             "https://example.com/maps?q=40.4168,-3.7038",
             null
@@ -295,32 +315,7 @@ class GeoPointTest {
     }
 
     @Test
-    fun `maps google subdomain q param valid`() {
-        testGMapsUri(
-            "https://maps.google.com/?q=40.4168,-3.7038",
-            "GeoPoint<40.4168,-3.7038>"
-        )
-    }
-
-    @Test
-    fun `www gmaps q param valid`() {
-        testGMapsUri(
-            "https://www.google.com/maps?q=40.4168,-3.7038",
-            "GeoPoint<40.4168,-3.7038>"
-        )
-    }
-
-    // === Pattern 1: /maps?q=... (www.google.com) ===
-    @Test
-    fun `gmaps www q param valid`() {
-        testGMapsUri(
-            "https://www.google.com/maps?q=40.4168,-3.7038",
-            "GeoPoint<40.4168,-3.7038>"
-        )
-    }
-
-    @Test
-    fun `gmaps www q param bad lat`() {
+    fun `gmaps path bad lat`() {
         testGMapsUri(
             "https://www.google.com/maps?q=bad,-3.7038",
             null
@@ -328,52 +323,28 @@ class GeoPointTest {
     }
 
     @Test
-    fun `gmaps www q param lat too low`() {
+    fun `gmaps path lat too low`() {
         testGMapsUri(
             "https://www.google.com/maps?q=-95.0,-3.7038",
             null
         )
     }
 
-    // === Pattern 1b: maps.google.com/?q=... ===
-    @Test
-    fun `gmaps subdomain q param valid`() {
-        testGMapsUri(
-            "https://maps.google.com/?q=39.2114,-1.5392",
-            "GeoPoint<39.2114,-1.5392>"
-        )
-    }
+    // Pattern: https://www.google.com/maps/dir/lat1,lon1/lat2,lon2/...
 
-    @Test
-    fun `gmaps subdomain q param with extra params`() {
-        testGMapsUri(
-            "https://maps.google.com/?q=41.3851,2.1734&z=15",
-            "GeoPoint<41.3851,2.1734>"
-        )
-    }
-
-    @Test
-    fun `gmaps subdomain q param bad lon`() {
-        testGMapsUri(
-            "https://maps.google.com/?q=40.4168,bad",
-            null
-        )
-    }
-
-    @Test
-    fun `gmaps subdomain q param lon too high`() {
-        testGMapsUri(
-            "https://maps.google.com/?q=40.4168,200.0",
-            null
-        )
-    }
-
-    // === Pattern 2: /maps/dir/... ===
     @Test
     fun `gmaps dir takes route origin`() {
         testGMapsUri(
             "https://www.google.com/maps/dir/40.4168,-3.7038/41.3851,2.1734/",
             "GeoPoint<40.4168,-3.7038>"
+        )
+    }
+
+    @Test
+    fun `gmaps dir incomplete`() {
+        testGMapsUri(
+            "https://www.google.com/maps/dir/40.4168/",
+            null
         )
     }
 
@@ -388,7 +359,7 @@ class GeoPointTest {
     @Test
     fun `gmaps dir bad lat`() {
         testGMapsUri(
-            "https://www.google.com/maps/dir/bad,-3.7038/41.3851,2.1734/",
+            "https://www.google.com/maps/dir/6.6.6,-3.7038/41.3851,2.1734/",
             null
         )
     }
@@ -397,14 +368,6 @@ class GeoPointTest {
     fun `gmaps dir lat too low`() {
         testGMapsUri(
             "https://www.google.com/maps/dir/-95.0,-3.7038/41.3851,2.1734/",
-            null
-        )
-    }
-
-    @Test
-    fun `gmaps route incomplete`() {
-        testGMapsUri(
-            "https://www.google.com/maps/dir/40.4168/",
             null
         )
     }
@@ -421,7 +384,7 @@ class GeoPointTest {
     @Test
     fun `gmaps place bad lon`() {
         testGMapsUri(
-            "https://www.google.com/maps/place/Barcelona/41.3851,bad",
+            "https://www.google.com/maps/place/Barcelona/41.3851,6.6.6",
             null
         )
     }
@@ -435,6 +398,7 @@ class GeoPointTest {
     }
 
     // === Pattern 4: /maps/@... ===
+
     @Test
     fun `gmaps map view center valid`() {
         testGMapsUri(
