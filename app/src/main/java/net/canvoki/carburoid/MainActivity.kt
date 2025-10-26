@@ -161,8 +161,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleDeepLink(intent: Intent?) {
-        intent?.getParcelableExtra(MainActivity.EXTRA_LOCATION, Location::class.java)?.let { location ->
-            locationService.setFixedLocation(location)
+        @Suppress("DEPRECATION") // getParcelableExtra
+        intent?.getParcelableExtra<Location>(MainActivity.EXTRA_LOCATION)?.let { parcelable ->
+            locationService.setFixedLocation(parcelable)
         }
     }
 
