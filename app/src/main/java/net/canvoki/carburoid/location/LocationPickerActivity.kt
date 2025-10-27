@@ -41,8 +41,11 @@ class LocationPickerActivity : AppCompatActivity() {
     private lateinit var map: MapView
     private lateinit var searchBox: MaterialAutoCompleteTextView
     private var marker: Marker? = null
+    private var ongoingCall: okhttp3.Call? = null
     private val searchHandler = Handler(Looper.getMainLooper())
     private var searchRunnable: Runnable? = null
+    private var searchBlocked = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +93,7 @@ class LocationPickerActivity : AppCompatActivity() {
         searchBox.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (searchBlocked) return
                 searchRunnable?.let { searchHandler.removeCallbacks(it) }
                 val query = s?.toString()?.trim() ?: ""
                 if (query.length < 3) return  // avoid searching for tiny inputs
@@ -104,8 +108,11 @@ class LocationPickerActivity : AppCompatActivity() {
         // Choosing a suggestion
         searchBox.setOnItemClickListener { _, _, position, _ ->
             val suggestion = suggestions[position]
+            updateSearchText(suggestion.display)
             moveToLocation(suggestion.lat, suggestion.lon)
         }
+
+        updateSearchText(initDescription)
 
     }
 
@@ -125,14 +132,17 @@ class LocationPickerActivity : AppCompatActivity() {
         val url = "https://nominatim.openstreetmap.org/search?" +
             "format=json&q=${URLEncoder.encode(query, "UTF-8")}&limit=5&countrycodes=es"
 
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .header("User-Agent", packageName)
+            .build()
+        val call = client.newCall(request)
+        ongoingCall = call
+
         Thread {
             try {
-                val client = OkHttpClient()
-                val request = Request.Builder()
-                    .url(url)
-                    .header("User-Agent", packageName)
-                    .build()
-                val response = client.newCall(request).execute()
+                val response = call.execute()
                 val body = response.body?.string() ?: return@Thread
                 val array = JSONArray(body)
 
@@ -162,6 +172,20 @@ class LocationPickerActivity : AppCompatActivity() {
         }.start()
     }
 
+    private fun updateSearchText(newText: String, showDropDown: Boolean = false) {
+        searchBlocked = true
+
+        searchRunnable?.let { searchHandler.removeCallbacks(it) }
+        ongoingCall?.cancel()
+
+        searchBox.setText(newText, false)  // false = don’t filter suggestions again
+
+        if (showDropDown) {
+            searchBox.showDropDown()  // optional, only if needed
+        }
+
+        searchBlocked = false
+    }
 
     private fun moveToLocation(lat: Double, lon: Double) {
         val point = GeoPoint(lat, lon)
