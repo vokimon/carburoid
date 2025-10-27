@@ -1,5 +1,11 @@
 # Change log
 
+## Unreleased
+
+- ✨ Update current position on click concentric target icon
+- ✨ Edit current position by clicking on the edit icon
+- 💥 Swipe does not update current positon, just reload gas stations.
+
 ## 1.1.0 (2025-10-26)
 
 Bidirectional connection to mapping apps
