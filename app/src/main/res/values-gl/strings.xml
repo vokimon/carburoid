@@ -61,5 +61,6 @@
     <string name="location_picker_title">Seleccione unha ubicación</string>
     <string name="location_picker_search_icon_description">Buscar</string>
     <string name="location_picker_search_location_hint">Busca unha cidade ou enderezo</string>
+    <string name="location_picker_searching">Buscando…</string>
     <string name="location_picker_no_results">Non se atoparon ubicacións</string>
 </resources>

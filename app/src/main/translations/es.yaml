@@ -59,4 +59,5 @@ open_in_maps: Abre en el mapa
 location_picker_title: Selecciona una ubicación
 location_picker_search_icon_description: Busca
 location_picker_search_location_hint: Busca una ciudad o dirección
+location_picker_searching: Buscando…
 location_picker_no_results: No se encontraron ubicaciones

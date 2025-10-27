@@ -114,7 +114,11 @@ class LocationPickerActivity : AppCompatActivity() {
 
     private fun searchSuggestions(query: String) {
         runOnUiThread {
-            val searchingAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, listOf("Searching…"))
+            val searchingAdapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                listOf(getString(R.string.location_picker_searching))
+            )
             searchBox.setAdapter(searchingAdapter)
             searchBox.showDropDown()
         }

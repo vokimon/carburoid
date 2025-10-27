@@ -59,4 +59,5 @@ open_in_maps: Obre al mapa
 location_picker_title: Escull una ubicació
 location_picker_search_icon_description: Cerca
 location_picker_search_location_hint: Cerca una ciutat o adreça
+location_picker_searching: Cercant…
 location_picker_no_results: No s'han trobat ubicacions

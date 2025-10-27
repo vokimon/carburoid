@@ -61,5 +61,6 @@
     <string name="location_picker_title">Escull una ubicació</string>
     <string name="location_picker_search_icon_description">Cerca</string>
     <string name="location_picker_search_location_hint">Cerca una ciutat o adreça</string>
+    <string name="location_picker_searching">Cercant…</string>
     <string name="location_picker_no_results">No s\'han trobat ubicacions</string>
 </resources>
