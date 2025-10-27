@@ -172,17 +172,14 @@ class LocationPickerActivity : AppCompatActivity() {
         }.start()
     }
 
-    private fun updateSearchText(newText: String, showDropDown: Boolean = false) {
+    private fun updateSearchText(newText: String) {
         searchBlocked = true
 
         searchRunnable?.let { searchHandler.removeCallbacks(it) }
         ongoingCall?.cancel()
 
-        searchBox.setText(newText, false)  // false = don’t filter suggestions again
-
-        if (showDropDown) {
-            searchBox.showDropDown()  // optional, only if needed
-        }
+        val doFilter = false
+        searchBox.setText(newText, doFilter)
 
         searchBlocked = false
     }
