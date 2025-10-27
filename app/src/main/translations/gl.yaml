@@ -57,5 +57,6 @@ refreshing_data: Estanse actualizando os datos…
 failed_download: 'Fallou a descarga: {error}'
 open_in_maps: Abrir no mapa
 location_picker_title: Seleccione unha ubicación
+location_picker_search_icon_description: Buscar
 location_picker_search_location_hint: Busca unha cidade ou enderezo
 location_picker_no_results: Non se atoparon ubicacións

@@ -1,106 +1,202 @@
 package net.canvoki.carburoid.location
 
-import android.app.Activity
 import android.content.Intent
-import android.location.Address
-import android.location.Geocoder
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
+import android.view.Menu
+import android.view.MenuItem
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.ListView
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doAfterTextChanged
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.Dispatchers
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.json.JSONArray
+import org.osmdroid.api.IMapController
+import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
+import java.net.URLEncoder
 import java.util.Locale
 import net.canvoki.carburoid.R
 
-class LocationPickerActivity : AppCompatActivity() {
 
+class LocationPickerActivity : AppCompatActivity() {
     companion object {
+        const val EXTRA_CURRENT_DESCRIPTION = "current_description"
         const val EXTRA_CURRENT_LAT = "current_lat"
         const val EXTRA_CURRENT_LON = "current_lon"
-        const val EXTRA_CURRENT_DESCRIPTION = "current_description"
-
         const val EXTRA_SELECTED_LAT = "selected_lat"
         const val EXTRA_SELECTED_LON = "selected_lon"
     }
 
-    private lateinit var searchEditText: EditText
-    private lateinit var progressBar: ProgressBar
-    private lateinit var resultsList: ListView
-
-    private val geocoder by lazy { Geocoder(this, Locale.getDefault()) }
-    private var searchJob: Job? = null
+    private lateinit var map: MapView
+    private lateinit var searchBox: MaterialAutoCompleteTextView
+    private var marker: Marker? = null
+    private val searchHandler = Handler(Looper.getMainLooper())
+    private var searchRunnable: Runnable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Configuration.getInstance().userAgentValue = packageName
         setContentView(R.layout.activity_location_picker)
 
-        searchEditText = findViewById(R.id.search_edit_text)
-        progressBar = findViewById(R.id.progress_bar)
-        resultsList = findViewById(R.id.results_list)
+        val initialLocation = GeoPoint(
+            intent.getDoubleExtra(EXTRA_CURRENT_LAT, 40.0),
+            intent.getDoubleExtra(EXTRA_CURRENT_LON, -1.0),
+        )
+        val initDescription = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
 
-        // Pre-fill with current location description (optional)
-        intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION)?.let { desc ->
-            if (desc != "Location not available") {
-                searchEditText.setText(desc)
-            }
+        supportActionBar?.apply {
+            title = getString(R.string.location_picker_title)
+            setDisplayHomeAsUpEnabled(true)
         }
 
-        // Debounced search
-        searchEditText.doAfterTextChanged { text ->
-            searchJob?.cancel()
-            if (text.isNullOrBlank()) return@doAfterTextChanged
-            searchJob = lifecycleScope.launch {
-                searchLocations(text.toString())
-            }
+        map = findViewById(R.id.map)
+        map.setTileSource(TileSourceFactory.MAPNIK)
+        map.setMultiTouchControls(true)
+
+        val controller: IMapController = map.controller
+        controller.setZoom(15.0)
+        controller.setCenter(initialLocation)
+
+        marker = Marker(map).apply {
+            position = initialLocation
+            isDraggable = true
+            setOnMarkerDragListener(object : Marker.OnMarkerDragListener {
+                override fun onMarkerDrag(marker: Marker?) {}
+                override fun onMarkerDragStart(marker: Marker?) {}
+                override fun onMarkerDragEnd(marker: Marker?) {
+                    marker?.position?.let {
+                        map.controller.animateTo(it)
+                    }
+                }
+            })
         }
+        map.overlays.add(marker)
+        map.invalidate()
+
+
+        searchBox = findViewById(R.id.searchBox)
+
+        searchBox.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                searchRunnable?.let { searchHandler.removeCallbacks(it) }
+                val query = s?.toString()?.trim() ?: ""
+                if (query.length < 3) return  // avoid searching for tiny inputs
+
+                // Debounce: wait 400ms after last keystroke
+                searchRunnable = Runnable { searchSuggestions(query) }
+                searchHandler.postDelayed(searchRunnable!!, 400)
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        // Choosing a suggestion
+        searchBox.setOnItemClickListener { _, _, position, _ ->
+            val suggestion = suggestions[position]
+            moveToLocation(suggestion.lat, suggestion.lon)
+        }
+
     }
 
-    private suspend fun searchLocations(query: String) {
-        withContext(Dispatchers.IO) {
+    data class Suggestion(val display: String, val lat: Double, val lon: Double)
+    private var suggestions: List<Suggestion> = emptyList()
+
+    private fun searchSuggestions(query: String) {
+        runOnUiThread {
+            val searchingAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, listOf("Searching…"))
+            searchBox.setAdapter(searchingAdapter)
+            searchBox.showDropDown()
+        }
+        val url = "https://nominatim.openstreetmap.org/search?" +
+            "format=json&q=${URLEncoder.encode(query, "UTF-8")}&limit=5&countrycodes=es"
+
+        Thread {
             try {
-                val results = geocoder.getFromLocationName(query, 5)
-                withContext(Dispatchers.Main) {
-                    showResults(results ?: emptyList())
+                val client = OkHttpClient()
+                val request = Request.Builder()
+                    .url(url)
+                    .header("User-Agent", packageName)
+                    .build()
+                val response = client.newCall(request).execute()
+                val body = response.body?.string() ?: return@Thread
+                val array = JSONArray(body)
+
+                val newSuggestions = mutableListOf<Suggestion>()
+                for (i in 0 until array.length()) {
+                    val obj = array.getJSONObject(i)
+                    val display = obj.getString("display_name")
+                    val lat = obj.getDouble("lat")
+                    val lon = obj.getDouble("lon")
+                    newSuggestions.add(Suggestion(display, lat, lon))
+                }
+
+                runOnUiThread {
+                    suggestions = newSuggestions
+                    val titles = newSuggestions.map { it.display }
+                    val adapter = ArrayAdapter(
+                        this,
+                        android.R.layout.simple_dropdown_item_1line,
+                        titles
+                    )
+                    searchBox.setAdapter(adapter)
+                    searchBox.showDropDown()
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    showError("Geocoding failed")
+                e.printStackTrace()
+            }
+        }.start()
+    }
+
+
+    private fun moveToLocation(lat: Double, lon: Double) {
+        val point = GeoPoint(lat, lon)
+        marker?.position = point
+        map.controller.animateTo(point)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_pick_location, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> { // ← back arrow in ActionBar
+                returnCancel()
+                true
                 }
+            R.id.action_accept -> {
+                returnResult()
+                true
             }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun showResults(addresses: List<Address>) {
-        progressBar.visibility = View.GONE
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, addresses.map { it.getAddressLine(0) })
-        resultsList.adapter = adapter
-        resultsList.setOnItemClickListener { _, _, position, _ ->
-            val address = addresses[position]
-            val resultIntent = Intent().apply {
-                putExtra(EXTRA_SELECTED_LAT, address.latitude)
-                putExtra(EXTRA_SELECTED_LON, address.longitude)
+    private fun returnResult() {
+        marker?.position?.let { pos ->
+            val intent = Intent().apply {
+                putExtra(EXTRA_SELECTED_LAT, pos.latitude)
+                putExtra(EXTRA_SELECTED_LON, pos.longitude)
             }
-            setResult(RESULT_OK, resultIntent)
-            finish()
+            setResult(RESULT_OK, intent)
         }
+        finish()
     }
 
-    private fun showError(message: String) {
-        progressBar.visibility = View.GONE
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    private fun returnCancel() {
+        setResult(RESULT_CANCELED)
+        finish()
     }
 }
-

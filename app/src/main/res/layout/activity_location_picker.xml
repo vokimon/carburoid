@@ -1,57 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
+    <!-- Search box -->
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/location_picker_search_location_hint"
-        tools:ignore="HardcodedText"
-        tools:hint="Madrid, Barcelona, 40.4168,-3.7038">
+        android:layout_margin="8dp"
+        app:startIconDrawable="@drawable/ic_search"
+        app:startIconContentDescription="@string/location_picker_search_icon_description">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_edit_text"
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/searchBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:dropDownVerticalOffset="8dp"
+            android:dropDownHorizontalOffset="0dp"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="12dp"
+            android:hint="@string/location_picker_search_location_hint"
+            android:imeOptions="actionSearch"
             android:inputType="text"
-            android:maxLines="1" />
+            android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        tools:visibility="visible" />
-
-    <TextView
-        android:id="@+id/empty_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="@string/location_picker_no_results"
-        android:visibility="gone"
-        tools:visibility="visible" />
-
-    <ListView
-        android:id="@+id/results_list"
+    <!-- Map -->
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="8dp"
-        android:divider="?android:attr/listDivider"
-        android:dividerHeight="1dp"
-        tools:listitem="@android:layout/simple_list_item_1"
-        tools:visibility="visible" />
-
+        android:layout_weight="1" />
 </LinearLayout>

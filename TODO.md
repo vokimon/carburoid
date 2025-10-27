@@ -2,9 +2,14 @@
 
 Do you want to help? This is my roadmap.
 
-- [ ] Edit current position
-    - [ ] material icon place
+
+
+- [ ] Empty text search show last locations
+- [ ] When dragging the marker, update the description
+- [ ] Quick search text clear
+- [ ] Bug: after setting gps position, picker keeps previous position
 - [ ] Real road distance
+- [ ] Feedback for search query
 - [ ] Route deviation distance
     - [ ] material icon route
 - [ ] Filters: Hide stations beyond the sea (Peninsule, Canary, Balearic, Ceuta, Melilla)
@@ -18,6 +23,10 @@ Do you want to help? This is my roadmap.
 
 ## Done
 
+- [x] Edit current position
+- [x] Limit searchs to spain
+- [x] See options while writing (autocomplete)
+- [x] Select options while writing
 - [x] Fdroid
 - [x] Filter out private stations
     - [x] Tipo de venta: P Publico R Restringida A Asociados (si tiene las dos, dos entradas distintas cada una con sus precios)

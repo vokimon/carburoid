@@ -57,5 +57,6 @@ refreshing_data: Refreshing data…
 failed_download: "Download failed: {error}"
 open_in_maps: Open in a map
 location_picker_title: Select location
+location_picker_search_icon_description: Search
 location_picker_search_location_hint: Search city or address
 location_picker_no_results: No locations found

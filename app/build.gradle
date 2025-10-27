@@ -135,6 +135,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
     implementation 'com.squareup.retrofit2:converter-scalars:3.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:latest'
+    implementation 'org.osmdroid:osmdroid-android:6.1.20'
+    implementation 'org.osmdroid:osmdroid-wms:6.1.20'
 
     nonfreeImplementation 'com.google.android.gms:play-services-location:21.3.0'
 

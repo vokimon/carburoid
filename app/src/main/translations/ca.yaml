@@ -57,5 +57,6 @@ refreshing_data: S'estan actualitzant les dades…
 failed_download: "Ha fallat la descarrega de dades: {error}"
 open_in_maps: Obre al mapa
 location_picker_title: Escull una ubicació
+location_picker_search_icon_description: Cerca
 location_picker_search_location_hint: Cerca una ciutat o adreça
 location_picker_no_results: No s'han trobat ubicacions
