@@ -20,6 +20,10 @@
         android:layout_height="wrap_content"
         android:inputType="none"
         android:focusable="false"
+        android:singleLine="false"
+        android:minLines="2"
+        android:maxLines="2"
+        android:ellipsize="end"
         tools:ignore="HardcodedText"
         android:text="(40.4168, -3.7038)" />
 
