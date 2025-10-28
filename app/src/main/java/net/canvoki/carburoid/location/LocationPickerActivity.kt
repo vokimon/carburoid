@@ -22,9 +22,11 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
+import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import java.net.URLEncoder
 import java.util.Locale
@@ -96,6 +98,20 @@ class LocationPickerActivity : AppCompatActivity() {
         map.overlays.add(marker)
         map.invalidate()
 
+        val mapEventsReceiver = object : MapEventsReceiver {
+            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                p?.let {
+                    marker?.position = it
+                    map.controller.animateTo(it)
+                    reverseGeocode(it)
+                }
+                return true
+            }
+
+            override fun longPressHelper(p: GeoPoint?): Boolean = false
+        }
+
+        map.overlays.add(MapEventsOverlay(mapEventsReceiver))
 
         searchBox = findViewById(R.id.searchBox)
 
