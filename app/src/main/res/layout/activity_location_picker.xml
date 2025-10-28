@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         app:startIconDrawable="@drawable/ic_search"
+        app:endIconMode="clear_text"
+        app:endIconTint="?attr/colorControlNormal"
         app:startIconContentDescription="@string/location_picker_search_icon_description">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
