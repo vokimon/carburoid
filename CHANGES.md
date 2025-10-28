@@ -1,6 +1,6 @@
 # Change log
 
-## 1.2.0 (2025-10-17)
+## 1.2.0 (2025-10-28)
 
 Edit your current position
 

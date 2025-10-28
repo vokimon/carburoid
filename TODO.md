@@ -3,10 +3,10 @@
 Do you want to help? This is my roadmap.
 
 
-
+- [ ] Translate PositionPicker navigation button tooltips
 - [ ] Empty text search show last locations
-- [ ] When dragging the marker, update the description
-- [ ] Quick search text clear
+- [x] When dragging the marker, update the description
+- [x] Quick search text clear
 - [ ] Bug: after setting gps position, picker keeps previous position
 - [ ] Real road distance
 - [ ] Feedback for search query
