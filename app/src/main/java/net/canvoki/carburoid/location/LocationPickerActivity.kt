@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -71,7 +72,13 @@ class LocationPickerActivity : AppCompatActivity() {
         controller.setZoom(15.0)
         controller.setCenter(initialLocation)
 
+        val personIcon = ResourcesCompat.getDrawable(
+            resources,
+            org.osmdroid.library.R.drawable.person,
+            theme
+        )
         marker = Marker(map).apply {
+            icon = personIcon
             position = initialLocation
             isDraggable = true
             setOnMarkerDragListener(object : Marker.OnMarkerDragListener {
