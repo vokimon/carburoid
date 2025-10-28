@@ -1,15 +1,19 @@
 # Change log
 
-## Unreleased
+## 1.2.0 (2025-10-17)
 
-- ✨ Update current position on click concentric target icon
-- ✨ Edit current position by clicking on the edit icon
+Edit your current position
+
+- ✨ By clicking the edit icon, enter a edit position screen
+- ✨ Edit position with interactive map
+- ✨ Edit position with utocompletion location search
+- ✨ GPS reposition by clicking on concentric target icon
 - 💥 Swipe does not update current positon, just reload gas stations.
 - 💄 Avoid flicker when updating the description
 
 ## 1.1.0 (2025-10-26)
 
-Bidirectional connection to mapping apps
+Bidirectional connection with mapping apps
 
 - ✨ Carburoid as share target for locations
 - ✨ Carburoid as handler for geo uri
@@ -18,10 +22,14 @@ Bidirectional connection to mapping apps
 
 ## 1.0.3 (2025-10-20)
 
+Even more FDroid tweaks:
+
 - 🏗️ Fdroid: Removed privative dependency info only readable by Google
 - 🏗️ Cleaned warnings on optin use of experimental api's on tests
 
 ## 1.0.2 (2025-10-19)
+
+FDroid tweaks:
 
 - 🏗️ Signed packages and related automations
 - 🏗️ Informative apk names: appid-flavor-version-build.apk

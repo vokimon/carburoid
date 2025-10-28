@@ -19,19 +19,24 @@ full_description_md: |+
   - Dark and Light themes
 
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_2_0_md: "Edit your current position\n\n- ✨ By clicking the edit icon, enter
+  a edit position screen\n- ✨ Edit position with interactive map\n- ✨ Edit position
+  with utocompletion location search\n- ✨ GPS reposition by clicking on concentric
+  target icon\n- \U0001F4A5 Swipe does not update current positon, just reload gas
+  stations.\n- \U0001F484 Avoid flicker when updating the description"
 changes_1_1_0_md: |-
-  Bidirectional connection to mapping apps
+  Bidirectional connection with mapping apps
 
   - ✨ Carburoid as share target for locations
   - ✨ Carburoid as handler for geo uri
   - ✨ Carburoid as handler for http OSD links
   - ✨ Carburoid as handler for http Google Maps links
-changes_1_0_3_md: "- \U0001F3D7️ Fdroid: Removed privative dependency info only readable
-  by Google\n- \U0001F3D7️ Cleaned warnings on optin use of experimental api's on
-  tests"
-changes_1_0_2_md: "- \U0001F3D7️ Signed packages and related automations\n- \U0001F3D7️
-  Informative apk names: appid-flavor-version-build.apk\n- \U0001F3D7️ bump to gradle
-  8.14"
+changes_1_0_3_md: "Even more FDroid tweaks:\n\n- \U0001F3D7️ Fdroid: Removed privative
+  dependency info only readable by Google\n- \U0001F3D7️ Cleaned warnings on optin
+  use of experimental api's on tests"
+changes_1_0_2_md: "FDroid tweaks:\n\n- \U0001F3D7️ Signed packages and related automations\n-
+  \U0001F3D7️ Informative apk names: appid-flavor-version-build.apk\n- \U0001F3D7️
+  bump to gradle 8.14"
 changes_1_0_1_md: "First version on FDroid, featuring:\n\n- \U0001F3D7️ floss and
   nonfree flavors, using or not privative GPlay location services\n- \U0001F310 Galician
   translation. Thanks Beatriz Plana\n- \U0001F310 Basque translation. Thanks Javier

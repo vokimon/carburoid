@@ -93,7 +93,8 @@ class MainActivity : AppCompatActivity() {
 
         swipeRefreshLayout.setOnRefreshListener {
             lifecycleScope.launch {
-                repository.launchFetch() // Triggers background fetch if needed
+                // Forces a background fetch
+                repository.launchFetch()
             }
         }
 
