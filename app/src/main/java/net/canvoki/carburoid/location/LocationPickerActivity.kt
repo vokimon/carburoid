@@ -31,6 +31,7 @@ import org.osmdroid.views.overlay.Marker
 import java.net.URLEncoder
 import java.util.Locale
 import net.canvoki.carburoid.R
+import net.canvoki.carburoid.log
 
 
 class LocationPickerActivity : AppCompatActivity() {
@@ -56,12 +57,6 @@ class LocationPickerActivity : AppCompatActivity() {
         Configuration.getInstance().userAgentValue = packageName
         setContentView(R.layout.activity_location_picker)
 
-        val initialLocation = GeoPoint(
-            intent.getDoubleExtra(EXTRA_CURRENT_LAT, 40.0),
-            intent.getDoubleExtra(EXTRA_CURRENT_LON, -1.0),
-        )
-        val initDescription = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
-
         supportActionBar?.apply {
             title = getString(R.string.location_picker_title)
             setDisplayHomeAsUpEnabled(true)
@@ -73,7 +68,6 @@ class LocationPickerActivity : AppCompatActivity() {
 
         val controller: IMapController = map.controller
         controller.setZoom(15.0)
-        controller.setCenter(initialLocation)
 
         val personIcon = ResourcesCompat.getDrawable(
             resources,
@@ -82,7 +76,6 @@ class LocationPickerActivity : AppCompatActivity() {
         )
         marker = Marker(map).apply {
             icon = personIcon
-            position = initialLocation
             isDraggable = true
             setOnMarkerDragListener(object : Marker.OnMarkerDragListener {
                 override fun onMarkerDrag(marker: Marker?) {}
@@ -137,8 +130,52 @@ class LocationPickerActivity : AppCompatActivity() {
             moveToLocation(suggestion.lat, suggestion.lon)
         }
 
-        updateSearchText(initDescription)
+        if (savedInstanceState != null) {
+            setStateFromSavedInstance(savedInstanceState)
+        } else {
+            setStateFromIntent(intent)
+        }
+    }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        log("MAP: SAVING_STATE ${marker?.position}")
+        marker?.position?.let { pos ->
+            outState.putDouble(EXTRA_CURRENT_LAT, pos.latitude)
+            outState.putDouble(EXTRA_CURRENT_LON, pos.longitude)
+        }
+    }
+
+    private fun setStateFromSavedInstance(inState: Bundle) {
+        moveToLocation(
+            inState.getDouble(EXTRA_CURRENT_LAT, 40.0),
+            inState.getDouble(EXTRA_CURRENT_LON, -1.0),
+        )
+        log("MAP: LOADING_STATE ${marker?.position}")
+        val initDescription = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
+        updateSearchText(initDescription)
+    }
+
+    private fun setStateFromIntent(intent: Intent) {
+        moveToLocation(
+            intent.getDoubleExtra(EXTRA_CURRENT_LAT, 40.0),
+            intent.getDoubleExtra(EXTRA_CURRENT_LON, -1.0)
+        )
+        log("MAP: RECEIVE_FROM_PARENT ${marker?.position}")
+        val initDescription = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
+        updateSearchText(initDescription)
+    }
+
+    private fun returnResult() {
+        log("MAP: SENDING_TO_PARENT ${marker?.position}")
+        marker?.position?.let { pos ->
+            val intent = Intent().apply {
+                putExtra(EXTRA_SELECTED_LAT, pos.latitude)
+                putExtra(EXTRA_SELECTED_LON, pos.longitude)
+            }
+            setResult(RESULT_OK, intent)
+        }
+        finish()
     }
 
     data class Suggestion(val display: String, val lat: Double, val lon: Double)
@@ -264,17 +301,6 @@ class LocationPickerActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun returnResult() {
-        marker?.position?.let { pos ->
-            val intent = Intent().apply {
-                putExtra(EXTRA_SELECTED_LAT, pos.latitude)
-                putExtra(EXTRA_SELECTED_LON, pos.longitude)
-            }
-            setResult(RESULT_OK, intent)
-        }
-        finish()
     }
 
     private fun returnCancel() {
