@@ -19,6 +19,7 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
+import org.json.JSONObject
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -87,6 +88,7 @@ class LocationPickerActivity : AppCompatActivity() {
                 override fun onMarkerDragEnd(marker: Marker?) {
                     marker?.position?.let {
                         map.controller.animateTo(it)
+                        reverseGeocode(it)
                     }
                 }
             })
@@ -178,6 +180,32 @@ class LocationPickerActivity : AppCompatActivity() {
             }
         }.start()
     }
+
+    private fun reverseGeocode(point: GeoPoint) {
+        val url = "https://nominatim.openstreetmap.org/reverse?" +
+            "format=json&lat=${point.latitude}&lon=${point.longitude}"
+
+        Thread {
+            try {
+                val client = OkHttpClient()
+                val request = Request.Builder()
+                    .url(url)
+                    .header("User-Agent", packageName)
+                    .build()
+                val response = client.newCall(request).execute()
+                val body = response.body?.string() ?: return@Thread
+                val json = JSONObject(body)
+                val displayName = json.optString("display_name", "")
+
+                runOnUiThread {
+                    updateSearchText(displayName)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }.start()
+    }
+
 
     private fun updateSearchText(newText: String) {
         searchBlocked = true
