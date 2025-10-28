@@ -275,4 +275,17 @@ class LocationPickerActivity : AppCompatActivity() {
         setResult(RESULT_CANCELED)
         finish()
     }
+
+    override fun onResume() {
+        super.onResume()
+        // avoids map leaks
+        map.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // avoids map leaks
+        map.onPause()
+    }
+
 }
