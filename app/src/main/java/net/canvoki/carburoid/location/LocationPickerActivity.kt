@@ -144,6 +144,12 @@ class LocationPickerActivity : AppCompatActivity() {
     data class Suggestion(val display: String, val lat: Double, val lon: Double)
     private var suggestions: List<Suggestion> = emptyList()
 
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        searchBlocked = true
+        super.onRestoreInstanceState(savedInstanceState)
+        searchBlocked = false
+    }
+
     private fun searchSuggestions(query: String) {
         runOnUiThread {
             val searchingAdapter = ArrayAdapter(
