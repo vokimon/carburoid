@@ -2,7 +2,6 @@ project_name: Carburoid
 splash_motto: Llena al mejor precio, más cerca
 short_description: Encuentra gasolineras en España por precio y distancia
 full_description_md: |+
-
   Funcionalidades:
 
   - Datos oficiales que envian las gasolineras al Ministerio de Industria de España
