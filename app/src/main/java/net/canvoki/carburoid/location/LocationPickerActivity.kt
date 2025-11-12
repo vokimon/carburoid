@@ -33,6 +33,7 @@ import java.util.Locale
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
 
+data class Suggestion(val display: String, val lat: Double, val lon: Double)
 
 class LocationPickerActivity : AppCompatActivity() {
     companion object {
@@ -50,6 +51,7 @@ class LocationPickerActivity : AppCompatActivity() {
     private val searchHandler = Handler(Looper.getMainLooper())
     private var searchRunnable: Runnable? = null
     private var searchBlocked = false
+    private var suggestions: List<Suggestion> = emptyList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -178,9 +180,6 @@ class LocationPickerActivity : AppCompatActivity() {
         finish()
     }
 
-    data class Suggestion(val display: String, val lat: Double, val lon: Double)
-    private var suggestions: List<Suggestion> = emptyList()
-
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         searchBlocked = true
         super.onRestoreInstanceState(savedInstanceState)
@@ -264,7 +263,6 @@ class LocationPickerActivity : AppCompatActivity() {
             }
         }.start()
     }
-
 
     private fun updateSearchText(newText: String) {
         searchBlocked = true
