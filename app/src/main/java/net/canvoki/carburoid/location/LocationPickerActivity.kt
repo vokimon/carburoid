@@ -141,7 +141,6 @@ class LocationPickerActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        log("MAP: SAVING_STATE ${marker?.position}")
         marker?.position?.let { pos ->
             outState.putDouble(EXTRA_CURRENT_LAT, pos.latitude)
             outState.putDouble(EXTRA_CURRENT_LON, pos.longitude)
@@ -153,7 +152,6 @@ class LocationPickerActivity : AppCompatActivity() {
             inState.getDouble(EXTRA_CURRENT_LAT, 40.0),
             inState.getDouble(EXTRA_CURRENT_LON, -1.0),
         )
-        log("MAP: LOADING_STATE ${marker?.position}")
         val initDescription = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
         updateSearchText(initDescription)
     }
@@ -163,13 +161,11 @@ class LocationPickerActivity : AppCompatActivity() {
             intent.getDoubleExtra(EXTRA_CURRENT_LAT, 40.0),
             intent.getDoubleExtra(EXTRA_CURRENT_LON, -1.0)
         )
-        log("MAP: RECEIVE_FROM_PARENT ${marker?.position}")
         val initDescription = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
         updateSearchText(initDescription)
     }
 
     private fun returnResult() {
-        log("MAP: SENDING_TO_PARENT ${marker?.position}")
         marker?.position?.let { pos ->
             val intent = Intent().apply {
                 putExtra(EXTRA_SELECTED_LAT, pos.latitude)
