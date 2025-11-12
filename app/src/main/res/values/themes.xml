@@ -2,5 +2,7 @@
     <!-- Base application theme -->
     <style name="Theme.Carburoid" parent="Theme.Material3.DayNight">
         <!-- Customize your theme here -->
+        <!-- API 35 introduces edge-to-edge by default, this enables the old behaviour -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     </style>
 </resources>
