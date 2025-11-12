@@ -55,10 +55,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         log("onCreate")
-        super.onCreate(savedInstanceState)
 
         LanguageSettings.initializeLanguage(this)
-        language = LanguageSettings.getApplicationLanguage()
+        language = LanguageSettings.getConfiguredLanguageCode(this)
+
+        super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
         recyclerView = findViewById(R.id.recycler_view)
@@ -133,7 +135,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val configuredLanguage = LanguageSettings.getApplicationLanguage()
+        val configuredLanguage = LanguageSettings.getConfiguredLanguageCode(this)
         if (language != configuredLanguage) {
             recreate()
         }

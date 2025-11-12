@@ -25,7 +25,7 @@ object LanguageSettings {
 
     fun initializeLanguage(context: Context) {
         val languageCode = getLanguagePreference(context)
-        var locale = setApplicationLanguage(languageCode)
+        var locale = setApplicationLanguage(context, languageCode)
         setActivityLanguage(context, locale)
     }
 
@@ -39,7 +39,7 @@ object LanguageSettings {
         languagePref.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
             val languageCode = newValue as String
             setLanguagePreference(context, languageCode)
-            var locale = setApplicationLanguage(languageCode)
+            var locale = setApplicationLanguage(context, languageCode)
             setActivityLanguage(context, locale)
 
             (context as? AppCompatActivity)?.recreate()
@@ -99,18 +99,43 @@ object LanguageSettings {
         }
     }
 
-    private fun getLanguagePreference(context: Context): String {
+    fun getLanguagePreference(context: Context): String {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         return prefs.getString(KEY, "system") ?: "system"
     }
 
-    private fun setApplicationLanguage(languageCode: String): Locale {
+    fun getConfiguredLanguageCode(context: Context): String {
+        val preference = getLanguagePreference(context)
+        if (preference!="system") {
+            return preference
+        }
+        return getDeviceLocale().language
+    }
+
+    private fun setApplicationLanguage(context: Context, languageCode: String): Locale {
         val locale = when (languageCode) {
             "system" -> getDeviceLocale()
             else -> Locale.forLanguageTag(languageCode)
         }
         Locale.setDefault(locale)
+        val config = Configuration(context.resources.configuration)
+        config.setLocale(locale)
+        context.createConfigurationContext(config)
         return locale
+    }
+
+    fun setActivityLanguage(context: Context, languageCode: String) {
+        val locale = when (languageCode) {
+            "system" -> Resources.getSystem().configuration.locales[0]
+            else -> Locale.forLanguageTag(languageCode)
+        }
+
+        val config = Configuration(context.resources.configuration)
+        config.setLocale(locale)
+
+        val metrics = context.resources.displayMetrics
+        @Suppress("DEPRECATION")
+        context.resources.updateConfiguration(config, metrics)
     }
 
     fun setActivityLanguage(context: Context, locale: Locale) {
