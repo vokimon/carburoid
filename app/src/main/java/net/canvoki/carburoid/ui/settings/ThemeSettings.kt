@@ -22,13 +22,13 @@ object ThemeSettings {
 
         themePref.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
             val mode = newValue as String
-            saveAndApplyTheme(context, mode)
+            saveAndApply(context, mode)
             updateSummary(themePref, context)
             true
         }
     }
 
-    fun applyTheme(context: Context) {
+    fun apply(context: Context) {
         val themeMode = currentValue(context)
         when (themeMode) {
             "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -53,9 +53,9 @@ object ThemeSettings {
         }
     }
 
-    private fun saveAndApplyTheme(context: Context, mode: String) {
+    private fun saveAndApply(context: Context, mode: String) {
         setCurrentValue(context, mode)
-        applyTheme(context)
+        apply(context)
     }
 
     private fun updateSummary(preference: ListPreference, context: Context) {

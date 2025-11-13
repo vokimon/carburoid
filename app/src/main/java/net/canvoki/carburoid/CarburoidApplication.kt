@@ -22,7 +22,7 @@ class CarburoidApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         LanguageSettings.apply(this)
-        ThemeSettings.applyTheme(this)
+        ThemeSettings.apply(this)
         cacheFile = File(filesDir, "gas_stations_cache.json")
         setupDebugData()
         repository = setupRepository()
