@@ -8,8 +8,8 @@
     <string name="settings_language_title">اللغة</string>
     <string name="settings_language_summary">غيّر لغة التطبيق</string>
     <string name="language_system_default">النظام</string>
-    <string name="settings_translate_title">ترجم</string>
-    <string name="settings_translate_summary">ساعد في ترجمة لغتك على Weblate</string>
+    <string name="settings_translate_title">ساعد في ترجمة لغتك</string>
+    <string name="settings_translate_summary">اذهب إلى Weblate</string>
     <string name="settings_theme">الثيم</string>
     <string name="theme_light">فاتح</string>
     <string name="theme_dark">غامق</string>

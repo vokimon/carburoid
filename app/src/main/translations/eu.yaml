@@ -6,8 +6,8 @@ settings_category_language_appearance: Hizkuntza eta itxura
 settings_language_title: Hizkuntza
 settings_language_summary: Aplikazioaren hizkuntza aldatzeko
 language_system_default: Sistema lehenetsia
-settings_translate_title: Itzuli
-settings_translate_summary: Lagundu zure hizkuntza Weblate-n itzultzen
+settings_translate_title: Lagundu zure hizkuntza itzultzen
+settings_translate_summary: Joan Weblate-ra
 settings_theme: Gaia
 theme_light: Argia
 theme_dark: Iluna

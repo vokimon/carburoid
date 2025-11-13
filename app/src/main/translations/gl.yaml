@@ -5,8 +5,8 @@ settings_category_language_appearance: Linguaxe e aparencia
 settings_language_title: Linguaxe
 settings_language_summary: Cambia o idioma da aplicación
 language_system_default: Sistema
-settings_translate_title: Traduce
-settings_translate_summary: Axuda a traducir o teu idioma en Weblate
+settings_translate_title: Axuda a traducir o teu idioma
+settings_translate_summary: Vai a Weblate
 settings_theme: Tema
 theme_light: Claro
 theme_dark: Escuro

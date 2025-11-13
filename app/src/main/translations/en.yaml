@@ -6,8 +6,8 @@ settings_category_language_appearance: Language and appearance
 settings_language_title: Language
 settings_language_summary: Change the app language
 language_system_default: System default
-settings_translate_title: Translate
-settings_translate_summary: Help translate your language on Weblate
+settings_translate_title: Help translate your language
+settings_translate_summary: Go to Weblate
 settings_theme: Theme
 theme_light: Light
 theme_dark: Dark
