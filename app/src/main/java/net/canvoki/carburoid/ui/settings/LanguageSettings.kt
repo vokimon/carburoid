@@ -1,9 +1,11 @@
 package net.canvoki.carburoid.ui.settings
 
+import android.app.LocaleManager
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.content.SharedPreferences
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
@@ -13,11 +15,13 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
 import net.canvoki.carburoid.R
+import net.canvoki.carburoid.log
 import java.util.Locale
 
 object LanguageSettings {
     private const val SYSTEM_LANGUAGE = "system"
     private const val KEY = "app_language"
+    private var systemLocale: Locale? = null
 
     private var availableLanguagesCache: List<LanguageOption>? = null
 
@@ -104,19 +108,32 @@ object LanguageSettings {
         return prefs.getString(KEY, SYSTEM_LANGUAGE) ?: SYSTEM_LANGUAGE
     }
 
-    private fun getSystemLocale(): Locale {
-        val locales = Resources.getSystem().configuration.locales
-        return if (!locales.isEmpty) locales[0] else Locale.getDefault()
+    private fun holdSystemLocale(context: Context) {
+        // Just rely on the first call, before ever changing the locale
+        if (systemLocale != null) return
+
+        systemLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Android 13+ can get systemLocales from LocaleManager
+            val localeManager = context.getSystemService(LocaleManager::class.java)
+            localeManager?.systemLocales?.get(0) ?: Locale.getDefault()
+        } else {
+            // Android 8.0+ up to 12: get the system configuration locales
+            val locales = Resources.getSystem().configuration.locales
+            if (!locales.isEmpty) locales[0] else Locale.getDefault()
+        }
     }
 
     private fun getConfiguredLocale(context: Context): Locale {
         val lang = getPreferencesLanguage(context)
-        return if (lang == SYSTEM_LANGUAGE) getSystemLocale() else Locale.forLanguageTag(lang)
+        if (lang == SYSTEM_LANGUAGE) return systemLocale!!
+        return Locale.forLanguageTag(lang)
     }
 
     fun apply(context: Context) {
+        // Retrieve system language before we apply any language
+        holdSystemLocale(context)
         val locale = getConfiguredLocale(context)
-
+        log("Applying language ${locale.language}")
         Locale.setDefault(locale)
         val locales = LocaleListCompat.create(locale)
         AppCompatDelegate.setApplicationLocales(locales)
