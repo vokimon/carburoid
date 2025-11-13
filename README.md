@@ -2,7 +2,7 @@
 [![CI Status](https://github.com/vokimon/carburoid/actions/workflows/main.yaml/badge.svg)](https://github.com/vokimon/carburoid/actions/workflows/main.yaml)
 [![Estat de la traducció](https://hosted.weblate.org/widget/carburoid/carburoid-ui/svg-badge.svg)](https://hosted.weblate.org/engage/carburoid/)
 [![Get it on F-Droid](https://img.shields.io/f-droid/v/net.canvoki.carburoid.svg?logo=F-Droid)](https://f-droid.org/packages/net.canvoki.carburoid)
-![GitHub Downloads](https://img.shields.io/github/downloads/vokimon/carburoid/total)
+![GitHub Downloads](https://img.shields.io/github/downloads/vokimon/carburoid/total?logo=github)
 ![Carburoid. Fillup cheaper, closer](media/promo/banner.svg)
 
 # Carburoid
