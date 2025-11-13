@@ -1,5 +1,17 @@
 # Change log
 
+## Unreleased
+
+Layout fixes on Android 15 and issues on language/rotation changes
+
+- 🌐 Arabic added (via ChatGpt, sorry)
+- 🐛 Clearer text for weblate link
+- 🐛 Android 15 showed the ui under the AppBar
+- 🐛 Memory leaks when stoping or pausing Location Picker
+- 🐛 Location picker lost position when rotating the device
+- 🐛 Language changes flickered and not fully applied
+- 🐛 Current position was lost on rotation or language change
+
 ## 1.2.0 (2025-10-28)
 
 Edit your current position
