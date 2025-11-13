@@ -1,0 +1,64 @@
+language_code: ar
+language_name: العربية
+app_name: Carburoid
+menu_settings: الإعدادات
+settings_category_language_appearance: اللغة والمظهر
+settings_language_title: اللغة
+settings_language_summary: غيّر لغة التطبيق
+language_system_default: النظام
+settings_translate_title: ترجم
+settings_translate_summary: ساعد في ترجمة لغتك على Weblate
+settings_theme: الثيم
+theme_light: فاتح
+theme_dark: غامق
+theme_system: تلقائي (النظام)
+settings_category_station_filters: تصفية محطات الوقود
+settings_filter_expensive: إخفاء المحطات الغالية والبعيدة
+settings_filter_expensive_summary: لا تعرض المحطات إذا كانت هناك محطات أقرب أو أرخص. (موصى به)
+settings_filter_non_public: الأسعار العامة فقط
+settings_filter_non_public_summary: إخفاء الأسعار التي تتطلب اشتراك
+settings_filter_closed: إظهار المحطات المغلقة
+settings_filter_closed_summary: اضبط فترة زمنية للمحطات التي ستفتح قريبًا
+settings_filter_closed_tolerance_none: بدون فترة، دائمًا الفلترة
+settings_filter_closed_tolerance_half_hour: نصف ساعة
+settings_filter_closed_tolerance_one_hour: ساعة واحدة
+settings_filter_closed_tolerance_two_hours: ساعتان
+settings_filter_closed_tolerance_twelve_hours: نصف يوم
+settings_filter_closed_tolerance_one_day: يوم واحد
+settings_filter_closed_tolerance_never: عرض دائمًا
+no_gas_stations: لم يتم العثور على محطات وقود مطابقة
+product_selector_hint: المنتج
+product_selector_icon_description: محدد المنتج
+location_selector_hint: الموقع
+location_selector_locate_device: حدد موقع الجهاز
+price_not_public: ✱ السعر مشروط
+detail_location: الموقع
+detail_opening_hours: ساعات العمل
+detail_other_products: منتجات أخرى
+station_no_name: بدون اسم
+station_no_address: بدون عنوان
+station_no_city: بدون مدينة
+station_no_price: غير متوفر
+station_no_distance: ?? كم
+station_status_unknown: مغلق??
+station_status_permanently_closed: مغلق نهائيًا
+station_status_closed: مغلق
+station_status_opens_at: يفتح {when}
+station_status_closes_at: يغلق {when}
+station_status_open: مفتوح
+station_status_247: مفتوح 24 ساعة
+location_not_available: لم يتم اكتشاف الموقع
+location_error: خطأ أثناء اكتشاف الموقع
+location_forbidden: تم رفض الوصول إلى الموقع
+location_deactivated: الموقع معطل
+location_activate: فعّل
+location_permisions_concede: سماح
+refreshing_data: جاري تحديث البيانات…
+failed_download: "فشل تنزيل البيانات: {error}"
+open_in_maps: افتح في الخرائط
+location_picker_title: اختر موقعًا
+location_picker_search_icon_description: بحث
+location_picker_search_location_hint: ابحث عن مدينة أو عنوان
+location_picker_searching: جار البحث…
+location_picker_no_results: لم يتم العثور على مواقع
+

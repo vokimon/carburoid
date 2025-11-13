@@ -5,6 +5,7 @@
 <resources>
     <string-array name="supported_language_codes">
         <item>an</item>
+        <item>ar</item>
         <item>ca</item>
         <item>en</item>
         <item>es</item>
