@@ -37,24 +37,25 @@ object LanguageSettings {
             val languageCode = newValue as String
             setPreferencesLanguage(context, languageCode)
             apply(context)
+            updateEntries(languagePref, context)
             updateSummary(languagePref, context)
             true
         }
     }
 
     private fun getAvailableLanguages(context: Context): List<LanguageOption> {
+        val systemLanguageOption = LanguageOption(
+            SYSTEM_LANGUAGE,
+            context.getString(R.string.language_system_default),
+        )
         val availableLanguages = availableLanguagesCache
         if (availableLanguages != null) {
-            return availableLanguages
+            return listOf(systemLanguageOption) + availableLanguages
         }
 
         val supportedCodes = context.resources.getStringArray(R.array.supported_language_codes).toList()
 
         val languages = mutableListOf<LanguageOption>()
-        languages.add(LanguageOption(
-            SYSTEM_LANGUAGE,
-            context.getString(R.string.language_system_default),
-        ))
 
         for (code in supportedCodes) {
             val localizedContext = createLocalizedContext(context, code)
@@ -63,7 +64,7 @@ object LanguageSettings {
         }
 
         availableLanguagesCache = languages
-        return languages
+        return listOf(systemLanguageOption) + languages
     }
 
     private fun createLocalizedContext(context: Context, languageCode: String): Context {
