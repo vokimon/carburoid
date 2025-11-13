@@ -51,13 +51,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var swipeRefreshLayout: androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     private lateinit var gasStationAdapter: GasStationAdapter
 
-    private var language: String? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         log("onCreate")
-
-        LanguageSettings.initializeLanguage(this)
-        language = LanguageSettings.getConfiguredLanguageCode(this)
 
         super.onCreate(savedInstanceState)
 
@@ -131,14 +126,6 @@ class MainActivity : AppCompatActivity() {
 
         locationService.refreshLocation()
         handleDeepLink(intent)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val configuredLanguage = LanguageSettings.getConfiguredLanguageCode(this)
-        if (language != configuredLanguage) {
-            recreate()
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import net.canvoki.carburoid.network.GasStationApiFactory
 import net.canvoki.carburoid.repository.GasStationRepository
+import net.canvoki.carburoid.ui.settings.LanguageSettings
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 import java.io.File
 import java.io.FileNotFoundException
@@ -20,6 +21,7 @@ class CarburoidApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        LanguageSettings.apply(this)
         ThemeSettings.applyTheme(this)
         cacheFile = File(filesDir, "gas_stations_cache.json")
         setupDebugData()

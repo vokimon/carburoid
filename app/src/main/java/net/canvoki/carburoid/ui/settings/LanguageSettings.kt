@@ -3,8 +3,11 @@ package net.canvoki.carburoid.ui.settings
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
+import androidx.core.os.LocaleListCompat
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
@@ -13,21 +16,15 @@ import net.canvoki.carburoid.R
 import java.util.Locale
 
 object LanguageSettings {
+    private const val SYSTEM_LANGUAGE = "system"
     private const val KEY = "app_language"
 
-    // Cache per evitar recàlculs
     private var availableLanguagesCache: List<LanguageOption>? = null
 
     data class LanguageOption(
         val code: String,
         val name: String, // Nom en el seu propi idioma
     )
-
-    fun initializeLanguage(context: Context) {
-        val languageCode = getLanguagePreference(context)
-        var locale = setApplicationLanguage(context, languageCode)
-        setActivityLanguage(context, locale)
-    }
 
     fun registerIn(screen: PreferenceScreen) {
         val context = screen.context
@@ -38,12 +35,8 @@ object LanguageSettings {
 
         languagePref.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
             val languageCode = newValue as String
-            setLanguagePreference(context, languageCode)
-            var locale = setApplicationLanguage(context, languageCode)
-            setActivityLanguage(context, locale)
-
-            (context as? AppCompatActivity)?.recreate()
-
+            setPreferencesLanguage(context, languageCode)
+            apply(context)
             updateSummary(languagePref, context)
             true
         }
@@ -58,7 +51,10 @@ object LanguageSettings {
         val supportedCodes = context.resources.getStringArray(R.array.supported_language_codes).toList()
 
         val languages = mutableListOf<LanguageOption>()
-        languages.add(LanguageOption("system", context.getString(R.string.language_system_default)))
+        languages.add(LanguageOption(
+            SYSTEM_LANGUAGE,
+            context.getString(R.string.language_system_default),
+        ))
 
         for (code in supportedCodes) {
             val localizedContext = createLocalizedContext(context, code)
@@ -79,7 +75,7 @@ object LanguageSettings {
     }
 
     private fun updateSummary(preference: ListPreference, context: Context) {
-        val currentCode = getLanguagePreference(context)
+        val currentCode = getPreferencesLanguage(context)
         val languages = getAvailableLanguages(context)
         val currentLanguage = languages.find { it.code == currentCode }
 
@@ -92,68 +88,36 @@ object LanguageSettings {
         preference.entryValues = languages.map { it.code }.toTypedArray()
     }
 
-    private fun setLanguagePreference(context: Context, languageCode: String) {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        prefs.edit {
+    private fun getPrefs(context: Context) :  SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+    }
+
+    private fun setPreferencesLanguage(context: Context, languageCode: String) {
+        getPrefs(context).edit {
             putString(KEY, languageCode)
         }
     }
 
-    fun getLanguagePreference(context: Context): String {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        return prefs.getString(KEY, "system") ?: "system"
+    private fun getPreferencesLanguage(context: Context): String {
+        val prefs = getPrefs(context)
+        return prefs.getString(KEY, SYSTEM_LANGUAGE) ?: SYSTEM_LANGUAGE
     }
 
-    fun getConfiguredLanguageCode(context: Context): String {
-        val preference = getLanguagePreference(context)
-        if (preference!="system") {
-            return preference
-        }
-        return getDeviceLocale().language
-    }
-
-    private fun setApplicationLanguage(context: Context, languageCode: String): Locale {
-        val locale = when (languageCode) {
-            "system" -> getDeviceLocale()
-            else -> Locale.forLanguageTag(languageCode)
-        }
-        Locale.setDefault(locale)
-        val config = Configuration(context.resources.configuration)
-        config.setLocale(locale)
-        context.createConfigurationContext(config)
-        return locale
-    }
-
-    fun setActivityLanguage(context: Context, languageCode: String) {
-        val locale = when (languageCode) {
-            "system" -> Resources.getSystem().configuration.locales[0]
-            else -> Locale.forLanguageTag(languageCode)
-        }
-
-        val config = Configuration(context.resources.configuration)
-        config.setLocale(locale)
-
-        val metrics = context.resources.displayMetrics
-        @Suppress("DEPRECATION")
-        context.resources.updateConfiguration(config, metrics)
-    }
-
-    fun setActivityLanguage(context: Context, locale: Locale) {
-        // Configure locale for the resources to come (not existing ones)
-        val config = context.resources.configuration
-        config.setLocale(locale)
-
-        val metrics = context.resources.displayMetrics
-        @Suppress("DEPRECATION")
-        context.resources.updateConfiguration(config, metrics)
-    }
-
-    private fun getDeviceLocale(): Locale {
+    private fun getSystemLocale(): Locale {
         val locales = Resources.getSystem().configuration.locales
-        return if (locales.isEmpty) Locale.getDefault() else locales[0]
+        return if (!locales.isEmpty) locales[0] else Locale.getDefault()
     }
 
-    fun getApplicationLanguage(): String {
-        return Locale.getDefault().language
+    private fun getConfiguredLocale(context: Context): Locale {
+        val lang = getPreferencesLanguage(context)
+        return if (lang == SYSTEM_LANGUAGE) getSystemLocale() else Locale.forLanguageTag(lang)
+    }
+
+    fun apply(context: Context) {
+        val locale = getConfiguredLocale(context)
+
+        Locale.setDefault(locale)
+        val locales = LocaleListCompat.create(locale)
+        AppCompatDelegate.setApplicationLocales(locales)
     }
 }
