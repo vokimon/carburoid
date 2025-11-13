@@ -63,6 +63,7 @@ class LocationService(
 
     fun setFixedLocation(location: Location) {
         fixedLocation = location
+        saveLastRealLocation(location)
         setLocation(location)
     }
 
@@ -243,7 +244,7 @@ class LocationService(
         }
     }
 
-    private fun getSavedLocation(): Location? {
+    fun getSavedLocation(): Location? {
         val latBits = prefs.getLong("last_lat", Long.MIN_VALUE)
         val lngBits = prefs.getLong("last_lng", Long.MIN_VALUE)
 

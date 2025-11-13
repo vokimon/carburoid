@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity() {
                 loadGasStations()
             }
         }
+
         val productSelector = findViewById<ProductSelector>(R.id.product_selector)
         productSelector.setOnProductSelectedListener { selectedProduct ->
             loadGasStations()
@@ -123,9 +124,30 @@ class MainActivity : AppCompatActivity() {
                 loadGasStations()
             }
         }
+        (
+            useSavedLocation(savedInstanceState) ||
+            useDeepLinkIntentLocation(intent) ||
+            useDeviceLocation()
+        )
+    }
 
+
+    private fun useSavedLocation(savedInstanceState: Bundle?): Boolean {
+        if (savedInstanceState == null) return false
+        val saved = locationService.getSavedLocation() ?: return false
+        locationService.setFixedLocation(saved)
+        return true
+    }
+
+    private fun useDeepLinkIntentLocation(intent: Intent?): Boolean {
+        val location = intent?.getParcelableExtra<Location>(MainActivity.EXTRA_LOCATION) ?: return false
+        locationService.setFixedLocation(location)
+        return true
+    }
+
+    private fun useDeviceLocation(): Boolean {
         locationService.refreshLocation()
-        handleDeepLink(intent)
+        return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -146,14 +168,7 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
-        handleDeepLink(intent)
-    }
-
-    private fun handleDeepLink(intent: Intent?) {
-        @Suppress("DEPRECATION") // getParcelableExtra
-        intent?.getParcelableExtra<Location>(MainActivity.EXTRA_LOCATION)?.let { parcelable ->
-            locationService.setFixedLocation(parcelable)
-        }
+        useDeepLinkIntentLocation(intent)
     }
 
     private fun showToast(message: String) {
