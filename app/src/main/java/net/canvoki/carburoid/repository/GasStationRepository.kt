@@ -6,11 +6,10 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import net.canvoki.carburoid.log
-import net.canvoki.carburoid.nolog
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
+import net.canvoki.carburoid.nolog
 import net.canvoki.carburoid.timeit
 import java.io.File
 import java.time.Duration

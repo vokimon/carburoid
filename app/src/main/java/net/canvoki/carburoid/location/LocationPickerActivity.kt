@@ -8,14 +8,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
-import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import net.canvoki.carburoid.R
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
@@ -29,9 +26,6 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import java.net.URLEncoder
-import java.util.Locale
-import net.canvoki.carburoid.R
-import net.canvoki.carburoid.log
 
 data class Suggestion(val display: String, val lat: Double, val lon: Double)
 
@@ -53,7 +47,6 @@ class LocationPickerActivity : AppCompatActivity() {
     private var searchBlocked = false
     private var suggestions: List<Suggestion> = emptyList()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Configuration.getInstance().userAgentValue = packageName
@@ -74,7 +67,7 @@ class LocationPickerActivity : AppCompatActivity() {
         val personIcon = ResourcesCompat.getDrawable(
             resources,
             org.osmdroid.library.R.drawable.person,
-            theme
+            theme,
         )
         marker = Marker(map).apply {
             icon = personIcon
@@ -116,7 +109,7 @@ class LocationPickerActivity : AppCompatActivity() {
                 if (searchBlocked) return
                 searchRunnable?.let { searchHandler.removeCallbacks(it) }
                 val query = s?.toString()?.trim() ?: ""
-                if (query.length < 3) return  // avoid searching for tiny inputs
+                if (query.length < 3) return // avoid searching for tiny inputs
 
                 // Debounce: wait 400ms after last keystroke
                 searchRunnable = Runnable { searchSuggestions(query) }
@@ -159,7 +152,7 @@ class LocationPickerActivity : AppCompatActivity() {
     private fun setStateFromIntent(intent: Intent) {
         moveToLocation(
             intent.getDoubleExtra(EXTRA_CURRENT_LAT, 40.0),
-            intent.getDoubleExtra(EXTRA_CURRENT_LON, -1.0)
+            intent.getDoubleExtra(EXTRA_CURRENT_LON, -1.0),
         )
         val initDescription = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
         updateSearchText(initDescription)
@@ -187,7 +180,7 @@ class LocationPickerActivity : AppCompatActivity() {
             val searchingAdapter = ArrayAdapter(
                 this,
                 android.R.layout.simple_dropdown_item_1line,
-                listOf(getString(R.string.location_picker_searching))
+                listOf(getString(R.string.location_picker_searching)),
             )
             searchBox.setAdapter(searchingAdapter)
             searchBox.showDropDown()
@@ -224,7 +217,7 @@ class LocationPickerActivity : AppCompatActivity() {
                     val adapter = ArrayAdapter(
                         this,
                         android.R.layout.simple_dropdown_item_1line,
-                        titles
+                        titles,
                     )
                     searchBox.setAdapter(adapter)
                     searchBox.showDropDown()
@@ -288,7 +281,7 @@ class LocationPickerActivity : AppCompatActivity() {
             android.R.id.home -> { // ← back arrow in ActionBar
                 returnCancel()
                 true
-                }
+            }
             R.id.action_accept -> {
                 returnResult()
                 true
@@ -313,5 +306,4 @@ class LocationPickerActivity : AppCompatActivity() {
         // avoids map leaks
         map.onPause()
     }
-
 }

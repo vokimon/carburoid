@@ -5,7 +5,7 @@ import java.net.URLDecoder
 
 class Uri private constructor(
     private val uri: URI,
-    private val queryMap: Map<String, String>
+    private val queryMap: Map<String, String>,
 ) {
     val host: String? get() = uri.host
     val path: String? get() = uri.path

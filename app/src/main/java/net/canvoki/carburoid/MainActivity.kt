@@ -27,7 +27,6 @@ import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.ui.StationDetailActivity
-import net.canvoki.carburoid.ui.settings.LanguageSettings
 
 class MainActivity : AppCompatActivity() {
 
@@ -126,11 +125,10 @@ class MainActivity : AppCompatActivity() {
         }
         (
             useSavedLocation(savedInstanceState) ||
-            useDeepLinkIntentLocation(intent) ||
-            useDeviceLocation()
-        )
+                useDeepLinkIntentLocation(intent) ||
+                useDeviceLocation()
+            )
     }
-
 
     private fun useSavedLocation(savedInstanceState: Bundle?): Boolean {
         if (savedInstanceState == null) return false

@@ -7,8 +7,6 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import com.google.android.material.R as MaterialR
-import androidx.appcompat.R as AppCompatR
 import net.canvoki.carburoid.R
 import java.time.DayOfWeek
 import java.time.Instant
@@ -17,6 +15,8 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.Locale
+import androidx.appcompat.R as AppCompatR
+import com.google.android.material.R as MaterialR
 
 val END_OF_DAY = LocalTime.of(23, 59)
 typealias TimeSpec = Pair<Int, Int>
@@ -24,7 +24,6 @@ typealias Interval = Pair<TimeSpec, TimeSpec>
 typealias Intervals = List<Interval>
 typealias DayRange = List<DayOfWeek>
 typealias ScheduleEntry = Pair<DayRange, Intervals>
-
 
 data class OpeningStatus(
     val isOpen: Boolean,
@@ -111,6 +110,7 @@ data class OpeningStatus(
         thresholdMinutes: Long = defaultThresholdMinutes,
     ): Int {
         val typedValue = TypedValue()
+
         @AttrRes val colorAttr = resolveState(thresholdMinutes).colorAttr
         context.theme.resolveAttribute(colorAttr, typedValue, true)
         return typedValue.data

@@ -2,11 +2,10 @@ package net.canvoki.carburoid.ui.settings
 
 import android.app.LocaleManager
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.content.SharedPreferences
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import androidx.core.os.LocaleListCompat
@@ -93,7 +92,7 @@ object LanguageSettings {
         preference.entryValues = languages.map { it.code }.toTypedArray()
     }
 
-    private fun getPrefs(context: Context) :  SharedPreferences {
+    private fun getPrefs(context: Context): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(context)
     }
 

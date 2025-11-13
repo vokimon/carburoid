@@ -2,9 +2,7 @@ package net.canvoki.carburoid.ui
 
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.net.Uri
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +13,6 @@ import net.canvoki.carburoid.databinding.ActivityStationDetailBinding
 import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.repository.GasStationRepository
 import java.time.Instant
-import androidx.appcompat.R as AppCompatR
 import com.google.android.material.R as MaterialR
 
 class StationDetailActivity : AppCompatActivity() {

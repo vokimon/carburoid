@@ -1,5 +1,6 @@
 package net.canvoki.carburoid.location
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -7,7 +8,6 @@ import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
-import android.Manifest
 import android.net.Uri
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
@@ -16,13 +16,12 @@ import androidx.core.content.edit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.withContext
 import net.canvoki.carburoid.R
-import net.canvoki.carburoid.location.LocationProvider
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.distances.DistanceFromAddress
 import net.canvoki.carburoid.log
@@ -141,7 +140,7 @@ class LocationService(
         }
         provider.getLastKnownLocation(
             onSuccess = { location -> handleDeviceLocationSuccess(location) },
-            onError = { e -> handleDeviceLocationError(e) }
+            onError = { e -> handleDeviceLocationError(e) },
         )
     }
 
@@ -184,21 +183,21 @@ class LocationService(
     private fun updateDescription() {
         geocodingJob?.cancel()
         val location = currentLocation
-        if (location==null) {
+        if (location == null) {
             description = null
             CoroutineScope(Dispatchers.Main).launch {
-                _descriptionUpdated.emit(description?:"")
+                _descriptionUpdated.emit(description ?: "")
             }
             return
         }
         // Provisional description
         description = "(${location.latitude}, ${location.longitude})"
         CoroutineScope(Dispatchers.Main).launch {
-            _descriptionUpdated.emit(description?:"")
+            _descriptionUpdated.emit(description ?: "")
         }
         geocodingJob = launch {
             description = geocodeLocation(location) ?: description
-            _descriptionUpdated.emit(description?:"")
+            _descriptionUpdated.emit(description ?: "")
         }
     }
 
@@ -215,6 +214,7 @@ class LocationService(
             try {
                 timeit("GEOCODING $location") {
                     val geocoder = Geocoder(activity, Locale.getDefault())
+
                     @Suppress("DEPRECATION")
                     val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
                     if (addresses == null || addresses.isEmpty()) {
@@ -262,8 +262,8 @@ class LocationService(
         val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return (
             locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-            locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        )
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+            )
     }
 
     private fun openSystemPermissionsSettings() {

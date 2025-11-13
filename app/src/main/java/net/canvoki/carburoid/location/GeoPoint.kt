@@ -73,9 +73,9 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
             }
 
             return null
-         }
+        }
 
-         fun fromGoogleMapsLink(text: String): GeoPoint? {
+        fun fromGoogleMapsLink(text: String): GeoPoint? {
             val uri = Uri.parse(text) ?: return null
 
             if (uri.host == "maps.google.com") {
@@ -94,7 +94,7 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
                 return parseCoordinatesWithLabels(q)
             }
             // https://www.google.com/maps/dir/40.4168,-3.7038/41.3851,2.1734/ (directions)
-            if (uri.path?.startsWith("/maps/dir/")==true) {
+            if (uri.path?.startsWith("/maps/dir/") == true) {
                 val points = uri.path!!.substringAfter("/maps/dir/").split("/")
                 if (points.size >= 2) {
                     return parseCoordinates(points[0])
@@ -154,6 +154,5 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
         private fun matchToCoords(match: MatchResult): GeoPoint? {
             return fromTextComponents(match.groupValues[1], match.groupValues[2])
         }
-
     }
 }

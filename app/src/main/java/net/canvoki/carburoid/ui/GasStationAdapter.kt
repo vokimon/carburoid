@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import net.canvoki.carburoid.log
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
+import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import java.time.Instant
 
@@ -60,7 +60,7 @@ class GasStationAdapter(
         holder.location.text = if (location.isNotEmpty()) location else context.getString(R.string.station_no_city)
 
         val price = station.price?.let { "%.03f €".format(it) }
-        log("PRICE: ${price}")
+        log("PRICE: $price")
         holder.price.text = if (station.isPublicPrice) price else "*" + price
 
         val distance = CurrentDistancePolicy.getDistance(station)
@@ -72,7 +72,6 @@ class GasStationAdapter(
         holder.openStatus.setTextColor(statusColor)
         holder.openStatusIcon.setImageResource(status.icon())
         holder.openStatusIcon.imageTintList = ColorStateList.valueOf(statusColor)
-
     }
 
     override fun getItemCount() = stations.size

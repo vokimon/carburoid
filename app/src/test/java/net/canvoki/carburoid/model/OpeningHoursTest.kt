@@ -1,10 +1,10 @@
 package net.canvoki.carburoid.model
 
 import net.canvoki.carburoid.test.madridInstant
+import org.junit.After
+import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
-import org.junit.Before
-import org.junit.After
 import java.io.File
 import java.time.DayOfWeek
 import java.time.Instant

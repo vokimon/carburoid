@@ -1,9 +1,8 @@
 package net.canvoki.carburoid.location
 
-import java.util.Locale
-import net.canvoki.carburoid.location.GeoPoint
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.util.Locale
 
 fun locationStr(l: GeoPoint?): String? {
     return l?.let { "GeoPoint<${"%.4f".format(Locale.ROOT, it.latitude)},${"%.4f".format(Locale.ROOT, it.longitude)}>" }
@@ -113,7 +112,7 @@ class GeoPointTest {
     fun `osm link valid`() {
         testOsmLink(
             "https://www.openstreetmap.org/#map=15/40.4168/-3.7038",
-            "GeoPoint<40.4168,-3.7038>"
+            "GeoPoint<40.4168,-3.7038>",
         )
     }
 
@@ -121,7 +120,7 @@ class GeoPointTest {
     fun `osm link with http`() {
         testOsmLink(
             "http://www.openstreetmap.org/#map=10/39.2114/-1.5392",
-            "GeoPoint<39.2114,-1.5392>"
+            "GeoPoint<39.2114,-1.5392>",
         )
     }
 
@@ -129,7 +128,7 @@ class GeoPointTest {
     fun `osm link without subdomain`() {
         testOsmLink(
             "https://openstreetmap.org/#map=12/41.3851/2.1734",
-            "GeoPoint<41.3851,2.1734>"
+            "GeoPoint<41.3851,2.1734>",
         )
     }
 
@@ -137,7 +136,7 @@ class GeoPointTest {
     fun `osm link negative coordinates`() {
         testOsmLink(
             "https://www.openstreetmap.org/#map=14/-33.4567/-70.6789",
-            "GeoPoint<-33.4567,-70.6789>"
+            "GeoPoint<-33.4567,-70.6789>",
         )
     }
 
@@ -145,7 +144,7 @@ class GeoPointTest {
     fun `osm link invalid zoom level`() {
         testOsmLink(
             "https://www.openstreetmap.org/#map=abc/40.4168/-3.7038",
-            null
+            null,
         )
     }
 
@@ -153,7 +152,7 @@ class GeoPointTest {
     fun `osm link missing coordinates`() {
         testOsmLink(
             "https://www.openstreetmap.org/#map=15/",
-            null
+            null,
         )
     }
 
@@ -162,7 +161,7 @@ class GeoPointTest {
     fun `osm link directions takes origin`() {
         testOsmLink(
             "https://www.openstreetmap.org/directions?from=40.4168,-3.7038&to=41.3851,2.1734",
-            "GeoPoint<40.4168,-3.7038>"
+            "GeoPoint<40.4168,-3.7038>",
         )
     }
 
@@ -170,7 +169,7 @@ class GeoPointTest {
     fun `osm link malformed coordinates`() {
         testOsmLink(
             "https://www.openstreetmap.org/#map=15/40.4168/",
-            null
+            null,
         )
     }
 
@@ -178,7 +177,7 @@ class GeoPointTest {
     fun `osm link out of bounds latitude`() {
         testOsmLink(
             "https://www.openstreetmap.org/#map=15/95.0/-3.7038",
-            null
+            null,
         )
     }
 
@@ -186,7 +185,7 @@ class GeoPointTest {
     fun `osm link out of bounds negative latitude`() {
         testOsmLink(
             "https://www.openstreetmap.org/#map=15/-95.0/-3.7038",
-            null
+            null,
         )
     }
 
@@ -194,7 +193,7 @@ class GeoPointTest {
     fun `osm link out of bounds longitude`() {
         testOsmLink(
             "https://www.openstreetmap.org/#map=15/40.4168/200.0",
-            null
+            null,
         )
     }
 
@@ -202,7 +201,7 @@ class GeoPointTest {
     fun `osm link out of bounds negative longitude`() {
         testOsmLink(
             "https://www.openstreetmap.org/#map=15/40.4168/-200.0",
-            null
+            null,
         )
     }
 
@@ -210,7 +209,7 @@ class GeoPointTest {
     fun `rejects fake osm link`() {
         testOsmLink(
             "https://evil.com/openstreetmap.org/#map=15/40.4168/-3.7038",
-            null
+            null,
         )
     }
 
@@ -228,7 +227,7 @@ class GeoPointTest {
     fun `gmaps subdomain`() {
         testGMapsUri(
             "https://maps.google.com/?q=40.4168,-3.7038",
-            "GeoPoint<40.4168,-3.7038>"
+            "GeoPoint<40.4168,-3.7038>",
         )
     }
 
@@ -236,7 +235,7 @@ class GeoPointTest {
     fun `gmaps subdomain with extra params ignored`() {
         testGMapsUri(
             "https://maps.google.com/?q=41.3851,2.1734&z=15",
-            "GeoPoint<41.3851,2.1734>"
+            "GeoPoint<41.3851,2.1734>",
         )
     }
 
@@ -244,7 +243,7 @@ class GeoPointTest {
     fun `gmaps subdomain integer`() {
         testGMapsUri(
             "https://maps.google.com/?q=40,-3",
-            "GeoPoint<40.0000,-3.0000>"
+            "GeoPoint<40.0000,-3.0000>",
         )
     }
 
@@ -252,7 +251,7 @@ class GeoPointTest {
     fun `gmaps subdomain invalid latitude`() {
         testGMapsUri(
             "https://maps.google.com/?q=bad,3",
-            null
+            null,
         )
     }
 
@@ -260,7 +259,7 @@ class GeoPointTest {
     fun `gmaps subdomain invalid longitude`() {
         testGMapsUri(
             "https://maps.google.com/?q=40,bad",
-            null
+            null,
         )
     }
 
@@ -268,7 +267,7 @@ class GeoPointTest {
     fun `gmaps subdomain latitude to high`() {
         testGMapsUri(
             "https://maps.google.com/?q=95.0,-3.7038",
-            null
+            null,
         )
     }
 
@@ -276,7 +275,7 @@ class GeoPointTest {
     fun `gmaps subdomain latitude too low`() {
         testGMapsUri(
             "https://maps.google.com/?q=-95.0,-3.7038",
-            null
+            null,
         )
     }
 
@@ -284,7 +283,7 @@ class GeoPointTest {
     fun `gmaps subdomain longitude too high`() {
         testGMapsUri(
             "https://maps.google.com/?q=40.4168,200.0",
-            null
+            null,
         )
     }
 
@@ -292,7 +291,7 @@ class GeoPointTest {
     fun `gmaps subdomain longitude too low`() {
         testGMapsUri(
             "https://maps.google.com/?q=40.4168,-200.0",
-            null
+            null,
         )
     }
 
@@ -300,7 +299,7 @@ class GeoPointTest {
     fun `gmaps subdomain missing q param`() {
         testGMapsUri(
             "https://maps.google.com/?z=15",
-            null
+            null,
         )
     }
 
@@ -308,7 +307,7 @@ class GeoPointTest {
     fun `gmaps subdomain with label and coords`() {
         testGMapsUri(
             "https://maps.google.com/?q=Madrid%2040.4168,-3.7038",
-            "GeoPoint<40.4168,-3.7038>"
+            "GeoPoint<40.4168,-3.7038>",
         )
     }
 
@@ -316,7 +315,7 @@ class GeoPointTest {
     fun `gmaps subdomain with parentheses`() {
         testGMapsUri(
             "https://maps.google.com/?q=Station+(40.4168,-3.7038)",
-            "GeoPoint<40.4168,-3.7038>"
+            "GeoPoint<40.4168,-3.7038>",
         )
     }
 
@@ -326,7 +325,7 @@ class GeoPointTest {
     fun `gmaps path`() {
         testGMapsUri(
             "https://www.google.com/maps?q=39.2114,-1.5392",
-            "GeoPoint<39.2114,-1.5392>"
+            "GeoPoint<39.2114,-1.5392>",
         )
     }
 
@@ -334,7 +333,7 @@ class GeoPointTest {
     fun `gmaps path but no google url`() {
         testGMapsUri(
             "https://example.com/maps?q=40.4168,-3.7038",
-            null
+            null,
         )
     }
 
@@ -342,7 +341,7 @@ class GeoPointTest {
     fun `gmaps path bad lat`() {
         testGMapsUri(
             "https://www.google.com/maps?q=bad,-3.7038",
-            null
+            null,
         )
     }
 
@@ -350,7 +349,7 @@ class GeoPointTest {
     fun `gmaps path lat too low`() {
         testGMapsUri(
             "https://www.google.com/maps?q=-95.0,-3.7038",
-            null
+            null,
         )
     }
 
@@ -358,7 +357,7 @@ class GeoPointTest {
     fun `gmaps path with label and coords`() {
         testGMapsUri(
             "https://www.google.com/maps?q=Madrid%2040.4168,-3.7038",
-            "GeoPoint<40.4168,-3.7038>"
+            "GeoPoint<40.4168,-3.7038>",
         )
     }
 
@@ -366,7 +365,7 @@ class GeoPointTest {
     fun `gmaps path with parentheses`() {
         testGMapsUri(
             "https://www.google.com/maps?q=Station+(40.4168,-3.7038)",
-            "GeoPoint<40.4168,-3.7038>"
+            "GeoPoint<40.4168,-3.7038>",
         )
     }
 
@@ -376,7 +375,7 @@ class GeoPointTest {
     fun `gmaps dir takes route origin`() {
         testGMapsUri(
             "https://www.google.com/maps/dir/40.4168,-3.7038/41.3851,2.1734/",
-            "GeoPoint<40.4168,-3.7038>"
+            "GeoPoint<40.4168,-3.7038>",
         )
     }
 
@@ -384,7 +383,7 @@ class GeoPointTest {
     fun `gmaps dir incomplete`() {
         testGMapsUri(
             "https://www.google.com/maps/dir/40.4168/",
-            null
+            null,
         )
     }
 
@@ -392,22 +391,23 @@ class GeoPointTest {
     fun `gmaps dir with multiple waypoints`() {
         testGMapsUri(
             "https://www.google.com/maps/dir/39.2114,-1.5392/40.4168,-3.7038/41.3851,2.1734/42.8467,-1.2345/",
-            "GeoPoint<39.2114,-1.5392>"
+            "GeoPoint<39.2114,-1.5392>",
         )
     }
- 
+
     @Test
     fun `gmaps dir invalid number latitude`() {
         testGMapsUri(
             "https://www.google.com/maps/dir/6.6.6,-3.7038/41.3851,2.1734/",
-            null
+            null,
         )
     }
+
     @Test
     fun `gmaps dir invalid number longitude`() {
         testGMapsUri(
             "https://www.google.com/maps/dir/40.4168,6.6.6/41.3851,2.1734/",
-            null
+            null,
         )
     }
 
@@ -415,7 +415,7 @@ class GeoPointTest {
     fun `gmaps dir lat too low`() {
         testGMapsUri(
             "https://www.google.com/maps/dir/-95.0,-3.7038/41.3851,2.1734/",
-            null
+            null,
         )
     }
 
@@ -424,7 +424,7 @@ class GeoPointTest {
     fun `gmaps place with coords valid`() {
         testGMapsUri(
             "https://www.google.com/maps/place/Abengibre/39.2114,-1.5392",
-            "GeoPoint<39.2114,-1.5392>"
+            "GeoPoint<39.2114,-1.5392>",
         )
     }
 
@@ -432,7 +432,7 @@ class GeoPointTest {
     fun `gmaps place bad lon`() {
         testGMapsUri(
             "https://www.google.com/maps/place/Barcelona/41.3851,6.6.6",
-            null
+            null,
         )
     }
 
@@ -440,7 +440,7 @@ class GeoPointTest {
     fun `gmaps place lon too low`() {
         testGMapsUri(
             "https://www.google.com/maps/place/Sevilla/37.3891,-200.0",
-            null
+            null,
         )
     }
 
@@ -450,7 +450,7 @@ class GeoPointTest {
     fun `gmaps map view center valid`() {
         testGMapsUri(
             "https://www.google.com/maps/@41.3851,2.1734,12z",
-            "GeoPoint<41.3851,2.1734>"
+            "GeoPoint<41.3851,2.1734>",
         )
     }
 
@@ -458,7 +458,7 @@ class GeoPointTest {
     fun `gmaps map view bad lat`() {
         testGMapsUri(
             "https://www.google.com/maps/@6.6.6,2.1734,12z",
-            null
+            null,
         )
     }
 
@@ -466,8 +466,7 @@ class GeoPointTest {
     fun `gmaps map view lon too low`() {
         testGMapsUri(
             "https://www.google.com/maps/@41.3851,-200.0,12z",
-            null
+            null,
         )
     }
-
 }
