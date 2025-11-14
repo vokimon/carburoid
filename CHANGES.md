@@ -2,7 +2,7 @@
 
 ## 1.2.2 (2025-11-14)
 
-- 🏗️ agp downgraded 8.13.0 -> 8.11.0 because fdroid build server
+- 🏗️ agp downgraded 8.13.0 -> 8.11.0 because fdroid build server (Fixes #1)
 
 ## 1.2.1 (2025-11-14)
 
@@ -11,7 +11,8 @@ Layout fixes on Android 15 and issues on language/rotation changes
 - 💄 Icons for some preferences
 - 🌐 Arabic added (via ChatGpt, sorry)
 - 🐛 Clearer text for weblate link
-- 🐛 Android 15 showed the ui under the AppBar
+- 🐛 Android 15 slided the product selector under the AppBar
+    - Thanks to Antiono Romero for the report
 - 🐛 Memory leaks when stoping or pausing Location Picker
 - 🐛 Location picker lost position when rotating the device
 - 🐛 Language changes flickered and not fully applied
