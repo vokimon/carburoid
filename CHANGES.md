@@ -4,6 +4,7 @@
 
 Layout fixes on Android 15 and issues on language/rotation changes
 
+- 💄 Icons for some preferences
 - 🌐 Arabic added (via ChatGpt, sorry)
 - 🐛 Clearer text for weblate link
 - 🐛 Android 15 showed the ui under the AppBar

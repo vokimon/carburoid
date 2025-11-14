@@ -13,6 +13,9 @@ import net.canvoki.carburoid.R
 object ThemeSettings {
 
     private const val KEY = "dark_mode"
+    private const val VALUE_LIGHT = "light"
+    private const val VALUE_DARK = "dark"
+    private const val VALUE_AUTO = "auto"
 
     fun registerIn(screen: PreferenceScreen) {
         val context = screen.context
@@ -31,9 +34,9 @@ object ThemeSettings {
     fun apply(context: Context) {
         val themeMode = currentValue(context)
         when (themeMode) {
-            "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            "auto" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            VALUE_LIGHT -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            VALUE_DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            VALUE_AUTO -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
     }
 
@@ -43,7 +46,7 @@ object ThemeSettings {
 
     private fun currentValue(context: Context): String? {
         val prefs = preferences(context)
-        return prefs.getString(KEY, "auto")
+        return prefs.getString(KEY, VALUE_AUTO)
     }
 
     private fun setCurrentValue(context: Context, value: String) {
@@ -61,8 +64,8 @@ object ThemeSettings {
     private fun updateSummary(preference: ListPreference, context: Context) {
         val current = currentValue(context)
         preference.summary = when (current) {
-            "light" -> context.getString(R.string.theme_light)
-            "dark" -> context.getString(R.string.theme_dark)
+            VALUE_LIGHT -> context.getString(R.string.theme_light)
+            VALUE_DARK -> context.getString(R.string.theme_dark)
             else -> context.getString(R.string.theme_system)
         }
     }
