@@ -2,16 +2,17 @@
 
 Do you want to help? This is my roadmap.
 
-
 - [ ] Translate PositionPicker navigation button tooltips
-- [ ] Empty text search show last locations
-- [x] When dragging the marker, update the description
-- [x] Quick search text clear
-- [ ] Bug: after setting gps position, picker keeps previous position
+- [ ] Location Search: When empty, autocomplete show later searches
+- [ ] Location Search: Prioritize near matches to the current position
+- [ ] Location Search: Feedback when doing a query
+- [ ] Refactor: Invert Paretto: Sort by price, filter by distance, to ease distance recomputation
 - [ ] Real road distance
-- [ ] Feedback for search query
 - [ ] Route deviation distance
-    - [ ] material icon route
+    - [ ] How to set a route from LocationPicker
+    - [ ] How to display the route
+    - [ ] material icon 'route'
+- [ ] List: Display diferently stations that appear because we disabled a filter
 - [ ] Filters: Hide stations beyond the sea (Peninsule, Canary, Balearic, Ceuta, Melilla)
 - [ ] Language: Asturian
 - [ ] Language: Aranese (Occitan)
@@ -23,6 +24,10 @@ Do you want to help? This is my roadmap.
 
 ## Done
 
+- [x] When dragging the marker, update the description
+- [x] Quick search text clear
+- [x] Bug: after setting gps position, picker keeps previous position
+- [x] Language: Arabic
 - [x] Edit current position
 - [x] Limit searchs to spain
 - [x] See options while writing (autocomplete)

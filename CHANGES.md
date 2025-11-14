@@ -1,6 +1,6 @@
 # Change log
 
-## Unreleased
+## 1.2.1 (2025-11-14)
 
 Layout fixes on Android 15 and issues on language/rotation changes
 

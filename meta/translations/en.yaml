@@ -19,6 +19,13 @@ full_description_md: |+
   - Dark and Light themes
 
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_2_1_md: "Layout fixes on Android 15 and issues on language/rotation changes\n\n-
+  \U0001F484 Icons for some preferences\n- \U0001F310 Arabic added (via ChatGpt, sorry)\n-
+  \U0001F41B Clearer text for weblate link\n- \U0001F41B Android 15 showed the ui
+  under the AppBar\n- \U0001F41B Memory leaks when stoping or pausing Location Picker\n-
+  \U0001F41B Location picker lost position when rotating the device\n- \U0001F41B
+  Language changes flickered and not fully applied\n- \U0001F41B Current position
+  was lost on rotation or language change"
 changes_1_2_0_md: "Edit your current position\n\n- ✨ By clicking the edit icon, enter
   a edit position screen\n- ✨ Edit position with interactive map\n- ✨ Edit position
   with utocompletion location search\n- ✨ GPS reposition by clicking on concentric
