@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var emptyView: TextView
     private lateinit var progressText: TextView
     private lateinit var swipeRefreshLayout: androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    private lateinit var loadingPill: LinearLayout
     private lateinit var gasStationAdapter: GasStationAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +66,8 @@ class MainActivity : AppCompatActivity() {
         emptyView = findViewById(R.id.text_empty)
         progressText = findViewById(R.id.text_progress)
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
+        loadingPill = findViewById(R.id.loading_pill)
+
 
         gasStationAdapter = GasStationAdapter(this, emptyList(), ::onItemClicked)
         recyclerView.adapter = gasStationAdapter
@@ -89,27 +93,26 @@ class MainActivity : AppCompatActivity() {
         }
 
         swipeRefreshLayout.setOnRefreshListener {
-            lifecycleScope.launch {
-                // Forces a background fetch
-                repository.launchFetch()
-            }
+            swipeRefreshLayout.isRefreshing = false
+            repository.launchFetch()
         }
+
 
         lifecycleScope.launch {
             repository.events.collect { event ->
                 when (event) {
                     is RepositoryEvent.UpdateStarted -> {
-                        swipeRefreshLayout.isRefreshing = true
+                        updateLoadingDataStatus()
                         nolog("EVENT UpdateStarted")
                     }
                     is RepositoryEvent.UpdateReady -> {
-                        swipeRefreshLayout.isRefreshing = false
+                        updateLoadingDataStatus()
                         showProgress("Processing Data...")
                         nolog("EVENT UpdateReady")
                         loadGasStations()
                     }
                     is RepositoryEvent.UpdateFailed -> {
-                        swipeRefreshLayout.isRefreshing = false
+                        updateLoadingDataStatus()
                         nolog("EVENT UpdateFailed")
                         showToast(event.error)
                     }
@@ -128,6 +131,18 @@ class MainActivity : AppCompatActivity() {
                 useDeepLinkIntentLocation(intent) ||
                 useDeviceLocation()
             )
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        updateLoadingDataStatus()
+    }
+
+    fun updateLoadingDataStatus() {
+        val isUpdating = repository.isFetchInProgress()
+        loadingPill.visibility = if (isUpdating) View.VISIBLE else View.GONE
+        swipeRefreshLayout.isEnabled = !isUpdating
     }
 
     private fun useSavedLocation(savedInstanceState: Bundle?): Boolean {
