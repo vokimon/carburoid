@@ -1,5 +1,10 @@
 # Change log
 
+## Unreleased
+
+- 💄 Less anoying refresing data spinner
+- 🌐 Corrected Catalan words in Spanish translations (Fixes #4)
+
 ## 1.2.2 (2025-11-14)
 
 - 🏗️ agp downgraded 8.13.0 -> 8.11.0 because fdroid build server (Fixes #1)

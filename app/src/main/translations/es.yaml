@@ -4,7 +4,7 @@ app_name: Carburoid
 menu_settings: Ajustes
 settings_category_language_appearance: Idioma y apariencia
 settings_language_title: Idioma
-settings_language_summary: Canvia el idioma de la aplicación
+settings_language_summary: Cambia el idioma de la aplicación
 language_system_default: Sistema
 settings_translate_title: Ayuda a traducir tu idioma
 settings_translate_summary: Ir a Weblate
@@ -13,9 +13,9 @@ theme_light: Claro
 theme_dark: Oscuro
 theme_system: Automático (Sistema)
 settings_category_station_filters: Filtrado de gasolineras
-settings_filter_expensive: Oculta estaciones caras i lejanas
+settings_filter_expensive: Oculta estaciones caras y lejanas
 settings_filter_expensive_summary: No muestres estaciones cuando las haya más cercanas o más baratas. (Recomendado)
-settings_filter_non_public: Solo precios públicos
+settings_filter_non_public: Sólo precios públicos
 settings_filter_non_public_summary: Oculta los precios que requieran afiliación.
 settings_filter_closed: Muestra estaciones cerradas
 settings_filter_closed_summary: Establece un margen de tiempo para estaciones que abrirán pronto
@@ -25,7 +25,7 @@ settings_filter_closed_tolerance_one_hour: Una hora
 settings_filter_closed_tolerance_two_hours: Dos hores
 settings_filter_closed_tolerance_twelve_hours: Medio día
 settings_filter_closed_tolerance_one_day: Un día
-settings_filter_closed_tolerance_never: Muestra sempre
+settings_filter_closed_tolerance_never: Muestra siempre
 no_gas_stations: No se encontraron gasolineras coincidentes
 product_selector_hint: Producto
 product_selector_icon_description: Selector de producto

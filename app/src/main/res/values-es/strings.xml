@@ -6,7 +6,7 @@
     <string name="menu_settings">Ajustes</string>
     <string name="settings_category_language_appearance">Idioma y apariencia</string>
     <string name="settings_language_title">Idioma</string>
-    <string name="settings_language_summary">Canvia el idioma de la aplicación</string>
+    <string name="settings_language_summary">Cambia el idioma de la aplicación</string>
     <string name="language_system_default">Sistema</string>
     <string name="settings_translate_title">Ayuda a traducir tu idioma</string>
     <string name="settings_translate_summary">Ir a Weblate</string>
@@ -15,9 +15,9 @@
     <string name="theme_dark">Oscuro</string>
     <string name="theme_system">Automático (Sistema)</string>
     <string name="settings_category_station_filters">Filtrado de gasolineras</string>
-    <string name="settings_filter_expensive">Oculta estaciones caras i lejanas</string>
+    <string name="settings_filter_expensive">Oculta estaciones caras y lejanas</string>
     <string name="settings_filter_expensive_summary">No muestres estaciones cuando las haya más cercanas o más baratas. (Recomendado)</string>
-    <string name="settings_filter_non_public">Solo precios públicos</string>
+    <string name="settings_filter_non_public">Sólo precios públicos</string>
     <string name="settings_filter_non_public_summary">Oculta los precios que requieran afiliación.</string>
     <string name="settings_filter_closed">Muestra estaciones cerradas</string>
     <string name="settings_filter_closed_summary">Establece un margen de tiempo para estaciones que abrirán pronto</string>
@@ -27,7 +27,7 @@
     <string name="settings_filter_closed_tolerance_two_hours">Dos hores</string>
     <string name="settings_filter_closed_tolerance_twelve_hours">Medio día</string>
     <string name="settings_filter_closed_tolerance_one_day">Un día</string>
-    <string name="settings_filter_closed_tolerance_never">Muestra sempre</string>
+    <string name="settings_filter_closed_tolerance_never">Muestra siempre</string>
     <string name="no_gas_stations">No se encontraron gasolineras coincidentes</string>
     <string name="product_selector_hint">Producto</string>
     <string name="product_selector_icon_description">Selector de producto</string>
