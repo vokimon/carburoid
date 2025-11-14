@@ -10,6 +10,7 @@
             app:key="dark_mode"
             app:title="@string/settings_theme"
             app:summary="%s"
+            android:icon="@drawable/ic_brightness_medium"
             app:entries="@array/theme_entries"
             app:entryValues="@array/theme_values"
             app:defaultValue="auto" />
@@ -17,6 +18,7 @@
         <ListPreference
             android:key="app_language"
             android:title="@string/settings_language_title"
+            android:icon="@drawable/ic_translate"
             android:summary="@string/settings_language_summary"
             android:defaultValue="system" />
 
