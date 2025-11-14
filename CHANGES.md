@@ -1,5 +1,9 @@
 # Change log
 
+## 1.2.2 (2025-11-14)
+
+- 🏗️ agp downgraded 8.13.0 -> 8.11.0 because fdroid build server
+
 ## 1.2.1 (2025-11-14)
 
 Layout fixes on Android 15 and issues on language/rotation changes

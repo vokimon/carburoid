@@ -19,6 +19,8 @@ full_description_md: |+
   - Dark and Light themes
 
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_2_2_md: "- \U0001F3D7️ agp downgraded 8.13.0 -> 8.11.0 because fdroid build
+  server"
 changes_1_2_1_md: "Layout fixes on Android 15 and issues on language/rotation changes\n\n-
   \U0001F484 Icons for some preferences\n- \U0001F310 Arabic added (via ChatGpt, sorry)\n-
   \U0001F41B Clearer text for weblate link\n- \U0001F41B Android 15 showed the ui
