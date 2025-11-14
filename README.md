@@ -26,12 +26,12 @@ Features:
 
 <p>
 <img width="20%" alt="Gas station list (dark theme)" src="media/01-StationList-Dark.png" />
-<img width="20%" alt="Gas station list (light theme)" src="media/02-StationList-Light.png" />
 <img width="20%" alt="Gas station details (dark theme)" src="media/03-Detail-Dark.png" />
-<img width="20%" alt="Gas station details (light theme)" src="media/04-Detail-Light.png" />
 <img width="20%" alt="Location Picker (dark theme)" src="media/05-LocationPicker-Dark.png" />
-<img width="20%" alt="Location Picker (light theme)" src="media/06-LocationPicker-Light.png" />
 <img width="20%" alt="Settings (dark theme)" src="media/07-Settings-Dark.png" />
+<img width="20%" alt="Gas station list (light theme)" src="media/02-StationList-Light.png" />
+<img width="20%" alt="Gas station details (light theme)" src="media/04-Detail-Light.png" />
+<img width="20%" alt="Location Picker (light theme)" src="media/06-LocationPicker-Light.png" />
 <img width="20%" alt="Settings (light theme)" src="media/08-Settings-Light.png" />
 </p>
 
