@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.IntentCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -153,7 +154,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun useDeepLinkIntentLocation(intent: Intent?): Boolean {
-        val location = intent?.getParcelableExtra<Location>(MainActivity.EXTRA_LOCATION) ?: return false
+        val location = intent?.let {
+            IntentCompat.getParcelableExtra(it, MainActivity.EXTRA_LOCATION, Location::class.java)
+        } ?: return false
+
         locationService.setFixedLocation(location)
         return true
     }
