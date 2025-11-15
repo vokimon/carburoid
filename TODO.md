@@ -2,7 +2,6 @@
 
 Do you want to help? This is my roadmap.
 
-- [ ] Translate PositionPicker navigation button tooltips
 - [ ] Location Search: When empty, autocomplete show later searches
 - [ ] Location Search: Prioritize near matches to the current position
 - [ ] Location Search: Feedback when doing a query
@@ -11,6 +10,23 @@ Do you want to help? This is my roadmap.
 - [ ] Route deviation distance
     - [ ] How to set a route from LocationPicker
     - [ ] How to display the route
+    - [ ] Accept routes as deep links
+        - https://www.google.com/maps/dir/Start/Waypoint1/Waypoint2/.../Destination
+        - xml+gpx
+            ```
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Para abrir GPX desde almacenamiento o compartido -->
+                <data android:mimeType="application/gpx+xml" />
+                
+                <!-- Opcional: permitir abrir desde URI file:// o content:// -->
+                <data android:scheme="file" android:host="*" android:pathPattern=".*\\.gpx" />
+                <data android:scheme="content" android:host="*" android:pathPattern=".*\\.gpx" />
+            </intent-filter>
+            ```
     - [ ] material icon 'route'
 - [ ] List: Display diferently stations that appear because we disabled a filter
 - [ ] Filters: Hide stations beyond the sea (Peninsule, Canary, Balearic, Ceuta, Melilla)
@@ -19,11 +35,13 @@ Do you want to help? This is my roadmap.
 - [ ] Modernize code
     - [ ] Migrate Activities to ViewBinding
     - [ ] Migrate uses of android package to androidx
-    - [ ] Compose?
+    - [ ] Compose
+- [ ] Favorites
 
 
 ## Done
 
+- [x] Translate PositionPicker navigation button tooltips
 - [x] When dragging the marker, update the description
 - [x] Quick search text clear
 - [x] Bug: after setting gps position, picker keeps previous position

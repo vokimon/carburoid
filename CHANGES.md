@@ -1,5 +1,10 @@
 # Change log
 
+## Unreleased
+
+- 🐛 Osm links were not processed
+- 🌐 Missing translations for Location picker 'Accept' button
+
 ## 1.2.3 (2025-11-15)
 
 - 💄 Less anoying data spinner for data refreshing
