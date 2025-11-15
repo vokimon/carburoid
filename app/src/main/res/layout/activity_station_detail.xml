@@ -102,7 +102,9 @@
                     android:layout_gravity="start"
                     tools:tint="?attr/colorOnBackground"
                     tools:visibility="visible"
-                    android:src="@drawable/ic_schedule" />
+                    android:src="@drawable/ic_schedule"
+                    android:importantForAccessibility="no"
+                    android:contentDescription="@null" />
 
                 <TextView
                     android:id="@+id/text_open_status"

@@ -81,7 +81,9 @@
             android:layout_height="14dp"
             tools:tint="?attr/colorOnBackground"
             tools:visibility="visible"
-            android:src="@drawable/ic_schedule" />
+            android:src="@drawable/ic_schedule"
+            android:importantForAccessibility="no"
+            android:contentDescription="@null" />
 
         <TextView
             android:layout_marginStart="@dimen/space_m"
