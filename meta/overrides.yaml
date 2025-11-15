@@ -8,10 +8,7 @@ keywords:
 - gasoil
 - diesel
 fdroid_categories:
-- Location Tracker & Sharer
-- Money
 - Navigation
-- Public Transport
 fdroid_fields:
   AuthorEmail: fdroid@canvoki.net
   AuthorName: David García Gazón
@@ -20,3 +17,7 @@ fdroid_fields:
   UpdateCheckMode: Tags carburoid-([\d.]+)
   Binaries: https://github.com/vokimon/carburoid/releases/download/carburoid-%v/net.canvoki.carburoid-floss-%v-release.apk
   UpdateCheckData: 'version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)'
+  AntiFeatures:
+    NonFreeNet:
+      en-US: Rely on sedeaplicaciones.minetur.gob.es
+

@@ -1,8 +1,8 @@
+AntiFeatures:
+  NonFreeNet:
+    en-US: Rely on sedeaplicaciones.minetur.gob.es
 Categories:
-  - Location Tracker & Sharer
-  - Money
   - Navigation
-  - Public Transport
 License: AGPL-3.0-or-later
 AuthorName: David García Gazón
 AuthorEmail: voki@canvoki.net

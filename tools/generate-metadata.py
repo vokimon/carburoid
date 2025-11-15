@@ -245,6 +245,8 @@ def motto_from_splash(config):
 def generate_fdroid_metadata_file(metadata_path):
     meta = ns()
     # https://f-droid.org/docs/Build_Metadata_Reference/#Categories
+    if 'AntiFeatures' in config.fdroid_fields:
+        meta.AntiFeatures = config.fdroid_fields.get("AntiFeatures")
     meta.Categories = config.fdroid_categories
     meta.License = config.license
     meta.AuthorName = config.fdroid_fields["AuthorName"]
@@ -293,7 +295,14 @@ def generate_fdroid_metadata_file(metadata_path):
     meta.CurrentVersion = config.last_version
     meta.CurrentVersionCode = int(version_to_code(config.last_version))
     meta.update(config.fdroid_fields)
-    dump(Path('tools')/(config.unique_name+".yml"), meta.dump())
+
+    # Insert blank lines as fdroid rewrite does
+    output = meta.dump()
+    blockKeys = "AutoName RepoType Build AllowedAPKSigningKeys AutoUpdateMode".split()
+    for key in blockKeys:
+        output = output.replace(key, f"\n{key}")
+
+    dump(Path('tools')/(config.unique_name+".yml"), output)
 
 
 @dataclass
