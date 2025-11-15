@@ -1,4 +1,4 @@
 ## 1.2.2 (2025-11-14)
 
-- 🏗️ agp downgraded 8.13.0 -> 8.11.0 because fdroid build server
+- 🏗️ agp downgraded 8.13.0 -> 8.11.0 because fdroid build server (Fixes #1)
 

@@ -1,9 +1,11 @@
 # Change log
 
-## Unreleased
+## 1.2.3 (2025-11-15)
 
-- 💄 Less anoying refresing data spinner
-- 🌐 Corrected Catalan words in Spanish translations (Fixes #4)
+- 💄 Less anoying data spinner for data refreshing
+- 🌐 Spanish contained untranslated Catalan words (Fixes #4)
+    - Thanks to wuniversales for the report
+- 🏗️ agp upgraded back. FDroid server got an upgrade.
 
 ## 1.2.2 (2025-11-14)
 

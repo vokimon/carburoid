@@ -5,7 +5,8 @@ Layout fixes on Android 15 and issues on language/rotation changes
 - 💄 Icons for some preferences
 - 🌐 Arabic added (via ChatGpt, sorry)
 - 🐛 Clearer text for weblate link
-- 🐛 Android 15 showed the ui under the AppBar
+- 🐛 Android 15 slided the product selector under the AppBar
+    - Thanks to Antiono Romero for the report
 - 🐛 Memory leaks when stoping or pausing Location Picker
 - 🐛 Location picker lost position when rotating the device
 - 🐛 Language changes flickered and not fully applied

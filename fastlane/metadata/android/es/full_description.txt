@@ -1,4 +1,3 @@
-
 Funcionalidades:
 
 - Datos oficiales que envian las gasolineras al Ministerio de Industria de España
