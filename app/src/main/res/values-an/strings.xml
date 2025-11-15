@@ -63,4 +63,5 @@
     <string name="location_picker_search_location_hint">Busca una ciudat u adreza</string>
     <string name="location_picker_searching">Cercando…</string>
     <string name="location_picker_no_results">No se trobó garra ubicación</string>
+    <string name="loading_new_data">Descargando datos nuevos…</string>
 </resources>

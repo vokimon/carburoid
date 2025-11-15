@@ -63,4 +63,5 @@
     <string name="location_picker_search_location_hint">Cerca una ciutat o adreça</string>
     <string name="location_picker_searching">Cercant…</string>
     <string name="location_picker_no_results">No s\'han trobat ubicacions</string>
+    <string name="loading_new_data">S’estan baixant dades noves…</string>
 </resources>

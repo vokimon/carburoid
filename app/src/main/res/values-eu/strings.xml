@@ -63,4 +63,5 @@
     <string name="location_picker_search_location_hint">Bilatu hiri edo helbide bat</string>
     <string name="location_picker_searching">Bilatzen…</string>
     <string name="location_picker_no_results">Ez da kokapenik aurkitu</string>
+    <string name="loading_new_data">Datu berriak deskargatzen…</string>
 </resources>
