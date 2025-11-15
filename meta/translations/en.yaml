@@ -27,7 +27,7 @@ changes_1_2_2_md: "- \U0001F3D7️ agp downgraded 8.13.0 -> 8.11.0 because fdroi
 changes_1_2_1_md: "Layout fixes on Android 15 and issues on language/rotation changes\n\n-
   \U0001F484 Icons for some preferences\n- \U0001F310 Arabic added (via ChatGpt, sorry)\n-
   \U0001F41B Clearer text for weblate link\n- \U0001F41B Android 15 slided the product
-  selector under the AppBar\n    - Thanks to Antiono Romero for the report\n- \U0001F41B
+  selector under the AppBar\n    - Thanks to Antonio Romero for the report\n- \U0001F41B
   Memory leaks when stoping or pausing Location Picker\n- \U0001F41B Location picker
   lost position when rotating the device\n- \U0001F41B Language changes flickered
   and not fully applied\n- \U0001F41B Current position was lost on rotation or language
