@@ -64,4 +64,5 @@
     <string name="location_picker_searching">جار البحث…</string>
     <string name="location_picker_no_results">لم يتم العثور على مواقع</string>
     <string name="loading_new_data">جارٍ تنزيل بيانات جديدة…</string>
+    <string name="dialog_accept">قبول</string>
 </resources>

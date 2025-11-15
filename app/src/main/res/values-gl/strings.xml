@@ -64,4 +64,5 @@
     <string name="location_picker_searching">Buscando…</string>
     <string name="location_picker_no_results">Non se atoparon ubicacións</string>
     <string name="loading_new_data">Descargando datos novos…</string>
+    <string name="dialog_accept">Aceptar</string>
 </resources>

@@ -7,5 +7,5 @@
         app:showAsAction="always"
         app:iconTint="?attr/colorControlNormal"
         android:icon="@drawable/ic_check"
-        android:title="Accept" /><!-- TODO: Translate -->
+        android:title="@string/dialog_accept" />
 </menu>
