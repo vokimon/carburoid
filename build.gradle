@@ -1,7 +1,7 @@
 // Top-level build file
 buildscript {
     ext.kotlin_version = '2.2.20'
-    ext.agp_version = '8.11.1'
+    ext.agp_version = '8.13.1'
 
     repositories {
         google()
