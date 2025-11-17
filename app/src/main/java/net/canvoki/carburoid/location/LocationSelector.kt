@@ -17,72 +17,74 @@ import kotlinx.coroutines.launch
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
 
-class LocationSelector @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-) : FrameLayout(context, attrs, defStyleAttr) {
+class LocationSelector
+    @JvmOverloads
+    constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0,
+    ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private val textInputLayout: TextInputLayout
-    private val textInputEditText: TextInputEditText
-    private val locationIcon = ContextCompat.getDrawable(context, R.drawable.ic_my_location)
-    private val progressIcon = ContextCompat.getDrawable(context, R.drawable.ic_refresh)
+        private val textInputLayout: TextInputLayout
+        private val textInputEditText: TextInputEditText
+        private val locationIcon = ContextCompat.getDrawable(context, R.drawable.ic_my_location)
+        private val progressIcon = ContextCompat.getDrawable(context, R.drawable.ic_refresh)
 
-    init {
-        View.inflate(context, R.layout.location_selector, this)
+        init {
+            View.inflate(context, R.layout.location_selector, this)
 
-        textInputLayout = findViewById(R.id.text_input_layout)
-        textInputEditText = findViewById(R.id.text_input_edit_text)
-    }
-
-    fun bind(activity: ComponentActivity, service: LocationService) {
-        setLocationDescription(service.getCurrentLocationDescription())
-        activity.lifecycleScope.launch {
-            service.descriptionUpdated.collect { description ->
-                setLocationDescription(description)
-            }
+            textInputLayout = findViewById(R.id.text_input_layout)
+            textInputEditText = findViewById(R.id.text_input_edit_text)
         }
 
-        textInputLayout.setStartIconOnClickListener {
-            log("REFRESHING ON ICON PRESS")
-            textInputLayout.startIconDrawable = progressIcon
-            service.refreshLocation()
-        }
-
-        val launcher = activity.registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult(),
-        ) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val lat = result.data?.getDoubleExtra(LocationPickerActivity.EXTRA_SELECTED_LAT, 0.0)
-                val lon = result.data?.getDoubleExtra(LocationPickerActivity.EXTRA_SELECTED_LON, 0.0)
-                if (lat != null && lon != null) {
-                    val newLocation = Location("user_picked").apply {
-                        latitude = lat
-                        longitude = lon
-                    }
-                    service.setFixedLocation(newLocation)
+        fun bind(activity: ComponentActivity, service: LocationService) {
+            setLocationDescription(service.getCurrentLocationDescription())
+            activity.lifecycleScope.launch {
+                service.descriptionUpdated.collect { description ->
+                    setLocationDescription(description)
                 }
             }
-        }
 
-        textInputLayout.setEndIconOnClickListener {
-            val current = service.getCurrentLocation()
-            val intent = Intent(activity, LocationPickerActivity::class.java).apply {
-                putExtra(LocationPickerActivity.EXTRA_CURRENT_LAT, current?.latitude)
-                putExtra(LocationPickerActivity.EXTRA_CURRENT_LON, current?.longitude)
-                putExtra(LocationPickerActivity.EXTRA_CURRENT_DESCRIPTION, service.getCurrentLocationDescription())
+            textInputLayout.setStartIconOnClickListener {
+                log("REFRESHING ON ICON PRESS")
+                textInputLayout.startIconDrawable = progressIcon
+                service.refreshLocation()
             }
-            launcher.launch(intent)
+
+            val launcher = activity.registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult(),
+            ) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val lat = result.data?.getDoubleExtra(LocationPickerActivity.EXTRA_SELECTED_LAT, 0.0)
+                    val lon = result.data?.getDoubleExtra(LocationPickerActivity.EXTRA_SELECTED_LON, 0.0)
+                    if (lat != null && lon != null) {
+                        val newLocation = Location("user_picked").apply {
+                            latitude = lat
+                            longitude = lon
+                        }
+                        service.setFixedLocation(newLocation)
+                    }
+                }
+            }
+
+            textInputLayout.setEndIconOnClickListener {
+                val current = service.getCurrentLocation()
+                val intent = Intent(activity, LocationPickerActivity::class.java).apply {
+                    putExtra(LocationPickerActivity.EXTRA_CURRENT_LAT, current?.latitude)
+                    putExtra(LocationPickerActivity.EXTRA_CURRENT_LON, current?.longitude)
+                    putExtra(LocationPickerActivity.EXTRA_CURRENT_DESCRIPTION, service.getCurrentLocationDescription())
+                }
+                launcher.launch(intent)
+            }
+        }
+
+        fun setLocationDescription(description: String) {
+            textInputLayout.startIconDrawable = locationIcon
+            textInputEditText.setText(description)
+            log("Updating description to $description")
+        }
+
+        fun setOnEditClickListener(listener: () -> Unit) {
+            textInputLayout.setEndIconOnClickListener { listener() }
         }
     }
-
-    fun setLocationDescription(description: String) {
-        textInputLayout.startIconDrawable = locationIcon
-        textInputEditText.setText(description)
-        log("Updating description to $description")
-    }
-
-    fun setOnEditClickListener(listener: () -> Unit) {
-        textInputLayout.setEndIconOnClickListener { listener() }
-    }
-}

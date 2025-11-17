@@ -69,7 +69,6 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
         loadingPill = findViewById(R.id.loading_pill)
 
-
         gasStationAdapter = GasStationAdapter(this, emptyList(), ::onItemClicked)
         recyclerView.adapter = gasStationAdapter
 
@@ -97,7 +96,6 @@ class MainActivity : AppCompatActivity() {
             swipeRefreshLayout.isRefreshing = false
             repository.launchFetch()
         }
-
 
         lifecycleScope.launch {
             repository.events.collect { event ->
@@ -132,7 +130,6 @@ class MainActivity : AppCompatActivity() {
                 useDeepLinkIntentLocation(intent) ||
                 useDeviceLocation()
             )
-
     }
 
     override fun onStart() {

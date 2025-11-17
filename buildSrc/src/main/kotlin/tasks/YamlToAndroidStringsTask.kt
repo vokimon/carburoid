@@ -2,6 +2,12 @@ package tasks
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
@@ -9,12 +15,6 @@ import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
-import org.gradle.api.GradleException
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputDirectory
-import org.gradle.api.tasks.OutputDirectory
-import org.gradle.api.tasks.TaskAction
 
 typealias ParamList = List<String>
 typealias ParamCatalog = Map<String, ParamList>
@@ -58,7 +58,7 @@ fun parametersToXml(template: String, params: ParamList): String {
         if (index < 0) {
             throw MismatchedParamException(paramName)
         }
-        "%${index+1}\$${format}"
+        "%${index + 1}\$$format"
     }.replace("<escaped_open>", "{").replace("}}", "}")
 }
 
@@ -67,13 +67,12 @@ fun parameterOrderFromYaml(yamlFile: File): ParamCatalog {
     val yamlContent = mapper.readValue(yamlFile, Map::class.java) as Map<*, *>
     val result = mutableMapOf<String, ParamList>()
 
-    fun processKey(content: Map<*, *>, prefix: String="") {
+    fun processKey(content: Map<*, *>, prefix: String = "") {
         content.forEach { (key, value) ->
             val fullKey = prefix + (key as String)
             when (value) {
                 is Map<*, *> -> {
-                    processKey(value, prefix="${fullKey}__")
-
+                    processKey(value, prefix = "${fullKey}__")
                 }
                 is String -> {
                     val parameters = extractParams(value as String)
@@ -114,7 +113,7 @@ open class YamlToAndroidStringsTask : DefaultTask() {
                 }
                 appendLine("    </string-array>")
                 appendLine("</resources>")
-            }
+            },
         )
         println("Generated language arrays: ${languageCodes.joinToString(", ")}")
     }
@@ -130,7 +129,6 @@ open class YamlToAndroidStringsTask : DefaultTask() {
     private fun yamlForLanguage(yamlDir: File, langCode: String): File {
         return yamlDir.resolve("$langCode.yaml").takeIf { it.exists() }
             ?: yamlDir.resolve("$langCode.yml")
-
     }
 
     @TaskAction
@@ -163,7 +161,6 @@ open class YamlToAndroidStringsTask : DefaultTask() {
     }
 
     private fun convertYamlToAndroidXml(yamlFile: File, xmlFile: File, paramCatalog: ParamCatalog) {
-
         fun processYamlMap(map: Map<*, *>, prefix: String, resources: org.w3c.dom.Element, paramCatalog: ParamCatalog) {
             val doc = resources.ownerDocument
             map.forEach { (key, value) ->
@@ -176,12 +173,12 @@ open class YamlToAndroidStringsTask : DefaultTask() {
                         val paramList = paramCatalog[fullKey] ?: emptyList()
                         val valueWithPositionalParameters = try {
                             parametersToXml(value, paramList)
-                        } catch(e: MismatchedParamException) {
+                        } catch (e: MismatchedParamException) {
                             errors.add(
                                 """
-                                Key "${fullKey}" has a parameter "${e.paramName}" not present the original string.
-                                    File: ${yamlFile}
-                                """.trimIndent()
+                                Key "$fullKey" has a parameter "${e.paramName}" not present the original string.
+                                    File: $yamlFile
+                                """.trimIndent(),
                             )
                             value // keep the old string and continue
                         }
@@ -214,8 +211,5 @@ open class YamlToAndroidStringsTask : DefaultTask() {
         }
 
         transformer.transform(DOMSource(doc), StreamResult(xmlFile))
-
     }
-
 }
-

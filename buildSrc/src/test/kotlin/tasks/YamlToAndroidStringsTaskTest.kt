@@ -3,10 +3,8 @@ package tasks
 import kotlin.io.path.createTempFile
 import kotlin.io.path.writeText
 import kotlin.test.Test
-import kotlin.test.Ignore
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.fail
 
 class YamlToAndroidStringsTaskTest {
 
@@ -31,7 +29,7 @@ class YamlToAndroidStringsTaskTest {
         assertEquals(
             expected,
             result,
-            "Input: '$input'\nExpected: $expected\nActual: $result\n"
+            "Input: '$input'\nExpected: $expected\nActual: $result\n",
         )
     }
 
@@ -39,7 +37,7 @@ class YamlToAndroidStringsTaskTest {
     fun `extractParams with no params returns empty list`() {
         assertExtractParams(
             "Hello world",
-            emptyList()
+            emptyList(),
         )
     }
 
@@ -74,7 +72,7 @@ class YamlToAndroidStringsTaskTest {
     fun `extractParams with multiple params returns correct list`() {
         assertExtractParams(
             "Hello {param1} and {param2:d}",
-            listOf("param1", "param2")
+            listOf("param1", "param2"),
         )
     }
 
@@ -90,7 +88,7 @@ class YamlToAndroidStringsTaskTest {
     fun `extractParams ignores escaped curly braces`() {
         assertExtractParams(
             "Hello {{user}}",
-             emptyList(),
+            emptyList(),
         )
     }
 
@@ -98,10 +96,9 @@ class YamlToAndroidStringsTaskTest {
     fun `extractParams triple curly braces`() {
         assertExtractParams(
             "Hello {{{user}}}",
-             listOf("user"),
+            listOf("user"),
         )
     }
-
 
     // format params
 
@@ -115,7 +112,7 @@ class YamlToAndroidStringsTaskTest {
         assertParametersToXml(
             template = "Just a plain string",
             params = emptyList(),
-            expected = "Just a plain string"
+            expected = "Just a plain string",
         )
     }
 
@@ -124,7 +121,7 @@ class YamlToAndroidStringsTaskTest {
         assertParametersToXml(
             template = "Hello {name}",
             params = listOf("name"),
-            expected = "Hello %1\$s"
+            expected = "Hello %1\$s",
         )
     }
 
@@ -133,7 +130,7 @@ class YamlToAndroidStringsTaskTest {
         assertParametersToXml(
             template = "Bye {user}",
             params = listOf("user"),
-            expected = "Bye %1\$s"
+            expected = "Bye %1\$s",
         )
     }
 
@@ -158,13 +155,12 @@ class YamlToAndroidStringsTaskTest {
         assertEquals(exception.paramName, "second")
     }
 
-
     @Test
     fun `parametersToXml trims spaces before name`() {
         assertParametersToXml(
             template = "Hello { name}",
             params = listOf("name"),
-            expected = "Hello %1\$s"
+            expected = "Hello %1\$s",
         )
     }
 
@@ -173,7 +169,7 @@ class YamlToAndroidStringsTaskTest {
         assertParametersToXml(
             template = "Hello {name }",
             params = listOf("name"),
-            expected = "Hello %1\$s"
+            expected = "Hello %1\$s",
         )
     }
 
@@ -182,7 +178,7 @@ class YamlToAndroidStringsTaskTest {
         assertParametersToXml(
             template = "Hello {name : spec }",
             params = listOf("name"),
-            expected = "Hello %1\$spec"
+            expected = "Hello %1\$spec",
         )
     }
 
@@ -191,7 +187,7 @@ class YamlToAndroidStringsTaskTest {
         assertParametersToXml(
             template = "Hello {first}, you are {age:d} years old",
             params = listOf("first", "age"),
-            expected = "Hello %1\$s, you are %2\$d years old"
+            expected = "Hello %1\$s, you are %2\$d years old",
         )
     }
 
@@ -200,7 +196,7 @@ class YamlToAndroidStringsTaskTest {
         assertParametersToXml(
             template = "Hello {{name}}",
             params = listOf("name"),
-            expected = "Hello {name}"
+            expected = "Hello {name}",
         )
     }
 
@@ -209,7 +205,7 @@ class YamlToAndroidStringsTaskTest {
         assertParametersToXml(
             template = "Hello {{{name}}}",
             params = listOf("name"),
-            expected = "Hello {%1\$s}"
+            expected = "Hello {%1\$s}",
         )
     }
 
@@ -222,7 +218,6 @@ class YamlToAndroidStringsTaskTest {
         assertEquals(expected, result)
     }
 
-
     @Test
     fun `parameterOrderFromYaml single parameter`() {
         assertParameterOrderFromYaml(
@@ -232,6 +227,7 @@ class YamlToAndroidStringsTaskTest {
             expected = mapOf("greeting" to listOf("name")),
         )
     }
+
     @Test
     fun `parameterOrderFromYaml multiple parameters`() {
         assertParameterOrderFromYaml(
@@ -241,6 +237,7 @@ class YamlToAndroidStringsTaskTest {
             expected = mapOf("greeting" to listOf("name", "place")),
         )
     }
+
     @Test
     fun `parameterOrderFromYaml strings with no parameters`() {
         assertParameterOrderFromYaml(
@@ -250,6 +247,7 @@ class YamlToAndroidStringsTaskTest {
             expected = mapOf("farewell" to emptyList<String>()),
         )
     }
+
     @Test
     fun `parameterOrderFromYaml ignores escaped curly braces`() {
         assertParameterOrderFromYaml(
@@ -258,8 +256,8 @@ class YamlToAndroidStringsTaskTest {
             """,
             expected = mapOf("info" to emptyList<String>()),
         )
-
     }
+
     @Test
     fun `parameterOrderFromYaml ignores format specifiers`() {
         val yamlContent = """
@@ -269,6 +267,7 @@ class YamlToAndroidStringsTaskTest {
 
         assertParameterOrderFromYaml(yamlContent, expected)
     }
+
     @Test
     fun `parameterOrderFromYaml multiple texts`() {
         assertParameterOrderFromYaml(
@@ -282,6 +281,7 @@ class YamlToAndroidStringsTaskTest {
             ),
         )
     }
+
     @Test
     fun `parameterOrderFromYaml hierarchical keys`() {
         assertParameterOrderFromYaml(
@@ -294,6 +294,7 @@ class YamlToAndroidStringsTaskTest {
             ),
         )
     }
+
     @Test
     fun `parameterOrderFromYaml deep hierarchical keys`() {
         assertParameterOrderFromYaml(
@@ -307,6 +308,4 @@ class YamlToAndroidStringsTaskTest {
             ),
         )
     }
-
 }
-

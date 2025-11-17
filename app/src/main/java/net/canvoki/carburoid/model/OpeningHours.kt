@@ -78,7 +78,7 @@ data class OpeningStatus(
         ) {
             override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
                 status.isOpen && status.until != null && status.until >= deadline
-        };
+        }, ;
 
         abstract fun matches(status: OpeningStatus, deadline: Instant): Boolean
 

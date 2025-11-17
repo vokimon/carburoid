@@ -238,7 +238,10 @@ class GasStationTest {
         val json = gasStation.toJson()
 
         //println("JSON serialitzat: $json")
-        assertEquals("""{"IDEESS":1234,"Rótulo":"Test Station","Dirección":"Calle Principal 123","Localidad":"Madrid","Provincia":"Madrid","Latitud":"40,4168","Longitud (WGS84)":"-3,7038","Tipo Venta":"P","Horario":"L-D: 24H","prices":{"Gasolina 95":1.234},"Precio Gasolina 95":"1,234"}""", json)
+        assertEquals(
+            """{"IDEESS":1234,"Rótulo":"Test Station","Dirección":"Calle Principal 123","Localidad":"Madrid","Provincia":"Madrid","Latitud":"40,4168","Longitud (WGS84)":"-3,7038","Tipo Venta":"P","Horario":"L-D: 24H","prices":{"Gasolina 95":1.234},"Precio Gasolina 95":"1,234"}""",
+            json,
+        )
     }
 
     @Test
@@ -279,7 +282,10 @@ class GasStationTest {
         val json = gasStation.toJson()
 
         //println("JSON serialitzat: $json")
-        assertEquals("""{"IDEESS":1234,"Rótulo":"Test Station","Dirección":"Calle Principal 123","Localidad":"Madrid","Provincia":"Madrid","Latitud":"40,4168","Longitud (WGS84)":"-3,7038","Tipo Venta":"P","Horario":"L-D: 24H","prices":{"Gasolina 95":1.234},"Precio Gasolina 95":"1,234"}""", json)
+        assertEquals(
+            """{"IDEESS":1234,"Rótulo":"Test Station","Dirección":"Calle Principal 123","Localidad":"Madrid","Provincia":"Madrid","Latitud":"40,4168","Longitud (WGS84)":"-3,7038","Tipo Venta":"P","Horario":"L-D: 24H","prices":{"Gasolina 95":1.234},"Precio Gasolina 95":"1,234"}""",
+            json,
+        )
     }
 
     @Test
