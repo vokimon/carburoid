@@ -3,6 +3,7 @@ import tasks.YamlToAndroidStringsTask
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id "org.jlleitschuh.gradle.ktlint"
 }
 
 def versionPropsFile = rootProject.file("version.properties")
@@ -122,6 +123,13 @@ tasks.withType(Test) {
 
 task yamlToAndroidStrings(type: YamlToAndroidStringsTask)
 preBuild.dependsOn yamlToAndroidStrings
+
+ktlint {
+    debug = true
+    android = true
+    outputToConsole = true
+}
+
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.17.0'

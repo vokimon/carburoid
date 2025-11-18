@@ -7,7 +7,10 @@ import com.google.gson.stream.JsonWriter
 import net.canvoki.carburoid.model.OpeningHours
 
 class OpeningHoursAdapter : TypeAdapter<OpeningHours>() {
-    override fun write(out: JsonWriter, value: OpeningHours?) {
+    override fun write(
+        out: JsonWriter,
+        value: OpeningHours?,
+    ) {
         out.value(value?.toString() ?: "")
     }
 

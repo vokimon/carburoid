@@ -12,8 +12,9 @@ class StationFilter(
             station.computeDistance()
         }
 
-        val sortedStations = stations
-            .sortedBy { it.distanceInMeters }
+        val sortedStations =
+            stations
+                .sortedBy { it.distanceInMeters }
         var minPrice = 1000.0
         val result = mutableListOf<GasStation>()
         val deadLine = Instant.now().plus(Duration.ofMinutes(config.hideClosedMarginInMinutes.toLong()))

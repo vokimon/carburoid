@@ -6,7 +6,10 @@ import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 
 class SaleTypeAdapter : TypeAdapter<Boolean>() {
-    override fun write(out: JsonWriter, value: Boolean?) {
+    override fun write(
+        out: JsonWriter,
+        value: Boolean?,
+    ) {
         out.value(
             when (value) {
                 true -> "P"

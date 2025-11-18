@@ -11,7 +11,6 @@ import androidx.preference.PreferenceScreen
 import net.canvoki.carburoid.R
 
 object ThemeSettings {
-
     private const val KEY = "dark_mode"
     private const val VALUE_LIGHT = "light"
     private const val VALUE_DARK = "dark"
@@ -49,24 +48,34 @@ object ThemeSettings {
         return prefs.getString(KEY, VALUE_AUTO)
     }
 
-    private fun setCurrentValue(context: Context, value: String) {
+    private fun setCurrentValue(
+        context: Context,
+        value: String,
+    ) {
         val prefs = preferences(context)
         prefs.edit {
             putString(KEY, value)
         }
     }
 
-    private fun saveAndApply(context: Context, mode: String) {
+    private fun saveAndApply(
+        context: Context,
+        mode: String,
+    ) {
         setCurrentValue(context, mode)
         apply(context)
     }
 
-    private fun updateSummary(preference: ListPreference, context: Context) {
+    private fun updateSummary(
+        preference: ListPreference,
+        context: Context,
+    ) {
         val current = currentValue(context)
-        preference.summary = when (current) {
-            VALUE_LIGHT -> context.getString(R.string.theme_light)
-            VALUE_DARK -> context.getString(R.string.theme_dark)
-            else -> context.getString(R.string.theme_system)
-        }
+        preference.summary =
+            when (current) {
+                VALUE_LIGHT -> context.getString(R.string.theme_light)
+                VALUE_DARK -> context.getString(R.string.theme_dark)
+                else -> context.getString(R.string.theme_system)
+            }
     }
 }

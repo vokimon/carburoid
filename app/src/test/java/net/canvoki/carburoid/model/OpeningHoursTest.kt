@@ -15,7 +15,6 @@ import kotlin.test.assertEquals
 import kotlin.test.fail
 
 class OpeningHoursTest {
-
     private lateinit var originalLocale: Locale
 
     @Before
@@ -278,7 +277,10 @@ class OpeningHoursTest {
         assertEquals("L-X: 08:00-13:30", result)
     }
 
-    fun parseTimeTestCase(expected: TimeSpec?, spec: String) {
+    fun parseTimeTestCase(
+        expected: TimeSpec?,
+        spec: String,
+    ) {
         val time = OpeningHours.parseTime(spec)
         assertEquals(expected, time)
     }
@@ -340,7 +342,10 @@ class OpeningHoursTest {
 
     // parseInterval (single)
 
-    fun parseIntervalTestCase(expected: Interval?, spec: String) {
+    fun parseIntervalTestCase(
+        expected: Interval?,
+        spec: String,
+    ) {
         val result = OpeningHours.parseInterval(spec)
         assertEquals(expected, result)
     }
@@ -382,7 +387,10 @@ class OpeningHoursTest {
 
     // parseIntervals (multiple)
 
-    fun parseIntervalsTestCase(expected: Intervals?, spec: String) {
+    fun parseIntervalsTestCase(
+        expected: Intervals?,
+        spec: String,
+    ) {
         val result = OpeningHours.parseIntervals(spec)
         assertEquals(expected, result)
     }
@@ -415,7 +423,10 @@ class OpeningHoursTest {
 
     // parseDayShort
 
-    fun parseDayShort_testCase(expected: DayOfWeek?, spec: String) {
+    fun parseDayShort_testCase(
+        expected: DayOfWeek?,
+        spec: String,
+    ) {
         assertEquals(expected, OpeningHours.parseDayShort(spec))
     }
 
@@ -459,7 +470,10 @@ class OpeningHoursTest {
         parseDayShort_testCase(DayOfWeek.SUNDAY, "D")
     }
 
-    fun parseDayRange_testCase(expected: DayRange?, spec: String) {
+    fun parseDayRange_testCase(
+        expected: DayRange?,
+        spec: String,
+    ) {
         val result = OpeningHours.parseDayRange(spec)
         assertEquals(expected, result)
     }
@@ -519,7 +533,10 @@ class OpeningHoursTest {
 
     // parseScheduleEntry
 
-    fun parseScheduleEntry_TestCase(expected: ScheduleEntry?, spec: String) {
+    fun parseScheduleEntry_TestCase(
+        expected: ScheduleEntry?,
+        spec: String,
+    ) {
         assertEquals(expected, OpeningHours.parseScheduleEntry(spec))
     }
 
@@ -544,16 +561,20 @@ class OpeningHoursTest {
             listOf(
                 DayOfWeek.FRIDAY,
                 DayOfWeek.SATURDAY,
-            ) to listOf(
-                (3 to 0) to (12 to 0),
-                (14 to 0) to (22 to 0),
-            ),
+            ) to
+                listOf(
+                    (3 to 0) to (12 to 0),
+                    (14 to 0) to (22 to 0),
+                ),
             "V-S: 3:00-12:00 y 14:00-22:00",
         )
     }
 
     // parse
-    fun parse_TestCase(expected: String?, spec: String) {
+    fun parse_TestCase(
+        expected: String?,
+        spec: String,
+    ) {
         assertEquals(expected, OpeningHours.parse(spec)?.toString())
     }
 

@@ -8,7 +8,6 @@ import net.canvoki.carburoid.model.GasStation
  * TODO: Implement real logic to compute distance to closest segment of the polyline.
  */
 class DeviationFromRoute(private val routePolyline: List<Location>) : DistanceMethod {
-
     override fun computeDistance(station: GasStation): Float? {
         // TODO: Compute minimum distance from station to any segment of the route
         // For now, return 0f as placeholder

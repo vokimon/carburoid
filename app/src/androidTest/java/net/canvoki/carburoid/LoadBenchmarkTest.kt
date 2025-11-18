@@ -7,7 +7,6 @@ import java.time.Instant
 import net.canvoki.carburoid.log as println
 
 class LoadBenchmarkTest {
-
     @Test
     fun testParsingPerformance() {
         val context = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext

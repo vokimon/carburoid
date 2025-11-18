@@ -33,7 +33,6 @@ class LocationService(
     private val notify: (String) -> Unit,
     private val suggestAction: (String, String, () -> Unit) -> Unit,
 ) : CoroutineScope by MainScope() {
-
     private val _locationChanged = MutableSharedFlow<Location>(replay = 0)
     val locationChanged = _locationChanged.asSharedFlow()
 
@@ -100,7 +99,10 @@ class LocationService(
         // called from onRequestPermissionsResult in the main activity
     }
 
-    fun processPermission(requestCode: Int, results: IntArray) {
+    fun processPermission(
+        requestCode: Int,
+        results: IntArray,
+    ) {
         if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return
         }
@@ -117,10 +119,11 @@ class LocationService(
     }
 
     private fun getLastResortLocation(): Location {
-        val madrid = Location("").apply {
-            latitude = 40.4168
-            longitude = -3.7038
-        }
+        val madrid =
+            Location("").apply {
+                latitude = 40.4168
+                longitude = -3.7038
+            }
         return madrid
     }
 
@@ -195,10 +198,11 @@ class LocationService(
         CoroutineScope(Dispatchers.Main).launch {
             _descriptionUpdated.emit(description ?: "")
         }
-        geocodingJob = launch {
-            description = geocodeLocation(location) ?: description
-            _descriptionUpdated.emit(description ?: "")
-        }
+        geocodingJob =
+            launch {
+                description = geocodeLocation(location) ?: description
+                _descriptionUpdated.emit(description ?: "")
+            }
     }
 
     fun getCurrentLocationDescription(): String {
@@ -263,13 +267,14 @@ class LocationService(
         return (
             locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-            )
+        )
     }
 
     private fun openSystemPermissionsSettings() {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = Uri.fromParts("package", activity.packageName, null)
-        }
+        val intent =
+            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", activity.packageName, null)
+            }
         activity.startActivity(intent)
     }
 

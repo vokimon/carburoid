@@ -25,7 +25,10 @@ fun log(message: String) {
 /** quick replacement to disable a log line */
 fun nolog(message: String) {}
 
-fun <T> timeits(label: String, block: () -> T): T {
+fun <T> timeits(
+    label: String,
+    block: () -> T,
+): T {
     nolog("$label > ⏱️ start timing ")
     val start = System.nanoTime()
     val result = block()
@@ -34,7 +37,11 @@ fun <T> timeits(label: String, block: () -> T): T {
     nolog("$label < ⏱️ took %.3f ms".format(durationMs))
     return result
 }
-suspend fun <T> timeit(label: String, block: suspend () -> T): T {
+
+suspend fun <T> timeit(
+    label: String,
+    block: suspend () -> T,
+): T {
     nolog("$label > ⏱️ start timing ")
     val start = System.nanoTime()
     val result = block()

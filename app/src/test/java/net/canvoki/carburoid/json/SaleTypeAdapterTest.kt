@@ -6,7 +6,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class SaleTypeAdapterTest {
-
     val adapter = SaleTypeAdapter()
 
     @Test

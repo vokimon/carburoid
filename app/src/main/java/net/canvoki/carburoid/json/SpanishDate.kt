@@ -28,7 +28,10 @@ fun fromSpanishDate(spanishDate: String?): Instant? {
 }
 
 class SpanishDateTypeAdapter : TypeAdapter<Instant?>() {
-    override fun write(out: JsonWriter, value: Instant?) {
+    override fun write(
+        out: JsonWriter,
+        value: Instant?,
+    ) {
         if (value == null) {
             out.nullValue()
         } else {

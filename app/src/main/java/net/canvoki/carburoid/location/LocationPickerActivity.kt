@@ -64,59 +64,80 @@ class LocationPickerActivity : AppCompatActivity() {
         val controller: IMapController = map.controller
         controller.setZoom(15.0)
 
-        val personIcon = ResourcesCompat.getDrawable(
-            resources,
-            org.osmdroid.library.R.drawable.person,
-            theme,
-        )
-        marker = Marker(map).apply {
-            icon = personIcon
-            isDraggable = true
-            setOnMarkerDragListener(object : Marker.OnMarkerDragListener {
-                override fun onMarkerDrag(marker: Marker?) {}
-                override fun onMarkerDragStart(marker: Marker?) {}
-                override fun onMarkerDragEnd(marker: Marker?) {
-                    marker?.position?.let {
-                        map.controller.animateTo(it)
-                        reverseGeocode(it)
-                    }
-                }
-            })
-        }
+        val personIcon =
+            ResourcesCompat.getDrawable(
+                resources,
+                org.osmdroid.library.R.drawable.person,
+                theme,
+            )
+        marker =
+            Marker(map).apply {
+                icon = personIcon
+                isDraggable = true
+                setOnMarkerDragListener(
+                    object : Marker.OnMarkerDragListener {
+                        override fun onMarkerDrag(marker: Marker?) {}
+
+                        override fun onMarkerDragStart(marker: Marker?) {}
+
+                        override fun onMarkerDragEnd(marker: Marker?) {
+                            marker?.position?.let {
+                                map.controller.animateTo(it)
+                                reverseGeocode(it)
+                            }
+                        }
+                    },
+                )
+            }
         map.overlays.add(marker)
         map.invalidate()
 
-        val mapEventsReceiver = object : MapEventsReceiver {
-            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                p?.let {
-                    marker?.position = it
-                    map.controller.animateTo(it)
-                    reverseGeocode(it)
+        val mapEventsReceiver =
+            object : MapEventsReceiver {
+                override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                    p?.let {
+                        marker?.position = it
+                        map.controller.animateTo(it)
+                        reverseGeocode(it)
+                    }
+                    return true
                 }
-                return true
-            }
 
-            override fun longPressHelper(p: GeoPoint?): Boolean = false
-        }
+                override fun longPressHelper(p: GeoPoint?): Boolean = false
+            }
 
         map.overlays.add(MapEventsOverlay(mapEventsReceiver))
 
         searchBox = findViewById(R.id.searchBox)
 
-        searchBox.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (searchBlocked) return
-                searchRunnable?.let { searchHandler.removeCallbacks(it) }
-                val query = s?.toString()?.trim() ?: ""
-                if (query.length < 3) return // avoid searching for tiny inputs
+        searchBox.addTextChangedListener(
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int,
+                ) {}
 
-                // Debounce: wait 400ms after last keystroke
-                searchRunnable = Runnable { searchSuggestions(query) }
-                searchHandler.postDelayed(searchRunnable!!, 400)
-            }
-            override fun afterTextChanged(s: Editable?) {}
-        })
+                override fun onTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int,
+                ) {
+                    if (searchBlocked) return
+                    searchRunnable?.let { searchHandler.removeCallbacks(it) }
+                    val query = s?.toString()?.trim() ?: ""
+                    if (query.length < 3) return // avoid searching for tiny inputs
+
+                    // Debounce: wait 400ms after last keystroke
+                    searchRunnable = Runnable { searchSuggestions(query) }
+                    searchHandler.postDelayed(searchRunnable!!, 400)
+                }
+
+                override fun afterTextChanged(s: Editable?) {}
+            },
+        )
 
         // Choosing a suggestion
         searchBox.setOnItemClickListener { _, _, position, _ ->
@@ -160,10 +181,11 @@ class LocationPickerActivity : AppCompatActivity() {
 
     private fun returnResult() {
         marker?.position?.let { pos ->
-            val intent = Intent().apply {
-                putExtra(EXTRA_SELECTED_LAT, pos.latitude)
-                putExtra(EXTRA_SELECTED_LON, pos.longitude)
-            }
+            val intent =
+                Intent().apply {
+                    putExtra(EXTRA_SELECTED_LAT, pos.latitude)
+                    putExtra(EXTRA_SELECTED_LON, pos.longitude)
+                }
             setResult(RESULT_OK, intent)
         }
         finish()
@@ -177,22 +199,25 @@ class LocationPickerActivity : AppCompatActivity() {
 
     private fun searchSuggestions(query: String) {
         runOnUiThread {
-            val searchingAdapter = ArrayAdapter(
-                this,
-                android.R.layout.simple_dropdown_item_1line,
-                listOf(getString(R.string.location_picker_searching)),
-            )
+            val searchingAdapter =
+                ArrayAdapter(
+                    this,
+                    android.R.layout.simple_dropdown_item_1line,
+                    listOf(getString(R.string.location_picker_searching)),
+                )
             searchBox.setAdapter(searchingAdapter)
             searchBox.showDropDown()
         }
-        val url = "https://nominatim.openstreetmap.org/search?" +
-            "format=json&q=${URLEncoder.encode(query, "UTF-8")}&limit=5&countrycodes=es"
+        val url =
+            "https://nominatim.openstreetmap.org/search?" +
+                "format=json&q=${URLEncoder.encode(query, "UTF-8")}&limit=5&countrycodes=es"
 
         val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(url)
-            .header("User-Agent", packageName)
-            .build()
+        val request =
+            Request.Builder()
+                .url(url)
+                .header("User-Agent", packageName)
+                .build()
         val call = client.newCall(request)
         ongoingCall = call
 
@@ -214,11 +239,12 @@ class LocationPickerActivity : AppCompatActivity() {
                 runOnUiThread {
                     suggestions = newSuggestions
                     val titles = newSuggestions.map { it.display }
-                    val adapter = ArrayAdapter(
-                        this,
-                        android.R.layout.simple_dropdown_item_1line,
-                        titles,
-                    )
+                    val adapter =
+                        ArrayAdapter(
+                            this,
+                            android.R.layout.simple_dropdown_item_1line,
+                            titles,
+                        )
                     searchBox.setAdapter(adapter)
                     searchBox.showDropDown()
                 }
@@ -229,16 +255,18 @@ class LocationPickerActivity : AppCompatActivity() {
     }
 
     private fun reverseGeocode(point: GeoPoint) {
-        val url = "https://nominatim.openstreetmap.org/reverse?" +
-            "format=json&lat=${point.latitude}&lon=${point.longitude}"
+        val url =
+            "https://nominatim.openstreetmap.org/reverse?" +
+                "format=json&lat=${point.latitude}&lon=${point.longitude}"
 
         Thread {
             try {
                 val client = OkHttpClient()
-                val request = Request.Builder()
-                    .url(url)
-                    .header("User-Agent", packageName)
-                    .build()
+                val request =
+                    Request.Builder()
+                        .url(url)
+                        .header("User-Agent", packageName)
+                        .build()
                 val response = client.newCall(request).execute()
                 val body = response.body?.string() ?: return@Thread
                 val json = JSONObject(body)
@@ -265,7 +293,10 @@ class LocationPickerActivity : AppCompatActivity() {
         searchBlocked = false
     }
 
-    private fun moveToLocation(lat: Double, lon: Double) {
+    private fun moveToLocation(
+        lat: Double,
+        lon: Double,
+    ) {
         val point = GeoPoint(lat, lon)
         marker?.position = point
         map.controller.animateTo(point)

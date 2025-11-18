@@ -9,11 +9,13 @@ fun locationStr(l: GeoPoint?): String? {
 }
 
 class GeoPointTest {
-
     ////////////////////////////////////////////////////////////////////////////////
     // Geo URI (geo:...)
 
-    private fun testGeoUri(uri: String, expected: String?) {
+    private fun testGeoUri(
+        uri: String,
+        expected: String?,
+    ) {
         val actual = GeoPoint.fromGeoUri(uri)
         assertEquals(expected, locationStr(actual))
     }
@@ -103,7 +105,10 @@ class GeoPointTest {
     ////////////////////////////////////////////////////////////////////////////////
     // Open Street Maps (OSM)
 
-    private fun testOsmLink(text: String, expected: String?) {
+    private fun testOsmLink(
+        text: String,
+        expected: String?,
+    ) {
         val actual = GeoPoint.fromOsmLink(text)
         assertEquals(expected, locationStr(actual))
     }
@@ -216,7 +221,10 @@ class GeoPointTest {
     ////////////////////////////////////////////////////////////////////////////////
     // Google Maps
 
-    private fun testGMapsUri(text: String, expected: String?) {
+    private fun testGMapsUri(
+        text: String,
+        expected: String?,
+    ) {
         val actual = GeoPoint.fromGoogleMapsLink(text)
         assertEquals(expected, locationStr(actual))
     }

@@ -47,10 +47,11 @@ object LanguageSettings {
     }
 
     private fun getAvailableLanguages(context: Context): List<LanguageOption> {
-        val systemLanguageOption = LanguageOption(
-            SYSTEM_LANGUAGE,
-            context.getString(R.string.language_system_default),
-        )
+        val systemLanguageOption =
+            LanguageOption(
+                SYSTEM_LANGUAGE,
+                context.getString(R.string.language_system_default),
+            )
         val availableLanguages = availableLanguagesCache
         if (availableLanguages != null) {
             return listOf(systemLanguageOption) + availableLanguages
@@ -70,7 +71,10 @@ object LanguageSettings {
         return listOf(systemLanguageOption) + languages
     }
 
-    private fun createLocalizedContext(context: Context, languageCode: String): Context {
+    private fun createLocalizedContext(
+        context: Context,
+        languageCode: String,
+    ): Context {
         val locale = Locale.forLanguageTag(languageCode)
         val config = Configuration(context.resources.configuration)
         config.setLocale(locale)
@@ -78,7 +82,10 @@ object LanguageSettings {
         return context.createConfigurationContext(config)
     }
 
-    private fun updateSummary(preference: ListPreference, context: Context) {
+    private fun updateSummary(
+        preference: ListPreference,
+        context: Context,
+    ) {
         val currentCode = getPreferencesLanguage(context)
         val languages = getAvailableLanguages(context)
         val currentLanguage = languages.find { it.code == currentCode }
@@ -86,7 +93,10 @@ object LanguageSettings {
         preference.summary = currentLanguage?.name ?: context.getString(R.string.language_system_default)
     }
 
-    private fun updateEntries(preference: ListPreference, context: Context) {
+    private fun updateEntries(
+        preference: ListPreference,
+        context: Context,
+    ) {
         val languages = getAvailableLanguages(context)
         preference.entries = languages.map { it.name }.toTypedArray()
         preference.entryValues = languages.map { it.code }.toTypedArray()
@@ -96,7 +106,10 @@ object LanguageSettings {
         return PreferenceManager.getDefaultSharedPreferences(context)
     }
 
-    private fun setPreferencesLanguage(context: Context, languageCode: String) {
+    private fun setPreferencesLanguage(
+        context: Context,
+        languageCode: String,
+    ) {
         getPrefs(context).edit {
             putString(KEY, languageCode)
         }
@@ -111,15 +124,16 @@ object LanguageSettings {
         // Just rely on the first call, before ever changing the locale
         if (systemLocale != null) return
 
-        systemLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // Android 13+ can get systemLocales from LocaleManager
-            val localeManager = context.getSystemService(LocaleManager::class.java)
-            localeManager?.systemLocales?.get(0) ?: Locale.getDefault()
-        } else {
-            // Android 8.0+ up to 12: get the system configuration locales
-            val locales = Resources.getSystem().configuration.locales
-            if (!locales.isEmpty) locales[0] else Locale.getDefault()
-        }
+        systemLocale =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                // Android 13+ can get systemLocales from LocaleManager
+                val localeManager = context.getSystemService(LocaleManager::class.java)
+                localeManager?.systemLocales?.get(0) ?: Locale.getDefault()
+            } else {
+                // Android 8.0+ up to 12: get the system configuration locales
+                val locales = Resources.getSystem().configuration.locales
+                if (!locales.isEmpty) locales[0] else Locale.getDefault()
+            }
     }
 
     private fun getConfiguredLocale(context: Context): Locale {

@@ -13,16 +13,17 @@ class DeepLinkHandler : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val inputText = when (intent.action) {
-            Intent.ACTION_VIEW -> {
-                val uri: Uri? = intent.data
-                uri?.toString()
+        val inputText =
+            when (intent.action) {
+                Intent.ACTION_VIEW -> {
+                    val uri: Uri? = intent.data
+                    uri?.toString()
+                }
+                Intent.ACTION_SEND -> {
+                    intent.getStringExtra(Intent.EXTRA_TEXT)
+                }
+                else -> null
             }
-            Intent.ACTION_SEND -> {
-                intent.getStringExtra(Intent.EXTRA_TEXT)
-            }
-            else -> null
-        }
 
         val geoPoint = GeoPoint.fromText(inputText)
 

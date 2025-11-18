@@ -8,7 +8,6 @@ import org.junit.Test
 import java.util.Locale
 
 class GasStationTest {
-
     private lateinit var originalLocale: Locale
 
     @Before
@@ -35,7 +34,8 @@ class GasStationTest {
     @Test
     fun `parse station with valid coordinates`() {
         // Sample JSON for one station
-        val json = """
+        val json =
+            """
             {
                 "Rótulo": "REPSOL",
                 "Dirección": "Calle Mayor 1",
@@ -47,7 +47,7 @@ class GasStationTest {
                 "Horario": "L-D: 10:00-20:00",
                 "Tipo Venta": "P"
             }
-        """.trimIndent()
+            """.trimIndent()
 
         // Parse with Gson
         val station = GasStation.parse(json)
@@ -64,7 +64,8 @@ class GasStationTest {
 
     @Test
     fun `parse station with blank coordinates`() {
-        val json = """
+        val json =
+            """
             {
                 "Rótulo": "CEPSA",
                 "Dirección": "Gran Vía 2",
@@ -75,7 +76,7 @@ class GasStationTest {
                 "Longitud (WGS84)": "   ",
                 "Tipo Venta": "P"
             }
-        """.trimIndent()
+            """.trimIndent()
 
         val station = GasStation.parse(json)
 
@@ -86,7 +87,8 @@ class GasStationTest {
 
     @Test
     fun `parse station prices available as map`() {
-        val json = """
+        val json =
+            """
             {
                 "Rótulo": "CEPSA",
                 "Dirección": "Gran Vía 2",
@@ -97,7 +99,7 @@ class GasStationTest {
                 "Longitud (WGS84)": "   ",
                 "Tipo Venta": "P"
             }
-        """.trimIndent()
+            """.trimIndent()
 
         val station = GasStation.parse(json)
 
@@ -106,7 +108,8 @@ class GasStationTest {
 
     @Test
     fun `parse station unexpected prices`() {
-        val json = """
+        val json =
+            """
             {
                 "Rótulo": "CEPSA",
                 "Dirección": "Gran Vía 2",
@@ -117,7 +120,7 @@ class GasStationTest {
                 "Latitud": "",
                 "Longitud (WGS84)": "   "
             }
-        """.trimIndent()
+            """.trimIndent()
 
         val station = GasStation.parse(json)
 
@@ -175,7 +178,8 @@ class GasStationTest {
 
     @Test
     fun `parse station list`() {
-        val json = """
+        val json =
+            """
             {
                 "ListaEESSPrecio": [
                     {
@@ -190,7 +194,7 @@ class GasStationTest {
                     }
                 ]
             }
-        """.trimIndent()
+            """.trimIndent()
 
         val response = GasStationResponse.parse(json)
         val station = response.stations.first()
@@ -201,7 +205,8 @@ class GasStationTest {
 
     fun `parse station with no Horarios gets null`() {
         // Sample JSON for one station
-        val json = """
+        val json =
+            """
             {
                 "Rótulo": "REPSOL",
                 "Dirección": "Calle Mayor 1",
@@ -212,7 +217,7 @@ class GasStationTest {
                 "Longitud (WGS84)": "-3,7038",
                 "Tipo Venta": "P"
             }
-        """.trimIndent()
+            """.trimIndent()
 
         // Parse with Gson
         val station = GasStation.parse(json)
@@ -223,17 +228,18 @@ class GasStationTest {
 
     @Test
     fun `toJson with data`() {
-        val gasStation = GasStation(
-            id = 1234,
-            name = "Test Station",
-            address = "Calle Principal 123",
-            city = "Madrid",
-            state = "Madrid",
-            latitude = 40.4168,
-            longitude = -3.7038,
-            isPublicPrice = true,
-            prices = mapOf("Gasolina 95" to 1.234),
-        )
+        val gasStation =
+            GasStation(
+                id = 1234,
+                name = "Test Station",
+                address = "Calle Principal 123",
+                city = "Madrid",
+                state = "Madrid",
+                latitude = 40.4168,
+                longitude = -3.7038,
+                isPublicPrice = true,
+                prices = mapOf("Gasolina 95" to 1.234),
+            )
 
         val json = gasStation.toJson()
 
@@ -246,17 +252,18 @@ class GasStationTest {
 
     @Test
     fun `toJson with nulls`() {
-        val gasStation = GasStation(
-            id = 1234, // Not null
-            name = null,
-            address = null,
-            city = null,
-            state = null,
-            latitude = null,
-            longitude = null,
-            isPublicPrice = false, // Not null
-            prices = mapOf("Gasolina 95" to null),
-        )
+        val gasStation =
+            GasStation(
+                id = 1234, // Not null
+                name = null,
+                address = null,
+                city = null,
+                state = null,
+                latitude = null,
+                longitude = null,
+                isPublicPrice = false, // Not null
+                prices = mapOf("Gasolina 95" to null),
+            )
 
         val json = gasStation.toJson()
 
@@ -267,17 +274,18 @@ class GasStationTest {
     @Test
     fun `toJson with exotic locale, arab`() {
         Locale.setDefault(Locale.forLanguageTag("ar")) // Arabic serializes its own numbers
-        val gasStation = GasStation(
-            id = 1234,
-            name = "Test Station",
-            address = "Calle Principal 123",
-            city = "Madrid",
-            state = "Madrid",
-            latitude = 40.4168,
-            longitude = -3.7038,
-            isPublicPrice = true,
-            prices = mapOf("Gasolina 95" to 1.234),
-        )
+        val gasStation =
+            GasStation(
+                id = 1234,
+                name = "Test Station",
+                address = "Calle Principal 123",
+                city = "Madrid",
+                state = "Madrid",
+                latitude = 40.4168,
+                longitude = -3.7038,
+                isPublicPrice = true,
+                prices = mapOf("Gasolina 95" to 1.234),
+            )
 
         val json = gasStation.toJson()
 
@@ -290,17 +298,18 @@ class GasStationTest {
 
     @Test
     fun testRoundTrip() {
-        val originalStation = GasStation(
-            id = 1234,
-            name = "Test Station",
-            address = "Calle Principal 123",
-            city = "Madrid",
-            state = "Madrid",
-            latitude = 40.4168,
-            longitude = -3.7038,
-            isPublicPrice = true,
-            prices = mapOf("Gasolina 95" to 1.234),
-        )
+        val originalStation =
+            GasStation(
+                id = 1234,
+                name = "Test Station",
+                address = "Calle Principal 123",
+                city = "Madrid",
+                state = "Madrid",
+                latitude = 40.4168,
+                longitude = -3.7038,
+                isPublicPrice = true,
+                prices = mapOf("Gasolina 95" to 1.234),
+            )
 
         val json = originalStation.toJson()
         //println("JSON serialitzat: $json")

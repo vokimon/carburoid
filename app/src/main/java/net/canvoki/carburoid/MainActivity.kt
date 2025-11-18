@@ -31,7 +31,6 @@ import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.ui.StationDetailActivity
 
 class MainActivity : AppCompatActivity() {
-
     companion object {
         const val EXTRA_LOCATION = "location"
         const val EXTRA_SOURCE = "source"
@@ -75,11 +74,12 @@ class MainActivity : AppCompatActivity() {
         showEmpty(getString(R.string.no_gas_stations))
 
         var locationSelector = findViewById<LocationSelector>(R.id.location_selector)
-        locationService = LocationService(
-            this,
-            notify = ::showToast,
-            suggestAction = ::suggestAction,
-        )
+        locationService =
+            LocationService(
+                this,
+                notify = ::showToast,
+                suggestAction = ::suggestAction,
+            )
         locationSelector.bind(this, locationService)
         lifecycleScope.launch {
             locationService.locationChanged.collect {
@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity() {
             useSavedLocation(savedInstanceState) ||
                 useDeepLinkIntentLocation(intent) ||
                 useDeviceLocation()
-            )
+        )
     }
 
     override fun onStart() {
@@ -151,9 +151,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun useDeepLinkIntentLocation(intent: Intent?): Boolean {
-        val location = intent?.let {
-            IntentCompat.getParcelableExtra(it, MainActivity.EXTRA_LOCATION, Location::class.java)
-        } ?: return false
+        val location =
+            intent?.let {
+                IntentCompat.getParcelableExtra(it, MainActivity.EXTRA_LOCATION, Location::class.java)
+            } ?: return false
 
         locationService.setFixedLocation(location)
         return true
@@ -187,23 +188,29 @@ class MainActivity : AppCompatActivity() {
 
     private fun showToast(message: String) {
         log(message)
-        val snackbar = Snackbar.make(
-            findViewById<ViewGroup>(android.R.id.content),
-            message,
-            Snackbar.LENGTH_LONG,
-        )
+        val snackbar =
+            Snackbar.make(
+                findViewById<ViewGroup>(android.R.id.content),
+                message,
+                Snackbar.LENGTH_LONG,
+            )
         snackbar.show()
     }
 
-    private fun suggestAction(message: String, actionText: String, action: () -> Unit) {
+    private fun suggestAction(
+        message: String,
+        actionText: String,
+        action: () -> Unit,
+    ) {
         log(message)
-        val snackbar = Snackbar.make(
-            findViewById<ViewGroup>(android.R.id.content),
-            message,
-            Snackbar.LENGTH_LONG,
-        ).setAction(actionText) {
-            action()
-        }
+        val snackbar =
+            Snackbar.make(
+                findViewById<ViewGroup>(android.R.id.content),
+                message,
+                Snackbar.LENGTH_LONG,
+            ).setAction(actionText) {
+                action()
+            }
         snackbar.show()
     }
 
@@ -250,9 +257,10 @@ class MainActivity : AppCompatActivity() {
 
                 // 🚧 Do heavy work in IO (or Default) dispatcher
                 val stations = repository.getData()?.stations ?: emptyList()
-                val sortedStations = timeit("PROCESSING STATIONS") {
-                    StationFilter(config).filter(stations)
-                }
+                val sortedStations =
+                    timeit("PROCESSING STATIONS") {
+                        StationFilter(config).filter(stations)
+                    }
 
                 timeit("UPDATING CONTENT") {
                     if (sortedStations.isEmpty()) {

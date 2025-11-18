@@ -12,16 +12,16 @@ import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
 
 object FilterSettings {
-
     private const val PREFS_NAME = "app_settings"
     private const val KEY_HIDE_EXPENSIVE = "hide_expensive_further"
     private const val KEY_ONLY_PUBLIC_PRICES = "only_public_prices"
     private const val KEY_HIDE_CLOSED_MARGIN_MINUTES = "hide_closed_margin_minutes"
 
-    private val relevantKeys = setOf(
-        KEY_HIDE_EXPENSIVE,
-        KEY_ONLY_PUBLIC_PRICES,
-    )
+    private val relevantKeys =
+        setOf(
+            KEY_HIDE_EXPENSIVE,
+            KEY_ONLY_PUBLIC_PRICES,
+        )
 
     private val _changes = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     val changes: Flow<Unit> get() = _changes.asSharedFlow()
@@ -36,13 +36,14 @@ object FilterSettings {
 
         updateSummary(screen, prefs, context, KEY_HIDE_CLOSED_MARGIN_MINUTES)
 
-        listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            log("Changed $key")
-            updateSummary(screen, prefs, context, key ?: "")
-            if (key in relevantKeys) {
-                _changes.tryEmit(Unit)
+        listener =
+            SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+                log("Changed $key")
+                updateSummary(screen, prefs, context, key ?: "")
+                if (key in relevantKeys) {
+                    _changes.tryEmit(Unit)
+                }
             }
-        }
 
         prefs.registerOnSharedPreferenceChangeListener(listener)
     }
@@ -66,7 +67,12 @@ object FilterSettings {
         )
     }
 
-    private fun updateSummary(screen: PreferenceScreen, preference: SharedPreferences, context: Context, key: String) {
+    private fun updateSummary(
+        screen: PreferenceScreen,
+        preference: SharedPreferences,
+        context: Context,
+        key: String,
+    ) {
         if (key != KEY_HIDE_CLOSED_MARGIN_MINUTES) return
 
         val listPreference = screen.findPreference<ListPreference>(key)

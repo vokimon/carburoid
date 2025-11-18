@@ -7,8 +7,10 @@ import java.time.Instant
 import kotlin.test.assertEquals
 
 class SpanishDateTest {
-
-    fun toCase(expected: String?, input: String?) {
+    fun toCase(
+        expected: String?,
+        input: String?,
+    ) {
         val instant = input?.let { Instant.parse(it) }
         assertEquals(expected, toSpanishDate(instant))
     }
@@ -29,7 +31,10 @@ class SpanishDateTest {
 
     @Test fun `toSpanishDate second dupped daylight date`() = toCase("27/10/2024 2:30:00", "2024-10-27T01:30:00Z")
 
-    fun fromCase(expected: String?, input: String?) {
+    fun fromCase(
+        expected: String?,
+        input: String?,
+    ) {
         val parsedExpected = expected?.let { Instant.parse(it) }
         assertEquals(parsedExpected, fromSpanishDate(input))
     }
@@ -48,10 +53,11 @@ class SpanishDateTest {
 
     @Test fun `fromSpanishDate just after spring +2`() = fromCase("2024-03-31T01:00:00Z", "31/03/2024 3:00:00")
 
-    @Test fun `fromSpanishDate dupped daylight date, arbitrarily takes the earlier one`() = fromCase(
-        "2024-10-27T00:30:00Z",
-        "27/10/2024 2:30:00",
-    )
+    @Test fun `fromSpanishDate dupped daylight date, arbitrarily takes the earlier one`() =
+        fromCase(
+            "2024-10-27T00:30:00Z",
+            "27/10/2024 2:30:00",
+        )
 
     @Test fun `fromSpanishDate mising daylight date, uses winter time`() = fromCase("2024-03-31T01:15:00Z", "31/03/2024 2:15:00")
 

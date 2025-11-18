@@ -7,7 +7,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class OpeningHoursAdapterTest {
-
     val adapter = OpeningHoursAdapter()
 
     @Test

@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonWriter
 fun toSpanishFloat(value: Double?): String? {
     return value?.toString()?.replace(".", ",")
 }
+
 fun fromSpanishFloat(value: String?): Double? {
     return value?.replace(',', '.')?.toDoubleOrNull()
 }
@@ -21,7 +22,10 @@ class SpanishFloatTypeAdapter : TypeAdapter<Double?>() {
         }
     }
 
-    override fun write(writer: JsonWriter, value: Double?) {
+    override fun write(
+        writer: JsonWriter,
+        value: Double?,
+    ) {
         if (value != null) {
             writer.value(toSpanishFloat(value))
         } else {

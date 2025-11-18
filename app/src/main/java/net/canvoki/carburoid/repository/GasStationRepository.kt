@@ -20,7 +20,9 @@ typealias Parser = (String) -> GasStationResponse
 
 sealed class RepositoryEvent {
     object UpdateStarted : RepositoryEvent()
+
     object UpdateReady : RepositoryEvent()
+
     data class UpdateFailed(val error: String) : RepositoryEvent()
 }
 
@@ -35,6 +37,7 @@ class GasStationRepository(
     companion object {
         const val minutesToExpire = 30L
     }
+
     private val _events = MutableSharedFlow<RepositoryEvent>(replay = 0)
     val events: SharedFlow<RepositoryEvent> = _events.asSharedFlow()
 
@@ -78,14 +81,16 @@ class GasStationRepository(
         scope.launch {
             _events.emit(RepositoryEvent.UpdateStarted)
             try {
-                val response = timeit("FETCH") {
-                    api.getGasStations()
-                }
+                val response =
+                    timeit("FETCH") {
+                        api.getGasStations()
+                    }
 
                 if (parser != null) {
-                    parsed = timeit("PARSING FETCH") {
-                        parser(response)
-                    }
+                    parsed =
+                        timeit("PARSING FETCH") {
+                            parser(response)
+                        }
                 }
                 saveToCache(response)
                 isBackgroundUpdateRunning.set(false)

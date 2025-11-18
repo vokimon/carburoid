@@ -37,7 +37,6 @@ fun preprocessSpanishNumbers(json: String): String {
 data class GasStationResponse(
     @SerializedName("ListaEESSPrecio")
     val stations: List<GasStation>,
-
     @SerializedName("Fecha")
     @JsonAdapter(SpanishDateTypeAdapter::class)
     val downloadDate: Instant? = null,
@@ -45,11 +44,13 @@ data class GasStationResponse(
     fun toJson(): String {
         return gson.toJson(this)
     }
+
     companion object {
         fun parse(json: String): GasStationResponse {
-            val preprocessed = timeits("PREPROCESSAT") {
-                preprocessSpanishNumbers(json)
-            }
+            val preprocessed =
+                timeits("PREPROCESSAT") {
+                    preprocessSpanishNumbers(json)
+                }
             return timeits("PARSE") {
                 gson.fromJson(preprocessed, GasStationResponse::class.java)
             }
@@ -60,35 +61,26 @@ data class GasStationResponse(
 data class GasStation(
     @SerializedName("IDEESS")
     val id: Int,
-
     @SerializedName("Rótulo")
     val name: String?,
-
     @SerializedName("Dirección")
     val address: String?,
-
     @SerializedName("Localidad")
     val city: String?,
-
     @SerializedName("Provincia")
     val state: String?,
-
     @SerializedName("Latitud")
     @JsonAdapter(SpanishFloatTypeAdapter::class)
     val latitude: Double?,
-
     @SerializedName("Longitud (WGS84)")
     @JsonAdapter(SpanishFloatTypeAdapter::class)
     val longitude: Double?,
-
     @SerializedName("Tipo Venta")
     @JsonAdapter(SaleTypeAdapter::class)
     val isPublicPrice: Boolean = true,
-
     @SerializedName("Horario")
     @JsonAdapter(OpeningHoursAdapter::class)
     val openingHours: OpeningHours? = OpeningHours.parse("L-D: 24H"),
-
     val prices: Map<String, Double?> = emptyMap(),
 ) {
     var distanceInMeters: Float? = null
@@ -126,7 +118,6 @@ data class GasStation(
 class GasStationJsonAdapter(
     private val gson: Gson,
 ) : JsonDeserializer<GasStation>, JsonSerializer<GasStation> {
-
     override fun deserialize(
         json: JsonElement,
         typeOfT: Type,
@@ -138,11 +129,12 @@ class GasStationJsonAdapter(
         for (key in jsonObject.keySet()) {
             if (key.startsWith("Precio ")) {
                 val value = jsonObject.get(key)
-                val price = when {
-                    value.isJsonNull -> null
-                    value.isJsonPrimitive && value.asJsonPrimitive.isNumber -> value.asDouble
-                    else -> null
-                }
+                val price =
+                    when {
+                        value.isJsonNull -> null
+                        value.isJsonPrimitive && value.asJsonPrimitive.isNumber -> value.asDouble
+                        else -> null
+                    }
                 val product = key.removePrefix("Precio ")
                 prices[product] = price
             }

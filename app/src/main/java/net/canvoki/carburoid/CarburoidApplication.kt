@@ -12,7 +12,6 @@ import java.io.File
 import java.io.FileNotFoundException
 
 class CarburoidApplication : Application() {
-
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     private lateinit var cacheFile: File
@@ -30,23 +29,25 @@ class CarburoidApplication : Application() {
 
     fun setupDebugData() {
         if (cacheFile.exists()) return
-        val mockJson = try {
-            assets.open("stations-debug.json").bufferedReader().use { it.readText() }
-        } catch (e: FileNotFoundException) {
-            log("MOCK DATA NOT FOUND. RELEASE?")
-            return
-        }
+        val mockJson =
+            try {
+                assets.open("stations-debug.json").bufferedReader().use { it.readText() }
+            } catch (e: FileNotFoundException) {
+                log("MOCK DATA NOT FOUND. RELEASE?")
+                return
+            }
         log("USING MOCK DATA. DEBUG?")
         cacheFile.writeText(mockJson)
     }
 
     fun setupRepository(): GasStationRepository {
         val api = GasStationApiFactory.create()
-        val repository = GasStationRepository(
-            api = api,
-            cacheFile = cacheFile,
-            scope = appScope,
-        )
+        val repository =
+            GasStationRepository(
+                api = api,
+                cacheFile = cacheFile,
+                scope = appScope,
+            )
         return repository
     }
 }

@@ -16,7 +16,6 @@ import java.time.Instant
 import com.google.android.material.R as MaterialR
 
 class StationDetailActivity : AppCompatActivity() {
-
     private val app: CarburoidApplication
         get() = application as CarburoidApplication
 

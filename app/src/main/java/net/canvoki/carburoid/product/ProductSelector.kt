@@ -14,7 +14,6 @@ class ProductSelector
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0,
     ) : AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
-
         private var listener: ((String) -> Unit)? = null
         private var suppressCallback = false
 

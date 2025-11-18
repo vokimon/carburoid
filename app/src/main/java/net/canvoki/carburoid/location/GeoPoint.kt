@@ -7,7 +7,6 @@ import net.canvoki.carburoid.network.Uri
  * Represents of a geographic point (WGS84).
  */
 data class GeoPoint(val latitude: Double, val longitude: Double) {
-
     fun toAndroidLocation(): Location {
         val gp = this
         return Location("carburoid").apply {
@@ -17,7 +16,6 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
     }
 
     companion object {
-
         /** Parse from free-form text (decimal, DMS, OSM links, etc.) */
         fun fromText(text: String?): GeoPoint? {
             if (text == null) return null
@@ -32,10 +30,11 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
                 return null
             }
             val ssp = uriString.substringAfter("geo:", "").removePrefix("/")
-            val coordPart = ssp
-                .substringBefore(';')
-                .substringBefore('?')
-                .trim()
+            val coordPart =
+                ssp
+                    .substringBefore(';')
+                    .substringBefore('?')
+                    .trim()
             val coords = coordPart.split(',').map { it.trim() }
             if (coords.size < 2) return null
             return fromTextComponents(coords[0], coords[1])
@@ -122,7 +121,10 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
             return null
         }
 
-        private fun fromTextComponents(latString: String, lonString: String): GeoPoint? {
+        private fun fromTextComponents(
+            latString: String,
+            lonString: String,
+        ): GeoPoint? {
             val lat = latString.toDoubleOrNull() ?: return null
             val lon = lonString.toDoubleOrNull() ?: return null
             if (lat in -90.0..90.0 && lon in -180.0..180.0) {
@@ -151,6 +153,7 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
 
             return null
         }
+
         private fun matchToCoords(match: MatchResult): GeoPoint? {
             return fromTextComponents(match.groupValues[1], match.groupValues[2])
         }

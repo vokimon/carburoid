@@ -42,8 +42,10 @@ data class OpeningStatus(
             colorAttr = AppCompatR.attr.colorError,
             iconRes = R.drawable.ic_block,
         ) {
-            override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
-                !status.isOpen && status.until == null
+            override fun matches(
+                status: OpeningStatus,
+                deadline: Instant,
+            ): Boolean = !status.isOpen && status.until == null
         },
         OPENS_AT(
             stringRes = R.string.station_status_opens_at,
@@ -51,16 +53,20 @@ data class OpeningStatus(
             iconRes = R.drawable.ic_lock_clock,
             usesRelativeTime = true,
         ) {
-            override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
-                !status.isOpen && status.until != null
+            override fun matches(
+                status: OpeningStatus,
+                deadline: Instant,
+            ): Boolean = !status.isOpen && status.until != null
         },
         OPEN_24H(
             stringRes = R.string.station_status_247,
             colorAttr = AppCompatR.attr.colorPrimary,
             iconRes = R.drawable.ic_schedule,
         ) {
-            override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
-                status.isOpen && status.until == null
+            override fun matches(
+                status: OpeningStatus,
+                deadline: Instant,
+            ): Boolean = status.isOpen && status.until == null
         },
         CLOSES_SOON(
             stringRes = R.string.station_status_closes_at,
@@ -68,21 +74,31 @@ data class OpeningStatus(
             iconRes = R.drawable.ic_warning,
             usesRelativeTime = true,
         ) {
-            override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
-                status.isOpen && status.until != null && status.until < deadline
+            override fun matches(
+                status: OpeningStatus,
+                deadline: Instant,
+            ): Boolean = status.isOpen && status.until != null && status.until < deadline
         },
         OPEN(
             stringRes = R.string.station_status_open,
             colorAttr = AppCompatR.attr.colorPrimary,
             iconRes = R.drawable.ic_check_circle,
         ) {
-            override fun matches(status: OpeningStatus, deadline: Instant): Boolean =
-                status.isOpen && status.until != null && status.until >= deadline
+            override fun matches(
+                status: OpeningStatus,
+                deadline: Instant,
+            ): Boolean = status.isOpen && status.until != null && status.until >= deadline
         }, ;
 
-        abstract fun matches(status: OpeningStatus, deadline: Instant): Boolean
+        abstract fun matches(
+            status: OpeningStatus,
+            deadline: Instant,
+        ): Boolean
 
-        fun forHumans(context: Context, status: OpeningStatus): String {
+        fun forHumans(
+            context: Context,
+            status: OpeningStatus,
+        ): String {
             return if (usesRelativeTime) {
                 val relative = status.getRelativeTimeSpan(status.until!!, Instant.now())
                 context.getString(stringRes, relative)
@@ -117,9 +133,7 @@ data class OpeningStatus(
     }
 
     @DrawableRes
-    fun icon(
-        thresholdMinutes: Long = defaultThresholdMinutes,
-    ): Int {
+    fun icon(thresholdMinutes: Long = defaultThresholdMinutes): Int {
         return resolveState(thresholdMinutes).iconRes
     }
 
@@ -143,13 +157,21 @@ data class OpeningStatus(
     }
 }
 
-fun toLocal(instant: Instant, zoneId: ZoneId = ZoneId.of("Europe/Madrid")): Pair<DayOfWeek, LocalTime> {
+fun toLocal(
+    instant: Instant,
+    zoneId: ZoneId = ZoneId.of("Europe/Madrid"),
+): Pair<DayOfWeek, LocalTime> {
     val localDateTime = instant.atZone(zoneId).toLocalDateTime()
     val truncatedTime = localDateTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES)
     return localDateTime.dayOfWeek to truncatedTime
 }
 
-fun toInstant(reference: Instant, day: DayOfWeek, time: LocalTime, zoneId: ZoneId): Instant {
+fun toInstant(
+    reference: Instant,
+    day: DayOfWeek,
+    time: LocalTime,
+    zoneId: ZoneId,
+): Instant {
     val refZoned = reference.atZone(zoneId)
     val refDate = refZoned.toLocalDate()
     val refDay = refZoned.dayOfWeek
@@ -157,11 +179,12 @@ fun toInstant(reference: Instant, day: DayOfWeek, time: LocalTime, zoneId: ZoneI
     val refTime = refZoned.toLocalTime()
     val targetDayValue = day.value
 
-    val daysToAdd = if (day == refDay && time < refTime) {
-        7
-    } else {
-        (targetDayValue - refDayValue + 7) % 7
-    }
+    val daysToAdd =
+        if (day == refDay && time < refTime) {
+            7
+        } else {
+            (targetDayValue - refDayValue + 7) % 7
+        }
 
     val targetDate = refDate.plusDays(daysToAdd.toLong())
     val targetLocal = LocalDateTime.of(targetDate, time)
@@ -172,7 +195,13 @@ class OpeningHours() {
     private var currentDay: DayOfWeek = DayOfWeek.MONDAY
     private val dayIntervals = mutableMapOf<DayOfWeek, MutableList<Pair<LocalTime, LocalTime>>>()
 
-    fun add(day: DayOfWeek, startHour: Int, startMinute: Int, endHour: Int, endMinute: Int) {
+    fun add(
+        day: DayOfWeek,
+        startHour: Int,
+        startMinute: Int,
+        endHour: Int,
+        endMinute: Int,
+    ) {
         val interval = LocalTime.of(startHour, startMinute) to LocalTime.of(endHour, endMinute)
         val intervals = dayIntervals.getOrPut(day) { mutableListOf() }
 
@@ -188,12 +217,15 @@ class OpeningHours() {
         val merged = (
             minOf(intervals[mergeStart].first, interval.first) to
                 maxOf(intervals[mergeEnd - 1].second, interval.second)
-            )
+        )
         intervals.subList(mergeStart, mergeEnd).clear()
         intervals.add(mergeStart, merged)
     }
 
-    fun getStatus(instant: Instant, zoneId: ZoneId): OpeningStatus {
+    fun getStatus(
+        instant: Instant,
+        zoneId: ZoneId,
+    ): OpeningStatus {
         val (day, time) = toLocal(instant, zoneId)
 
         fun openUntil(until: Pair<DayOfWeek, LocalTime>?): OpeningStatus {
@@ -209,6 +241,7 @@ class OpeningHours() {
             val untilInstant = toInstant(instant, untilDay, untilTime, zoneId)
             return OpeningStatus(isOpen = true, until = untilInstant)
         }
+
         fun closedUntil(until: Pair<DayOfWeek, LocalTime>?): OpeningStatus {
             if (until == null) return OpeningStatus(isOpen = false, null)
             val (untilDay, untilTime) = until
@@ -256,7 +289,10 @@ class OpeningHours() {
         return null
     }
 
-    private fun searchNextOpeningGap(day: DayOfWeek, time: LocalTime): Pair<DayOfWeek, LocalTime>? {
+    private fun searchNextOpeningGap(
+        day: DayOfWeek,
+        time: LocalTime,
+    ): Pair<DayOfWeek, LocalTime>? {
         var closingAt = time
         var closingDay = day
         for (dayOffset in 1L..8L) {
@@ -279,9 +315,10 @@ class OpeningHours() {
     }
 
     override fun toString(): String {
-        val dayStrings: List<Pair<String, String>> = DayOfWeek.values().map { day ->
-            spanishWeekDayShort(day) to formatIntervals(dayIntervals[day] ?: emptyList())
-        }
+        val dayStrings: List<Pair<String, String>> =
+            DayOfWeek.values().map { day ->
+                spanishWeekDayShort(day) to formatIntervals(dayIntervals[day] ?: emptyList())
+            }
 
         var pivot = ""
         val result = mutableListOf<Pair<String, String>>()
@@ -323,18 +360,18 @@ class OpeningHours() {
         return String.format(Locale.ROOT, "%02d:%02d", time.hour, time.minute)
     }
 
-    private fun spanishWeekDayShort(day: DayOfWeek): String = when (day) {
-        DayOfWeek.MONDAY -> "L"
-        DayOfWeek.TUESDAY -> "M"
-        DayOfWeek.WEDNESDAY -> "X"
-        DayOfWeek.THURSDAY -> "J"
-        DayOfWeek.FRIDAY -> "V"
-        DayOfWeek.SATURDAY -> "S"
-        DayOfWeek.SUNDAY -> "D"
-    }
+    private fun spanishWeekDayShort(day: DayOfWeek): String =
+        when (day) {
+            DayOfWeek.MONDAY -> "L"
+            DayOfWeek.TUESDAY -> "M"
+            DayOfWeek.WEDNESDAY -> "X"
+            DayOfWeek.THURSDAY -> "J"
+            DayOfWeek.FRIDAY -> "V"
+            DayOfWeek.SATURDAY -> "S"
+            DayOfWeek.SUNDAY -> "D"
+        }
 
     companion object {
-
         fun parseTime(intervalStr: String): TimeSpec? {
             val parts = intervalStr.split(":")
             if (parts.size != 2) return null
