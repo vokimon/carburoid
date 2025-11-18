@@ -35,7 +35,7 @@ class GasStationRepository(
     },
 ) {
     companion object {
-        const val minutesToExpire = 30L
+        const val MINUTES_TO_EXPIRE = 30L
     }
 
     private val _events = MutableSharedFlow<RepositoryEvent>(replay = 0)
@@ -111,7 +111,7 @@ class GasStationRepository(
         val p = parsed ?: return true
         val date = p.downloadDate ?: return true
 
-        val deadline = Instant.now().minus(Duration.ofMinutes(minutesToExpire))
+        val deadline = Instant.now().minus(Duration.ofMinutes(MINUTES_TO_EXPIRE))
         if (date <= deadline) return true
         // up-to-date cache
         return false

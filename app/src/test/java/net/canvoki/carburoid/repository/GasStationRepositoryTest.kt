@@ -28,18 +28,17 @@ class GasStationRepositoryTest {
     private lateinit var cacheFile: File
     private lateinit var repository: GasStationRepository
 
-    fun jsonResponse(stations: List<Map<String, Any>> = emptyList()): String {
-        return Gson().toJson(
+    fun jsonResponse(stations: List<Map<String, Any>> = emptyList()): String =
+        Gson().toJson(
             mapOf("ListaEESSPrecio" to stations),
         )
-    }
 
     fun station(
         index: Int,
         distance: Double,
         price: Double?,
-    ): Map<String, Any> {
-        return mapOf(
+    ): Map<String, Any> =
+        mapOf(
             "IDEESS" to "$index",
             "Rótulo" to "Station $index at $distance km, $price €",
             "Dirección" to "Address $index",
@@ -50,7 +49,6 @@ class GasStationRepositoryTest {
             "Longitud (WGS84)" to (toSpanishFloat(distance) ?: ""),
             "Tipo Venta" to "P",
         )
-    }
 
     private fun dataExample() =
         GasStationResponse(
@@ -547,7 +545,7 @@ class GasStationRepositoryTest {
     @Test
     fun `isExpired, true if old cache`() =
         runTest {
-            writeCache(Instant.now().minus(Duration.ofMinutes(GasStationRepository.minutesToExpire)))
+            writeCache(Instant.now().minus(Duration.ofMinutes(GasStationRepository.MINUTES_TO_EXPIRE)))
             val repository = GasStationRepository(api, cacheFile, this)
 
             assertEquals(true, repository.isExpired())
