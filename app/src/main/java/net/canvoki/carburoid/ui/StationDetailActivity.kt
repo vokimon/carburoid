@@ -35,7 +35,9 @@ class StationDetailActivity : AppCompatActivity() {
         binding.textName.text = station.name
         binding.textCurrentProduct.text = ProductManager.getCurrent()
         binding.textPrice.text = station.price?.let { "%.3f €".format(it) } ?: getString(R.string.station_no_price)
-        binding.textDistance.text = station.distanceInMeters?.let { "%.1f km".format(it / 1000f) } ?: getString(R.string.station_no_distance)
+        binding.textDistance.text = station.distanceInMeters?.let {
+            "%.1f km".format(it / 1000f)
+        } ?: getString(R.string.station_no_distance)
 
         val status = station.openStatus(Instant.now())
         val statusText = status.forHumans(this)
