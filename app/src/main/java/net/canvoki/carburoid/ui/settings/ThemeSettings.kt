@@ -3,6 +3,11 @@ package net.canvoki.carburoid.ui.settings
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
 import androidx.core.content.edit
 import androidx.preference.ListPreference
 import androidx.preference.Preference
@@ -77,5 +82,15 @@ object ThemeSettings {
                 VALUE_DARK -> context.getString(R.string.theme_dark)
                 else -> context.getString(R.string.theme_system)
             }
+    }
+
+    @Composable
+    fun effectiveColorScheme(): ColorScheme {
+        val isDark = when (AppCompatDelegate.getDefaultNightMode()) {
+            AppCompatDelegate.MODE_NIGHT_NO -> false
+            AppCompatDelegate.MODE_NIGHT_YES -> true
+            else -> isSystemInDarkTheme()
+        }
+        return if (isDark) darkColorScheme() else lightColorScheme()
     }
 }

@@ -2,6 +2,7 @@ language_code: en
 language_name: English
 app_name: Carburoid
 menu_settings: Settings
+menu_chart: Chart
 settings_category_language_appearance: Language and appearance
 settings_language_title: Language
 settings_language_summary: Change the app language
@@ -63,3 +64,4 @@ location_picker_searching: Searching…
 location_picker_no_results: No locations found
 loading_new_data: Downloading new data…
 dialog_accept: Accept
+
