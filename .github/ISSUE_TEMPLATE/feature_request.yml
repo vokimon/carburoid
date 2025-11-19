@@ -1,8 +1,8 @@
 name: "✨ Feature request"
-about: Suggest an idea for Carburoid
+description: Suggest an idea for Carburoid
 title: "Feature: [brief description]"
 labels: [enhancement]
-assignees: ''
+assignees: []
 body:
   - type: markdown
     attributes:
