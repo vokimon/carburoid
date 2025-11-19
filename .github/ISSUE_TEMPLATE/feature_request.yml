@@ -1,6 +1,6 @@
 name: "✨ Feature request"
 description: Suggest an idea for Carburoid
-title: "Feature: [brief description]"
+title: "✨ Feature: [brief description]"
 labels: [enhancement]
 assignees: []
 body:

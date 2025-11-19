@@ -1,6 +1,6 @@
 name: "🐛 Bug Report"
 description: Report a reproducible issue or unexpected behavior in Carburoid.
-title: "Bug: [brief description]"
+title: "🐛 Bug: [brief description]"
 labels: [bug]
 assignees: []
 
