@@ -3,6 +3,7 @@ import tasks.YamlToAndroidStringsTask
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.compose' version '2.2.20'
     //id "org.jlleitschuh.gradle.ktlint"
 }
 
@@ -82,6 +83,7 @@ android {
         }
         nonfree { dimension "freeness" }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -93,7 +95,13 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
+    }
+
     testOptions {
         unitTests.all {
             jvmArgs(
@@ -133,9 +141,14 @@ ktlint {
 */
 
 dependencies {
+    implementation platform("androidx.compose:compose-bom:2025.01.00")
     implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.13.0'
+    implementation "androidx.activity:activity-compose:1.9.3"
+    implementation "androidx.compose.ui:ui"
+    implementation "androidx.compose.material3:material3"
+    implementation "androidx.compose.ui:ui-tooling-preview"
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.9.4'
     implementation 'androidx.preference:preference-ktx:1.2.1'
@@ -143,9 +156,14 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:3.0.0'
     implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
     implementation 'com.squareup.retrofit2:converter-scalars:3.0.0'
+    implementation "com.patrykandpatrick.vico:compose-m3:2.3.6"
+    implementation "com.patrykandpatrick.vico:compose:2.3.6"
+    implementation "com.patrykandpatrick.vico:core:2.3.6"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:latest'
     implementation 'org.osmdroid:osmdroid-android:6.1.20'
     implementation 'org.osmdroid:osmdroid-wms:6.1.20'
+
+    debugImplementation "androidx.compose.ui:ui-tooling"
 
     nonfreeImplementation 'com.google.android.gms:play-services-location:21.3.0'
 

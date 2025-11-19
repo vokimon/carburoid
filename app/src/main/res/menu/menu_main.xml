@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_chart"
+        app:iconTint="?attr/colorOnSurface"
+        android:icon="@drawable/ic_show_chart"
+        app:showAsAction="ifRoom"
+        android:title="@string/menu_chart" />
+    <item
         android:id="@+id/action_settings"
         app:iconTint="?attr/colorOnSurface"
         android:icon="@drawable/ic_settings"

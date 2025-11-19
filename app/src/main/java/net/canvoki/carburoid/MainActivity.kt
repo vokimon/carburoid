@@ -29,6 +29,7 @@ import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.ui.StationDetailActivity
+import net.canvoki.carburoid.ui.ChartActivity
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -174,6 +175,10 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.action_settings -> {
                 startActivity(Intent(this, SettingsActivity::class.java))
+                true
+            }
+            R.id.action_chart -> {
+                startActivity(Intent(this, ChartActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
