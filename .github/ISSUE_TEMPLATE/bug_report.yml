@@ -1,7 +1,7 @@
 name: "🐛 Bug Report"
 description: "Report a reproducible issue or unexpected behavior in Carburoid."
 title: "Bug: [Type a short description]"
-labels: bug
+labels: [bug]
 assignees: ''
 
 body:
@@ -108,4 +108,3 @@ body:
       placeholder: "Anything else the team should know?"
     validations:
       required: false
----

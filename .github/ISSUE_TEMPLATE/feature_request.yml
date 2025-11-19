@@ -1,7 +1,7 @@
 name: "✨ Feature request"
 about: Suggest an idea for Carburoid
 title: "Feature: [brief description]"
-labels: enhancement
+labels: [enhancement]
 assignees: ''
 body:
   - type: markdown
@@ -20,7 +20,7 @@ body:
       label: Motivation
       description: |
         Describe the situation motivating this request
-      placeholder:
+      placeholder: |
         I often drive from Pamplona to Santander and I have discount bouchers for MuchoOil stations
         but since the prices are not including those discounts those stations are hidden.
     validations:
