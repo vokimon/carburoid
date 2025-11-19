@@ -1,0 +1,36 @@
+name: "💬 Question/Discussion"
+description: A question you want to address to the community
+title: "💬 Question: [brief description]"
+labels:
+- question
+assignees: []
+body:
+- type: markdown
+  attributes:
+    value: |
+      Thanks for taking the time to participate in the community!
+      Please formulate you question or open the topic you want to discuss with the community.
+
+      Using English is encouraged, but any language spoken in Spain is welcome.
+      Maintainters might translate the title or add an english summary to your request if you don't.
+- type: dropdown
+  id: question-type
+  attributes:
+    label: Question topic
+    description: Which kind of question?
+    options:
+    - Application usage
+    - Future developments
+    - Contributing
+    - Licensing and distribution
+    - Community issues
+    - Other
+  validations:
+    required: true
+- type: textarea
+  id: description
+  attributes:
+    label: Question
+    description: Formulate your question
+  validations:
+    required: true

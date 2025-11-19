@@ -9,12 +9,10 @@ body:
   attributes:
     value: |
       Thanks for taking the time to report a bug!
-      Please fill out the following
-      details to help us diagnose the issue.
+      Please fill out the following details to help us diagnose the issue.
 
       Using English is encouraged, but any language spoken in Spain is welcome.
-      Maintainters might edit the title of the issue to translate it
-      or to add an english summary of your request.
+      Maintainters might translate the title or add an english summary to your request if you don't.
 - type: dropdown
   id: app-version
   attributes:
