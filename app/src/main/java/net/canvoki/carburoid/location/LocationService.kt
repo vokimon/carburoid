@@ -55,9 +55,7 @@ class LocationService(
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
     }
 
-    private fun tr(stringId: Int): String {
-        return activity.getString(stringId)
-    }
+    private fun tr(stringId: Int): String = activity.getString(stringId)
 
     fun setFixedLocation(location: Location) {
         fixedLocation = location
@@ -82,12 +80,11 @@ class LocationService(
         requestDeviceLocation()
     }
 
-    private fun hasPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
+    private fun hasPermission(): Boolean =
+        ContextCompat.checkSelfPermission(
             activity,
             Manifest.permission.ACCESS_FINE_LOCATION,
         ) == PackageManager.PERMISSION_GRANTED
-    }
 
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
@@ -205,9 +202,7 @@ class LocationService(
             }
     }
 
-    fun getCurrentLocationDescription(): String {
-        return description ?: "Location not available"
-    }
+    fun getCurrentLocationDescription(): String = description ?: "Location not available"
 
     private suspend fun geocodeLocation(location: Location): String? {
         return withContext(Dispatchers.IO) {
@@ -267,7 +262,7 @@ class LocationService(
         return (
             locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        )
+            )
     }
 
     private fun openSystemPermissionsSettings() {
@@ -289,7 +284,5 @@ class LocationService(
         }
     }
 
-    fun getCurrentLocation(): Location? {
-        return fixedLocation ?: currentLocation
-    }
+    fun getCurrentLocation(): Location? = fixedLocation ?: currentLocation
 }

@@ -154,8 +154,9 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
             return null
         }
 
-        private fun matchToCoords(match: MatchResult): GeoPoint? {
-            return fromTextComponents(match.groupValues[1], match.groupValues[2])
-        }
+        private fun matchToCoords(match: MatchResult): GeoPoint? = fromTextComponents(
+            match.groupValues[1],
+            match.groupValues[2],
+        )
     }
 }

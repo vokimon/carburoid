@@ -56,7 +56,8 @@ class StationDetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.textOpeningHours.text = station.openingHours?.toString() ?: getString(R.string.station_status_permanently_closed)
+        binding.textOpeningHours.text = station.openingHours?.toString()
+            ?: getString(R.string.station_status_permanently_closed)
 
         binding.textExclusivePriceWarning.visibility = if (station.isPublicPrice) View.GONE else View.VISIBLE
 

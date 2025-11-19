@@ -19,8 +19,7 @@ class GasStationAdapter(
     private var context: Context,
     private var stations: List<GasStation>,
     private val onStationClick: (GasStation) -> Unit = {},
-) :
-    RecyclerView.Adapter<GasStationAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<GasStationAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.text_name)
         val address: TextView = view.findViewById(R.id.text_address)

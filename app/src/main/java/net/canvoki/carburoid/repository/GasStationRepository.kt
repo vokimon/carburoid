@@ -69,9 +69,7 @@ class GasStationRepository(
         return parsed
     }
 
-    fun getStationById(id: Int): GasStation? {
-        return getData()?.stations?.find { it.id == id }
-    }
+    fun getStationById(id: Int): GasStation? = getData()?.stations?.find { it.id == id }
 
     fun launchFetch() {
         if (!isBackgroundUpdateRunning.compareAndSet(false, true)) { // expected, new value

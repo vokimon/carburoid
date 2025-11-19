@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity() {
             useSavedLocation(savedInstanceState) ||
                 useDeepLinkIntentLocation(intent) ||
                 useDeviceLocation()
-        )
+            )
     }
 
     override fun onStart() {
@@ -170,15 +170,14 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
             R.id.action_settings -> {
                 startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)

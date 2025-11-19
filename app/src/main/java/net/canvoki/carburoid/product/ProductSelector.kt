@@ -9,11 +9,8 @@ import androidx.core.content.edit
 
 class ProductSelector
     @JvmOverloads
-    constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0,
-    ) : AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
         private var listener: ((String) -> Unit)? = null
         private var suppressCallback = false
 
@@ -37,7 +34,6 @@ class ProductSelector
                     products,
                 ),
             )
-
             val selected = loadLastSelectedProduct()
             setText(selected, false)
         }
@@ -82,13 +78,10 @@ class ProductSelector
             }
         }
 
-        private fun loadLastSelectedProduct(): String {
-            return preferences().getString(PREF_LAST_SELECTED, DEFAULT_PRODUCT) ?: DEFAULT_PRODUCT
-        }
+        private fun loadLastSelectedProduct(): String =
+            preferences().getString(PREF_LAST_SELECTED, DEFAULT_PRODUCT) ?: DEFAULT_PRODUCT
 
-        private fun preferences(): SharedPreferences {
-            return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        }
+        private fun preferences(): SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
         override fun onRestoreInstanceState(state: Parcelable?) {
             super.onRestoreInstanceState(state)

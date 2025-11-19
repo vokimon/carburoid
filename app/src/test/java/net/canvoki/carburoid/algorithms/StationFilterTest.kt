@@ -16,12 +16,11 @@ import java.time.DayOfWeek
  * We cannot use a Location based solution since
  * this is an Android Framework not available for testing.
  */
-class DummyDistanceMethod() : DistanceMethod {
-    override fun computeDistance(station: GasStation): Float? {
-        return station.longitude?.let {
+class DummyDistanceMethod : DistanceMethod {
+    override fun computeDistance(station: GasStation): Float? =
+        station.longitude?.let {
             kotlin.math.abs(it).toFloat()
         }
-    }
 
     override fun getReferenceName(): String = "Dummy"
 }
@@ -32,8 +31,8 @@ fun dummyStation(
     price: Double?,
     isPublicPrice: Boolean = true,
     hours: String = "L-D: 24H",
-): GasStation {
-    return GasStation(
+): GasStation =
+    GasStation(
         id = index,
         name = "Station $index at $distance km, $price €",
         address = "Address $index",
@@ -48,7 +47,6 @@ fun dummyStation(
         isPublicPrice = isPublicPrice,
         openingHours = OpeningHours.parse(hours) ?: OpeningHours(),
     )
-}
 
 fun assertResult(
     expected: List<String>,
@@ -254,14 +252,15 @@ class StationFilterTest {
             expected =
                 listOf(
                     "Station 1 at 10.0 km, 0.2 €",
-                    //"Station 2 at 15.0 km, 0.3 €", // Closed
+                    // "Station 2 at 15.0 km, 0.3 €", // Closed
                 ),
         )
     }
 
     @Test
     fun `closed station opening soon`() {
-        atMadridInstant(DayOfWeek.TUESDAY, "09:30") { // 1:30h to 11h
+        atMadridInstant(DayOfWeek.TUESDAY, "09:30") {
+            // 1:30h to 11h
             testCase(
                 hideClosedMarginInMinutes = 2 * 60, // Margin 2h
                 stations =
@@ -280,7 +279,8 @@ class StationFilterTest {
 
     @Test
     fun `closed station opening late`() {
-        atMadridInstant(DayOfWeek.TUESDAY, "08:30") { // 2:30h to 11h
+        atMadridInstant(DayOfWeek.TUESDAY, "08:30") {
+            // 2:30h to 11h
             testCase(
                 hideClosedMarginInMinutes = 2 * 60, // Margin 2h
                 stations =
@@ -291,7 +291,7 @@ class StationFilterTest {
                 expected =
                     listOf(
                         "Station 1 at 10.0 km, 0.5 €",
-                        //"Station 2 at 15.0 km, 0.3 €", // Closed during the next 2h
+                        // "Station 2 at 15.0 km, 0.3 €", // Closed during the next 2h
                     ),
             )
         }
@@ -299,7 +299,8 @@ class StationFilterTest {
 
     @Test
     fun `closed station opening late but extended margin`() {
-        atMadridInstant(DayOfWeek.TUESDAY, "08:30") { // 2:30h to 11h
+        atMadridInstant(DayOfWeek.TUESDAY, "08:30") {
+            // 2:30h to 11h
             testCase(
                 hideClosedMarginInMinutes = 3 * 60, // Margin 3h!
                 stations =
@@ -318,7 +319,8 @@ class StationFilterTest {
 
     @Test
     fun `permanently closed with infinite margin (one week)`() {
-        atMadridInstant(DayOfWeek.TUESDAY, "08:30") { // 2:30h to 11h
+        atMadridInstant(DayOfWeek.TUESDAY, "08:30") {
+            // 2:30h to 11h
             testCase(
                 hideClosedMarginInMinutes = 7 * 24 * 60, // Margin 3h!
                 stations =
@@ -337,7 +339,8 @@ class StationFilterTest {
 
     @Test
     fun `closed stations do not lower the cutoff price`() {
-        atMadridInstant(DayOfWeek.TUESDAY, "10:30") { // 0:30h to 11h
+        atMadridInstant(DayOfWeek.TUESDAY, "10:30") {
+            // 0:30h to 11h
             testCase(
                 hideClosedMarginInMinutes = 2 * 60, // Margin 2h
                 stations =

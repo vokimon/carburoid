@@ -51,6 +51,4 @@ fun <T> atMadridInstant(
     day: DayOfWeek,
     localtime: String,
     block: () -> T,
-): T {
-    return atMadridInstant(day, localtime, weekOffset = 0, block)
-}
+): T = atMadridInstant(day, localtime, weekOffset = 0, block)

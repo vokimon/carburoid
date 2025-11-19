@@ -307,8 +307,8 @@ class LocationPickerActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
             android.R.id.home -> { // ← back arrow in ActionBar
                 returnCancel()
                 true
@@ -319,7 +319,6 @@ class LocationPickerActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
 
     private fun returnCancel() {
         setResult(RESULT_CANCELED)

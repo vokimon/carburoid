@@ -136,8 +136,8 @@ class GasStationTest {
         )
     }
 
-    fun twoProductsStation(): GasStation {
-        return GasStation.parse(
+    fun twoProductsStation(): GasStation =
+        GasStation.parse(
             """
             {
                 "Rótulo": "CEPSA",
@@ -151,7 +151,6 @@ class GasStationTest {
                 "Tipo Venta": "P"
             }""",
         )
-    }
 
     @After
     fun resetCurrentProduct() {

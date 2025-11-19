@@ -10,9 +10,7 @@ interface GasStationApi {
 }
 
 object GasStationApiFactory {
-    fun create(): GasStationApi {
-        return retrofit.create(GasStationApi::class.java)
-    }
+    fun create(): GasStationApi = retrofit.create(GasStationApi::class.java)
 
     private val retrofit =
         retrofit2.Retrofit.Builder()

@@ -9,7 +9,8 @@ import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
-import java.util.*
+import java.util.Locale
+import java.util.SortedSet
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerFactory
@@ -35,7 +36,9 @@ fun escapeAndroidString(input: String): String {
     return escaped
 }
 
-class MismatchedParamException(val paramName: String) : Exception("Parameter '$paramName' not found in provided params.")
+class MismatchedParamException(val paramName: String) : Exception(
+    "Parameter '$paramName' not found in provided params.",
+)
 
 fun extractParams(template: String): ParamList {
     val tempTemplate = template.replace("{{", "<escaped_open>")

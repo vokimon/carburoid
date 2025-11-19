@@ -1,15 +1,15 @@
 package net.canvoki.carburoid
 
+import androidx.test.platform.app.InstrumentationRegistry
 import net.canvoki.carburoid.model.GasStationResponse
 import org.junit.Test
 import java.io.File
 import java.time.Instant
-import net.canvoki.carburoid.log as println
 
 class LoadBenchmarkTest {
     @Test
     fun testParsingPerformance() {
-        val context = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation().targetContext
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
         val inputStream = context.resources.openRawResource(R.raw.sample_gas_stations)
         val jsonContent = inputStream.bufferedReader().use { it.readText() }
 
@@ -23,18 +23,18 @@ class LoadBenchmarkTest {
             val endTime = System.currentTimeMillis()
             size = response?.stations?.size ?: 0
             times.add(endTime - startTime)
-            println("Iteration $it: ${endTime - startTime}ms, stations: $size")
+            log("Iteration $it: ${endTime - startTime}ms, stations: $size")
         }
 
         val avgTime = times.average()
         val minTime = times.minOrNull()
         val maxTime = times.maxOrNull()
 
-        println("Parsing stats:")
-        println("  Average: ${avgTime}ms")
-        println("  Min: ${minTime}ms")
-        println("  Max: ${maxTime}ms")
-        println("  Stations: $size")
+        log("Parsing stats:")
+        log("  Average: ${avgTime}ms")
+        log("  Min: ${minTime}ms")
+        log("  Max: ${maxTime}ms")
+        log("  Stations: $size")
 
         // Escriu els resultats a un fitxer
 
@@ -52,6 +52,6 @@ class LoadBenchmarkTest {
         resultsFile.appendText(resultLine)
 
         // Mostra el contingut acumulat del fitxer
-        println("BENCHMARK_RESULTS: " + resultLine)
+        log("BENCHMARK_RESULTS: " + resultLine)
     }
 }

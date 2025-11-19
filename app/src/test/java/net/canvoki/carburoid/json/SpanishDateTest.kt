@@ -59,7 +59,10 @@ class SpanishDateTest {
             "27/10/2024 2:30:00",
         )
 
-    @Test fun `fromSpanishDate mising daylight date, uses winter time`() = fromCase("2024-03-31T01:15:00Z", "31/03/2024 2:15:00")
+    @Test fun `fromSpanishDate mising daylight date, uses winter time`() = fromCase(
+        "2024-03-31T01:15:00Z",
+        "31/03/2024 2:15:00",
+    )
 
     private val adapter = SpanishDateTypeAdapter()
 

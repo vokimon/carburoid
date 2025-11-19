@@ -102,9 +102,7 @@ object LanguageSettings {
         preference.entryValues = languages.map { it.code }.toTypedArray()
     }
 
-    private fun getPrefs(context: Context): SharedPreferences {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-    }
+    private fun getPrefs(context: Context): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
     private fun setPreferencesLanguage(
         context: Context,

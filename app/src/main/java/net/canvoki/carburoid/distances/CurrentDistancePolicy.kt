@@ -19,21 +19,15 @@ object CurrentDistancePolicy {
     /**
      * Gets the active distance computation strategy.
      */
-    fun getMethod(): DistanceMethod? {
-        return this.method
-    }
+    fun getMethod(): DistanceMethod? = this.method
 
     /**
      * Computes distance for the given station using the active strategy.
      */
-    fun getDistance(station: GasStation): Float? {
-        return method?.computeDistance(station)
-    }
+    fun getDistance(station: GasStation): Float? = method?.computeDistance(station)
 
     /**
      * Returns the human-readable name of the current reference point/route.
      */
-    fun getReferenceName(): String {
-        return method?.getReferenceName() ?: "Unknown Reference"
-    }
+    fun getReferenceName(): String = method?.getReferenceName() ?: "Unknown Reference"
 }

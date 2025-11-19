@@ -25,10 +25,7 @@ typealias Intervals = List<Interval>
 typealias DayRange = List<DayOfWeek>
 typealias ScheduleEntry = Pair<DayRange, Intervals>
 
-data class OpeningStatus(
-    val isOpen: Boolean,
-    val until: Instant?,
-) {
+data class OpeningStatus(val isOpen: Boolean, val until: Instant?) {
     val defaultThresholdMinutes: Long = 24 * 60
 
     enum class UiValues(
@@ -98,14 +95,13 @@ data class OpeningStatus(
         fun forHumans(
             context: Context,
             status: OpeningStatus,
-        ): String {
-            return if (usesRelativeTime) {
+        ): String =
+            if (usesRelativeTime) {
                 val relative = status.getRelativeTimeSpan(status.until!!, Instant.now())
                 context.getString(stringRes, relative)
             } else {
                 context.getString(stringRes)
             }
-        }
     }
 
     private fun resolveState(thresholdMinutes: Long): UiValues {
@@ -116,9 +112,7 @@ data class OpeningStatus(
     fun forHumans(
         context: Context,
         thresholdMinutes: Long = defaultThresholdMinutes,
-    ): String {
-        return resolveState(thresholdMinutes).forHumans(context, this)
-    }
+    ): String = resolveState(thresholdMinutes).forHumans(context, this)
 
     @ColorInt
     fun color(
@@ -133,13 +127,9 @@ data class OpeningStatus(
     }
 
     @DrawableRes
-    fun icon(thresholdMinutes: Long = defaultThresholdMinutes): Int {
-        return resolveState(thresholdMinutes).iconRes
-    }
+    fun icon(thresholdMinutes: Long = defaultThresholdMinutes): Int = resolveState(thresholdMinutes).iconRes
 
-    private fun getDeadline(thresholdMinutes: Long): Instant {
-        return Instant.now().plus(thresholdMinutes, ChronoUnit.MINUTES)
-    }
+    private fun getDeadline(thresholdMinutes: Long): Instant = Instant.now().plus(thresholdMinutes, ChronoUnit.MINUTES)
 
     private fun getRelativeTimeSpan(
         until: Instant,
@@ -191,7 +181,7 @@ fun toInstant(
     return targetLocal.atZone(zoneId).toInstant()
 }
 
-class OpeningHours() {
+class OpeningHours {
     private var currentDay: DayOfWeek = DayOfWeek.MONDAY
     private val dayIntervals = mutableMapOf<DayOfWeek, MutableList<Pair<LocalTime, LocalTime>>>()
 
@@ -205,8 +195,16 @@ class OpeningHours() {
         val interval = LocalTime.of(startHour, startMinute) to LocalTime.of(endHour, endMinute)
         val intervals = dayIntervals.getOrPut(day) { mutableListOf() }
 
-        val mergeStart = intervals.indexOfFirst { interval.first <= it.second }.let { if (it < 0) intervals.size else it }
-        val mergeEnd = intervals.indexOfFirst { interval.second < it.first }.let { if (it < 0) intervals.size else it }
+        val mergeStart = intervals.indexOfFirst {
+            interval.first <= it.second
+        }.let {
+            if (it < 0) intervals.size else it
+        }
+        val mergeEnd = intervals.indexOfFirst {
+            interval.second < it.first
+        }.let {
+            if (it < 0) intervals.size else it
+        }
 
         if (mergeStart == mergeEnd) {
             intervals.add(mergeStart, interval)
@@ -217,7 +215,7 @@ class OpeningHours() {
         val merged = (
             minOf(intervals[mergeStart].first, interval.first) to
                 maxOf(intervals[mergeEnd - 1].second, interval.second)
-        )
+            )
         intervals.subList(mergeStart, mergeEnd).clear()
         intervals.add(mergeStart, merged)
     }
@@ -275,9 +273,10 @@ class OpeningHours() {
         return openUntil(nextClosing)
     }
 
-    private fun getDayIntervals(day: DayOfWeek): List<Pair<LocalTime, LocalTime>> {
-        return dayIntervals.getOrDefault(day, emptyList())
-    }
+    private fun getDayIntervals(day: DayOfWeek): List<Pair<LocalTime, LocalTime>> = dayIntervals.getOrDefault(
+        day,
+        emptyList(),
+    )
 
     private fun searchNextOpening(day: DayOfWeek): Pair<DayOfWeek, LocalTime>? {
         for (i in 1L..7L) {
@@ -344,9 +343,10 @@ class OpeningHours() {
             .joinToString("; ")
     }
 
-    private fun formatIntervals(intervals: List<Pair<LocalTime, LocalTime>>): String {
-        return intervals.map { formatInterval(it) }.joinToString(" y ")
-    }
+    private fun formatIntervals(intervals: List<Pair<LocalTime, LocalTime>>): String =
+        intervals.map {
+            formatInterval(it)
+        }.joinToString(" y ")
 
     private fun formatInterval(interval: Pair<LocalTime, LocalTime>): String {
         val (start, end) = interval
@@ -356,9 +356,7 @@ class OpeningHours() {
         return "${formatTime(start)}-${formatTime(end)}"
     }
 
-    private fun formatTime(time: LocalTime): String {
-        return String.format(Locale.ROOT, "%02d:%02d", time.hour, time.minute)
-    }
+    private fun formatTime(time: LocalTime): String = String.format(Locale.ROOT, "%02d:%02d", time.hour, time.minute)
 
     private fun spanishWeekDayShort(day: DayOfWeek): String =
         when (day) {
@@ -403,8 +401,8 @@ class OpeningHours() {
             return intervals.map { it!! }
         }
 
-        fun parseDayShort(spec: String): DayOfWeek? {
-            return when (spec) {
+        fun parseDayShort(spec: String): DayOfWeek? =
+            when (spec) {
                 "L" -> DayOfWeek.MONDAY
                 "M" -> DayOfWeek.TUESDAY
                 "X" -> DayOfWeek.WEDNESDAY
@@ -414,7 +412,6 @@ class OpeningHours() {
                 "D" -> DayOfWeek.SUNDAY
                 else -> null
             }
-        }
 
         fun parseDayRange(spec: String): DayRange? {
             val parts = spec.split("-")

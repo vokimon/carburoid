@@ -39,9 +39,9 @@ object ThemeSettings {
         }
     }
 
-    private fun preferences(context: Context): SharedPreferences {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-    }
+    private fun preferences(context: Context): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(
+        context,
+    )
 
     private fun currentValue(context: Context): String? {
         val prefs = preferences(context)

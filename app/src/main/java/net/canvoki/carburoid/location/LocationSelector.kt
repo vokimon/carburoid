@@ -19,11 +19,8 @@ import net.canvoki.carburoid.log
 
 class LocationSelector
     @JvmOverloads
-    constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0,
-    ) : FrameLayout(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
+    FrameLayout(context, attrs, defStyleAttr) {
         private val textInputLayout: TextInputLayout
         private val textInputEditText: TextInputEditText
         private val locationIcon = ContextCompat.getDrawable(context, R.drawable.ic_my_location)
@@ -77,7 +74,10 @@ class LocationSelector
                     Intent(activity, LocationPickerActivity::class.java).apply {
                         putExtra(LocationPickerActivity.EXTRA_CURRENT_LAT, current?.latitude)
                         putExtra(LocationPickerActivity.EXTRA_CURRENT_LON, current?.longitude)
-                        putExtra(LocationPickerActivity.EXTRA_CURRENT_DESCRIPTION, service.getCurrentLocationDescription())
+                        putExtra(
+                            LocationPickerActivity.EXTRA_CURRENT_DESCRIPTION,
+                            service.getCurrentLocationDescription(),
+                        )
                     }
                 launcher.launch(intent)
             }

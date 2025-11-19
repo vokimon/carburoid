@@ -63,7 +63,9 @@ object FilterSettings {
         return FilterConfig(
             hideExpensiveFurther = prefs.getBoolean(KEY_HIDE_EXPENSIVE, default.hideExpensiveFurther),
             onlyPublicPrices = prefs.getBoolean(KEY_ONLY_PUBLIC_PRICES, default.onlyPublicPrices),
-            hideClosedMarginInMinutes = prefs.getString(KEY_HIDE_CLOSED_MARGIN_MINUTES, null)?.toInt() ?: default.hideClosedMarginInMinutes,
+            hideClosedMarginInMinutes =
+                prefs.getString(KEY_HIDE_CLOSED_MARGIN_MINUTES, null)?.toInt()
+                    ?: default.hideClosedMarginInMinutes,
         )
     }
 
@@ -91,7 +93,7 @@ object FilterSettings {
         }
     }
 
-    private fun preferences(context: Context): SharedPreferences {
-        return PreferenceManager.getDefaultSharedPreferences(context)
-    }
+    private fun preferences(context: Context): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(
+        context,
+    )
 }
