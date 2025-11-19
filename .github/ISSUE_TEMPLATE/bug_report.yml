@@ -1,0 +1,111 @@
+name: "🐛 Bug Report"
+description: "Report a reproducible issue or unexpected behavior in Carburoid."
+title: "Bug: [Type a short description]"
+labels: bug
+assignees: ''
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug!  
+        Please fill out the following details to help us diagnose the issue.
+
+  - type: input
+    id: app-version
+    attributes:
+      label: App Version
+      description: "Which version of the app are you using? (e.g., 1.4.2 from Play Store, commit hash if debug build)"
+      placeholder: "1.4.2 / commit abc123"
+    validations:
+      required: true
+
+  - type: input
+    id: android-version
+    attributes:
+      label: Android Version
+      description: "Include the OS version (e.g., Android 12, 13)"
+      placeholder: "Android 13"
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device Model
+      description: "Your device model (e.g., Pixel 6, Samsung S21)"
+      placeholder: "Pixel 7"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install-method
+    attributes:
+      label: Installation Method
+      options:
+        #- Google Play
+        - F-Droid
+        - GitHub Release APK
+        - Built from Source
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the Bug
+      description: "A clear and concise description of the issue."
+      placeholder: "The app crashes when opening the Settings screen..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to Reproduce
+      description: "List the steps needed to trigger the issue."
+      placeholder: |
+        1. Open the app
+        2. Go to Settings
+        3. Tap 'Notifications'
+        4. Crash occurs
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      placeholder: "Settings screen opens normally…"
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      placeholder: "The app crashes instantly with no toast message."
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logcat Output (if available)
+      description: "Attach relevant logcat lines or crash stack trace."
+      render: text
+      placeholder: |
+        java.lang.NullPointerException: ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Information
+      description: "Screenshots, screen recordings, or any extra context. You can drag and drop images into the field"
+      placeholder: "Anything else the team should know?"
+    validations:
+      required: false
+---

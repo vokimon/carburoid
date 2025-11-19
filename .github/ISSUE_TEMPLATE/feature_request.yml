@@ -1,0 +1,37 @@
+name: "✨ Feature request"
+about: Suggest an idea for Carburoid
+title: "Feature: [brief description]"
+labels: enhancement
+assignees: ''
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for your suggestion! Please fill out the form below.
+        Be as specific as possible—this helps us evaluate and implement your idea.
+
+        Using English is encouraged, but any language spoken in Spain is welcome.
+        Maintainters might edit the title of the issue to translate it
+        or to add an english summary of your request.
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: |
+        Describe the situation motivating this request
+      placeholder:
+        I often drive from Pamplona to Santander and I have discount bouchers for MuchoOil stations
+        but since the prices are not including those discounts those stations are hidden.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution(s)
+      description: |
+        Explain in detail which solution(s) you propose to enhance Carburoid in such a situation.
+    validations:
+      required: true
+
