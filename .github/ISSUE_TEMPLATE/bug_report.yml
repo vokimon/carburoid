@@ -1,14 +1,20 @@
-name: "\U0001F41B Bug Report"
+name: "🐛 Bug Report"
 description: Report a reproducible issue or unexpected behavior in Carburoid.
-title: "\U0001F41B Bug: [brief description]"
+title: "🐛 Bug: [brief description]"
 labels:
 - bug
 assignees: []
 body:
 - type: markdown
   attributes:
-    value: "Thanks for taking the time to report a bug!  \nPlease fill out the following
-      details to help us diagnose the issue.\n"
+    value: |
+      Thanks for taking the time to report a bug!
+      Please fill out the following
+      details to help us diagnose the issue.
+
+      Using English is encouraged, but any language spoken in Spain is welcome.
+      Maintainters might edit the title of the issue to translate it
+      or to add an english summary of your request.
 - type: dropdown
   id: app-version
   attributes:
@@ -32,16 +38,16 @@ body:
     label: Android Version
     description: Android version running in your device
     options:
-        - Android 16
-        - Android 15
-        - Android 14
-        - Android 13
-        - Android 12
-        - Android 11
-        - Android 10
-        - Android 9
-        - Android 8.1
-        - Android 8.0
+    - Android 16
+    - Android 15
+    - Android 14
+    - Android 13
+    - Android 12
+    - Android 11
+    - Android 10
+    - Android 9
+    - Android 8.1
+    - Android 8.0
   validations:
     required: true
 - type: input
