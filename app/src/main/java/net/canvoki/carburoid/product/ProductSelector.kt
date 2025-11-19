@@ -21,8 +21,10 @@ class ProductSelector
         }
 
         init {
-            setupProducts()
             setupListener()
+            post {
+                setupProducts()
+            }
         }
 
         private fun setupProducts() {
