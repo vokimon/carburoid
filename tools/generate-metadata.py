@@ -859,6 +859,40 @@ def load_metadata_translations():
         for yaml in Path('meta/translations').glob("*.yaml")
     ))
 
+
+def add_version_to_github_issue_template(template: str, field_name: str, version: str):
+    """
+    Add a version to the app-version dropdown in the GitHub issue template.
+    If the version already exists, do nothing.
+    Uses python-yamlns for loading/saving.
+    """
+    template_path = Path(f".github/ISSUE_TEMPLATE/{template}.yml")
+    template = ns.load(template_path)
+
+    for field in template.body:
+        if field.get('id') == field_name and field.type == "dropdown":
+            options = field.attributes.get("options", [])
+            if version in options:
+                return warn(f"Field '{field_name}' in template '{template_path}' already has version '{version}'.")
+
+            options.append(version)
+            def tuple_version(version_name):
+                return [int(element) for element in version_name.split('.')]
+            options.sort(key=tuple_version, reverse=True)
+            field.attributes["options"] = options
+            break
+    else:
+        raise ValueError(f"Dropdown with id '{field_name}' not found in template '{template_path}'.")
+
+    ns.dump(template, template_path)
+
+def update_github_issue_templates():
+    # TODO: configurable
+    for template, field in [
+        ('bug_report', 'app-version')
+    ]:
+        add_version_to_github_issue_template(template, field, config.last_version)
+
 def generate_fastlane():
     generate_metadata_translation_master()
     translations = load_metadata_translations()
@@ -876,6 +910,7 @@ def generate_fastlane():
 
 def generateMetadata():
     update_promo_images()
+    update_github_issue_templates()
     generate_fastlane()
     #update_flatpak_metainfo()
     #update_flatpak_desktop_file()
