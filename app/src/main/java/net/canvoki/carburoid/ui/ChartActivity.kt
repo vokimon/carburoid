@@ -18,7 +18,7 @@ class ChartActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_chart_view)
 
         val composeView = findViewById<ComposeView>(R.id.chartView)
 

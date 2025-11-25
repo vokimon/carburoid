@@ -42,6 +42,11 @@
             android:parentActivityName=".MainActivity" />
 
         <activity
+            android:name=".ui.ChartActivity"
+            android:label="@string/menu_settings"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
             android:name=".ui.StationDetailActivity"
             android:exported="false" />
 
