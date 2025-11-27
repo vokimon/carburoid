@@ -22,13 +22,13 @@ fun Material2KoalaTheme(
             color = materialColors.onBackground,
             majorGridlineStyle = LineStyle(
                 brush = SolidColor(materialColors.outlineVariant),
-                alpha = 0.2f,
-                strokeWidth = 0.8.dp
+                alpha = 0.5f,
+                strokeWidth = 1.0.dp
             ),
             minorGridlineStyle = LineStyle(
                 brush = SolidColor(materialColors.outlineVariant),
-                alpha = 0.05f,
-                strokeWidth = 0.2.dp
+                alpha = 0.2f,
+                strokeWidth = 1.0.dp
             ),
         ),
     ) {

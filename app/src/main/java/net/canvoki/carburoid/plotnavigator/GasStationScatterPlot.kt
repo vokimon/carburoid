@@ -211,7 +211,7 @@ fun ScatterPlot(
                 ),
                 lineStyle = LineStyle(
                     strokeWidth = 2.dp,
-                    brush = SolidColor(Color.Red)
+                    brush = SolidColor(colors.outline),
                 ),
                 symbol = null // sense punts
             )
