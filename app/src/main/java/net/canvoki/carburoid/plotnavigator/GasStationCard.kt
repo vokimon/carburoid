@@ -109,7 +109,7 @@ fun GasStationCard(
 private fun OpeningStatusPill(station: GasStation) {
     val context = LocalContext.current
     val openStatus = station.openStatus(Instant.now())
-    val statusColor = Color(openStatus.color(context))
+    val statusColor = openStatus.color(MaterialTheme.colorScheme)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,

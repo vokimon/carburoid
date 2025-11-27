@@ -7,6 +7,8 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.material3.ColorScheme
+import androidx.compose.ui.graphics.Color
 import net.canvoki.carburoid.R
 import java.time.DayOfWeek
 import java.time.Instant
@@ -32,11 +34,13 @@ data class OpeningStatus(val isOpen: Boolean, val until: Instant?) {
         @field:StringRes val stringRes: Int,
         @field:AttrRes val colorAttr: Int,
         @field:DrawableRes val iconRes: Int,
+        val colorSelector: (ColorScheme) -> Color,
         val usesRelativeTime: Boolean = false,
     ) {
         PERMANENTLY_CLOSED(
             stringRes = R.string.station_status_permanently_closed,
             colorAttr = AppCompatR.attr.colorError,
+            colorSelector = { s -> s.error },
             iconRes = R.drawable.ic_block,
         ) {
             override fun matches(
@@ -47,6 +51,7 @@ data class OpeningStatus(val isOpen: Boolean, val until: Instant?) {
         OPENS_AT(
             stringRes = R.string.station_status_opens_at,
             colorAttr = MaterialR.attr.colorOnSurfaceVariant,
+            colorSelector = { s -> s.onSurfaceVariant },
             iconRes = R.drawable.ic_lock_clock,
             usesRelativeTime = true,
         ) {
@@ -58,6 +63,7 @@ data class OpeningStatus(val isOpen: Boolean, val until: Instant?) {
         OPEN_24H(
             stringRes = R.string.station_status_247,
             colorAttr = AppCompatR.attr.colorPrimary,
+            colorSelector = { s -> s.primary },
             iconRes = R.drawable.ic_schedule,
         ) {
             override fun matches(
@@ -68,6 +74,7 @@ data class OpeningStatus(val isOpen: Boolean, val until: Instant?) {
         CLOSES_SOON(
             stringRes = R.string.station_status_closes_at,
             colorAttr = AppCompatR.attr.colorError,
+            colorSelector = { s -> s.error },
             iconRes = R.drawable.ic_warning,
             usesRelativeTime = true,
         ) {
@@ -79,6 +86,7 @@ data class OpeningStatus(val isOpen: Boolean, val until: Instant?) {
         OPEN(
             stringRes = R.string.station_status_open,
             colorAttr = AppCompatR.attr.colorPrimary,
+            colorSelector = { s -> s.primary },
             iconRes = R.drawable.ic_check_circle,
         ) {
             override fun matches(
@@ -124,6 +132,13 @@ data class OpeningStatus(val isOpen: Boolean, val until: Instant?) {
         @AttrRes val colorAttr = resolveState(thresholdMinutes).colorAttr
         context.theme.resolveAttribute(colorAttr, typedValue, true)
         return typedValue.data
+    }
+
+    fun color(
+        colorScheme: ColorScheme,
+        thresholdMinutes: Long = defaultThresholdMinutes,
+    ): Color {
+        return resolveState(thresholdMinutes).colorSelector(colorScheme)
     }
 
     @DrawableRes
