@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,14 +16,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -57,6 +58,7 @@ import net.canvoki.carburoid.ui.settings.ThemeSettings
 import net.canvoki.carburoid.log
 
 
+
 fun getX(station: GasStation): Float? = station.distanceInMeters?.div(1000.0f)
 fun getY(station: GasStation): Float? = station.prices["Gasoleo A"]?.toFloat()
 
@@ -83,7 +85,6 @@ fun PortNavigatorScreen(stations: List<GasStation>) {
         }
     }
 }
-
 @Composable
 fun GasStationScatterPlot(
     items: List<GasStation>,
@@ -92,37 +93,17 @@ fun GasStationScatterPlot(
     modifier: Modifier = Modifier,
 ) {
     var selectedItem by remember { mutableStateOf<GasStation?>(null) }
-    log("Redraw GasStationScatterPlot ${selectedItem?.id}")
 
-    WrapFlow(
-        modifier = modifier,
-    ) {
-        AnimatedVisibility(
-            visible = selectedItem != null,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            Card(
-                elevation = CardDefaults.cardElevation(),
-            ) {
-                if (selectedItem == null) {
-                    Text("TODO")
-                }
-                else {
-                    GasStationCard(selectedItem!!)
-                }
-            }
-        }
+    Column(modifier = Modifier.fillMaxWidth()) {
         Material2KoalaTheme {
+            GasStationCard(selectedItem)
             ScatterPlot(
                 items = items,
                 getX = getX,
                 getY = getY,
                 selectedItem = selectedItem,
-                onPointClick = remember {{
-                    log("Setting ${selectedItem?.id} -> ${it?.id} ")
-                    selectedItem = it
-                }},
+                onPointClick = { selectedItem = it },
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
@@ -220,20 +201,6 @@ fun ScatterPlot(
         yAxisLabels = { "%.03f€".format(it)},
         modifier = modifier.horizontalSwipe(onStep=::changePage),
     ) {
-        LinePlot2(
-            data = valid,
-            symbol = { point ->
-                Symbol(
-                    fillBrush = SolidColor(colors.tertiary),
-                    outlineBrush = SolidColor(colors.onTertiary),
-                    modifier = Modifier.clickable {
-                        val item = (point as StationPoint).item
-                        log("Simbol Clicked ${item.id} ${item.name}")
-                        onPointClick(item)
-                    },
-                )
-            },
-        )
         selectedItem?.let { item ->
             val x = getX(item) ?: return@let
 
@@ -249,6 +216,24 @@ fun ScatterPlot(
                 symbol = null // sense punts
             )
         }
+        LinePlot2(
+            data = valid,
+            symbol = { point ->
+                val stationPoint = point as StationPoint
+                val isSelected = stationPoint.item.id == selectedItem?.id
+                Symbol(
+                    fillBrush = SolidColor(if (isSelected) colors.primary else colors.tertiary),
+                    outlineBrush = SolidColor(if (isSelected) colors.onPrimary else colors.onTertiary),
+                    modifier = Modifier.clickable {
+                        val item = (point as StationPoint).item
+                        log("Simbol Clicked ${item.id} ${item.name}")
+                        onPointClick(item)
+                    }
+                    .size(if (isSelected) 12.dp else 8.dp)
+
+                )
+            },
+        )
     }
 }
 

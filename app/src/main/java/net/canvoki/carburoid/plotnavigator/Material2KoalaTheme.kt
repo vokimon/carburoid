@@ -23,12 +23,12 @@ fun Material2KoalaTheme(
             majorGridlineStyle = LineStyle(
                 brush = SolidColor(materialColors.outlineVariant),
                 alpha = 0.2f,
-                strokeWidth = 1.dp
+                strokeWidth = 0.8.dp
             ),
             minorGridlineStyle = LineStyle(
                 brush = SolidColor(materialColors.outlineVariant),
-                alpha = 0.1f,
-                strokeWidth = 0.5.dp
+                alpha = 0.05f,
+                strokeWidth = 0.2.dp
             ),
         ),
     ) {

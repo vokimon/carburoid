@@ -34,10 +34,13 @@ fun GasStationCard(
     modifier: Modifier = Modifier,
     onClick: (GasStation) -> Unit = {}
 ) {
+    val context = LocalContext.current
     val priceText = station?.price?.let { "%.03f €".format(it) } ?: "?"
     val distance = station?.let { CurrentDistancePolicy.getDistance(it) }
     val distanceText = distance?.let { "%.01f km".format(it / 1000) } ?: "?? km"
-    val locationText = listOfNotNull(station?.city, station?.state).joinToString(" - ").ifEmpty { "Unknown" }
+    val locationText = listOfNotNull(station?.city, station?.state)
+        .joinToString(" - ")
+        .ifEmpty { context.getString(R.string.station_no_city) }
 
     Column(
         modifier = modifier
@@ -51,7 +54,7 @@ fun GasStationCard(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = station?.name ?: "No station selected",
+                    text = station?.name ?: context.getString(R.string.station_no_name),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                     maxLines = 1,
@@ -66,7 +69,7 @@ fun GasStationCard(
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = station?.address ?: "",
+                    text = station?.address ?: context.getString(R.string.station_no_address),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline,
                     maxLines = 1,
