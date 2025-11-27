@@ -2,6 +2,7 @@ language_code: eu
 language_name: Euskara
 app_name: Carburoid
 menu_settings: Doikuntzak
+menu_chart: Grafikoa
 settings_category_language_appearance: Hizkuntza eta itxura
 settings_language_title: Hizkuntza
 settings_language_summary: Aplikazioaren hizkuntza aldatzeko

@@ -2,6 +2,7 @@ language_code: ca
 language_name: Català
 app_name: Carburoid
 menu_settings: Configuració
+menu_chart: Gràfic
 settings_category_language_appearance: Llengua i aparença
 settings_language_title: Llengua
 settings_language_summary: Canvia la llengua de l'aplicació

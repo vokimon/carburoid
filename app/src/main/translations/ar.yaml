@@ -2,6 +2,7 @@ language_code: ar
 language_name: العربية
 app_name: Carburoid
 menu_settings: الإعدادات
+menu_chart: الرسم البياني
 settings_category_language_appearance: اللغة والمظهر
 settings_language_title: اللغة
 settings_language_summary: غيّر لغة التطبيق

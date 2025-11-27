@@ -4,6 +4,7 @@
     <string name="language_name">Català</string>
     <string name="app_name">Carburoid</string>
     <string name="menu_settings">Configuració</string>
+    <string name="menu_chart">Gràfic</string>
     <string name="settings_category_language_appearance">Llengua i aparença</string>
     <string name="settings_language_title">Llengua</string>
     <string name="settings_language_summary">Canvia la llengua de l\'aplicació</string>

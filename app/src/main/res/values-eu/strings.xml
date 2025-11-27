@@ -4,6 +4,7 @@
     <string name="language_name">Euskara</string>
     <string name="app_name">Carburoid</string>
     <string name="menu_settings">Doikuntzak</string>
+    <string name="menu_chart">Grafikoa</string>
     <string name="settings_category_language_appearance">Hizkuntza eta itxura</string>
     <string name="settings_language_title">Hizkuntza</string>
     <string name="settings_language_summary">Aplikazioaren hizkuntza aldatzeko</string>

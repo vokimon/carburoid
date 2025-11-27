@@ -2,6 +2,7 @@ language_code: es
 language_name: Español
 app_name: Carburoid
 menu_settings: Ajustes
+menu_chart: Gráfico
 settings_category_language_appearance: Idioma y apariencia
 settings_language_title: Idioma
 settings_language_summary: Cambia el idioma de la aplicación
