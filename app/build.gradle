@@ -5,6 +5,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.plugin.compose' version '2.2.20'
     //id "org.jlleitschuh.gradle.ktlint"
+    id 'com.diffplug.spotless' version "6.25.0"
 }
 
 def versionPropsFile = rootProject.file("version.properties")
@@ -131,6 +132,15 @@ tasks.withType(Test) {
 
 task yamlToAndroidStrings(type: YamlToAndroidStringsTask)
 preBuild.dependsOn yamlToAndroidStrings
+
+spotless {
+    kotlin {
+        ktfmt().googleStyle()
+    }
+    kotlinGradle {
+        ktfmt().googleStyle()
+    }
+}
 
 /*
 ktlint {

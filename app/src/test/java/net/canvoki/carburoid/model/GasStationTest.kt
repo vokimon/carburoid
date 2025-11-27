@@ -7,7 +7,7 @@ import org.junit.Before
 import org.junit.Test
 import java.util.Locale
 
-@Suppress("ktlint:max-line-length")
+@Suppress("ktlint:standard:max-line-length")
 val fullJsonCase = """{"IDEESS":1234,"Rótulo":"Test Station","Dirección":"Calle Principal 123","Localidad":"Madrid","Provincia":"Madrid","Latitud":"40,4168","Longitud (WGS84)":"-3,7038","Tipo Venta":"P","Horario":"L-D: 24H","prices":{"Gasolina 95":1.234},"Precio Gasolina 95":"1,234"}"""
 
 class GasStationTest {

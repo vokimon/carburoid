@@ -4,9 +4,10 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.Locale
 
-fun locationStr(l: GeoPoint?): String? {
-    return l?.let { "GeoPoint<${"%.4f".format(Locale.ROOT, it.latitude)},${"%.4f".format(Locale.ROOT, it.longitude)}>" }
-}
+fun locationStr(l: GeoPoint?): String? =
+    l?.let {
+        "GeoPoint<${"%.4f".format(Locale.ROOT, it.latitude)},${"%.4f".format(Locale.ROOT, it.longitude)}>"
+    }
 
 class GeoPointTest {
     ////////////////////////////////////////////////////////////////////////////////
