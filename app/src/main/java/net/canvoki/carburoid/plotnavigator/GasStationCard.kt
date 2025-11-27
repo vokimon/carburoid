@@ -30,59 +30,59 @@ import java.time.Instant
 
 @Composable
 fun GasStationCard(
-    station: GasStation,
+    station: GasStation?,
     modifier: Modifier = Modifier,
     onClick: (GasStation) -> Unit = {}
 ) {
-    val priceText = station.price?.let { "%.03f €".format(it) } ?: "?"
-    val distance = CurrentDistancePolicy.getDistance(station)
+    val priceText = station?.price?.let { "%.03f €".format(it) } ?: "?"
+    val distance = station?.let { CurrentDistancePolicy.getDistance(it) }
     val distanceText = distance?.let { "%.01f km".format(it / 1000) } ?: "?? km"
-    val locationText = listOfNotNull(station.city, station.state).joinToString(" - ").ifEmpty { "Unknown" }
+    val locationText = listOfNotNull(station?.city, station?.state).joinToString(" - ").ifEmpty { "Unknown" }
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
+//            .fillMaxWidth()
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(),
-            ) { onClick(station) }
+            ) { station?.let { onClick(station) } }
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = station.name ?: "No Name",
+                    text = station?.name ?: "No station selected",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                     maxLines = 1,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                 )
                 Text(
                     text = locationText,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.secondary,
                     maxLines = 1,
-                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = station.address ?: "No Address",
+                    text = station?.address ?: "",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline,
                     maxLines = 1,
                     fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
-                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 // <-- Replace previous pill Row with this composable -->
-                OpeningStatusPill(station)
+                station?.let { OpeningStatusPill(it) }
             }
 
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = if (station.isPublicPrice) priceText else "*$priceText",
+                    text = if (station == null || station.isPublicPrice) priceText else "*$priceText",
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     textAlign = TextAlign.End, // Aling digits
