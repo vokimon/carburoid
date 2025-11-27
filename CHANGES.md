@@ -4,6 +4,7 @@
 
 - 🐛 Osm links were not processed
 - 🌐 Missing translations for Location picker 'Accept' button
+- 🚧 Experimental Plot view
 
 ## 1.2.3 (2025-11-15)
 
