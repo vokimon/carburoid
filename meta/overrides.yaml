@@ -12,7 +12,6 @@ fdroid_categories:
 fdroid_fields:
   AuthorEmail: fdroid@canvoki.net
   AuthorName: David García Gazón
-  AuthorEmail: voki@canvoki.net
   AuthorWebSite: https://canvoki.net/coder
   UpdateCheckMode: Tags carburoid-([\d.]+)
   Binaries: https://github.com/vokimon/carburoid/releases/download/carburoid-%v/net.canvoki.carburoid-floss-%v-release.apk

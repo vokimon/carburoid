@@ -42,7 +42,8 @@ class SvgTemplate:
             namespaces=self._xpath_nsmap
         )
         if not text_els:
-            raise ValueError(f"No text element found with id='{element_id}'")
+            return None
+            raise ValueError(f"No text element found with id='{element_id}' in {self.template_path}")
         return self._get_text_content(text_els[0]).strip()
 
     def _update_text_in_tree(self, tree, key: str, value: str) -> bool:

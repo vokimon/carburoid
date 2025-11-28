@@ -240,7 +240,12 @@ def generate_fastlane_icon(metadata_path):
 
 def motto_from_splash(config):
     from svg_template import SvgTemplate
-    return SvgTemplate(config.splash_svg).extract('motto').strip()
+    if not Path(config.splash_svg).exists():
+        return None
+    motto = SvgTemplate(config.splash_svg).extract('motto')
+    if motto is None:
+        return warn(f"No text element found with id='{motto}' in {config.splash_svg}")
+    return motto.strip() or None
 
 def generate_fdroid_metadata_file(metadata_path):
     meta = ns()
@@ -323,6 +328,11 @@ def version_to_code(version, epoch=0) -> str:
 
 @dataclass
 class Config():
+    asset_id: str | None # assetlib id
+    category: int | None # assetlib category
+    previews: list
+    description_files: list[str] = field(default_factory=lambda: ["README.md"])
+
     repo: str = field(default_factory=git.repo_name)
     branch: str = field(default_factory=git.current_branch)
     git_hash: str = field(default_factory=git.revision_hash)
@@ -349,6 +359,11 @@ class Config():
     bitcoin_id: str = ""
     version_tag_prefix: str = 'v'
 
+
+    # TODO: Rename to explicitly 
+    @property
+    def project_license(self):
+        return spdx2assetlib_license.get(self.license) or spdx2assetlib_license['']
 
     @property
     def repo_url(self):
@@ -427,7 +442,7 @@ class Config():
         Emoji will be filter out.
         Anything besides 
         """
-        readme = Path("README.md").read_text()
+        readme = Path(self.description_files[0]).read_text()
         readme = readme.split('#',1)[1]
         readme_lines = readme.splitlines()
         self.project_name = self.project_name or readme_lines.pop(0).replace('#', '').strip().replace('-',' ').title()
@@ -867,6 +882,8 @@ def add_version_to_github_issue_template(template: str, field_name: str, version
     Uses python-yamlns for loading/saving.
     """
     template_path = Path(f".github/ISSUE_TEMPLATE/{template}.yml")
+    if not Path(template_path).exists():
+        return warn(f"Not found issue template '{template_path}'.")
     template = ns.load(template_path)
 
     for field in template.body:
