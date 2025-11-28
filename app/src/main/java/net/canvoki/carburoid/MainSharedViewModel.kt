@@ -13,6 +13,7 @@ import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.timeits
+import net.canvoki.carburoid.log
 
 class MainSharedViewModel(
     application: Application,
@@ -24,6 +25,16 @@ class MainSharedViewModel(
 
     private val _stationsUpdated = MutableSharedFlow<List<GasStation>>(replay = 0)
     val stationsUpdated: SharedFlow<List<GasStation>> = _stationsUpdated.asSharedFlow()
+
+    init {
+        // Observe filter changes
+        viewModelScope.launch {
+            FilterSettings.changes.collect {
+                log("EVENT Filter updated")
+                reloadStations()
+            }
+        }
+    }
 
     /**
      * Returns the current list of stations.

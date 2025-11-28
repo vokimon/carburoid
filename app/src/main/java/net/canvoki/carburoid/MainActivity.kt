@@ -136,13 +136,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-        lifecycleScope.launch {
-            FilterSettings.changes.collect {
-                nolog("EVENT Filter updated")
-                loadGasStations()
-            }
-        }
         (
             useSavedLocation(savedInstanceState) ||
                 useDeepLinkIntentLocation(intent) ||
