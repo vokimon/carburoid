@@ -266,7 +266,7 @@ class MainActivity : AppCompatActivity() {
                 showProgress(getString(R.string.refreshing_data))
 
                 // 🚧 Do heavy work in IO (or Default) dispatcher
-                val stations = repository.getData()?.stations ?: emptyList()
+                val stations = viewModel.getStations(repository)
                 val sortedStations =
                     timeit("PROCESSING STATIONS") {
                         StationFilter(config).filter(stations)
