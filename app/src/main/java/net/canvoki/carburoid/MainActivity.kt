@@ -125,7 +125,6 @@ class MainActivity : AppCompatActivity() {
                     is RepositoryEvent.UpdateReady -> {
                         updateLoadingDataStatus()
                         nolog("EVENT UpdateReady")
-                        loadGasStations()
                     }
                     is RepositoryEvent.UpdateFailed -> {
                         updateLoadingDataStatus()

@@ -11,9 +11,10 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.algorithms.StationFilter
-import net.canvoki.carburoid.model.GasStation
-import net.canvoki.carburoid.timeits
 import net.canvoki.carburoid.log
+import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.repository.RepositoryEvent
+import net.canvoki.carburoid.timeits
 
 class MainSharedViewModel(
     application: Application,
@@ -30,8 +31,20 @@ class MainSharedViewModel(
         // Observe filter changes
         viewModelScope.launch {
             FilterSettings.changes.collect {
-                log("EVENT Filter updated")
+                log("VM EVENT Filter updated")
                 reloadStations()
+            }
+        }
+        // Observe repository updates
+        viewModelScope.launch {
+            repository.events.collect { event ->
+                when (event) {
+                    is RepositoryEvent.UpdateReady -> {
+                        log("VM EVENT Repository.UpdateReady")
+                        reloadStations()
+                    }
+                    else -> Unit
+                }
             }
         }
     }
