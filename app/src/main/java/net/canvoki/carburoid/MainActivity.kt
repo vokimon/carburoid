@@ -44,6 +44,10 @@ class MainActivity : AppCompatActivity() {
     private val repository: GasStationRepository
         get() = app.repository
 
+    private val viewModel: MainSharedViewModel by lazy {
+        ViewModelProvider(this).get(MainSharedViewModel::class.java)
+    }
+
     private lateinit var locationService: LocationService
     private lateinit var productSelector: ProductSelector
     private lateinit var recyclerView: RecyclerView
@@ -53,14 +57,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var swipeRefreshLayout: androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     private lateinit var loadingPill: LinearLayout
     private lateinit var gasStationAdapter: GasStationAdapter
-    private lateinit var viewModel: MainSharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         log("onCreate")
 
         super.onCreate(savedInstanceState)
-
-        val viewModel = ViewModelProvider(this).get(MainSharedViewModel::class.java)
 
         setContentView(R.layout.activity_main)
 

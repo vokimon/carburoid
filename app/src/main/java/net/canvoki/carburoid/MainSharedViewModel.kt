@@ -1,15 +1,15 @@
 package net.canvoki.carburoid
 
+import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProvider
 import net.canvoki.carburoid.model.GasStation
-import net.canvoki.carburoid.repository.GasStationRepository
 
 class MainSharedViewModel(
-    application: CarburoidApplication,
+    application: Application,
 ) : AndroidViewModel(application) {
-    private val repository = application.repository
+    private val repository = (application as CarburoidApplication).repository
 
     /**
      * Returns the current list of stations.
