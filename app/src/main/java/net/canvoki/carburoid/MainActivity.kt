@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity() {
                     is RepositoryEvent.UpdateFailed -> {
                         updateLoadingDataStatus()
                         nolog("EVENT UpdateFailed")
-                        showToast(event.error)
+                        showToast(getString(R.string.failed_download, event.error))
                     }
                 }
             }
@@ -261,31 +261,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadGasStations() {
         lifecycleScope.launch {
-            val config = FilterSettings.config(this@MainActivity)
-            try {
-                showProgress(getString(R.string.refreshing_data))
+            showProgress(getString(R.string.refreshing_data))
 
-                // 🚧 Do heavy work in IO (or Default) dispatcher
-                val stations = viewModel.getStations()
-                val sortedStations =
-                    timeit("PROCESSING STATIONS") {
-                        StationFilter(config).filter(stations)
-                    }
+            // 🚧 Do heavy work in IO (or Default) dispatcher
+            val stations = timeit("PROCESSING STATIONS") {
+                viewModel.getStationsToDisplay()
+            }
 
-                timeit("UPDATING CONTENT") {
-                    if (sortedStations.isEmpty()) {
-                        showEmpty(getString(R.string.no_gas_stations))
-                    } else {
-                        gasStationAdapter.updateData(sortedStations)
-                        showContent()
-                    }
+            timeit("UPDATING CONTENT") {
+                if (stations.isEmpty()) {
+                    showEmpty(getString(R.string.no_gas_stations))
+                } else {
+                    gasStationAdapter.updateData(stations)
+                    showContent()
                 }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    showToast(getString(R.string.failed_download, e.message))
-                    showEmpty("Error loading stations: ${e.message}")
-                }
-                e.printStackTrace()
             }
         }
     }

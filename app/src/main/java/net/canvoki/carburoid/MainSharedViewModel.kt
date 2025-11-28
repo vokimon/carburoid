@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProvider
+import net.canvoki.carburoid.algorithms.FilterSettings
+import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.model.GasStation
 
 class MainSharedViewModel(
@@ -17,4 +19,13 @@ class MainSharedViewModel(
      * and triggers fetch if expired.
      */
     fun getStations(): List<GasStation> = repository.getData()?.stations ?: emptyList()
+
+    /**
+     * Returns stations filtered according to the given configuration.
+     */
+    fun getStationsToDisplay(): List<GasStation> {
+        val stations = getStations()
+        val config = FilterSettings.config(getApplication())
+        return StationFilter(config).filter(stations)
+    }
 }
