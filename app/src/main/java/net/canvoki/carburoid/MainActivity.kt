@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.IntentCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -52,11 +53,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var swipeRefreshLayout: androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     private lateinit var loadingPill: LinearLayout
     private lateinit var gasStationAdapter: GasStationAdapter
+    private lateinit var viewModel: MainSharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         log("onCreate")
 
         super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProvider(this)
+            .get(MainSharedViewModel::class.java)
 
         setContentView(R.layout.activity_main)
 
