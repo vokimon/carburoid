@@ -12,8 +12,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.IntentCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -60,8 +60,7 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this)
-            .get(MainSharedViewModel::class.java)
+        val viewModel = ViewModelProvider(this).get(MainSharedViewModel::class.java)
 
         setContentView(R.layout.activity_main)
 
@@ -266,7 +265,7 @@ class MainActivity : AppCompatActivity() {
                 showProgress(getString(R.string.refreshing_data))
 
                 // 🚧 Do heavy work in IO (or Default) dispatcher
-                val stations = viewModel.getStations(repository)
+                val stations = viewModel.getStations()
                 val sortedStations =
                     timeit("PROCESSING STATIONS") {
                         StationFilter(config).filter(stations)
