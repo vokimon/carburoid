@@ -260,11 +260,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadGasStations() {
-        showProgress(getString(R.string.refreshing_data))
+        onStationsReloadStarted()
         lifecycleScope.launch {
             val stations = viewModel.getStationsToDisplay()
             onStationsUpdated(stations)
         }
+    }
+
+    private fun onStationsReloadStarted() {
+        showProgress(getString(R.string.refreshing_data))
     }
 
     private fun onStationsUpdated(stations: List<GasStation>) {
