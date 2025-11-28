@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.timeits
 
 class MainSharedViewModel(
     application: Application,
@@ -26,6 +27,8 @@ class MainSharedViewModel(
     fun getStationsToDisplay(): List<GasStation> {
         val stations = getStations()
         val config = FilterSettings.config(getApplication())
-        return StationFilter(config).filter(stations)
+        return timeits("PROCESSING STATIONS") {
+            StationFilter(config).filter(stations)
+        }
     }
 }

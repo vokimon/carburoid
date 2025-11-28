@@ -260,22 +260,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadGasStations() {
+        showProgress(getString(R.string.refreshing_data))
         lifecycleScope.launch {
-            showProgress(getString(R.string.refreshing_data))
+            val stations = viewModel.getStationsToDisplay()
+            onStationsUpdated(stations)
+        }
+    }
 
-            // 🚧 Do heavy work in IO (or Default) dispatcher
-            val stations =
-                timeit("PROCESSING STATIONS") {
-                    viewModel.getStationsToDisplay()
-                }
-
-            timeit("UPDATING CONTENT") {
-                if (stations.isEmpty()) {
-                    showEmpty(getString(R.string.no_gas_stations))
-                } else {
-                    gasStationAdapter.updateData(stations)
-                    showContent()
-                }
+    private fun onStationsUpdated(stations: List<GasStation>) {
+        timeits("UPDATING CONTENT") {
+            if (stations.isEmpty()) {
+                showEmpty(getString(R.string.no_gas_stations))
+            } else {
+                gasStationAdapter.updateData(stations)
+                showContent()
             }
         }
     }
