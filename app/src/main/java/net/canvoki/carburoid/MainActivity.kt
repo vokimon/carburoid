@@ -79,6 +79,18 @@ class MainActivity : AppCompatActivity() {
 
         showEmpty(getString(R.string.no_gas_stations))
 
+        lifecycleScope.launch {
+            viewModel.stationsReloadStarted.collect {
+                showProgress(getString(R.string.refreshing_data))
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.stationsUpdated.collect { stations ->
+                onStationsUpdated(stations)
+            }
+        }
+
         var locationSelector = findViewById<LocationSelector>(R.id.location_selector)
         locationService =
             LocationService(
