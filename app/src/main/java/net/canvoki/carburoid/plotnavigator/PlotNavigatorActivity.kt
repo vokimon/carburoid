@@ -11,7 +11,6 @@ import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 class PlotNavigatorActivity : ComponentActivity() {
-
     private val app: CarburoidApplication
         get() = application as CarburoidApplication
 

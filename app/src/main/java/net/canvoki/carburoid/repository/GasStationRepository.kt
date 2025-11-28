@@ -23,7 +23,9 @@ sealed class RepositoryEvent {
 
     object UpdateReady : RepositoryEvent()
 
-    data class UpdateFailed(val error: String) : RepositoryEvent()
+    data class UpdateFailed(
+        val error: String,
+    ) : RepositoryEvent()
 }
 
 class GasStationRepository(

@@ -26,17 +26,14 @@ private val gson: Gson by lazy {
         .registerTypeAdapter(
             GasStation::class.java,
             GasStationJsonAdapter(GsonBuilder().create()),
-        )
-        .create()
+        ).create()
 }
 
-fun preprocessSpanishNumbers(json: String): String =
-    Regex("\"([+-]?\\d+),(\\d+)\"").replace(json, "$1.$2")
+fun preprocessSpanishNumbers(json: String): String = Regex("\"([+-]?\\d+),(\\d+)\"").replace(json, "$1.$2")
 
 data class GasStationResponse(
     @SerializedName("ListaEESSPrecio")
     val stations: List<GasStation>,
-
     @SerializedName("Fecha")
     @JsonAdapter(SpanishDateTypeAdapter::class)
     val downloadDate: Instant? = null,
@@ -59,35 +56,26 @@ data class GasStationResponse(
 data class GasStation(
     @SerializedName("IDEESS")
     val id: Int,
-
     @SerializedName("Rótulo")
     val name: String?,
-
     @SerializedName("Dirección")
     val address: String?,
-
     @SerializedName("Localidad")
     val city: String?,
-
     @SerializedName("Provincia")
     val state: String?,
-
     @SerializedName("Latitud")
     @JsonAdapter(SpanishFloatTypeAdapter::class)
     val latitude: Double?,
-
     @SerializedName("Longitud (WGS84)")
     @JsonAdapter(SpanishFloatTypeAdapter::class)
     val longitude: Double?,
-
     @SerializedName("Tipo Venta")
     @JsonAdapter(SaleTypeAdapter::class)
     val isPublicPrice: Boolean = true,
-
     @SerializedName("Horario")
     @JsonAdapter(OpeningHoursAdapter::class)
     val openingHours: OpeningHours? = OpeningHours.parse("L-D: 24H"),
-
     val prices: Map<String, Double?> = emptyMap(),
 ) {
     var distanceInMeters: Float? = null
@@ -119,49 +107,50 @@ data class GasStation(
 }
 
 // ✅ Custom Adapter that reuses Gson’s default adapter and adds `prices` field
-class GasStationJsonAdapter(private val gson: Gson) :
-    JsonDeserializer<GasStation>,
+class GasStationJsonAdapter(
+    private val gson: Gson,
+) : JsonDeserializer<GasStation>,
     JsonSerializer<GasStation> {
-        override fun deserialize(
-            json: JsonElement,
-            typeOfT: Type,
-            context: JsonDeserializationContext,
-        ): GasStation {
-            val jsonObject = json.asJsonObject
-            // Price processing
-            val prices = mutableMapOf<String, Double?>()
-            for (key in jsonObject.keySet()) {
-                if (key.startsWith("Precio ")) {
-                    val value = jsonObject.get(key)
-                    val price =
-                        when {
-                            value.isJsonNull -> null
-                            value.isJsonPrimitive && value.asJsonPrimitive.isNumber -> value.asDouble
-                            else -> null
-                        }
-                    val product = key.removePrefix("Precio ")
-                    prices[product] = price
-                }
+    override fun deserialize(
+        json: JsonElement,
+        typeOfT: Type,
+        context: JsonDeserializationContext,
+    ): GasStation {
+        val jsonObject = json.asJsonObject
+        // Price processing
+        val prices = mutableMapOf<String, Double?>()
+        for (key in jsonObject.keySet()) {
+            if (key.startsWith("Precio ")) {
+                val value = jsonObject.get(key)
+                val price =
+                    when {
+                        value.isJsonNull -> null
+                        value.isJsonPrimitive && value.asJsonPrimitive.isNumber -> value.asDouble
+                        else -> null
+                    }
+                val product = key.removePrefix("Precio ")
+                prices[product] = price
             }
-
-            val base = gson.fromJson(jsonObject, GasStation::class.java)
-            return base.copy(prices = prices)
         }
 
-        override fun serialize(
-            src: GasStation,
-            typeOfSrc: Type,
-            context: JsonSerializationContext,
-        ): JsonElement {
-            val jsonObject = gson.toJsonTree(src).asJsonObject
-
-            // ✅ Add dynamic price fields
-            for ((product, price) in src.prices) {
-                price?.let {
-                    jsonObject.addProperty("Precio $product", toSpanishFloat(it))
-                }
-            }
-
-            return jsonObject
-        }
+        val base = gson.fromJson(jsonObject, GasStation::class.java)
+        return base.copy(prices = prices)
     }
+
+    override fun serialize(
+        src: GasStation,
+        typeOfSrc: Type,
+        context: JsonSerializationContext,
+    ): JsonElement {
+        val jsonObject = gson.toJsonTree(src).asJsonObject
+
+        // ✅ Add dynamic price fields
+        for ((product, price) in src.prices) {
+            price?.let {
+                jsonObject.addProperty("Precio $product", toSpanishFloat(it))
+            }
+        }
+
+        return jsonObject
+    }
+}

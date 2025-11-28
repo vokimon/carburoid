@@ -3,53 +3,60 @@ package net.canvoki.carburoid.plotnavigator
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ripple
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import net.canvoki.carburoid.R
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.model.GasStation
-import net.canvoki.carburoid.R
 import java.time.Instant
 
 @Composable
 fun GasStationCard(
     station: GasStation?,
     modifier: Modifier = Modifier,
-    onClick: (GasStation) -> Unit = {}
+    onClick: (GasStation) -> Unit = {},
 ) {
     val context = LocalContext.current
     val priceText = station?.price?.let { "%.03f €".format(it) } ?: "?"
     val distance = station?.let { CurrentDistancePolicy.getDistance(it) }
     val distanceText = distance?.let { "%.01f km".format(it / 1000) } ?: "?? km"
-    val locationText = listOfNotNull(station?.city, station?.state)
-        .joinToString(" - ")
-        .ifEmpty { context.getString(R.string.station_no_city) }
+    val locationText =
+        listOfNotNull(station?.city, station?.state)
+            .joinToString(" - ")
+            .ifEmpty { context.getString(R.string.station_no_city) }
 
     Column(
-        modifier = modifier
+        modifier =
+            modifier
 //            .fillMaxWidth()
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(),
-            ) { station?.let { onClick(station) } }
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = ripple(),
+                ) { station?.let { onClick(station) } }
+                .padding(horizontal = 16.dp, vertical = 8.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
@@ -113,16 +120,17 @@ private fun OpeningStatusPill(station: GasStation) {
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clip(RoundedCornerShape(50.dp))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(horizontal = 12.dp, vertical = 4.dp)
+        modifier =
+            Modifier
+                .clip(RoundedCornerShape(50.dp))
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .padding(horizontal = 12.dp, vertical = 4.dp),
     ) {
         Icon(
             painter = painterResource(id = openStatus.icon()),
             contentDescription = null,
             tint = statusColor,
-            modifier = Modifier.size(14.dp)
+            modifier = Modifier.size(14.dp),
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
@@ -131,7 +139,7 @@ private fun OpeningStatusPill(station: GasStation) {
             style = MaterialTheme.typography.labelSmall,
             maxLines = 1,
             softWrap = false,
-            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
         )
     }
 }

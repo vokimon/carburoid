@@ -5,7 +5,9 @@ import android.app.Activity
 import android.location.Location
 import com.google.android.gms.location.LocationServices
 
-class LocationProvider(private val activity: Activity) {
+class LocationProvider(
+    private val activity: Activity,
+) {
     fun getLastKnownLocation(
         onSuccess: (Location?) -> Unit,
         onError: (Exception) -> Unit,

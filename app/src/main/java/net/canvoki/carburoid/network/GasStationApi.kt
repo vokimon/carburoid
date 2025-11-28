@@ -13,8 +13,11 @@ object GasStationApiFactory {
     fun create(): GasStationApi = retrofit.create(GasStationApi::class.java)
 
     private val retrofit =
-        retrofit2.Retrofit.Builder()
+        retrofit2.Retrofit
+            .Builder()
             .baseUrl("https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/")
-            .addConverterFactory(retrofit2.converter.scalars.ScalarsConverterFactory.create())
-            .build()
+            .addConverterFactory(
+                retrofit2.converter.scalars.ScalarsConverterFactory
+                    .create(),
+            ).build()
 }

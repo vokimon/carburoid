@@ -27,7 +27,11 @@ import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import java.net.URLEncoder
 
-data class Suggestion(val display: String, val lat: Double, val lon: Double)
+data class Suggestion(
+    val display: String,
+    val lat: Double,
+    val lon: Double,
+)
 
 class LocationPickerActivity : AppCompatActivity() {
     companion object {
@@ -214,7 +218,8 @@ class LocationPickerActivity : AppCompatActivity() {
 
         val client = OkHttpClient()
         val request =
-            Request.Builder()
+            Request
+                .Builder()
                 .url(url)
                 .header("User-Agent", packageName)
                 .build()
@@ -263,7 +268,8 @@ class LocationPickerActivity : AppCompatActivity() {
             try {
                 val client = OkHttpClient()
                 val request =
-                    Request.Builder()
+                    Request
+                        .Builder()
                         .url(url)
                         .header("User-Agent", packageName)
                         .build()

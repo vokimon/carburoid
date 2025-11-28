@@ -6,7 +6,10 @@ import net.canvoki.carburoid.network.Uri
 /**
  * Represents of a geographic point (WGS84).
  */
-data class GeoPoint(val latitude: Double, val longitude: Double) {
+data class GeoPoint(
+    val latitude: Double,
+    val longitude: Double,
+) {
     fun toAndroidLocation(): Location {
         val gp = this
         return Location("carburoid").apply {
@@ -154,9 +157,10 @@ data class GeoPoint(val latitude: Double, val longitude: Double) {
             return null
         }
 
-        private fun matchToCoords(match: MatchResult): GeoPoint? = fromTextComponents(
-            match.groupValues[1],
-            match.groupValues[2],
-        )
+        private fun matchToCoords(match: MatchResult): GeoPoint? =
+            fromTextComponents(
+                match.groupValues[1],
+                match.groupValues[2],
+            )
     }
 }

@@ -93,7 +93,8 @@ object FilterSettings {
         }
     }
 
-    private fun preferences(context: Context): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(
-        context,
-    )
+    private fun preferences(context: Context): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(
+            context,
+        )
 }

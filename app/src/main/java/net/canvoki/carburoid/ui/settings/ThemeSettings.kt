@@ -44,9 +44,10 @@ object ThemeSettings {
         }
     }
 
-    private fun preferences(context: Context): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(
-        context,
-    )
+    private fun preferences(context: Context): SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(
+            context,
+        )
 
     private fun currentValue(context: Context): String? {
         val prefs = preferences(context)
@@ -86,11 +87,12 @@ object ThemeSettings {
 
     @Composable
     fun effectiveColorScheme(): ColorScheme {
-        val isDark = when (AppCompatDelegate.getDefaultNightMode()) {
-            AppCompatDelegate.MODE_NIGHT_NO -> false
-            AppCompatDelegate.MODE_NIGHT_YES -> true
-            else -> isSystemInDarkTheme()
-        }
+        val isDark =
+            when (AppCompatDelegate.getDefaultNightMode()) {
+                AppCompatDelegate.MODE_NIGHT_NO -> false
+                AppCompatDelegate.MODE_NIGHT_YES -> true
+                else -> isSystemInDarkTheme()
+            }
         return if (isDark) darkColorScheme() else lightColorScheme()
     }
 }

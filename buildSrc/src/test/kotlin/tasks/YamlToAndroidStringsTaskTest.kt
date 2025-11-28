@@ -7,7 +7,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class YamlToAndroidStringsTaskTest {
-
     @Test
     fun `escapeAndroidString should escape special characters`() {
         val input = "Line1\nLine2\tTabbed\\Backslash\"Quote'Single"
@@ -24,7 +23,10 @@ class YamlToAndroidStringsTaskTest {
         assertEquals(expected, actual)
     }
 
-    private fun assertExtractParams(input: String, expected: List<String>) {
+    private fun assertExtractParams(
+        input: String,
+        expected: List<String>,
+    ) {
         val result = extractParams(input)
         assertEquals(
             expected,
@@ -102,7 +104,11 @@ class YamlToAndroidStringsTaskTest {
 
     // format params
 
-    private fun assertParametersToXml(template: String, params: List<String>, expected: String) {
+    private fun assertParametersToXml(
+        template: String,
+        params: List<String>,
+        expected: String,
+    ) {
         val result = parametersToXml(template, params)
         assertEquals(expected, result, "Template: '$template'\nExpected: '$expected'\nActual: '$result'\n")
     }
@@ -148,9 +154,10 @@ class YamlToAndroidStringsTaskTest {
         val template = "Hello {second}"
         val params = listOf("first") // Missing "second"
 
-        val exception = assertFailsWith<MismatchedParamException> {
-            parametersToXml(template, params)
-        }
+        val exception =
+            assertFailsWith<MismatchedParamException> {
+                parametersToXml(template, params)
+            }
 
         assertEquals(exception.paramName, "second")
     }
@@ -209,7 +216,10 @@ class YamlToAndroidStringsTaskTest {
         )
     }
 
-    fun assertParameterOrderFromYaml(yamlContent: String, expected: Map<String, List<String>>) {
+    fun assertParameterOrderFromYaml(
+        yamlContent: String,
+        expected: Map<String, List<String>>,
+    ) {
         val yamlFile = createTempFile(prefix = "tempYaml", suffix = ".yaml")
         yamlFile.writeText(yamlContent)
 
@@ -275,10 +285,11 @@ class YamlToAndroidStringsTaskTest {
                 greeting: "Hello {name}, welcome to {place}"
                 farewell: "Bye {name}"
             """,
-            expected = mapOf(
-                "greeting" to listOf("name", "place"),
-                "farewell" to listOf("name"),
-            ),
+            expected =
+                mapOf(
+                    "greeting" to listOf("name", "place"),
+                    "farewell" to listOf("name"),
+                ),
         )
     }
 
@@ -289,9 +300,10 @@ class YamlToAndroidStringsTaskTest {
                 parent:
                    greeting: "Hello {name}"
             """,
-            expected = mapOf(
-                "parent__greeting" to listOf("name"),
-            ),
+            expected =
+                mapOf(
+                    "parent__greeting" to listOf("name"),
+                ),
         )
     }
 
@@ -303,9 +315,10 @@ class YamlToAndroidStringsTaskTest {
                     parent:
                         greeting: "Hello {name}"
             """,
-            expected = mapOf(
-                "grandpa__parent__greeting" to listOf("name"),
-            ),
+            expected =
+                mapOf(
+                    "grandpa__parent__greeting" to listOf("name"),
+                ),
         )
     }
 }

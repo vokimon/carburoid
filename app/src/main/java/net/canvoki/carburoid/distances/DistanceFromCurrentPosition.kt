@@ -6,7 +6,9 @@ import net.canvoki.carburoid.model.GasStation
 /**
  * Computes distance from user's current GPS location to each gas station.
  */
-class DistanceFromCurrentPosition(private val userLocation: Location?) : DistanceMethod {
+class DistanceFromCurrentPosition(
+    private val userLocation: Location?,
+) : DistanceMethod {
     override fun computeDistance(station: GasStation): Float? {
         val stationLoc =
             station.latitude?.let { lat ->

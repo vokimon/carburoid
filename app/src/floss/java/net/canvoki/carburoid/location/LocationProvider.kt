@@ -5,7 +5,9 @@ import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 
-class LocationProvider(private val context: Context) {
+class LocationProvider(
+    private val context: Context,
+) {
     fun getLastKnownLocation(
         onSuccess: (Location?) -> Unit,
         onError: (Exception) -> Unit,

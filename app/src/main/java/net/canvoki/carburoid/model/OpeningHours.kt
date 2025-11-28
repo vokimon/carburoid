@@ -27,7 +27,10 @@ typealias Intervals = List<Interval>
 typealias DayRange = List<DayOfWeek>
 typealias ScheduleEntry = Pair<DayRange, Intervals>
 
-data class OpeningStatus(val isOpen: Boolean, val until: Instant?) {
+data class OpeningStatus(
+    val isOpen: Boolean,
+    val until: Instant?,
+) {
     val defaultThresholdMinutes: Long = 24 * 60
 
     enum class UiValues(
@@ -137,9 +140,7 @@ data class OpeningStatus(val isOpen: Boolean, val until: Instant?) {
     fun color(
         colorScheme: ColorScheme,
         thresholdMinutes: Long = defaultThresholdMinutes,
-    ): Color {
-        return resolveState(thresholdMinutes).colorSelector(colorScheme)
-    }
+    ): Color = resolveState(thresholdMinutes).colorSelector(colorScheme)
 
     @DrawableRes
     fun icon(thresholdMinutes: Long = defaultThresholdMinutes): Int = resolveState(thresholdMinutes).iconRes
@@ -153,12 +154,14 @@ data class OpeningStatus(val isOpen: Boolean, val until: Instant?) {
         val untilMillis = until.toEpochMilli()
         val nowMillis = now.toEpochMilli()
 
-        return DateUtils.getRelativeTimeSpanString(
-            untilMillis,
-            nowMillis,
-            DateUtils.MINUTE_IN_MILLIS,
-            DateUtils.FORMAT_ABBREV_RELATIVE,
-        ).toString().lowercase()
+        return DateUtils
+            .getRelativeTimeSpanString(
+                untilMillis,
+                nowMillis,
+                DateUtils.MINUTE_IN_MILLIS,
+                DateUtils.FORMAT_ABBREV_RELATIVE,
+            ).toString()
+            .lowercase()
     }
 }
 
@@ -210,16 +213,20 @@ class OpeningHours {
         val interval = LocalTime.of(startHour, startMinute) to LocalTime.of(endHour, endMinute)
         val intervals = dayIntervals.getOrPut(day) { mutableListOf() }
 
-        val mergeStart = intervals.indexOfFirst {
-            interval.first <= it.second
-        }.let {
-            if (it < 0) intervals.size else it
-        }
-        val mergeEnd = intervals.indexOfFirst {
-            interval.second < it.first
-        }.let {
-            if (it < 0) intervals.size else it
-        }
+        val mergeStart =
+            intervals
+                .indexOfFirst {
+                    interval.first <= it.second
+                }.let {
+                    if (it < 0) intervals.size else it
+                }
+        val mergeEnd =
+            intervals
+                .indexOfFirst {
+                    interval.second < it.first
+                }.let {
+                    if (it < 0) intervals.size else it
+                }
 
         if (mergeStart == mergeEnd) {
             intervals.add(mergeStart, interval)
@@ -230,7 +237,7 @@ class OpeningHours {
         val merged = (
             minOf(intervals[mergeStart].first, interval.first) to
                 maxOf(intervals[mergeEnd - 1].second, interval.second)
-            )
+        )
         intervals.subList(mergeStart, mergeEnd).clear()
         intervals.add(mergeStart, merged)
     }
@@ -288,10 +295,11 @@ class OpeningHours {
         return openUntil(nextClosing)
     }
 
-    private fun getDayIntervals(day: DayOfWeek): List<Pair<LocalTime, LocalTime>> = dayIntervals.getOrDefault(
-        day,
-        emptyList(),
-    )
+    private fun getDayIntervals(day: DayOfWeek): List<Pair<LocalTime, LocalTime>> =
+        dayIntervals.getOrDefault(
+            day,
+            emptyList(),
+        )
 
     private fun searchNextOpening(day: DayOfWeek): Pair<DayOfWeek, LocalTime>? {
         for (i in 1L..7L) {
@@ -359,9 +367,10 @@ class OpeningHours {
     }
 
     private fun formatIntervals(intervals: List<Pair<LocalTime, LocalTime>>): String =
-        intervals.map {
-            formatInterval(it)
-        }.joinToString(" y ")
+        intervals
+            .map {
+                formatInterval(it)
+            }.joinToString(" y ")
 
     private fun formatInterval(interval: Pair<LocalTime, LocalTime>): String {
         val (start, end) = interval

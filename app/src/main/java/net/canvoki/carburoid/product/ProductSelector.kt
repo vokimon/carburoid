@@ -9,8 +9,11 @@ import androidx.core.content.edit
 
 class ProductSelector
     @JvmOverloads
-    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
+    constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0,
+    ) : AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
         private var listener: ((String) -> Unit)? = null
         private var suppressCallback = false
 

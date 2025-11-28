@@ -24,7 +24,8 @@ fun madridInstant(
     val time = LocalTime.parse(localtime)
     val daysFromBase = (day.ordinal - DayOfWeek.MONDAY.ordinal) + (weekOffset * 7)
     val targetDate =
-        BASE_MONDAY.atZone(MADRID_ZONE)
+        BASE_MONDAY
+            .atZone(MADRID_ZONE)
             .toLocalDate()
             .plusDays(daysFromBase.toLong())
     val targetLocal = LocalDateTime.of(targetDate, time)

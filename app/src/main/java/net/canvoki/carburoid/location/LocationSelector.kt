@@ -19,8 +19,11 @@ import net.canvoki.carburoid.log
 
 class LocationSelector
     @JvmOverloads
-    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
-    FrameLayout(context, attrs, defStyleAttr) {
+    constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0,
+    ) : FrameLayout(context, attrs, defStyleAttr) {
         private val textInputLayout: TextInputLayout
         private val textInputEditText: TextInputEditText
         private val locationIcon = ContextCompat.getDrawable(context, R.drawable.ic_my_location)

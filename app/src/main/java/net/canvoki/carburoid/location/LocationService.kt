@@ -262,7 +262,7 @@ class LocationService(
         return (
             locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-            )
+        )
     }
 
     private fun openSystemPermissionsSettings() {

@@ -24,12 +24,12 @@ import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.location.LocationSelector
 import net.canvoki.carburoid.location.LocationService
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.plotnavigator.PlotNavigatorActivity
 import net.canvoki.carburoid.product.ProductSelector
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.ui.StationDetailActivity
-import net.canvoki.carburoid.plotnavigator.PlotNavigatorActivity
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
             useSavedLocation(savedInstanceState) ||
                 useDeepLinkIntentLocation(intent) ||
                 useDeviceLocation()
-            )
+        )
     }
 
     override fun onStart() {
@@ -208,13 +208,14 @@ class MainActivity : AppCompatActivity() {
     ) {
         log(message)
         val snackbar =
-            Snackbar.make(
-                findViewById<ViewGroup>(android.R.id.content),
-                message,
-                Snackbar.LENGTH_LONG,
-            ).setAction(actionText) {
-                action()
-            }
+            Snackbar
+                .make(
+                    findViewById<ViewGroup>(android.R.id.content),
+                    message,
+                    Snackbar.LENGTH_LONG,
+                ).setAction(actionText) {
+                    action()
+                }
         snackbar.show()
     }
 

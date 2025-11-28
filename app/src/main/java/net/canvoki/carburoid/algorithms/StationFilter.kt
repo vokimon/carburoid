@@ -4,7 +4,9 @@ import net.canvoki.carburoid.model.GasStation
 import java.time.Duration
 import java.time.Instant
 
-class StationFilter(var config: FilterConfig = FilterConfig()) {
+class StationFilter(
+    var config: FilterConfig = FilterConfig(),
+) {
     fun filter(stations: List<GasStation>): List<GasStation> {
         for (station in stations) {
             station.computeDistance()
