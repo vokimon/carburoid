@@ -264,9 +264,10 @@ class MainActivity : AppCompatActivity() {
             showProgress(getString(R.string.refreshing_data))
 
             // 🚧 Do heavy work in IO (or Default) dispatcher
-            val stations = timeit("PROCESSING STATIONS") {
-                viewModel.getStationsToDisplay()
-            }
+            val stations =
+                timeit("PROCESSING STATIONS") {
+                    viewModel.getStationsToDisplay()
+                }
 
             timeit("UPDATING CONTENT") {
                 if (stations.isEmpty()) {
