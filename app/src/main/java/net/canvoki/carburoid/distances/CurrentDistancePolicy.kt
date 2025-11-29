@@ -1,6 +1,9 @@
 package net.canvoki.carburoid.distances
 
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.log
 
 /**
  * Singleton that holds the current active distance computation strategy.
@@ -9,11 +12,15 @@ import net.canvoki.carburoid.model.GasStation
 object CurrentDistancePolicy {
     private var method: DistanceMethod? = null
 
+    private val _methodChanged = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val methodChanged = _methodChanged.asSharedFlow()
+
     /**
      * Sets the active distance computation strategy.
      */
     fun setMethod(method: DistanceMethod?) {
         this.method = method
+        val result = _methodChanged.tryEmit(Unit)
     }
 
     /**

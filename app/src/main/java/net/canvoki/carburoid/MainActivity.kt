@@ -99,11 +99,6 @@ class MainActivity : AppCompatActivity() {
                 suggestAction = ::suggestAction,
             )
         locationSelector.bind(this, locationService)
-        lifecycleScope.launch {
-            locationService.locationChanged.collect {
-                loadGasStations()
-            }
-        }
 
         val productSelector = findViewById<ProductSelector>(R.id.product_selector)
         productSelector.setOnProductSelectedListener { selectedProduct ->

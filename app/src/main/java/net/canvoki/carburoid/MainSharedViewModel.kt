@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.algorithms.StationFilter
+import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.repository.RepositoryEvent
@@ -28,6 +29,14 @@ class MainSharedViewModel(
     val stationsUpdated: SharedFlow<List<GasStation>> = _stationsUpdated.asSharedFlow()
 
     init {
+
+        // Observe changes on how to compute distance
+        viewModelScope.launch {
+            CurrentDistancePolicy.methodChanged.collect {
+                log("VM EVENT Distance policy updated")
+                reloadStations()
+            }
+        }
         // Observe filter changes
         viewModelScope.launch {
             FilterSettings.changes.collect {
