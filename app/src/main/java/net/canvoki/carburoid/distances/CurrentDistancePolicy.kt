@@ -2,8 +2,8 @@ package net.canvoki.carburoid.distances
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.log
+import net.canvoki.carburoid.model.GasStation
 
 /**
  * Singleton that holds the current active distance computation strategy.
