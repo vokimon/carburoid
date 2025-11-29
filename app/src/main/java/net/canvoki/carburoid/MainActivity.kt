@@ -26,7 +26,6 @@ import net.canvoki.carburoid.location.LocationSelector
 import net.canvoki.carburoid.location.LocationService
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.PlotNavigatorActivity
-import net.canvoki.carburoid.product.ProductSelector
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.ui.GasStationAdapter
@@ -49,7 +48,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var locationService: LocationService
-    private lateinit var productSelector: ProductSelector
     private lateinit var recyclerView: RecyclerView
     private lateinit var spinner: ProgressBar
     private lateinit var emptyView: TextView
