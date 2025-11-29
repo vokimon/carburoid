@@ -54,6 +54,7 @@ import io.github.koalaplot.core.xygraph.rememberFloatLinearAxisModel
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.ui.settings.ThemeSettings
+import net.canvoki.carburoid.product.CategorizedProductSelector
 
 fun getX(station: GasStation): Float? = station.distanceInMeters?.div(1000.0f)
 
@@ -94,8 +95,11 @@ fun GasStationScatterPlot(
     var selectedItem by remember { mutableStateOf<GasStation?>(null) }
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        Material2KoalaTheme {
+        Column() {
+            CategorizedProductSelector()
             GasStationCard(selectedItem)
+        }
+        Material2KoalaTheme {
             ScatterPlot(
                 items = items,
                 getX = getX,
