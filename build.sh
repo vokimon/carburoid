@@ -9,7 +9,7 @@ run() {
 
 run ./gradlew assembleFlossDebug &&
     run ./gradlew testFlossDebug &&
-    if false; then
+    if [ "$1" = "w" ] ; then
         run waydroid app remove net.canvoki.carburoid &&
         run waydroid app install $(ls -t app/build/outputs/apk/floss/debug/net.canvoki.carburoid-*.apk | head -n 1)  &&
         run waydroid app launch net.canvoki.carburoid &&
