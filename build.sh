@@ -9,12 +9,13 @@ run() {
 
 run ./gradlew assembleFlossDebug &&
     run ./gradlew testFlossDebug &&
-    (run adb uninstall net.canvoki.carburoid || true ) &&
     if false; then
-        run waydroid app install app/build/outputs/apk/floss/debug/net.canvoki.carburoid-floss-*-debug.apk &&
+        run waydroid app remove net.canvoki.carburoid &&
+        run waydroid app install $(ls -t app/build/outputs/apk/floss/debug/net.canvoki.carburoid-*.apk | head -n 1)  &&
         run waydroid app launch net.canvoki.carburoid &&
         true
     else
+        (run adb uninstall net.canvoki.carburoid || true ) &&
         run ./gradlew installFlossDebug &&
         run adb shell am start -n net.canvoki.carburoid/.MainActivity &&
         true
