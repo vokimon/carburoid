@@ -14,7 +14,6 @@ class ProductSelector
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0,
     ) : AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
-        private var listener: ((String) -> Unit)? = null
         private var suppressCallback = false
 
         companion object {
@@ -49,7 +48,6 @@ class ProductSelector
                 if (!suppressCallback) {
                     saveLastSelectedProduct(product)
                     ProductManager.setCurrent(product)
-                    listener?.invoke(product)
                 }
             }
 
@@ -62,10 +60,6 @@ class ProductSelector
                     }
                 }
             }
-        }
-
-        fun setOnProductSelectedListener(callback: (String) -> Unit) {
-            this.listener = callback
         }
 
         val selectedProduct: String
