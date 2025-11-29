@@ -100,11 +100,6 @@ class MainActivity : AppCompatActivity() {
             )
         locationSelector.bind(this, locationService)
 
-        val productSelector = findViewById<ProductSelector>(R.id.product_selector)
-        productSelector.setOnProductSelectedListener { selectedProduct ->
-            loadGasStations()
-        }
-
         swipeRefreshLayout.setOnRefreshListener {
             swipeRefreshLayout.isRefreshing = false
             repository.launchFetch()

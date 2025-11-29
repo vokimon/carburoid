@@ -1,6 +1,13 @@
 package net.canvoki.carburoid.product
 
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+
+
 object ProductManager {
+    private val _productChanged = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val productChanged = _productChanged.asSharedFlow()
+
     private val products =
         listOf(
             "Gasoleo A",
@@ -38,6 +45,7 @@ object ProductManager {
 
     fun setCurrent(product: String) {
         current = product
+        _productChanged.tryEmit(Unit)
     }
 
     fun resetCurrent() {

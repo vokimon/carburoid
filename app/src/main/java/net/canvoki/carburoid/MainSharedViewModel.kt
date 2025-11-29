@@ -14,6 +14,7 @@ import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.timeits
 
@@ -30,6 +31,13 @@ class MainSharedViewModel(
 
     init {
 
+        // Observe product changes
+        viewModelScope.launch {
+            ProductManager.productChanged.collect {
+                log("VM EVENT product updated")
+                reloadStations()
+            }
+        }
         // Observe changes on how to compute distance
         viewModelScope.launch {
             CurrentDistancePolicy.methodChanged.collect {
