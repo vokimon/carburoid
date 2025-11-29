@@ -2,9 +2,11 @@
 
 ## Unreleased
 
-- 🐛 Osm links were not processed
-- 🌐 Missing translations for Location picker 'Accept' button
 - 🚧 Experimental Plot view
+- 🐛 Osm links were not processed
+- 🐛 Filter on about to close/open did not apply inmediatelly
+- 🌐 Missing translations for Location picker 'Accept' button
+- ♻️ Using ModelView for filtering GasStations
 
 ## 1.2.3 (2025-11-15)
 

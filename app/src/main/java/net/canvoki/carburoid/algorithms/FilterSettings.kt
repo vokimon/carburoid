@@ -21,6 +21,7 @@ object FilterSettings {
         setOf(
             KEY_HIDE_EXPENSIVE,
             KEY_ONLY_PUBLIC_PRICES,
+            KEY_HIDE_CLOSED_MARGIN_MINUTES,
         )
 
     private val _changes = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
