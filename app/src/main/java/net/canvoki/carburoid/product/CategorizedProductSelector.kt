@@ -44,7 +44,7 @@ fun CategorizedProductSelector() {
     val productCategories =
         listOf(
             ProductCategory(
-                "Gasoils",
+                stringResource(R.string.product_category_diesel),
                 listOf(
                     "Gasoleo A",
                     "Gasoleo Premium",
@@ -53,7 +53,7 @@ fun CategorizedProductSelector() {
                 ),
             ),
             ProductCategory(
-                "Gasolinas",
+                stringResource(R.string.product_category_gasoline),
                 listOf(
                     "Gasolina 95 E10",
                     "Gasolina 95 E25",
@@ -66,7 +66,7 @@ fun CategorizedProductSelector() {
                 ),
             ),
             ProductCategory(
-                "Gas Naturales & Biogases",
+                stringResource(R.string.product_category_natural_gas),
                 listOf(
                     "Gas Natural Comprimido",
                     "Gas Natural Licuado",
@@ -75,14 +75,14 @@ fun CategorizedProductSelector() {
                 ),
             ),
             ProductCategory(
-                "Biocombustibles",
+                stringResource(R.string.product_category_biofuels),
                 listOf(
                     "Biodiesel",
                     "Bioetanol",
                 ),
             ),
             ProductCategory(
-                "Otros Gases",
+                stringResource(R.string.product_category_other_gases),
                 listOf(
                     "Gases licuados del petróleo",
                     "Hidrogeno",
@@ -91,7 +91,7 @@ fun CategorizedProductSelector() {
                 ),
             ),
             ProductCategory(
-                "Aditivos",
+                stringResource(R.string.product_category_additives),
                 listOf(
                     "Adblue",
                 ),
