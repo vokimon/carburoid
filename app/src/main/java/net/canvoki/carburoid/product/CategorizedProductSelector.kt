@@ -21,9 +21,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.canvoki.carburoid.R
 
 @Composable
 fun CategorizedProductSelector() {
@@ -98,7 +100,7 @@ fun CategorizedProductSelector() {
                 value = selectedProduct,
                 onValueChange = { },
                 readOnly = true,
-                label = { Text("Select Product") },
+                label = { Text(stringResource(R.string.product_selector_hint)) },
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                 },
