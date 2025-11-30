@@ -15,14 +15,14 @@ class ProductPreferences(
 
     private fun preferences() = context.getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE)
 
-    fun loadLastSelectedProduct(): String? =
-        preferences().getString(PREF_LAST_SELECTED, null)
+    fun loadLastSelectedProduct(): String? = preferences().getString(PREF_LAST_SELECTED, null)
 
     fun saveLastSelectedProduct(product: String) {
         preferences().edit {
             putString(PREF_LAST_SELECTED, product)
         }
     }
+
     fun loadRecentProducts(): List<String> {
         val recentProducts = preferences().getString(PREF_RECENT_PRODUCTS, null)
         if (recentProducts.isNullOrBlank()) {

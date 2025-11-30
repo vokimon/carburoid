@@ -17,6 +17,7 @@ class ProductSelection(
     private val context: Context,
 ) {
     private var preferences = ProductPreferences(context)
+
     companion object {
         const val N_RECENT = 5
     }
@@ -31,6 +32,10 @@ class ProductSelection(
     }
 
     fun recent(): List<String> {
+        // Either path returns at least one item:
+        // the current product.
+        // Other methods rely on this postcondition.
+
         val recent = preferences.loadRecentProducts()
         if (recent.isNotEmpty()) {
             return recent
@@ -45,7 +50,7 @@ class ProductSelection(
     }
 
     fun getCurrent(): String {
-        val product = recent().firstOrNull() !!
+        val product = recent().firstOrNull()!!
         if (product != ProductManager.getCurrent()) {
             ProductManager.setCurrent(product)
         }

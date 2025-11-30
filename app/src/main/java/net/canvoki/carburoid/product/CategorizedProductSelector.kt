@@ -120,7 +120,10 @@ fun CategorizedProductSelector() {
     }
 
     @Composable
-    fun CategoryGroup(categoryName: String, products: List<String>) {
+    fun CategoryGroup(
+        categoryName: String,
+        products: List<String>,
+    ) {
         CategoryHeader(categoryName)
         products.forEach { product ->
             ProductItem(product)
