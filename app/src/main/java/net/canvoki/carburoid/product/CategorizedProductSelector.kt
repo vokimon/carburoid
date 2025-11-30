@@ -30,8 +30,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import net.canvoki.carburoid.ui.settings.ThemeSettings
 import net.canvoki.carburoid.R
+import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
 fun CategorizedProductSelector() {
@@ -170,23 +170,23 @@ data class ProductCategory(
     val products: List<String>,
 )
 
+class CategorizedProductSelectorView
+    @JvmOverloads
+    constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyle: Int = 0,
+    ) : FrameLayout(context, attrs, defStyle) {
+        private val composeView = ComposeView(context)
 
-class CategorizedProductSelectorView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyle: Int = 0,
-) : FrameLayout(context, attrs, defStyle) {
+        init {
+            addView(composeView)
 
-    private val composeView = ComposeView(context)
-
-    init {
-        addView(composeView)
-
-        composeView.setContent {
-            CategorizedProductSelectorWrapper()
+            composeView.setContent {
+                CategorizedProductSelectorWrapper()
+            }
         }
     }
-}
 
 @Composable
 private fun CategorizedProductSelectorWrapper() {
@@ -196,7 +196,6 @@ private fun CategorizedProductSelectorWrapper() {
         CategorizedProductSelector()
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
