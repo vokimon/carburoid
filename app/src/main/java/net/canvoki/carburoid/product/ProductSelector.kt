@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.edit
 
+// ProductPreferences: Handles interactions with SharedPreferences
 class ProductPreferences(
     private val context: Context,
 ) {
@@ -19,25 +20,34 @@ class ProductPreferences(
 
     private fun preferences(): SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    private fun loadLastSelectedProduct(): String =
+    fun loadLastSelectedProduct(): String =
         preferences().getString(PREF_LAST_SELECTED, DEFAULT_PRODUCT) ?: DEFAULT_PRODUCT
 
-    private fun saveLastSelectedProduct(product: String) {
+    fun saveLastSelectedProduct(product: String) {
         preferences().edit {
             putString(PREF_LAST_SELECTED, product)
         }
     }
+}
 
+// ProductSelection: Manages the global state of the selected product
+class ProductSelection(
+    private val context: Context,
+) {
+    private val preferences = ProductPreferences(context)
+
+    // Gets the current product, syncing with ProductManager if necessary
     fun getCurrent(): String {
-        val product = loadLastSelectedProduct()
+        val product = preferences.loadLastSelectedProduct()
         if (product != ProductManager.getCurrent()) {
             ProductManager.setCurrent(product)
         }
         return product
     }
 
+    // Sets the current product, updating both the preferences and ProductManager
     fun setCurrent(product: String) {
-        saveLastSelectedProduct(product)
+        preferences.saveLastSelectedProduct(product)
         ProductManager.setCurrent(product)
     }
 }
@@ -49,7 +59,7 @@ class ProductSelector
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0,
     ) : AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
-        private var preferences = ProductPreferences(context)
+        private val productSelection = ProductSelection(context)
 
         init {
             setupListener()
@@ -67,15 +77,15 @@ class ProductSelector
                     products,
                 ),
             )
-            val selected = preferences.getCurrent()
+            val selected = productSelection.getCurrent()
             setText(selected, false)
         }
 
         private fun setupListener() {
-            setOnItemClickListener { parent, view, position, id ->
+            setOnItemClickListener { parent, _, position, _ ->
                 val product = parent.getItemAtPosition(position) as String
-                preferences.setCurrent(product)
-                setText(preferences.getCurrent(), false)
+                productSelection.setCurrent(product)
+                setText(productSelection.getCurrent(), false)
             }
         }
 

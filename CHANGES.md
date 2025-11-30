@@ -3,8 +3,10 @@
 ## Unreleased
 
 - 🚧 Experimental Plot view
+- 🚧 Experimental Categorized product selector
 - 🐛 Osm links were not processed
 - 🐛 Filter on about to close/open did not apply inmediatelly
+- 🐛 Location and product texts non-editable to prevent weird state
 - 🌐 Missing translations for Location picker 'Accept' button
 - ♻️ Using ModelView for filtering GasStations
 
