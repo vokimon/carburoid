@@ -9,21 +9,35 @@ import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.edit
 
 class ProductPreferences(
-    var context: Context,
+    private val context: Context
 ) {
+
     private val PREFS_NAME = "product_settings"
     private val PREF_LAST_SELECTED = "last_selected_product"
     private val DEFAULT_PRODUCT = ProductManager.DEFAULT_PRODUCT
 
     private fun preferences(): SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    fun loadLastSelectedProduct(): String =
+    private fun loadLastSelectedProduct(): String =
         preferences().getString(PREF_LAST_SELECTED, DEFAULT_PRODUCT) ?: DEFAULT_PRODUCT
 
-    fun saveLastSelectedProduct(product: String) {
+    private fun saveLastSelectedProduct(product: String) {
         preferences().edit {
             putString(PREF_LAST_SELECTED, product)
         }
+    }
+
+    fun getCurrent(): String {
+        val product = loadLastSelectedProduct()
+        if (product != ProductManager.getCurrent()) {
+            ProductManager.setCurrent(product)
+        }
+        return product
+    }
+
+    fun setCurrent(product: String) {
+        saveLastSelectedProduct(product)
+        ProductManager.setCurrent(product)
     }
 }
 
@@ -34,6 +48,7 @@ class ProductSelector
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0,
     ) : AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
+
         private var suppressCallback = false
         private var preferences = ProductPreferences(context)
 
@@ -53,7 +68,7 @@ class ProductSelector
                     products,
                 ),
             )
-            val selected = preferences.loadLastSelectedProduct()
+            val selected = preferences.getCurrent()
             setText(selected, false)
         }
 
@@ -61,8 +76,7 @@ class ProductSelector
             setOnItemClickListener { parent, view, position, id ->
                 val product = parent.getItemAtPosition(position) as String
                 if (!suppressCallback) {
-                    preferences.saveLastSelectedProduct(product)
-                    ProductManager.setCurrent(product)
+                    preferences.setCurrent(product)
                 }
             }
 
@@ -71,7 +85,7 @@ class ProductSelector
                     val currentText = text.toString()
                     val products = ProductManager.available()
                     if (currentText !in products) {
-                        setText(preferences.loadLastSelectedProduct(), false)
+                        setText(preferences.getCurrent(), false)
                     }
                 }
             }
@@ -92,4 +106,4 @@ class ProductSelector
                 setupProducts()
             }
         }
-    }
+}
