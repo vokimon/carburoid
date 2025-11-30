@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:inputType="none"
         android:focusable="false"
+        android:editable="false"
         android:singleLine="false"
         android:minLines="2"
         android:maxLines="2"
