@@ -1,5 +1,8 @@
 package net.canvoki.carburoid.product
 
+import android.content.Context
+import android.util.AttributeSet
+import android.widget.FrameLayout
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,11 +24,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.canvoki.carburoid.ui.settings.ThemeSettings
 import net.canvoki.carburoid.R
 
 @Composable
@@ -93,70 +98,68 @@ fun CategorizedProductSelector() {
             ),
         )
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        @OptIn(ExperimentalMaterial3Api::class)
-        ExposedDropdownMenuBox(
+    @OptIn(ExperimentalMaterial3Api::class)
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = it },
+    ) {
+        TextField(
+            value = selectedProduct,
+            onValueChange = { },
+            readOnly = true,
+            label = { Text(stringResource(R.string.product_selector_hint)) },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+            },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Filled.LocalGasStation,
+                    contentDescription = stringResource(R.string.product_selector_icon_description),
+                )
+            },
+            modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+        )
+
+        ExposedDropdownMenu(
             expanded = expanded,
-            onExpandedChange = { expanded = it },
+            onDismissRequest = { expanded = false },
         ) {
-            TextField(
-                value = selectedProduct,
-                onValueChange = { },
-                readOnly = true,
-                label = { Text(stringResource(R.string.product_selector_hint)) },
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-                },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.LocalGasStation,
-                        contentDescription = "Gas Station Icon",
-                    )
-                },
-                modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
-            )
-
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-            ) {
-                if (recentSelections.isNotEmpty()) {
-                    Text(
-                        "Recent Selections",
-                        modifier = Modifier.padding(8.dp),
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
-                    )
-                    recentSelections.forEach { product ->
-                        DropdownMenuItem(onClick = {
-                            selectedProduct = product
-                            expanded = false
-                            if (!recentSelections.contains(product)) {
-                                recentSelections = listOf(product) + recentSelections.take(4)
-                            }
-                        }, text = { Text(product) })
-                    }
-                    HorizontalDivider()
+            if (recentSelections.isNotEmpty()) {
+                Text(
+                    "Recent Selections",
+                    modifier = Modifier.padding(8.dp),
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
+                )
+                recentSelections.forEach { product ->
+                    DropdownMenuItem(onClick = {
+                        selectedProduct = product
+                        expanded = false
+                        if (!recentSelections.contains(product)) {
+                            recentSelections = listOf(product) + recentSelections.take(4)
+                        }
+                    }, text = { Text(product) })
                 }
+                HorizontalDivider()
+            }
 
-                productCategories.forEach { category ->
-                    Text(
-                        category.name,
-                        modifier = Modifier.padding(8.dp),
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
-                    )
-                    category.products.forEach { product ->
-                        DropdownMenuItem(onClick = {
-                            selectedProduct = product
-                            expanded = false
-                            if (!recentSelections.contains(product)) {
-                                recentSelections = listOf(product) + recentSelections.take(4)
-                            }
-                        }, text = { Text(product) })
-                    }
-                    HorizontalDivider()
+            productCategories.forEach { category ->
+                Text(
+                    category.name,
+                    modifier = Modifier.padding(8.dp),
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
+                )
+                category.products.forEach { product ->
+                    DropdownMenuItem(onClick = {
+                        selectedProduct = product
+                        expanded = false
+                        if (!recentSelections.contains(product)) {
+                            recentSelections = listOf(product) + recentSelections.take(4)
+                        }
+                    }, text = { Text(product) })
                 }
+                HorizontalDivider()
             }
         }
     }
@@ -166,6 +169,34 @@ data class ProductCategory(
     val name: String,
     val products: List<String>,
 )
+
+
+class CategorizedProductSelectorView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0,
+) : FrameLayout(context, attrs, defStyle) {
+
+    private val composeView = ComposeView(context)
+
+    init {
+        addView(composeView)
+
+        composeView.setContent {
+            CategorizedProductSelectorWrapper()
+        }
+    }
+}
+
+@Composable
+private fun CategorizedProductSelectorWrapper() {
+    MaterialTheme(
+        colorScheme = ThemeSettings.effectiveColorScheme(),
+    ) {
+        CategorizedProductSelector()
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
