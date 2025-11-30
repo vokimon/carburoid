@@ -1,7 +1,6 @@
 package net.canvoki.carburoid.product
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.widget.ArrayAdapter
@@ -18,7 +17,7 @@ class ProductPreferences(
         private const val DEFAULT_PRODUCT = ProductManager.DEFAULT_PRODUCT
     }
 
-    private fun preferences(): SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private fun preferences() = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     fun loadLastSelectedProduct(): String =
         preferences().getString(PREF_LAST_SELECTED, DEFAULT_PRODUCT) ?: DEFAULT_PRODUCT
