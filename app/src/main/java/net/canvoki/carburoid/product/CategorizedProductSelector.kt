@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +31,9 @@ import net.canvoki.carburoid.R
 @Composable
 fun CategorizedProductSelector() {
     var expanded by remember { mutableStateOf(false) }
-    var selectedProduct by remember { mutableStateOf("Select Product") }
+    val context = LocalContext.current
+    var productSelection = remember { ProductSelection(context = context) }
+    var selectedProduct by productSelection.asState()
     var recentSelections by remember { mutableStateOf(emptyList<String>()) }
 
     val productCategories =
