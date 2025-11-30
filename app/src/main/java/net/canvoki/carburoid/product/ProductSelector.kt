@@ -11,10 +11,11 @@ import androidx.core.content.edit
 class ProductPreferences(
     private val context: Context
 ) {
-
-    private val PREFS_NAME = "product_settings"
-    private val PREF_LAST_SELECTED = "last_selected_product"
-    private val DEFAULT_PRODUCT = ProductManager.DEFAULT_PRODUCT
+    companion object {
+        private val PREFS_NAME = "product_settings"
+        private val PREF_LAST_SELECTED = "last_selected_product"
+        private val DEFAULT_PRODUCT = ProductManager.DEFAULT_PRODUCT
+    }
 
     private fun preferences(): SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
