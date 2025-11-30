@@ -39,7 +39,7 @@ fun CategorizedProductSelector() {
     val context = LocalContext.current
     var productSelection = remember { ProductSelection(context = context) }
     var selectedProduct by productSelection.asState()
-    var recentSelections by remember { mutableStateOf(emptyList<String>()) }
+    var recentSelections = productSelection.recent()
 
     val productCategories =
         listOf(

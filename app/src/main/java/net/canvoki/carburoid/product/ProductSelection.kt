@@ -17,9 +17,35 @@ class ProductSelection(
     private val context: Context,
 ) {
     private var preferences = ProductPreferences(context)
+    companion object {
+        const val N_RECENT = 5
+    }
+
+    private fun updateRecent(product: String) {
+        val recent = recent().toMutableList()
+        if (product in recent) {
+            recent.remove(product)
+        }
+        recent.add(0, product)
+        preferences.saveRecentProducts(recent.take(5))
+    }
+
+    fun recent(): List<String> {
+        val recent = preferences.loadRecentProducts()
+        if (recent.isNotEmpty()) {
+            return recent
+        }
+
+        val legacy = preferences.loadLastSelectedProduct()
+        legacy?.let {
+            return listOf(it)
+        }
+
+        return listOf(ProductManager.getCurrent())
+    }
 
     fun getCurrent(): String {
-        val product = preferences.loadLastSelectedProduct()
+        val product = recent().firstOrNull() !!
         if (product != ProductManager.getCurrent()) {
             ProductManager.setCurrent(product)
         }
@@ -27,7 +53,7 @@ class ProductSelection(
     }
 
     fun setCurrent(product: String) {
-        preferences.saveLastSelectedProduct(product)
+        updateRecent(product)
         ProductManager.setCurrent(product)
     }
 
