@@ -9,7 +9,7 @@ import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.edit
 
 class ProductPreferences(
-    private val context: Context
+    private val context: Context,
 ) {
     companion object {
         private val PREFS_NAME = "product_settings"
@@ -49,7 +49,6 @@ class ProductSelector
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0,
     ) : AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
-
         private var suppressCallback = false
         private var preferences = ProductPreferences(context)
 
@@ -107,4 +106,4 @@ class ProductSelector
                 setupProducts()
             }
         }
-}
+    }
