@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.font.FontWeight
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategorizedProductSelector() {
     var expanded by remember { mutableStateOf(false) }
@@ -56,6 +55,7 @@ fun CategorizedProductSelector() {
     )
 
     Column(modifier = Modifier.padding(16.dp)) {
+        @OptIn(ExperimentalMaterial3Api::class)
         ExposedDropdownMenuBox(
             expanded = expanded,
             onExpandedChange = { expanded = it }
