@@ -120,7 +120,7 @@ fun CategorizedProductSelector() {
     }
 
     @Composable
-    fun CategoryGroup(categoryName, products) {
+    fun CategoryGroup(categoryName: String, products: List<String>) {
         CategoryHeader(categoryName)
         products.forEach { product ->
             ProductItem(product)
@@ -157,7 +157,7 @@ fun CategorizedProductSelector() {
             if (recentSelections.isNotEmpty()) {
                 CategoryGroup(
                     categoryName = stringResource(R.string.product_category_recent),
-                    products = recentSelection,
+                    products = recentSelections,
                 )
             }
 
