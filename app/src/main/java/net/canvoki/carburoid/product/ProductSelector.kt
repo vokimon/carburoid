@@ -49,7 +49,6 @@ class ProductSelector
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0,
     ) : AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
-        private var suppressCallback = false
         private var preferences = ProductPreferences(context)
 
         init {
@@ -75,29 +74,9 @@ class ProductSelector
         private fun setupListener() {
             setOnItemClickListener { parent, view, position, id ->
                 val product = parent.getItemAtPosition(position) as String
-                if (!suppressCallback) {
-                    preferences.setCurrent(product)
-                }
+                preferences.setCurrent(product)
+                setText(preferences.getCurrent(), false)
             }
-
-            setOnFocusChangeListener { _, hasFocus ->
-                if (!hasFocus) {
-                    val currentText = text.toString()
-                    val products = ProductManager.available()
-                    if (currentText !in products) {
-                        setText(preferences.getCurrent(), false)
-                    }
-                }
-            }
-        }
-
-        val selectedProduct: String
-            get() = text.toString()
-
-        fun setSelectedProduct(product: String) {
-            suppressCallback = true
-            setText(product, false)
-            suppressCallback = false
         }
 
         override fun onRestoreInstanceState(state: Parcelable?) {
