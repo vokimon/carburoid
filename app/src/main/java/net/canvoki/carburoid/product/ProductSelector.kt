@@ -47,6 +47,8 @@ class ProductSelection(
         preferences.saveLastSelectedProduct(product)
         ProductManager.setCurrent(product)
     }
+
+    fun choices(): List<String> = ProductManager.available()
 }
 
 // Selects the current product
@@ -57,7 +59,7 @@ class ProductSelector
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0,
     ) : AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
-        private val productSelection = ProductSelection(context)
+        private var productSelection = ProductSelection(context)
 
         init {
             setupListener()
@@ -67,7 +69,7 @@ class ProductSelector
         }
 
         private fun setupProducts() {
-            val products = ProductManager.available()
+            val products = productSelection.choices()
             setAdapter(
                 ArrayAdapter(
                     context,
