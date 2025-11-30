@@ -1,4 +1,5 @@
 package net.canvoki.carburoid.product
+
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Parcelable
@@ -6,6 +7,25 @@ import android.util.AttributeSet
 import android.widget.ArrayAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.edit
+
+class ProductPreferences(
+    var context: Context,
+) {
+    private val PREFS_NAME = "product_settings"
+    private val PREF_LAST_SELECTED = "last_selected_product"
+    private val DEFAULT_PRODUCT = ProductManager.DEFAULT_PRODUCT
+
+    private fun preferences(): SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
+    fun loadLastSelectedProduct(): String =
+        preferences().getString(PREF_LAST_SELECTED, DEFAULT_PRODUCT) ?: DEFAULT_PRODUCT
+
+    fun saveLastSelectedProduct(product: String) {
+        preferences().edit {
+            putString(PREF_LAST_SELECTED, product)
+        }
+    }
+}
 
 class ProductSelector
     @JvmOverloads
@@ -15,12 +35,7 @@ class ProductSelector
         defStyleAttr: Int = 0,
     ) : AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
         private var suppressCallback = false
-
-        companion object {
-            private const val PREFS_NAME = "product_settings"
-            private const val PREF_LAST_SELECTED = "last_selected_product"
-            private val DEFAULT_PRODUCT = ProductManager.DEFAULT_PRODUCT
-        }
+        private var preferences = ProductPreferences(context)
 
         init {
             setupListener()
@@ -38,7 +53,7 @@ class ProductSelector
                     products,
                 ),
             )
-            val selected = loadLastSelectedProduct()
+            val selected = preferences.loadLastSelectedProduct()
             setText(selected, false)
         }
 
@@ -46,7 +61,7 @@ class ProductSelector
             setOnItemClickListener { parent, view, position, id ->
                 val product = parent.getItemAtPosition(position) as String
                 if (!suppressCallback) {
-                    saveLastSelectedProduct(product)
+                    preferences.saveLastSelectedProduct(product)
                     ProductManager.setCurrent(product)
                 }
             }
@@ -56,7 +71,7 @@ class ProductSelector
                     val currentText = text.toString()
                     val products = ProductManager.available()
                     if (currentText !in products) {
-                        setText(loadLastSelectedProduct(), false)
+                        setText(preferences.loadLastSelectedProduct(), false)
                     }
                 }
             }
@@ -70,17 +85,6 @@ class ProductSelector
             setText(product, false)
             suppressCallback = false
         }
-
-        private fun saveLastSelectedProduct(product: String) {
-            preferences().edit {
-                putString(PREF_LAST_SELECTED, product)
-            }
-        }
-
-        private fun loadLastSelectedProduct(): String =
-            preferences().getString(PREF_LAST_SELECTED, DEFAULT_PRODUCT) ?: DEFAULT_PRODUCT
-
-        private fun preferences(): SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
         override fun onRestoreInstanceState(state: Parcelable?) {
             super.onRestoreInstanceState(state)
