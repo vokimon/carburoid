@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.edit
 
-// ProductPreferences: Handles interactions with SharedPreferences
+/// Product related data in Android Preferences
 class ProductPreferences(
     private val context: Context,
 ) {
@@ -29,13 +29,12 @@ class ProductPreferences(
     }
 }
 
-// ProductSelection: Manages the global state of the selected product
+// Coordinates the global state of the current selected product
 class ProductSelection(
     private val context: Context,
 ) {
-    private val preferences = ProductPreferences(context)
+    private var preferences = ProductPreferences(context)
 
-    // Gets the current product, syncing with ProductManager if necessary
     fun getCurrent(): String {
         val product = preferences.loadLastSelectedProduct()
         if (product != ProductManager.getCurrent()) {
@@ -44,13 +43,13 @@ class ProductSelection(
         return product
     }
 
-    // Sets the current product, updating both the preferences and ProductManager
     fun setCurrent(product: String) {
         preferences.saveLastSelectedProduct(product)
         ProductManager.setCurrent(product)
     }
 }
 
+// Selects the current product
 class ProductSelector
     @JvmOverloads
     constructor(
