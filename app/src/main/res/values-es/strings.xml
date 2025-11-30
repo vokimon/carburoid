@@ -32,6 +32,13 @@
     <string name="no_gas_stations">No se encontraron gasolineras coincidentes</string>
     <string name="product_selector_hint">Producto</string>
     <string name="product_selector_icon_description">Selector de producto</string>
+    <string name="product_category_recent">Recientes</string>
+    <string name="product_category_diesel">Gasoleos</string>
+    <string name="product_category_gasoline">Gasolinas</string>
+    <string name="product_category_natural_gas">Gas Naturales y Biogases</string>
+    <string name="product_category_biofuels">Biocombustibles</string>
+    <string name="product_category_other_gases">Otros Gases</string>
+    <string name="product_category_additives">Aditivos</string>
     <string name="location_selector_hint">Ubicación</string>
     <string name="location_selector_locate_device">Ubica el dispositivo</string>
     <string name="price_not_public">✱ Precio condicionado</string>

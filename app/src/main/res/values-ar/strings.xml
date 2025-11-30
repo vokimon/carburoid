@@ -32,6 +32,13 @@
     <string name="no_gas_stations">لم يتم العثور على محطات وقود مطابقة</string>
     <string name="product_selector_hint">المنتج</string>
     <string name="product_selector_icon_description">محدد المنتج</string>
+    <string name="product_category_recent">مؤخراً</string>
+    <string name="product_category_diesel">الديزل</string>
+    <string name="product_category_gasoline">البنزين</string>
+    <string name="product_category_natural_gas">الغاز الطبيعي و الغاز الحيوي</string>
+    <string name="product_category_biofuels">الوقود الحيوي</string>
+    <string name="product_category_other_gases">الغازات الأخرى</string>
+    <string name="product_category_additives">الإضافات</string>
     <string name="location_selector_hint">الموقع</string>
     <string name="location_selector_locate_device">حدد موقع الجهاز</string>
     <string name="price_not_public">✱ السعر مشروط</string>

@@ -30,6 +30,13 @@ settings_filter_closed_tolerance_never: Mostra sempre
 no_gas_stations: No s'han trobat benzineres coincidents
 product_selector_hint: Producte
 product_selector_icon_description: Selector de producte
+product_category_recent: Recents
+product_category_diesel: Gasolis
+product_category_gasoline: Gasolines
+product_category_natural_gas: Gasos Naturals i Biogàs
+product_category_biofuels: Biocombustibles
+product_category_other_gases: Altres Gasos
+product_category_additives: Aditius
 location_selector_hint: Ubicació
 location_selector_locate_device: Ubica el dispositiu
 price_not_public: ✱ Preu condicionat

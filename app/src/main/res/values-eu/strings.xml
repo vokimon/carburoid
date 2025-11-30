@@ -32,6 +32,13 @@
     <string name="no_gas_stations">Ez dago bat datorren gasolindegirik</string>
     <string name="product_selector_hint">Produktua</string>
     <string name="product_selector_icon_description">Produktu-hautagailua</string>
+    <string name="product_category_recent">Azkenak</string>
+    <string name="product_category_diesel">Gasolioak</string>
+    <string name="product_category_gasoline">Gasolina</string>
+    <string name="product_category_natural_gas">Gas Natural eta Biogasak</string>
+    <string name="product_category_biofuels">Biokargagarriek</string>
+    <string name="product_category_other_gases">Beste Gasak</string>
+    <string name="product_category_additives">Gehigarriak</string>
     <string name="location_selector_hint">Kokalekua</string>
     <string name="location_selector_locate_device">Kokatu gailua</string>
     <string name="price_not_public">✱ Prezio baldintzatua</string>

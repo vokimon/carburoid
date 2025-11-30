@@ -30,6 +30,13 @@ settings_filter_closed_tolerance_never: Erakutsi beti
 no_gas_stations: Ez dago bat datorren gasolindegirik
 product_selector_hint: Produktua
 product_selector_icon_description: Produktu-hautagailua
+product_category_recent: Azkenak
+product_category_diesel: Gasolioak
+product_category_gasoline: Gasolina
+product_category_natural_gas: Gas Natural eta Biogasak
+product_category_biofuels: Biokargagarriek
+product_category_other_gases: Beste Gasak
+product_category_additives: Gehigarriak
 location_selector_hint: Kokalekua
 location_selector_locate_device: Kokatu gailua
 price_not_public: ✱ Prezio baldintzatua

@@ -32,6 +32,13 @@
     <string name="no_gas_stations">No matching gas station</string>
     <string name="product_selector_hint">Product</string>
     <string name="product_selector_icon_description">Product selector</string>
+    <string name="product_category_recent">Recent</string>
+    <string name="product_category_diesel">Diesel</string>
+    <string name="product_category_gasoline">Gasoline</string>
+    <string name="product_category_natural_gas">Natural Gas &amp; Biogases</string>
+    <string name="product_category_biofuels">Biofuels</string>
+    <string name="product_category_other_gases">Other Gases</string>
+    <string name="product_category_additives">Additives</string>
     <string name="location_selector_hint">Location</string>
     <string name="location_selector_locate_device">Locate device</string>
     <string name="price_not_public">✱ Conditional price</string>

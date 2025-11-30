@@ -30,6 +30,13 @@ settings_filter_closed_tolerance_never: Amosar sempre
 no_gas_stations: Non se atoparon gasolineiras coincidentes
 product_selector_hint: Produto
 product_selector_icon_description: Selector de produto
+product_category_recent: Recientes
+product_category_diesel: Gasoleos
+product_category_gasoline: Gasolinas
+product_category_natural_gas: Gas Natural e Biogás
+product_category_biofuels: Biocombustibles
+product_category_other_gases: Outros Gases
+product_category_additives: Aditivos
 location_selector_hint: Localización
 location_selector_locate_device: Localiza o dispositivo
 price_not_public: ✱ Prezo condicionado
