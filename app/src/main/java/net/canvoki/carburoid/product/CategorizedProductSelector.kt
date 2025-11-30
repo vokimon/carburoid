@@ -98,6 +98,36 @@ fun CategorizedProductSelector() {
             ),
         )
 
+    @Composable
+    fun CategoryHeader(categoryName: String) {
+        Text(
+            categoryName,
+            modifier = Modifier.padding(8.dp),
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
+        )
+    }
+
+    @Composable
+    fun ProductItem(product: String) {
+        DropdownMenuItem(
+            text = { Text(product) },
+            onClick = {
+                selectedProduct = product
+                expanded = false
+            },
+        )
+    }
+
+    @Composable
+    fun CategoryGroup(categoryName, products) {
+        CategoryHeader(categoryName)
+        products.forEach { product ->
+            ProductItem(product)
+        }
+        HorizontalDivider()
+    }
+
     @OptIn(ExperimentalMaterial3Api::class)
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -125,41 +155,17 @@ fun CategorizedProductSelector() {
             onDismissRequest = { expanded = false },
         ) {
             if (recentSelections.isNotEmpty()) {
-                Text(
-                    "Recent Selections",
-                    modifier = Modifier.padding(8.dp),
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
+                CategoryGroup(
+                    categoryName = stringResource(R.string.product_category_recent),
+                    products = recentSelection,
                 )
-                recentSelections.forEach { product ->
-                    DropdownMenuItem(onClick = {
-                        selectedProduct = product
-                        expanded = false
-                        if (!recentSelections.contains(product)) {
-                            recentSelections = listOf(product) + recentSelections.take(4)
-                        }
-                    }, text = { Text(product) })
-                }
-                HorizontalDivider()
             }
 
             productCategories.forEach { category ->
-                Text(
-                    category.name,
-                    modifier = Modifier.padding(8.dp),
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
+                CategoryGroup(
+                    categoryName = category.name,
+                    products = category.products,
                 )
-                category.products.forEach { product ->
-                    DropdownMenuItem(onClick = {
-                        selectedProduct = product
-                        expanded = false
-                        if (!recentSelections.contains(product)) {
-                            recentSelections = listOf(product) + recentSelections.take(4)
-                        }
-                    }, text = { Text(product) })
-                }
-                HorizontalDivider()
             }
         }
     }
