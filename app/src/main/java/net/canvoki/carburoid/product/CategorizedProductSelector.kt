@@ -14,7 +14,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.LocalGasStation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -67,6 +67,12 @@ fun CategorizedProductSelector() {
                 label = { Text("Select Product") },
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.LocalGasStation,
+                        contentDescription = "Gas Station Icon"
+                    )
                 },
                 modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
             )
