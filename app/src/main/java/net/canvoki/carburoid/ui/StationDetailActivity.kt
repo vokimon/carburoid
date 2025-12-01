@@ -52,7 +52,7 @@ class StationDetailActivity : AppCompatActivity() {
         binding.textCityState.text = "${station.city}, ${station.state}"
 
         binding.layoutAddressMap.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, "geo:${station?.latitude},${station?.longitude}".toUri())
+            val intent = Intent(Intent.ACTION_VIEW, "geo:${station.latitude},${station.longitude}".toUri())
             startActivity(intent)
         }
 
