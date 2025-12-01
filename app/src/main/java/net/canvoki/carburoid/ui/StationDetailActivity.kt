@@ -11,6 +11,7 @@ import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.databinding.ActivityStationDetailBinding
 import net.canvoki.carburoid.product.ProductManager
+import net.canvoki.carburoid.product.translateProductName
 import net.canvoki.carburoid.repository.GasStationRepository
 import java.time.Instant
 import com.google.android.material.R as MaterialR
@@ -30,11 +31,17 @@ class StationDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val stationId = intent.getIntExtra("station_id", 0)
-        val station = repository.getStationById(stationId) ?: return // TODO: blank page
+        val station = repository.getStationById(stationId) ?: return
 
         binding.textName.text = station.name
-        binding.textCurrentProduct.text = ProductManager.getCurrent()
-        binding.textPrice.text = station.price?.let { "%.3f €".format(it) } ?: getString(R.string.station_no_price)
+
+        val currentProduct = ProductManager.getCurrent()
+        binding.textCurrentProduct.text = translateProductName(currentProduct, this)
+
+        binding.textPrice.text =
+            station.price?.let { "%.3f €".format(it) }
+                ?: getString(R.string.station_no_price)
+
         binding.textDistance.text = station.distanceInMeters?.let {
             "%.1f km".format(it / 1000f)
         } ?: getString(R.string.station_no_distance)
@@ -59,18 +66,21 @@ class StationDetailActivity : AppCompatActivity() {
         binding.textOpeningHours.text = station.openingHours?.toString()
             ?: getString(R.string.station_status_permanently_closed)
 
-        binding.textExclusivePriceWarning.visibility = if (station.isPublicPrice) View.GONE else View.VISIBLE
+        binding.textExclusivePriceWarning.visibility =
+            if (station.isPublicPrice) View.GONE else View.VISIBLE
 
-        // Other products
-        val otherProducts = station.prices.filter { it.key != ProductManager.getCurrent() }
+        val otherProducts = station.prices.filter { it.key != currentProduct }
         if (otherProducts.isNotEmpty()) {
             binding.labelOtherProducts.visibility = View.VISIBLE
             binding.containerOtherProducts.visibility = View.VISIBLE
 
             for ((product, price) in otherProducts) {
                 if (price == null) continue
+
+                val translatedName = translateProductName(product, this)
+
                 val textView = TextView(this)
-                textView.text = "%.3f €".format(price) + " - " + product
+                textView.text = "%.3f €".format(price) + " - " + translatedName
                 textView.setTextAppearance(MaterialR.style.TextAppearance_Material3_BodyMedium)
                 binding.containerOtherProducts.addView(textView)
             }
