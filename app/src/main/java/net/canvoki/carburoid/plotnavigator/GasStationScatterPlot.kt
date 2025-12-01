@@ -24,7 +24,7 @@ fun getX(station: GasStation): Float? = station.distanceInMeters?.div(1000.0f)
 fun getY(station: GasStation): Float? = station.prices["Gasoleo A"]?.toFloat()
 
 @Composable
-fun PortNavigatorScreen(stations: List<GasStation>) {
+fun PlotNavigatorScreen(stations: List<GasStation>) {
     MaterialTheme(
         colorScheme = ThemeSettings.effectiveColorScheme(),
     ) {

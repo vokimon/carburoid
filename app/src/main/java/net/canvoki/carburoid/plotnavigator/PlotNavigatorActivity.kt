@@ -26,7 +26,7 @@ class PlotNavigatorActivity : ComponentActivity() {
             val stations by viewModel.stationsUpdated.collectAsState(
                 initial = viewModel.getStationsToDisplay()
             )
-            PortNavigatorScreen(stations)
+            PlotNavigatorScreen(stations)
         }
     }
 }
