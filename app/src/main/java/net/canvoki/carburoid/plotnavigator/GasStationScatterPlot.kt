@@ -112,7 +112,6 @@ fun GasStationScatterPlot(
     }
 }
 
-
 data class StationPoint(
     val item: GasStation,
     val index: Int,
@@ -132,41 +131,29 @@ fun ScatterPlot(
     val colors = MaterialTheme.colorScheme
     log("Redraw ScatterPlot ${selectedItem?.id}")
     val currentSelectedItem by rememberUpdatedState(selectedItem)
-    val valid by remember(items, getX, getY) {
+
+    val points by remember(items, getX, getY) {
         derivedStateOf {
-            var minPrice = 10000f
-            var index = 0
-            items
-                .mapNotNull {
-                    val x = getX(it) ?: return@mapNotNull null
-                    val y = getY(it) ?: return@mapNotNull null
-                    if (x > 1000f) return@mapNotNull null
-                    it to (x to y)
-                }.sortedBy { it.second.first }
-                .mapNotNull {
-                    val item = it.first
-                    val x = it.second.first
-                    val y = it.second.second
-                    if (y > minPrice) return@mapNotNull null
-                    minPrice = y
-                    StationPoint(item = item, x = x, y = y, index = index++)
-                }
+            items.mapIndexed { index, station ->
+                val x = getX(station) ?: 0f
+                val y = getY(station) ?: 0f
+                StationPoint(item = station, x = x, y = y, index = index)
+            }
         }
     }
 
-    // Safe bounds without adding fake points
     val xMin = 0f
-    val xMax = valid.maxOfOrNull { it.x } ?: 800f
-    val yMin = valid.minOfOrNull { it.y } ?: 0f
-    val yMax = valid.maxOfOrNull { it.y } ?: 2f
+    val xMax = points.maxOfOrNull { it.x } ?: 800f
+    val yMin = points.minOfOrNull { it.y } ?: 0f
+    val yMax = points.maxOfOrNull { it.y } ?: 2f
 
     fun changePage(delta: Int) {
-        if (valid.isEmpty()) return
+        if (points.isEmpty()) return
 
         val currentIndex =
             currentSelectedItem?.let { item ->
-                log("find ${item.id} on ${valid.size} items")
-                valid
+                log("find ${item.id} on ${points.size} items")
+                points
                     .firstOrNull {
                         log("compare ${it.item.id} ${it.index}")
                         it.item.id == item.id
@@ -175,11 +162,11 @@ fun ScatterPlot(
 
         val newIndex =
             (currentIndex + delta)
-                .coerceIn(0, valid.lastIndex)
+                .coerceIn(0, points.lastIndex)
 
-        log("Deltaing $delta: ${currentSelectedItem?.id} [$currentIndex] -> ${valid[newIndex]?.item?.id} [$newIndex]")
+        log("Deltaing $delta: ${currentSelectedItem?.id} [$currentIndex] -> ${points[newIndex]?.item?.id} [$newIndex]")
         if (newIndex != currentIndex) {
-            onPointClick(valid[newIndex].item)
+            onPointClick(points[newIndex].item)
         }
     }
 
@@ -207,11 +194,11 @@ fun ScatterPlot(
                         strokeWidth = 2.dp,
                         brush = SolidColor(colors.outline),
                     ),
-                symbol = null, // sense punts
+                symbol = null, // no points
             )
         }
         LinePlot2(
-            data = valid,
+            data = points,
             symbol = { point ->
                 val stationPoint = point as StationPoint
                 val isSelected = stationPoint.item.id == selectedItem?.id
