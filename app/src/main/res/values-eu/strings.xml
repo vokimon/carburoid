@@ -39,6 +39,7 @@
     <string name="product_category_biofuels">Biokargagarriek</string>
     <string name="product_category_other_gases">Beste Gasak</string>
     <string name="product_category_additives">Gehigarriak</string>
+    <string name="product_name_gasoleo_a">Gasolioa A</string>
     <string name="location_selector_hint">Kokalekua</string>
     <string name="location_selector_locate_device">Kokatu gailua</string>
     <string name="price_not_public">✱ Prezio baldintzatua</string>

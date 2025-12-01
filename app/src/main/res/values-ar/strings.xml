@@ -39,6 +39,7 @@
     <string name="product_category_biofuels">الوقود الحيوي</string>
     <string name="product_category_other_gases">الغازات الأخرى</string>
     <string name="product_category_additives">الإضافات</string>
+    <string name="product_name_gasoleo_a">ديزل أ</string>
     <string name="location_selector_hint">الموقع</string>
     <string name="location_selector_locate_device">حدد موقع الجهاز</string>
     <string name="price_not_public">✱ السعر مشروط</string>

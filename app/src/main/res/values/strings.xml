@@ -39,6 +39,7 @@
     <string name="product_category_biofuels">Biofuels</string>
     <string name="product_category_other_gases">Other Gases</string>
     <string name="product_category_additives">Additives</string>
+    <string name="product_name_gasoleo_a">Diesel A</string>
     <string name="location_selector_hint">Location</string>
     <string name="location_selector_locate_device">Locate device</string>
     <string name="price_not_public">✱ Conditional price</string>

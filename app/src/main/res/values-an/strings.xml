@@ -39,6 +39,7 @@
     <string name="product_category_biofuels">Biocombustibles</string>
     <string name="product_category_other_gases">Altros Gasos</string>
     <string name="product_category_additives">Aditivos</string>
+    <string name="product_name_gasoleo_a">Gasoléo A</string>
     <string name="location_selector_hint">Ubicación</string>
     <string name="location_selector_locate_device">Ubica o dispositivo</string>
     <string name="price_not_public">✱ Preu condicionau</string>
