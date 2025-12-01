@@ -27,6 +27,7 @@ object ProductCatalog {
                         Product("Gasoleo Premium", R.string.product_name_gasoleo_premium),
                         Product("Gasoleo B", R.string.product_name_gasoleo_b),
                         Product("Diésel Renovable", R.string.product_name_diesel_renovable),
+                        Product("Biodiesel", R.string.product_name_biodiesel),
                     ),
             ),
             ProductCategory(
@@ -41,30 +42,17 @@ object ProductCatalog {
                         Product("Gasolina 98 E10", R.string.product_name_gasolina_98_e10),
                         Product("Gasolina 98 E5", R.string.product_name_gasolina_98_e5),
                         Product("Gasolina Renovable", R.string.product_name_gasolina_renovable),
+                        Product("Bioetanol", R.string.product_name_bioetanol),
                     ),
             ),
             ProductCategory(
-                name = R.string.product_category_natural_gas,
+                name = R.string.product_category_gaseous,
                 products =
                     listOf(
                         Product("Gas Natural Comprimido", R.string.product_name_gas_natural_comprimido),
                         Product("Gas Natural Licuado", R.string.product_name_gas_natural_licuado),
                         Product("Biogas Natural Comprimido", R.string.product_name_biogas_natural_comprimido),
                         Product("Biogas Natural Licuado", R.string.product_name_biogas_natural_licuado),
-                    ),
-            ),
-            ProductCategory(
-                name = R.string.product_category_biofuels,
-                products =
-                    listOf(
-                        Product("Biodiesel", R.string.product_name_biodiesel),
-                        Product("Bioetanol", R.string.product_name_bioetanol),
-                    ),
-            ),
-            ProductCategory(
-                name = R.string.product_category_other_gases,
-                products =
-                    listOf(
                         Product("Gases licuados del petróleo", R.string.product_name_gases_licuados_del_petroleo),
                         Product("Hidrogeno", R.string.product_name_hidrogeno),
                         Product("Amoniaco", R.string.product_name_amoniaco),

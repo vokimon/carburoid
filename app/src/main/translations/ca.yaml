@@ -31,16 +31,14 @@ no_gas_stations: No s'han trobat benzineres coincidents
 product_selector_hint: Producte
 product_selector_icon_description: Selector de producte
 product_category_recent: Recents
-product_category_diesel: Gasolis
+product_category_diesel: Gasoils
 product_category_gasoline: Benzines
-product_category_natural_gas: Gasos Naturals i Biogassos
-product_category_biofuels: Biocombustibles
-product_category_other_gases: Altres Gasos
+product_category_gaseous: Gasosos
 product_category_additives: Additius
-product_name_gasoleo_a: Gasoleo A
-product_name_gasoleo_premium: Gasoleo Premium
-product_name_gasoleo_b: Gasoleo B
-product_name_diesel_renovable: Dièsel Renovable
+product_name_gasoleo_a: Gasoil A
+product_name_gasoleo_premium: Gasoil Premium
+product_name_gasoleo_b: Gasoil B
+product_name_diesel_renovable: Gasoil Renovable
 product_name_gasolina_95_e10: Benzina 95 E10
 product_name_gasolina_95_e25: Benzina 95 E25
 product_name_gasolina_95_e5: Benzina 95 E5

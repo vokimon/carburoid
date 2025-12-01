@@ -33,9 +33,7 @@ product_selector_icon_description: محدد المنتج
 product_category_recent: ﻡﺆﺧﺭﺍً
 product_category_diesel: ﺎﻟﺪﻳﺰﻟ
 product_category_gasoline: ﺎﻠﺒﻧﺰﻴﻧ
-product_category_natural_gas: ﺎﻠﻏﺍﺯ ﺎﻠﻄﺒﻴﻌﻳ ﻭ ﺎﻠﻏﺍﺯ ﺎﻠﺤﻳﻮﻳ
-product_category_biofuels: ﺎﻟﻮﻗﻭﺩ ﺎﻠﺤﻳﻮﻳ
-product_category_other_gases: ﺎﻠﻏﺍﺯﺎﺗ ﺍﻸﺧﺭﻯ
+product_category_gaseous: الغازات
 product_category_additives: ﺍﻺﺿﺎﻓﺎﺗ
 product_name_gasoleo_a: ﺪﻳﺰﻟ ﺃ
 product_name_gasoleo_premium: ﺪﻳﺰﻟ ﺒﺮﻳﻤﻴﻮﻡ

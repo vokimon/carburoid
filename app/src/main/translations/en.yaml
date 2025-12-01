@@ -33,9 +33,7 @@ product_selector_icon_description: Product selector
 product_category_recent: Recent
 product_category_diesel: Diesel
 product_category_gasoline: Gasoline
-product_category_natural_gas: Natural Gas and Biogases
-product_category_biofuels: Biofuels
-product_category_other_gases: Other Gases
+product_category_gaseous: Gaseous
 product_category_additives: Additives
 product_name_gasoleo_a: Gasoleo A
 product_name_gasoleo_premium: Gasoleo Premium
