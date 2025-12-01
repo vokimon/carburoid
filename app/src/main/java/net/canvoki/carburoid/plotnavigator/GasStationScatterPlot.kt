@@ -19,10 +19,6 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.product.CategorizedProductSelector
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
-fun getX(station: GasStation): Float? = station.distanceInMeters?.div(1000.0f)
-
-fun getY(station: GasStation): Float? = station.prices["Gasoleo A"]?.toFloat()
-
 @Composable
 fun PlotNavigatorScreen(stations: List<GasStation>) {
     MaterialTheme(
@@ -51,6 +47,11 @@ fun GasStationScatterPlot(
     items: List<GasStation>,
     modifier: Modifier = Modifier,
 ) {
+    // Local functions to get X and Y values for the plot
+    fun getX(station: GasStation): Float? = station.distanceInMeters?.div(1000.0f)
+
+    fun getY(station: GasStation): Float? = station.prices["Gasoleo A"]?.toFloat()
+
     var selectedItem by remember { mutableStateOf<GasStation?>(null) }
 
     Column(modifier = Modifier.fillMaxWidth()) {
