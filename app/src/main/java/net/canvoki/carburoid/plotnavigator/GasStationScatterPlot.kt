@@ -39,8 +39,6 @@ fun PlotNavigatorScreen(stations: List<GasStation>) {
             ) {
                 GasStationScatterPlot(
                     items = stations,
-                    getX = ::getX,
-                    getY = ::getY,
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -51,8 +49,6 @@ fun PlotNavigatorScreen(stations: List<GasStation>) {
 @Composable
 fun GasStationScatterPlot(
     items: List<GasStation>,
-    getX: (GasStation) -> Float?,
-    getY: (GasStation) -> Float?,
     modifier: Modifier = Modifier,
 ) {
     var selectedItem by remember { mutableStateOf<GasStation?>(null) }
@@ -65,8 +61,8 @@ fun GasStationScatterPlot(
         Material2KoalaTheme {
             ScatterPlot(
                 items = items,
-                getX = getX,
-                getY = getY,
+                getX = ::getX,
+                getY = ::getY,
                 selectedItem = selectedItem,
                 onPointClick = { selectedItem = it },
                 modifier = Modifier.fillMaxWidth(),
