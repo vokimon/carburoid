@@ -28,16 +28,22 @@ Do you want to help? This is my roadmap.
             </intent-filter>
             ```
     - [ ] material icon 'route'
-- [ ] List: Display diferently stations that appear because we disabled a filter
+- [ ] List: Different style for stations that appear because we disabled a filter
 - [ ] Filters: Hide stations beyond the sea (Peninsule, Canary, Balearic, Ceuta, Melilla)
+- [x] Products: Recent products on top
+- [x] Products: Categorize
+- [ ] Products: Sort by popularity (how many gas station serve it)
+- [x] Product: Translate literals in CategorizedProductSelector
+- [ ] Product: Get list from Ministry API
+- [x] Product translation (now Api provides an spanish name as id, monolingual and fragile)
 - [ ] Language: Asturian
 - [ ] Language: Aranese (Occitan)
 - [ ] Modernize code
     - [ ] Migrate Activities to ViewBinding
     - [ ] Migrate uses of android package to androidx
-    - [ ] Compose
+    - [~] Migrate state to ModelView
+    - [~] Compose
 - [ ] Favorites
-
 
 ## Done
 

@@ -2,8 +2,10 @@
 
 ## Unreleased
 
+- ✨ Categorized products for easy search
+- ✨ Recent products on top
 - 🚧 Experimental Plot view
-- 🚧 Experimental Categorized product selector
+- 🐛 Product label and name overlaped Fixes #9
 - 🐛 Osm links were not processed
 - 🐛 Filter on about to close/open did not apply inmediatelly
 - 🐛 Location and product texts non-editable to prevent weird state
