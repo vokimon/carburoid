@@ -3,7 +3,7 @@ package net.canvoki.carburoid.product
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
-import androidx.compose.foundation.layout.Column
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -38,7 +38,7 @@ data class ProductInfo(
 )
 
 data class ProductCategory(
-    val name: String,
+    @field:StringRes val name: Int,
     val products: List<ProductInfo>,
 )
 
@@ -53,7 +53,7 @@ fun CategorizedProductSelector() {
     val productCategories =
         listOf(
             ProductCategory(
-                name = stringResource(R.string.product_category_diesel),
+                name = R.string.product_category_diesel,
                 products = listOf(
                     ProductInfo("Gasoleo A"),
                     ProductInfo("Gasoleo Premium"),
@@ -62,7 +62,7 @@ fun CategorizedProductSelector() {
                 ),
             ),
             ProductCategory(
-                name = stringResource(R.string.product_category_gasoline),
+                name = R.string.product_category_gasoline,
                 products = listOf(
                     ProductInfo("Gasolina 95 E10"),
                     ProductInfo("Gasolina 95 E25"),
@@ -75,7 +75,7 @@ fun CategorizedProductSelector() {
                 ),
             ),
             ProductCategory(
-                name = stringResource(R.string.product_category_natural_gas),
+                name = R.string.product_category_natural_gas,
                 products = listOf(
                     ProductInfo("Gas Natural Comprimido"),
                     ProductInfo("Gas Natural Licuado"),
@@ -84,14 +84,14 @@ fun CategorizedProductSelector() {
                 ),
             ),
             ProductCategory(
-                name = stringResource(R.string.product_category_biofuels),
+                name = R.string.product_category_biofuels,
                 products = listOf(
                     ProductInfo("Biodiesel"),
                     ProductInfo("Bioetanol"),
                 ),
             ),
             ProductCategory(
-                name = stringResource(R.string.product_category_other_gases),
+                name = R.string.product_category_other_gases,
                 products = listOf(
                     ProductInfo("Gases licuados del petróleo"),
                     ProductInfo("Hidrogeno"),
@@ -100,7 +100,7 @@ fun CategorizedProductSelector() {
                 ),
             ),
             ProductCategory(
-                name = stringResource(R.string.product_category_additives),
+                name = R.string.product_category_additives,
                 products = listOf(
                     ProductInfo("Adblue"),
                 ),
@@ -108,9 +108,9 @@ fun CategorizedProductSelector() {
         )
 
     @Composable
-    fun CategoryHeader(categoryName: String) {
+    fun CategoryHeader(@StringRes name: Int) {
         Text(
-            categoryName,
+            stringResource(name),
             modifier = Modifier.padding(8.dp),
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
@@ -130,10 +130,10 @@ fun CategorizedProductSelector() {
 
     @Composable
     fun CategoryGroup(
-        categoryName: String,
+        @StringRes name: Int,
         products: List<ProductInfo>,
     ) {
-        CategoryHeader(categoryName)
+        CategoryHeader(name)
         products.forEach { product ->
             ProductItem(product)
         }
@@ -168,14 +168,14 @@ fun CategorizedProductSelector() {
         ) {
             if (recentSelections.isNotEmpty()) {
                 CategoryGroup(
-                    categoryName = stringResource(R.string.product_category_recent),
+                    name = R.string.product_category_recent,
                     products = recentSelections.map { ProductInfo(it) },
                 )
             }
 
             productCategories.forEach { category ->
                 CategoryGroup(
-                    categoryName = category.name,
+                    name = category.name,
                     products = category.products,
                 )
             }
