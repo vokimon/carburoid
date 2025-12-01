@@ -170,8 +170,11 @@ fun ScatterPlot(
         }
     }
 
-    val xValues = valid.map { it.x }
-    val yValues = valid.map { it.y }
+    // Safe bounds without adding fake points
+    val xMin = 0f
+    val xMax = valid.maxOfOrNull { it.x } ?: 800f
+    val yMin = valid.minOfOrNull { it.y } ?: 0f
+    val yMax = valid.maxOfOrNull { it.y } ?: 2f
 
     fun changePage(delta: Int) {
         if (valid.isEmpty()) return
@@ -198,8 +201,8 @@ fun ScatterPlot(
 
     @OptIn(ExperimentalKoalaPlotApi::class)
     XYGraph(
-        xAxisModel = rememberFloatLinearAxisModel(0.0f..xValues.max()),
-        yAxisModel = rememberFloatLinearAxisModel(yValues.min()..yValues.max()),
+        xAxisModel = rememberFloatLinearAxisModel(xMin..xMax),
+        yAxisModel = rememberFloatLinearAxisModel(yMin..yMax),
         xAxisTitle = "Distància (km)",
         yAxisTitle = null, //"Preu (€)",
         xAxisLabels = { "%.01f".format(it) },
@@ -212,8 +215,8 @@ fun ScatterPlot(
             LinePlot2(
                 data =
                     listOf(
-                        StationPoint(item, -1, x, yValues.min()),
-                        StationPoint(item, -1, x, yValues.max()),
+                        StationPoint(item, -1, x, yMin),
+                        StationPoint(item, -1, x, yMax),
                     ),
                 lineStyle =
                     LineStyle(
