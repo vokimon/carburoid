@@ -44,7 +44,9 @@ fun CategorizedProductSelector() {
     val productCategories = ProductCatalog.categories
 
     @Composable
-    fun CategoryHeader(@StringRes name: Int) {
+    fun CategoryHeader(
+        @StringRes name: Int,
+    ) {
         Text(
             stringResource(name),
             modifier = Modifier.padding(8.dp),
@@ -92,9 +94,10 @@ fun CategorizedProductSelector() {
                     contentDescription = stringResource(R.string.product_selector_icon_description),
                 )
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
         )
 
         ExposedDropdownMenu(
