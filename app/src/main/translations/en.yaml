@@ -33,11 +33,33 @@ product_selector_icon_description: Product selector
 product_category_recent: Recent
 product_category_diesel: Diesel
 product_category_gasoline: Gasoline
-product_category_natural_gas: Natural Gas & Biogases
+product_category_natural_gas: Natural Gas and Biogases
 product_category_biofuels: Biofuels
 product_category_other_gases: Other Gases
 product_category_additives: Additives
-product_name_gasoleo_a: Diesel A
+product_name_gasoleo_a: Gasoleo A
+product_name_gasoleo_premium: Gasoleo Premium
+product_name_gasoleo_b: Gasoleo B
+product_name_diesel_renovable: Renewable Diesel
+product_name_gasolina_95_e10: Gasoline 95 E10
+product_name_gasolina_95_e25: Gasoline 95 E25
+product_name_gasolina_95_e5: Gasoline 95 E5
+product_name_gasolina_95_e5_premium: Gasoline 95 E5 Premium
+product_name_gasolina_95_e85: Gasoline 95 E85
+product_name_gasolina_98_e10: Gasoline 98 E10
+product_name_gasolina_98_e5: Gasoline 98 E5
+product_name_gasolina_renovable: Renewable Gasoline
+product_name_gas_natural_comprimido: Compressed Natural Gas
+product_name_gas_natural_licuado: Liquefied Natural Gas
+product_name_biogas_natural_comprimido: Compressed Biogas
+product_name_biogas_natural_licuado: Liquefied Biogas
+product_name_biodiesel: Biodiesel
+product_name_bioetanol: Bioethanol
+product_name_gases_licuados_del_petroleo: Liquefied Petroleum Gas
+product_name_hidrogeno: Hydrogen
+product_name_amoniaco: Ammonia
+product_name_metanol: Methanol
+product_name_adblue: AdBlue
 location_selector_hint: Location
 location_selector_locate_device: Locate device
 price_not_public: ✱ Conditional price

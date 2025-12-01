@@ -31,13 +31,35 @@ no_gas_stations: Ez dago bat datorren gasolindegirik
 product_selector_hint: Produktua
 product_selector_icon_description: Produktu-hautagailua
 product_category_recent: Azkenak
-product_category_diesel: Gasolioak
-product_category_gasoline: Gasolina
-product_category_natural_gas: Gas Natural eta Biogasak
-product_category_biofuels: Biokargagarriek
+product_category_diesel: Dieselak
+product_category_gasoline: Benzinak
+product_category_natural_gas: Gas Naturala eta Biogasa
+product_category_biofuels: Bioerregaienak
 product_category_other_gases: Beste Gasak
 product_category_additives: Gehigarriak
 product_name_gasoleo_a: Gasolioa A
+product_name_gasoleo_premium: Gasolioa Premium
+product_name_gasoleo_b: Gasolioa B
+product_name_diesel_renovable: Diesel Berriztagarria
+product_name_gasolina_95_e10: Benzina 95 E10
+product_name_gasolina_95_e25: Benzina 95 E25
+product_name_gasolina_95_e5: Benzina 95 E5
+product_name_gasolina_95_e5_premium: Benzina 95 E5 Premium
+product_name_gasolina_95_e85: Benzina 95 E85
+product_name_gasolina_98_e10: Benzina 98 E10
+product_name_gasolina_98_e5: Benzina 98 E5
+product_name_gasolina_renovable: Benzina Berriztagarria
+product_name_gas_natural_comprimido: Gas Naturala Konprimatua
+product_name_gas_natural_licuado: Gas Naturala Likidotua
+product_name_biogas_natural_comprimido: Biogas Naturala Konprimatua
+product_name_biogas_natural_licuado: Biogas Naturala Likidotua
+product_name_biodiesel: Biodiesel
+product_name_bioetanol: Bioetanol
+product_name_gases_licuados_del_petroleo: Gas Natural Llikuidatu Petrolioa
+product_name_hidrogeno: Hidrogenoa
+product_name_amoniaco: Amoniakoa
+product_name_metanol: Metanola
+product_name_adblue: Adblue
 location_selector_hint: Kokalekua
 location_selector_locate_device: Kokatu gailua
 price_not_public: ✱ Prezio baldintzatua

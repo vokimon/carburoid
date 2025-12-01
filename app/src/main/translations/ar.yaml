@@ -30,14 +30,36 @@ settings_filter_closed_tolerance_never: عرض دائمًا
 no_gas_stations: لم يتم العثور على محطات وقود مطابقة
 product_selector_hint: المنتج
 product_selector_icon_description: محدد المنتج
-product_category_recent: مؤخراً
-product_category_diesel: الديزل
-product_category_gasoline: البنزين
-product_category_natural_gas: الغاز الطبيعي و الغاز الحيوي
-product_category_biofuels: الوقود الحيوي
-product_category_other_gases: الغازات الأخرى
-product_category_additives: الإضافات
-product_name_gasoleo_a: ديزل أ
+product_category_recent: ﻡﺆﺧﺭﺍً
+product_category_diesel: ﺎﻟﺪﻳﺰﻟ
+product_category_gasoline: ﺎﻠﺒﻧﺰﻴﻧ
+product_category_natural_gas: ﺎﻠﻏﺍﺯ ﺎﻠﻄﺒﻴﻌﻳ ﻭ ﺎﻠﻏﺍﺯ ﺎﻠﺤﻳﻮﻳ
+product_category_biofuels: ﺎﻟﻮﻗﻭﺩ ﺎﻠﺤﻳﻮﻳ
+product_category_other_gases: ﺎﻠﻏﺍﺯﺎﺗ ﺍﻸﺧﺭﻯ
+product_category_additives: ﺍﻺﺿﺎﻓﺎﺗ
+product_name_gasoleo_a: ﺪﻳﺰﻟ ﺃ
+product_name_gasoleo_premium: ﺪﻳﺰﻟ ﺒﺮﻳﻤﻴﻮﻡ
+product_name_gasoleo_b: ﺪﻳﺰﻟ ﺏ
+product_name_diesel_renovable: ﺪﻳﺰﻟ ﺍﻟﻘﺎﺑﻞ ﻟﻠﺘﺠﺪﻳﺪ
+product_name_gasolina_95_e10: ﺒﻨﺰﻳﻨﺎ 95 E10
+product_name_gasolina_95_e25: ﺒﻨﺰﻳﻨﺎ 95 E25
+product_name_gasolina_95_e5: ﺒﻨﺰﻳﻨﺎ 95 E5
+product_name_gasolina_95_e5_premium: ﺒﻨﺰﻳﻨﺎ 95 E5 ﺒﺮﻳﻤﻴﻮﻡ
+product_name_gasolina_95_e85: ﺒﻨﺰﻳﻨﺎ 95 E85
+product_name_gasolina_98_e10: ﺒﻨﺰﻳﻨﺎ 98 E10
+product_name_gasolina_98_e5: ﺒﻨﺰﻳﻨﺎ 98 E5
+product_name_gasolina_renovable: ﺒﻨﺰﻳﻨﺎ ﺍﻟﻘﺎﺑﻠﺔ ﻟﻠﺘﺠﺪﻳﺪ
+product_name_gas_natural_comprimido: ﺎﻟﻐﺎﺯ ﺍﻟﻄﺒﻴﻌﻲ ﺍﻟﻤﺸﺪﻭﺩ
+product_name_gas_natural_licuado: ﺎﻟﻐﺎﺯ ﺍﻟﻄﺒﻴﻌﻲ ﺍﻟﺴﺎﺋﻞ
+product_name_biogas_natural_comprimido: ﺒﻴﻮ ﺍﻟﻐﺎﺯ ﺍﻟﻄﺒﻴﻌﻲ ﺍﻟﻤﺸﺪﻭﺩ
+product_name_biogas_natural_licuado: ﺒﻴﻮ ﺍﻟﻐﺎﺯ ﺍﻟﻄﺒﻴﻌﻲ ﺍﻟﺴﺎﺋﻞ
+product_name_biodiesel: ﺑﻴﻮﺩﻳﺰﻟ
+product_name_bioetanol: ﺑﻴﻮﺇﺗﺎﻧﻭﻝ
+product_name_gases_licuados_del_petroleo: ﺍﻟﻐﺎﺯﺍﺕ ﺍﻟﻤﺴﻴﻠﺔ ﻣﻦ ﺍﻟﺒﺘﺮﻭﻟﻴﻭ
+product_name_hidrogeno: ﺍﻟﻬﻴﺪﺭﻭﺟﻴﻦ
+product_name_amoniaco: ﺍﻷﻣﻮﻧﻲﺎﻙ
+product_name_metanol: ﺍﻟﻤﻴﺜﺎﻧﻮﻝ
+product_name_adblue: ﺁﺩﺒﻼﻭ
 location_selector_hint: الموقع
 location_selector_locate_device: حدد موقع الجهاز
 price_not_public: ✱ السعر مشروط

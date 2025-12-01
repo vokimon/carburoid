@@ -31,13 +31,35 @@ no_gas_stations: No se encontraron gasolineras coincidentes
 product_selector_hint: Producto
 product_selector_icon_description: Selector de producto
 product_category_recent: Recientes
-product_category_diesel: Gasoleos
-product_category_gasoline: Gasolinas
-product_category_natural_gas: Gas Naturales y Biogases
+product_category_diesel: Gasóleo
+product_category_gasoline: Gasolina
+product_category_natural_gas: Gas Natural y Biogases
 product_category_biofuels: Biocombustibles
 product_category_other_gases: Otros Gases
 product_category_additives: Aditivos
 product_name_gasoleo_a: Gasóleo A
+product_name_gasoleo_premium: Gasóleo Premium
+product_name_gasoleo_b: Gasóleo B
+product_name_diesel_renovable: Diésel Renovable
+product_name_gasolina_95_e10: Gasolina 95 E10
+product_name_gasolina_95_e25: Gasolina 95 E25
+product_name_gasolina_95_e5: Gasolina 95 E5
+product_name_gasolina_95_e5_premium: Gasolina 95 E5 Premium
+product_name_gasolina_95_e85: Gasolina 95 E85
+product_name_gasolina_98_e10: Gasolina 98 E10
+product_name_gasolina_98_e5: Gasolina 98 E5
+product_name_gasolina_renovable: Gasolina Renovable
+product_name_gas_natural_comprimido: Gas Natural Comprimido
+product_name_gas_natural_licuado: Gas Natural Licuado
+product_name_biogas_natural_comprimido: Biogas Natural Comprimido
+product_name_biogas_natural_licuado: Biogas Natural Licuado
+product_name_biodiesel: Biodiésel
+product_name_bioetanol: Bioetanol
+product_name_gases_licuados_del_petroleo: Gases licuados del petróleo
+product_name_hidrogeno: Hidrógeno
+product_name_amoniaco: Amoníaco
+product_name_metanol: Metanol
+product_name_adblue: Adblue
 location_selector_hint: Ubicación
 location_selector_locate_device: Ubica el dispositivo
 price_not_public: ✱ Precio condicionado

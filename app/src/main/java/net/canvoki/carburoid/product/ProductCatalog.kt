@@ -24,67 +24,65 @@ object ProductCatalog {
                 products =
                     listOf(
                         Product("Gasoleo A", R.string.product_name_gasoleo_a),
-                        Product("Gasoleo Premium"),
-                        Product("Gasoleo B"),
-                        Product("Diésel Renovable"),
+                        Product("Gasoleo Premium", R.string.product_name_gasoleo_premium),
+                        Product("Gasoleo B", R.string.product_name_gasoleo_b),
+                        Product("Diésel Renovable", R.string.product_name_diesel_renovable),
                     ),
             ),
             ProductCategory(
                 name = R.string.product_category_gasoline,
                 products =
                     listOf(
-                        Product("Gasolina 95 E10"),
-                        Product("Gasolina 95 E25"),
-                        Product("Gasolina 95 E5"),
-                        Product("Gasolina 95 E5 Premium"),
-                        Product("Gasolina 95 E85"),
-                        Product("Gasolina 98 E10"),
-                        Product("Gasolina 98 E5"),
-                        Product("Gasolina Renovable"),
+                        Product("Gasolina 95 E10", R.string.product_name_gasolina_95_e10),
+                        Product("Gasolina 95 E25", R.string.product_name_gasolina_95_e25),
+                        Product("Gasolina 95 E5", R.string.product_name_gasolina_95_e5),
+                        Product("Gasolina 95 E5 Premium", R.string.product_name_gasolina_95_e5_premium),
+                        Product("Gasolina 95 E85", R.string.product_name_gasolina_95_e85),
+                        Product("Gasolina 98 E10", R.string.product_name_gasolina_98_e10),
+                        Product("Gasolina 98 E5", R.string.product_name_gasolina_98_e5),
+                        Product("Gasolina Renovable", R.string.product_name_gasolina_renovable),
                     ),
             ),
             ProductCategory(
                 name = R.string.product_category_natural_gas,
                 products =
                     listOf(
-                        Product("Gas Natural Comprimido"),
-                        Product("Gas Natural Licuado"),
-                        Product("Biogas Natural Comprimido"),
-                        Product("Biogas Natural Licuado"),
+                        Product("Gas Natural Comprimido", R.string.product_name_gas_natural_comprimido),
+                        Product("Gas Natural Licuado", R.string.product_name_gas_natural_licuado),
+                        Product("Biogas Natural Comprimido", R.string.product_name_biogas_natural_comprimido),
+                        Product("Biogas Natural Licuado", R.string.product_name_biogas_natural_licuado),
                     ),
             ),
             ProductCategory(
                 name = R.string.product_category_biofuels,
                 products =
                     listOf(
-                        Product("Biodiesel"),
-                        Product("Bioetanol"),
+                        Product("Biodiesel", R.string.product_name_biodiesel),
+                        Product("Bioetanol", R.string.product_name_bioetanol),
                     ),
             ),
             ProductCategory(
                 name = R.string.product_category_other_gases,
                 products =
                     listOf(
-                        Product("Gases licuados del petróleo"),
-                        Product("Hidrogeno"),
-                        Product("Amoniaco"),
-                        Product("Metanol"),
+                        Product("Gases licuados del petróleo", R.string.product_name_gases_licuados_del_petroleo),
+                        Product("Hidrogeno", R.string.product_name_hidrogeno),
+                        Product("Amoniaco", R.string.product_name_amoniaco),
+                        Product("Metanol", R.string.product_name_metanol),
                     ),
             ),
             ProductCategory(
                 name = R.string.product_category_additives,
                 products =
                     listOf(
-                        Product("Adblue"),
+                        Product("Adblue", R.string.product_name_adblue),
                     ),
             ),
         )
     }
 
     private val productMap: Map<String, Product> by lazy {
-        categories
-            .flatMap { it.products }
-            .associateBy { it.apiName }
+        categories.flatMap { it.products }.associateBy { it.apiName }
     }
 
     fun productName(

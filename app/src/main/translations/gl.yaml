@@ -1,3 +1,4 @@
+language_code: gl
 language_name: Galego
 app_name: Carburoid
 menu_settings: Axustes
@@ -13,7 +14,6 @@ theme_light: Claro
 theme_dark: Escuro
 theme_system: Automático (Sistema)
 settings_category_station_filters: Filtrado de gasolineiras
-language_code: gl
 settings_filter_expensive: Oculta estacións caras e afastadas
 settings_filter_expensive_summary: Non amosar unha estación se existe outra máis próxima e máis barata. (Recomendado)
 settings_filter_non_public: Só prezos públicos
@@ -30,14 +30,36 @@ settings_filter_closed_tolerance_never: Amosar sempre
 no_gas_stations: Non se atoparon gasolineiras coincidentes
 product_selector_hint: Produto
 product_selector_icon_description: Selector de produto
-product_category_recent: Recientes
-product_category_diesel: Gasoleos
-product_category_gasoline: Gasolinas
-product_category_natural_gas: Gas Natural e Biogás
+product_category_recent: Recentes
+product_category_diesel: Gasóleo
+product_category_gasoline: Gasolina
+product_category_natural_gas: Gas Natural e Biogases
 product_category_biofuels: Biocombustibles
 product_category_other_gases: Outros Gases
 product_category_additives: Aditivos
 product_name_gasoleo_a: Gasóleo A
+product_name_gasoleo_premium: Gasóleo Premium
+product_name_gasoleo_b: Gasóleo B
+product_name_diesel_renovable: Diésel Renovable
+product_name_gasolina_95_e10: Gasolina 95 E10
+product_name_gasolina_95_e25: Gasolina 95 E25
+product_name_gasolina_95_e5: Gasolina 95 E5
+product_name_gasolina_95_e5_premium: Gasolina 95 E5 Premium
+product_name_gasolina_95_e85: Gasolina 95 E85
+product_name_gasolina_98_e10: Gasolina 98 E10
+product_name_gasolina_98_e5: Gasolina 98 E5
+product_name_gasolina_renovable: Gasolina Renovable
+product_name_gas_natural_comprimido: Gas Natural Comprimido
+product_name_gas_natural_licuado: Gas Natural Licuado
+product_name_biogas_natural_comprimido: Biogas Natural Comprimido
+product_name_biogas_natural_licuado: Biogas Natural Licuado
+product_name_biodiesel: Biodiésel
+product_name_bioetanol: Bioetanol
+product_name_gases_licuados_del_petroleo: Gases licuados do petróleo
+product_name_hidrogeno: Hidróxeno
+product_name_amoniaco: Amoníaco
+product_name_metanol: Metanol
+product_name_adblue: AdBlue
 location_selector_hint: Localización
 location_selector_locate_device: Localiza o dispositivo
 price_not_public: ✱ Prezo condicionado
