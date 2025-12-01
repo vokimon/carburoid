@@ -112,22 +112,6 @@ fun GasStationScatterPlot(
     }
 }
 
-@Composable
-fun GasStationSummaryCard(station: GasStation?) {
-    if (station == null) return
-    log("Redraw Summary ${station.id}")
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text("Name: ${station.name}", style = MaterialTheme.typography.titleMedium)
-        Text("Price: €${"%.3f".format(station.prices["Gasoleo A"] ?: 0.0f)}")
-        Text("Distance: ${"%.1f".format((station.distanceInMeters ?: 0.0f) / 1000.0f)} km")
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = {
-            // TODO: navigate to detail activity
-        }) {
-            Text("Go to Detail")
-        }
-    }
-}
 
 data class StationPoint(
     val item: GasStation,
