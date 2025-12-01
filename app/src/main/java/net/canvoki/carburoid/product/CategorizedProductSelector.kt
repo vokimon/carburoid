@@ -33,15 +33,6 @@ import androidx.compose.ui.unit.dp
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
-data class ProductInfo(
-    val apiName: String,
-)
-
-data class ProductCategory(
-    @field:StringRes val name: Int,
-    val products: List<ProductInfo>,
-)
-
 @Composable
 fun CategorizedProductSelector() {
     var expanded by remember { mutableStateOf(false) }
@@ -50,62 +41,7 @@ fun CategorizedProductSelector() {
     var selectedProduct by productSelection.asState()
     var recentSelections = productSelection.recent()
 
-    val productCategories =
-        listOf(
-            ProductCategory(
-                name = R.string.product_category_diesel,
-                products = listOf(
-                    ProductInfo("Gasoleo A"),
-                    ProductInfo("Gasoleo Premium"),
-                    ProductInfo("Gasoleo B"),
-                    ProductInfo("Diésel Renovable"),
-                ),
-            ),
-            ProductCategory(
-                name = R.string.product_category_gasoline,
-                products = listOf(
-                    ProductInfo("Gasolina 95 E10"),
-                    ProductInfo("Gasolina 95 E25"),
-                    ProductInfo("Gasolina 95 E5"),
-                    ProductInfo("Gasolina 95 E5 Premium"),
-                    ProductInfo("Gasolina 95 E85"),
-                    ProductInfo("Gasolina 98 E10"),
-                    ProductInfo("Gasolina 98 E5"),
-                    ProductInfo("Gasolina Renovable"),
-                ),
-            ),
-            ProductCategory(
-                name = R.string.product_category_natural_gas,
-                products = listOf(
-                    ProductInfo("Gas Natural Comprimido"),
-                    ProductInfo("Gas Natural Licuado"),
-                    ProductInfo("Biogas Natural Comprimido"),
-                    ProductInfo("Biogas Natural Licuado"),
-                ),
-            ),
-            ProductCategory(
-                name = R.string.product_category_biofuels,
-                products = listOf(
-                    ProductInfo("Biodiesel"),
-                    ProductInfo("Bioetanol"),
-                ),
-            ),
-            ProductCategory(
-                name = R.string.product_category_other_gases,
-                products = listOf(
-                    ProductInfo("Gases licuados del petróleo"),
-                    ProductInfo("Hidrogeno"),
-                    ProductInfo("Amoniaco"),
-                    ProductInfo("Metanol"),
-                ),
-            ),
-            ProductCategory(
-                name = R.string.product_category_additives,
-                products = listOf(
-                    ProductInfo("Adblue"),
-                ),
-            ),
-        )
+    val productCategories = ProductCatalog.categories
 
     @Composable
     fun CategoryHeader(@StringRes name: Int) {
@@ -118,24 +54,21 @@ fun CategorizedProductSelector() {
     }
 
     @Composable
-    fun ProductItem(product: ProductInfo) {
+    fun ProductItem(apiName: String) {
         DropdownMenuItem(
-            text = { Text(product.apiName) },
+            text = { Text(translateProductName(apiName)) },
             onClick = {
-                selectedProduct = product.apiName
+                selectedProduct = apiName
                 expanded = false
             },
         )
     }
 
     @Composable
-    fun CategoryGroup(
-        @StringRes name: Int,
-        products: List<ProductInfo>,
-    ) {
-        CategoryHeader(name)
-        products.forEach { product ->
-            ProductItem(product)
+    fun CategoryGroup(category: ProductCatalog.ProductCategory) {
+        CategoryHeader(category.name)
+        category.products.forEach { product ->
+            ProductItem(product.apiName)
         }
         HorizontalDivider()
     }
@@ -146,7 +79,7 @@ fun CategorizedProductSelector() {
         onExpandedChange = { expanded = it },
     ) {
         TextField(
-            value = selectedProduct,
+            value = translateProductName(selectedProduct),
             onValueChange = { },
             readOnly = true,
             label = { Text(stringResource(R.string.product_selector_hint)) },
@@ -159,7 +92,9 @@ fun CategorizedProductSelector() {
                     contentDescription = stringResource(R.string.product_selector_icon_description),
                 )
             },
-            modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
         )
 
         ExposedDropdownMenu(
@@ -167,17 +102,15 @@ fun CategorizedProductSelector() {
             onDismissRequest = { expanded = false },
         ) {
             if (recentSelections.isNotEmpty()) {
-                CategoryGroup(
-                    name = R.string.product_category_recent,
-                    products = recentSelections.map { ProductInfo(it) },
-                )
+                CategoryHeader(R.string.product_category_recent)
+                recentSelections.forEach { apiName ->
+                    ProductItem(apiName)
+                }
+                HorizontalDivider()
             }
 
             productCategories.forEach { category ->
-                CategoryGroup(
-                    name = category.name,
-                    products = category.products,
-                )
+                CategoryGroup(category)
             }
         }
     }

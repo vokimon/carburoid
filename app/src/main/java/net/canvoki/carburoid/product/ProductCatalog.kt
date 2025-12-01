@@ -17,7 +17,7 @@ object ProductCatalog {
         val products: List<Product>,
     )
 
-    private val categories: List<ProductCategory> by lazy {
+    val categories: List<ProductCategory> by lazy {
         listOf(
             ProductCategory(
                 name = R.string.product_category_diesel,
