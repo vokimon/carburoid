@@ -33,6 +33,15 @@ import androidx.compose.ui.unit.dp
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
+data class ProductInfo(
+    val apiName: String,
+)
+
+data class ProductCategory(
+    val name: String,
+    val products: List<ProductInfo>,
+)
+
 @Composable
 fun CategorizedProductSelector() {
     var expanded by remember { mutableStateOf(false) }
@@ -44,56 +53,56 @@ fun CategorizedProductSelector() {
     val productCategories =
         listOf(
             ProductCategory(
-                stringResource(R.string.product_category_diesel),
-                listOf(
-                    "Gasoleo A",
-                    "Gasoleo Premium",
-                    "Gasoleo B",
-                    "Diésel Renovable",
+                name = stringResource(R.string.product_category_diesel),
+                products = listOf(
+                    ProductInfo("Gasoleo A"),
+                    ProductInfo("Gasoleo Premium"),
+                    ProductInfo("Gasoleo B"),
+                    ProductInfo("Diésel Renovable"),
                 ),
             ),
             ProductCategory(
-                stringResource(R.string.product_category_gasoline),
-                listOf(
-                    "Gasolina 95 E10",
-                    "Gasolina 95 E25",
-                    "Gasolina 95 E5",
-                    "Gasolina 95 E5 Premium",
-                    "Gasolina 95 E85",
-                    "Gasolina 98 E10",
-                    "Gasolina 98 E5",
-                    "Gasolina Renovable",
+                name = stringResource(R.string.product_category_gasoline),
+                products = listOf(
+                    ProductInfo("Gasolina 95 E10"),
+                    ProductInfo("Gasolina 95 E25"),
+                    ProductInfo("Gasolina 95 E5"),
+                    ProductInfo("Gasolina 95 E5 Premium"),
+                    ProductInfo("Gasolina 95 E85"),
+                    ProductInfo("Gasolina 98 E10"),
+                    ProductInfo("Gasolina 98 E5"),
+                    ProductInfo("Gasolina Renovable"),
                 ),
             ),
             ProductCategory(
-                stringResource(R.string.product_category_natural_gas),
-                listOf(
-                    "Gas Natural Comprimido",
-                    "Gas Natural Licuado",
-                    "Biogas Natural Comprimido",
-                    "Biogas Natural Licuado",
+                name = stringResource(R.string.product_category_natural_gas),
+                products = listOf(
+                    ProductInfo("Gas Natural Comprimido"),
+                    ProductInfo("Gas Natural Licuado"),
+                    ProductInfo("Biogas Natural Comprimido"),
+                    ProductInfo("Biogas Natural Licuado"),
                 ),
             ),
             ProductCategory(
-                stringResource(R.string.product_category_biofuels),
-                listOf(
-                    "Biodiesel",
-                    "Bioetanol",
+                name = stringResource(R.string.product_category_biofuels),
+                products = listOf(
+                    ProductInfo("Biodiesel"),
+                    ProductInfo("Bioetanol"),
                 ),
             ),
             ProductCategory(
-                stringResource(R.string.product_category_other_gases),
-                listOf(
-                    "Gases licuados del petróleo",
-                    "Hidrogeno",
-                    "Amoniaco",
-                    "Metanol",
+                name = stringResource(R.string.product_category_other_gases),
+                products = listOf(
+                    ProductInfo("Gases licuados del petróleo"),
+                    ProductInfo("Hidrogeno"),
+                    ProductInfo("Amoniaco"),
+                    ProductInfo("Metanol"),
                 ),
             ),
             ProductCategory(
-                stringResource(R.string.product_category_additives),
-                listOf(
-                    "Adblue",
+                name = stringResource(R.string.product_category_additives),
+                products = listOf(
+                    ProductInfo("Adblue"),
                 ),
             ),
         )
@@ -109,11 +118,11 @@ fun CategorizedProductSelector() {
     }
 
     @Composable
-    fun ProductItem(product: String) {
+    fun ProductItem(product: ProductInfo) {
         DropdownMenuItem(
-            text = { Text(product) },
+            text = { Text(product.apiName) },
             onClick = {
-                selectedProduct = product
+                selectedProduct = product.apiName
                 expanded = false
             },
         )
@@ -122,7 +131,7 @@ fun CategorizedProductSelector() {
     @Composable
     fun CategoryGroup(
         categoryName: String,
-        products: List<String>,
+        products: List<ProductInfo>,
     ) {
         CategoryHeader(categoryName)
         products.forEach { product ->
@@ -160,7 +169,7 @@ fun CategorizedProductSelector() {
             if (recentSelections.isNotEmpty()) {
                 CategoryGroup(
                     categoryName = stringResource(R.string.product_category_recent),
-                    products = recentSelections,
+                    products = recentSelections.map { ProductInfo(it) },
                 )
             }
 
@@ -173,11 +182,6 @@ fun CategorizedProductSelector() {
         }
     }
 }
-
-data class ProductCategory(
-    val name: String,
-    val products: List<String>,
-)
 
 class CategorizedProductSelectorView
     @JvmOverloads
