@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.product.CategorizedProductSelector
+import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
@@ -47,12 +48,13 @@ fun GasStationScatterPlot(
     items: List<GasStation>,
     modifier: Modifier = Modifier,
 ) {
-    // Local functions to get X and Y values for the plot
+    var selectedItem by remember { mutableStateOf<GasStation?>(null) }
+
+    val product = ProductManager.getCurrent()
+
     fun getX(station: GasStation): Float? = station.distanceInMeters?.div(1000.0f)
 
-    fun getY(station: GasStation): Float? = station.prices["Gasoleo A"]?.toFloat()
-
-    var selectedItem by remember { mutableStateOf<GasStation?>(null) }
+    fun getY(station: GasStation): Float? = station.prices[product]?.toFloat()
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Column {
