@@ -55,7 +55,7 @@ fun GasStationScatterPlot(
     val product by rememberUpdatedState(ProductManager.getCurrent())
 
     LaunchedEffect(items) {
-        selectedItem = items[0]
+        selectedItem = items.getOrNull(0)
     }
 
     fun getX(station: GasStation): Float? = station.distanceInMeters?.div(1000.0f)

@@ -30,6 +30,37 @@ data class StationPoint(
     override val y: Float,
 ) : Point<Float, Float>
 
+
+fun xRange(points: List<StationPoint>): Pair<Float, Float> {
+    val xMax = points.maxOfOrNull { it.x } ?: 0f
+    return 0f to (if (xMax<= 0f) 800f else xMax)
+}
+
+fun yRange(points: List<StationPoint>): Pair<Float, Float> {
+    val defaultMin = 0f
+    val defaultMax = 2f
+    val yMin = points.minOfOrNull { it.y }
+    val yMax = points.maxOfOrNull { it.y }
+
+    // No points
+    if (yMin == null || yMax == null) {
+        return defaultMin to defaultMax
+    }
+
+    // Regular case
+    if (yMin < yMax) {
+        return yMin to yMax
+    }
+
+    // both yMin and yMax at ot below zero
+    if (yMax <= defaultMin) {
+        return defaultMin to defaultMax
+    }
+    return defaultMin to yMax
+}
+
+
+
 @Composable
 fun ScatterPlot(
     items: List<GasStation>,
@@ -54,10 +85,8 @@ fun ScatterPlot(
         }
     }
 
-    val xMin = 0f
-    val xMax = points.maxOfOrNull { it.x } ?: 800f
-    val yMin = points.minOfOrNull { it.y } ?: 0f
-    val yMax = points.maxOfOrNull { it.y } ?: 2f
+    val (xMin, xMax) = xRange(points)
+    val (yMin, yMax) = yRange(points)
 
     fun changePage(delta: Int) {
         if (points.isEmpty()) onItemSelected(null)
