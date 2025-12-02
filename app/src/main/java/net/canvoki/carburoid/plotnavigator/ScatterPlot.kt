@@ -43,10 +43,10 @@ fun ScatterPlot(
 
     val points by remember(items, getX, getY) {
         derivedStateOf {
-            items.mapIndexed { index, station ->
-                val x = getX(station) ?: 0f
-                val y = getY(station) ?: 0f
-                StationPoint(item = station, x = x, y = y, index = index)
+            items.mapIndexed { index, item ->
+                val x = getX(item) ?: 0f
+                val y = getY(item) ?: 0f
+                StationPoint(item = item, x = x, y = y, index = index)
             }
         }
     }
