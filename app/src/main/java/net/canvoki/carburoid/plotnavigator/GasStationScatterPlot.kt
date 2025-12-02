@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import net.canvoki.carburoid.model.GasStation
@@ -50,7 +52,11 @@ fun GasStationScatterPlot(
 ) {
     var selectedItem by remember { mutableStateOf<GasStation?>(null) }
 
-    val product = ProductManager.getCurrent()
+    val product by rememberUpdatedState(ProductManager.getCurrent())
+
+    LaunchedEffect(items) {
+        selectedItem = items[0]
+    }
 
     fun getX(station: GasStation): Float? = station.distanceInMeters?.div(1000.0f)
 
@@ -67,7 +73,7 @@ fun GasStationScatterPlot(
                 getX = ::getX,
                 getY = ::getY,
                 selectedItem = selectedItem,
-                onPointClick = { selectedItem = it },
+                onItemSelected = { selectedItem = it },
                 modifier = Modifier.fillMaxWidth(),
             )
         }

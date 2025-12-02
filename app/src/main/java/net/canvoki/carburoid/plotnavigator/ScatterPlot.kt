@@ -4,10 +4,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
@@ -18,7 +21,6 @@ import io.github.koalaplot.core.util.ExperimentalKoalaPlotApi
 import io.github.koalaplot.core.xygraph.Point
 import io.github.koalaplot.core.xygraph.XYGraph
 import io.github.koalaplot.core.xygraph.rememberFloatLinearAxisModel
-import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 
 data class StationPoint(
@@ -33,17 +35,18 @@ fun ScatterPlot(
     items: List<GasStation>,
     getX: (GasStation) -> Float?,
     getY: (GasStation) -> Float?,
-    onPointClick: (GasStation) -> Unit,
+    onItemSelected: (GasStation?) -> Unit,
     selectedItem: GasStation? = null,
     modifier: Modifier = Modifier,
 ) {
     val colors = MaterialTheme.colorScheme
-    log("Redraw ScatterPlot ${selectedItem?.id}")
-    val currentSelectedItem by rememberUpdatedState(selectedItem)
 
-    val points by remember(items, getX, getY) {
+    val currentSelectedItem by rememberUpdatedState(selectedItem)
+    val currentItems by rememberUpdatedState(items)
+
+    val points by remember(currentItems, getX, getY) {
         derivedStateOf {
-            items.mapIndexed { index, item ->
+            currentItems.mapIndexed { index, item ->
                 val x = getX(item) ?: 0f
                 val y = getY(item) ?: 0f
                 StationPoint(item = item, x = x, y = y, index = index)
@@ -57,25 +60,22 @@ fun ScatterPlot(
     val yMax = points.maxOfOrNull { it.y } ?: 2f
 
     fun changePage(delta: Int) {
-        if (points.isEmpty()) return
+        if (points.isEmpty()) onItemSelected(null)
 
-        val currentIndex =
-            currentSelectedItem?.let { item ->
-                log("find ${item.id} on ${points.size} items")
-                points
-                    .firstOrNull {
-                        log("compare ${it.item.id} ${it.index}")
-                        it.item.id == item.id
-                    }?.index
-            } ?: 0
+        val currentPoint = points.firstOrNull { it.item.id == currentSelectedItem?.id } ?: points.getOrNull(0)
 
+        if (currentPoint == null) {
+            onItemSelected(null)
+            return
+        }
+        val currentIndex = currentPoint.index
         val newIndex =
             (currentIndex + delta)
                 .coerceIn(0, points.lastIndex)
 
-        log("Deltaing $delta: ${currentSelectedItem?.id} [$currentIndex] -> ${points[newIndex]?.item?.id} [$newIndex]")
-        if (newIndex != currentIndex) {
-            onPointClick(points[newIndex].item)
+        val newItem = points[newIndex].item
+        if (newItem != currentSelectedItem) {
+            onItemSelected(newItem)
         }
     }
 
@@ -89,7 +89,8 @@ fun ScatterPlot(
         yAxisLabels = { "%.03f€".format(it) },
         modifier = modifier.horizontalSwipe(onStep = ::changePage),
     ) {
-        selectedItem?.let { item ->
+        // Vertical line across the selected item
+        currentSelectedItem?.let { item ->
             val x = getX(item) ?: return@let
 
             LinePlot2(
@@ -106,11 +107,13 @@ fun ScatterPlot(
                 symbol = null, // no points
             )
         }
+
+        // Relevant items as dots
         LinePlot2(
             data = points,
             symbol = { point ->
                 val stationPoint = point as StationPoint
-                val isSelected = stationPoint.item.id == selectedItem?.id
+                val isSelected = stationPoint.item.id == currentSelectedItem?.id
                 Symbol(
                     fillBrush = SolidColor(if (isSelected) colors.primary else colors.tertiary),
                     outlineBrush = SolidColor(if (isSelected) colors.onPrimary else colors.onTertiary),
@@ -118,8 +121,7 @@ fun ScatterPlot(
                         Modifier
                             .clickable {
                                 val item = (point as StationPoint).item
-                                log("Simbol Clicked ${item.id} ${item.name}")
-                                onPointClick(item)
+                                onItemSelected(item)
                             }.size(if (isSelected) 12.dp else 8.dp),
                 )
             },
