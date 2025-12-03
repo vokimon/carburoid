@@ -85,6 +85,18 @@ class LocationPickerActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
+        setupMap()
+        setupSearchBox()
+
+
+        if (savedInstanceState != null) {
+            setStateFromSavedInstance(savedInstanceState)
+        } else {
+            setStateFromIntent(intent)
+        }
+    }
+
+    private fun setupMap() {
         map = findViewById(R.id.map)
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setMultiTouchControls(true)
@@ -98,6 +110,7 @@ class LocationPickerActivity : AppCompatActivity() {
                 org.osmdroid.library.R.drawable.person,
                 theme,
             )
+
         marker =
             Marker(map).apply {
                 icon = personIcon
@@ -135,7 +148,9 @@ class LocationPickerActivity : AppCompatActivity() {
             }
 
         map.overlays.add(MapEventsOverlay(mapEventsReceiver))
+    }
 
+    private fun setupSearchBox() {
         searchBox = findViewById(R.id.searchBox)
 
         searchBox.addTextChangedListener(
@@ -172,12 +187,6 @@ class LocationPickerActivity : AppCompatActivity() {
             val suggestion = suggestions[position]
             updateSearchText(suggestion.display)
             moveToLocation(suggestion.lat, suggestion.lon)
-        }
-
-        if (savedInstanceState != null) {
-            setStateFromSavedInstance(savedInstanceState)
-        } else {
-            setStateFromIntent(intent)
         }
     }
 
