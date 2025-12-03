@@ -3,6 +3,7 @@ package net.canvoki.carburoid.ui
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,19 @@ import net.canvoki.carburoid.product.translateProductName
 import net.canvoki.carburoid.repository.GasStationRepository
 import java.time.Instant
 import com.google.android.material.R as MaterialR
+
+/**
+ * Turns every first word letter uppercase
+ * considering each acronym part as a word.
+ * TODO: Move it to GasStation and unit test it
+ */
+fun String.titlecase(): String {
+    val regex = Regex("""\p{L}+""")  // cualquier secuencia de letras
+
+    return regex.replace(this) { match ->
+        match.value.lowercase().replaceFirstChar { it.uppercase() }
+    }
+}
 
 class StationDetailActivity : AppCompatActivity() {
     private val app: CarburoidApplication
@@ -56,6 +70,11 @@ class StationDetailActivity : AppCompatActivity() {
 
         val stationId = intent.getIntExtra("station_id", 0)
         val station = repository.getStationById(stationId) ?: return
+
+        supportActionBar?.apply {
+            title = station.name?.titlecase() ?: getString(R.string.app_name)
+            setDisplayHomeAsUpEnabled(true)
+        }
 
         binding.textName.text = station.name
 
@@ -110,4 +129,13 @@ class StationDetailActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
+            android.R.id.home -> { // ← back arrow in ActionBar
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
 }
