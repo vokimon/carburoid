@@ -1,10 +1,13 @@
 # TODO
 
+- Single point plot crashes
+
 Do you want to help? This is my roadmap.
 
 - [ ] Location Search: When empty, autocomplete show later searches
 - [ ] Location Search: Prioritize near matches to the current position
 - [ ] Location Search: Feedback when doing a query
+- [ ] Location Search: Always accept on back, get ride of the dialog nonsense mentality.
 - [ ] Refactor: Invert Paretto: Sort by price, filter by distance, to ease distance recomputation
 - [ ] Real road distance
 - [ ] Route deviation distance
@@ -32,18 +35,25 @@ Do you want to help? This is my roadmap.
 - [ ] Filters: Hide stations beyond the sea (Peninsule, Canary, Balearic, Ceuta, Melilla)
 - [x] Products: Recent products on top
 - [x] Products: Categorize
-- [ ] Products: Sort by popularity (how many gas station serve it)
 - [x] Product: Translate literals in CategorizedProductSelector
+- [ ] Products: Sort by popularity. How many gas station serve it. Now it is sorted by hand.
 - [ ] Product: Get list from Ministry API
 - [x] Product translation (now Api provides an spanish name as id, monolingual and fragile)
+- [ ] Product: Use short names (now that we are translating we could translate shorter)
 - [ ] Language: Asturian
 - [ ] Language: Aranese (Occitan)
 - [ ] Modernize code
     - [ ] Migrate Activities to ViewBinding
     - [ ] Migrate uses of android package to androidx
-    - [~] Migrate state to ModelView
+    - [x] Migrate state to ModelView
     - [~] Compose
 - [ ] Favorites
+- [ ] Details view: Back button on AppBar
+- [ ] Plot view: Buttons `[Closer]` `[Cheaper]` to go each side
+- [ ] Plot view: Add Location Picker widget
+- [ ] Plot view: Add AppBar and back button
+- [ ] Plot view: Go to details on view
+- [ ] Plot view: Animation of the summary as feedback to the swipe
 
 ## Done
 
