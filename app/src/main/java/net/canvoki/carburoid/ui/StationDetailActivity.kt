@@ -76,8 +76,6 @@ class StationDetailActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        binding.textName.text = station.name
-
         val currentProduct = ProductManager.getCurrent()
         binding.textCurrentProduct.text = translateProductName(currentProduct, this)
 
