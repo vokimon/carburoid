@@ -20,6 +20,8 @@
     <string name="settings_filter_expensive_summary">Do not show an station if another nearer and cheaper exist. (Recommended)</string>
     <string name="settings_filter_non_public">Show only public prices</string>
     <string name="settings_filter_non_public_summary">Hide prices requiring membership or anything else.</string>
+    <string name="settings_filter_beyond_sea">Hide stations beyond the sea</string>
+    <string name="settings_filter_beyond_sea_summary">Show only those in your zone (Peninsula, Balearic Islands, Canary Islands, or Ceuta and Melilla)</string>
     <string name="settings_filter_closed">Show closed stations</string>
     <string name="settings_filter_closed_summary">Set a time margin for stations that will open soon</string>
     <string name="settings_filter_closed_tolerance_none">No margin, always filter</string>

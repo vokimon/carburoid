@@ -20,6 +20,8 @@
     <string name="settings_filter_expensive_summary">لا تعرض المحطات إذا كانت هناك محطات أقرب أو أرخص. (موصى به)</string>
     <string name="settings_filter_non_public">الأسعار العامة فقط</string>
     <string name="settings_filter_non_public_summary">إخفاء الأسعار التي تتطلب اشتراك</string>
+    <string name="settings_filter_beyond_sea">اخفاء محطات الوقود على الجانب الآخر من البحر</string>
+    <string name="settings_filter_beyond_sea_summary">عرض فقط تلك الموجودة في منطقتك (شبه الجزيرة، جزر البليار، جزر الكناري أو سبتة ومليلية)</string>
     <string name="settings_filter_closed">إظهار المحطات المغلقة</string>
     <string name="settings_filter_closed_summary">اضبط فترة زمنية للمحطات التي ستفتح قريبًا</string>
     <string name="settings_filter_closed_tolerance_none">بدون فترة، دائمًا الفلترة</string>

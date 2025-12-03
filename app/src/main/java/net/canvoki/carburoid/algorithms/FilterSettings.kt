@@ -16,12 +16,14 @@ object FilterSettings {
     private const val KEY_HIDE_EXPENSIVE = "hide_expensive_further"
     private const val KEY_ONLY_PUBLIC_PRICES = "only_public_prices"
     private const val KEY_HIDE_CLOSED_MARGIN_MINUTES = "hide_closed_margin_minutes"
+    private const val KEY_HIDE_BEYOND_SEA = "hide_beyond_sea"
 
     private val relevantKeys =
         setOf(
             KEY_HIDE_EXPENSIVE,
             KEY_ONLY_PUBLIC_PRICES,
             KEY_HIDE_CLOSED_MARGIN_MINUTES,
+            KEY_HIDE_BEYOND_SEA,
         )
 
     private val _changes = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
@@ -67,6 +69,7 @@ object FilterSettings {
             hideClosedMarginInMinutes =
                 prefs.getString(KEY_HIDE_CLOSED_MARGIN_MINUTES, null)?.toInt()
                     ?: default.hideClosedMarginInMinutes,
+            hideBeyondSea = prefs.getBoolean(KEY_HIDE_BEYOND_SEA, default.hideBeyondSea),
         )
     }
 

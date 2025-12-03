@@ -20,6 +20,8 @@
     <string name="settings_filter_expensive_summary">No amostrar estacions si n\'i ha d\'as más cercanas u baratas. (Recomendau)</string>
     <string name="settings_filter_non_public">Nomás preus públicos</string>
     <string name="settings_filter_non_public_summary">Amagar preus que demanden afiliación.</string>
+    <string name="settings_filter_beyond_sea">Amaga gasolineras al otro lado d\'o mar</string>
+    <string name="settings_filter_beyond_sea_summary">Muestra solo as que estén en a tu zona (Península, Balears, Canàries u Ceuta y Melilla)</string>
     <string name="settings_filter_closed">Amostrar estacions zarraus</string>
     <string name="settings_filter_closed_summary">Establir un margen de tiempo pa estacions que abrirán avoro</string>
     <string name="settings_filter_closed_tolerance_none">Sin margen, amagar siempre</string>

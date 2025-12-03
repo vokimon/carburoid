@@ -14,10 +14,12 @@ theme_light: Claro
 theme_dark: Oscuro
 theme_system: Automático (Sistema)
 settings_category_station_filters: Filtrado de gasolineras
-settings_filter_expensive: Oculta estaciones caras y lejanas
-settings_filter_expensive_summary: No muestres estaciones cuando las haya más cercanas o más baratas. (Recomendado)
+settings_filter_expensive: Oculta gasolineras caras y lejanas
+settings_filter_expensive_summary: No muestres gasolineras cuando las haya más cercanas o más baratas. (Recomendado)
 settings_filter_non_public: Sólo precios públicos
 settings_filter_non_public_summary: Oculta los precios que requieran afiliación.
+settings_filter_beyond_sea: Oculta gasolineras al otro lado del mar
+settings_filter_beyond_sea_summary: Muestra solo las que estén en tu zona (Península, Baleares, Canarias o Ceuta y Melilla)
 settings_filter_closed: Muestra estaciones cerradas
 settings_filter_closed_summary: Establece un margen de tiempo para estaciones que abrirán pronto
 settings_filter_closed_tolerance_none: Sin margen, filtra siempre

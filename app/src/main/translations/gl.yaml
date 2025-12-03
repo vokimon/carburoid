@@ -18,6 +18,8 @@ settings_filter_expensive: Oculta estacións caras e afastadas
 settings_filter_expensive_summary: Non amosar unha estación se existe outra máis próxima e máis barata. (Recomendado)
 settings_filter_non_public: Só prezos públicos
 settings_filter_non_public_summary: Oculta os prezos que requiran subscrición.
+settings_filter_beyond_sea: Oculta gasolineiras do outro lado do mar
+settings_filter_beyond_sea_summary: Mostra só as que estean na túa zona (Peninsula, Illas Baleares, Illas Canarias ou Ceuta e Melilla)
 settings_filter_closed: Mostrar estacións pechadas
 settings_filter_closed_summary: Establece unha marxe de tempo para as estacións que abrirán en breve
 settings_filter_closed_tolerance_none: Sen marxe, filtra sempre

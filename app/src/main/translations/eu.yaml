@@ -18,6 +18,8 @@ settings_filter_expensive: Ezkutatu geltoki garestiak eta urrunago
 settings_filter_expensive_summary: Ez erakutsi geltokirik hurbilago eta merkeago dagoen beste bat baldin badago. (Gomendatua)
 settings_filter_non_public: Prezio publikoak bakarrik erakutsi
 settings_filter_non_public_summary: Ezkutatu bazkidetza edo beste edozer eskatzen duten prezioak.
+settings_filter_beyond_sea: Itsas bestaldeko gasolindegiak ezkutatu
+settings_filter_beyond_sea_summary: Zure zonan daudenak bakarrik erakutsi (Penintsula, Balear Uharteak, Kanariko Uharteak edo Ceuta eta Melilla)
 settings_filter_closed: Erakutsi itxitako estazioak
 settings_filter_closed_summary: Ezarri denbora-tarte bat laster irekiko diren geltokietarako
 settings_filter_closed_tolerance_none: Marjinarik gabe, beti filtro

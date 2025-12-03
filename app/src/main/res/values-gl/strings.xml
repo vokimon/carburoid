@@ -20,6 +20,8 @@
     <string name="settings_filter_expensive_summary">Non amosar unha estación se existe outra máis próxima e máis barata. (Recomendado)</string>
     <string name="settings_filter_non_public">Só prezos públicos</string>
     <string name="settings_filter_non_public_summary">Oculta os prezos que requiran subscrición.</string>
+    <string name="settings_filter_beyond_sea">Oculta gasolineiras do outro lado do mar</string>
+    <string name="settings_filter_beyond_sea_summary">Mostra só as que estean na túa zona (Peninsula, Illas Baleares, Illas Canarias ou Ceuta e Melilla)</string>
     <string name="settings_filter_closed">Mostrar estacións pechadas</string>
     <string name="settings_filter_closed_summary">Establece unha marxe de tempo para as estacións que abrirán en breve</string>
     <string name="settings_filter_closed_tolerance_none">Sen marxe, filtra sempre</string>

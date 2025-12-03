@@ -4,4 +4,5 @@ data class FilterConfig(
     val hideExpensiveFurther: Boolean = true,
     val onlyPublicPrices: Boolean = true,
     val hideClosedMarginInMinutes: Int = 120,
+    val hideBeyondSea: Boolean = true,
 )

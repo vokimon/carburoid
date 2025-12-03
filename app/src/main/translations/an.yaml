@@ -18,6 +18,8 @@ settings_filter_expensive: Amagar estacions cara y lejanas
 settings_filter_expensive_summary: No amostrar estacions si n'i ha d'as más cercanas u baratas. (Recomendau)
 settings_filter_non_public: Nomás preus públicos
 settings_filter_non_public_summary: Amagar preus que demanden afiliación.
+settings_filter_beyond_sea: Amaga gasolineras al otro lado d'o mar
+settings_filter_beyond_sea_summary: Muestra solo as que estén en a tu zona (Península, Balears, Canàries u Ceuta y Melilla)
 settings_filter_closed: Amostrar estacions zarraus
 settings_filter_closed_summary: Establir un margen de tiempo pa estacions que abrirán avoro
 settings_filter_closed_tolerance_none: Sin margen, amagar siempre
