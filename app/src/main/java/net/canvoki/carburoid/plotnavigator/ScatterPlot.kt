@@ -30,10 +30,9 @@ data class StationPoint(
     override val y: Float,
 ) : Point<Float, Float>
 
-
 fun xRange(points: List<StationPoint>): Pair<Float, Float> {
     val xMax = points.maxOfOrNull { it.x } ?: 0f
-    return 0f to (if (xMax<= 0f) 800f else xMax)
+    return 0f to (if (xMax <= 0f) 800f else xMax)
 }
 
 fun yRange(points: List<StationPoint>): Pair<Float, Float> {
@@ -58,8 +57,6 @@ fun yRange(points: List<StationPoint>): Pair<Float, Float> {
     }
     return defaultMin to yMax
 }
-
-
 
 @Composable
 fun ScatterPlot(

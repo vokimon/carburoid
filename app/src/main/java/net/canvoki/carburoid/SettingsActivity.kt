@@ -23,10 +23,11 @@ class SettingsActivity : AppCompatActivity() {
         val content = findViewById<View>(android.R.id.content)
 
         ViewCompat.setOnApplyWindowInsetsListener(content) { v, insets ->
-            val bars = insets.getInsets(
-                WindowInsetsCompat.Type.systemBars()
-                or WindowInsetsCompat.Type.displayCutout()
-            )
+            val bars =
+                insets.getInsets(
+                    WindowInsetsCompat.Type.systemBars()
+                        or WindowInsetsCompat.Type.displayCutout(),
+                )
             v.updatePadding(
                 left = bars.left,
                 top = bars.top,

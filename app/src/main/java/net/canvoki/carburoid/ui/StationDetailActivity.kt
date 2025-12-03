@@ -40,10 +40,11 @@ class StationDetailActivity : AppCompatActivity() {
         val content = findViewById<View>(android.R.id.content)
 
         ViewCompat.setOnApplyWindowInsetsListener(content) { v, insets ->
-            val bars = insets.getInsets(
-                WindowInsetsCompat.Type.systemBars()
-                or WindowInsetsCompat.Type.displayCutout()
-            )
+            val bars =
+                insets.getInsets(
+                    WindowInsetsCompat.Type.systemBars()
+                        or WindowInsetsCompat.Type.displayCutout(),
+                )
             v.updatePadding(
                 left = bars.left,
                 top = bars.top,
@@ -52,7 +53,6 @@ class StationDetailActivity : AppCompatActivity() {
             )
             WindowInsetsCompat.CONSUMED
         }
-
 
         val stationId = intent.getIntExtra("station_id", 0)
         val station = repository.getStationById(stationId) ?: return
