@@ -5,17 +5,134 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.util.AttributeSet
-import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.launch
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
+import net.canvoki.carburoid.ui.settings.ThemeSettings
+
+@Composable
+fun LocationSelector(
+    activity: ComponentActivity,
+    service: LocationService,
+    modifier: Modifier = Modifier,
+) {
+    val descriptionFlowValue by service.descriptionUpdated.collectAsStateWithLifecycle(
+        initialValue = service.getCurrentLocationDescription(),
+    )
+
+    var description by remember { mutableStateOf(descriptionFlowValue) }
+    var refreshing by remember { mutableStateOf(false) }
+
+    LaunchedEffect(descriptionFlowValue) {
+        description = descriptionFlowValue
+        refreshing = false
+    }
+
+    val launcher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val lat = data?.getDoubleExtra(LocationPickerActivity.EXTRA_SELECTED_LAT, 0.0)
+                val lon = data?.getDoubleExtra(LocationPickerActivity.EXTRA_SELECTED_LON, 0.0)
+                if (lat != null && lon != null) {
+                    val newLocation =
+                        Location("user_picked").apply {
+                            latitude = lat
+                            longitude = lon
+                        }
+                    service.setFixedLocation(newLocation)
+                }
+            }
+        }
+
+    TextField(
+        value = description,
+        onValueChange = {},
+        readOnly = true,
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .heightIn(min = 56.dp),
+        label = {
+            Text(activity.getString(R.string.location_selector_hint))
+        },
+        leadingIcon = {
+            IconButton(
+                onClick = {
+                    log("REFRESHING ON ICON PRESS")
+                    refreshing = true
+                    service.refreshLocation()
+                },
+            ) {
+                Icon(
+                    painter =
+                        painterResource(
+                            if (refreshing) R.drawable.ic_refresh else R.drawable.ic_my_location,
+                        ),
+                    contentDescription = activity.getString(R.string.location_selector_locate_device),
+                )
+            }
+        },
+        trailingIcon = {
+            IconButton(
+                onClick = {
+                    val current = service.getCurrentLocation()
+                    val intent =
+                        Intent(activity, LocationPickerActivity::class.java).apply {
+                            putExtra(LocationPickerActivity.EXTRA_CURRENT_LAT, current?.latitude)
+                            putExtra(LocationPickerActivity.EXTRA_CURRENT_LON, current?.longitude)
+                            putExtra(
+                                LocationPickerActivity.EXTRA_CURRENT_DESCRIPTION,
+                                service.getCurrentLocationDescription(),
+                            )
+                        }
+                    launcher.launch(intent)
+                },
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_edit),
+                    contentDescription = activity.getString(R.string.location_selector_locate_device),
+                )
+            }
+        },
+        minLines = 2,
+        maxLines = 2,
+        textStyle = MaterialTheme.typography.bodyLarge,
+        placeholder = {
+            Text(
+                text = activity.getString(R.string.location_selector_hint),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        },
+    )
+}
 
 class LocationSelector
     @JvmOverloads
@@ -24,75 +141,31 @@ class LocationSelector
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0,
     ) : FrameLayout(context, attrs, defStyleAttr) {
-        private val textInputLayout: TextInputLayout
-        private val textInputEditText: TextInputEditText
-        private val locationIcon = ContextCompat.getDrawable(context, R.drawable.ic_my_location)
-        private val progressIcon = ContextCompat.getDrawable(context, R.drawable.ic_refresh)
+        private val composeView = ComposeView(context)
 
         init {
-            View.inflate(context, R.layout.location_selector, this)
-
-            textInputLayout = findViewById(R.id.text_input_layout)
-            textInputEditText = findViewById(R.id.text_input_edit_text)
+            addView(
+                composeView,
+                LayoutParams(
+                    LayoutParams.MATCH_PARENT,
+                    LayoutParams.WRAP_CONTENT,
+                ),
+            )
         }
 
         fun bind(
             activity: ComponentActivity,
             service: LocationService,
         ) {
-            setLocationDescription(service.getCurrentLocationDescription())
-            activity.lifecycleScope.launch {
-                service.descriptionUpdated.collect { description ->
-                    setLocationDescription(description)
+            composeView.setContent {
+                androidx.compose.material3.MaterialTheme(
+                    colorScheme = ThemeSettings.effectiveColorScheme(),
+                ) {
+                    LocationSelector(
+                        activity = activity,
+                        service = service,
+                    )
                 }
             }
-
-            textInputLayout.setStartIconOnClickListener {
-                log("REFRESHING ON ICON PRESS")
-                textInputLayout.startIconDrawable = progressIcon
-                service.refreshLocation()
-            }
-
-            val launcher =
-                activity.registerForActivityResult(
-                    ActivityResultContracts.StartActivityForResult(),
-                ) { result ->
-                    if (result.resultCode == Activity.RESULT_OK) {
-                        val lat = result.data?.getDoubleExtra(LocationPickerActivity.EXTRA_SELECTED_LAT, 0.0)
-                        val lon = result.data?.getDoubleExtra(LocationPickerActivity.EXTRA_SELECTED_LON, 0.0)
-                        if (lat != null && lon != null) {
-                            val newLocation =
-                                Location("user_picked").apply {
-                                    latitude = lat
-                                    longitude = lon
-                                }
-                            service.setFixedLocation(newLocation)
-                        }
-                    }
-                }
-
-            textInputLayout.setEndIconOnClickListener {
-                val current = service.getCurrentLocation()
-                val intent =
-                    Intent(activity, LocationPickerActivity::class.java).apply {
-                        putExtra(LocationPickerActivity.EXTRA_CURRENT_LAT, current?.latitude)
-                        putExtra(LocationPickerActivity.EXTRA_CURRENT_LON, current?.longitude)
-                        putExtra(
-                            LocationPickerActivity.EXTRA_CURRENT_DESCRIPTION,
-                            service.getCurrentLocationDescription(),
-                        )
-                    }
-                launcher.launch(intent)
-            }
-        }
-
-        private fun setLocationDescription(description: String) {
-            textInputLayout.startIconDrawable = locationIcon
-            textInputEditText.setText(description)
-            log("Updating description to $description")
-        }
-
-        private fun setOnEditClickListener(listener: () -> Unit) {
-            textInputLayout.setEndIconOnClickListener { listener() }
         }
     }
