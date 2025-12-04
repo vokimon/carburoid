@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import net.canvoki.carburoid.R
+import net.canvoki.carburoid.ui.setContentViewWithInsets
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
@@ -59,26 +60,8 @@ class LocationPickerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Configuration.getInstance().userAgentValue = packageName
-        WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        setContentView(R.layout.activity_location_picker)
-
-        val content = findViewById<View>(android.R.id.content)
-
-        ViewCompat.setOnApplyWindowInsetsListener(content) { v, insets ->
-            val bars =
-                insets.getInsets(
-                    WindowInsetsCompat.Type.systemBars()
-                        or WindowInsetsCompat.Type.displayCutout(),
-                )
-            v.updatePadding(
-                left = bars.left,
-                top = bars.top,
-                right = bars.right,
-                bottom = bars.bottom,
-            )
-            WindowInsetsCompat.CONSUMED
-        }
+        setContentViewWithInsets(R.layout.activity_location_picker)
 
         supportActionBar?.apply {
             title = getString(R.string.location_picker_title)
