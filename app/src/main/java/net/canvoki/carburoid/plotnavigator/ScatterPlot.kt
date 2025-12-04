@@ -65,11 +65,13 @@ fun ScatterPlot(
     getY: (GasStation) -> Float?,
     onItemSelected: (GasStation?) -> Unit,
     selectedItem: GasStation? = null,
+    selectedIndex: Int,
     modifier: Modifier = Modifier,
 ) {
     val colors = MaterialTheme.colorScheme
 
     val currentSelectedItem by rememberUpdatedState(selectedItem)
+    val currentIndex by rememberUpdatedState(selectedIndex)
     val currentItems by rememberUpdatedState(items)
 
     val points by remember(currentItems, getX, getY) {
@@ -86,23 +88,8 @@ fun ScatterPlot(
     val (yMin, yMax) = yRange(points)
 
     fun changePage(delta: Int) {
-        if (points.isEmpty()) onItemSelected(null)
-
-        val currentPoint = points.firstOrNull { it.item.id == currentSelectedItem?.id } ?: points.getOrNull(0)
-
-        if (currentPoint == null) {
-            onItemSelected(null)
-            return
-        }
-        val currentIndex = currentPoint.index
-        val newIndex =
-            (currentIndex + delta)
-                .coerceIn(0, points.lastIndex)
-
-        val newItem = points[newIndex].item
-        if (newItem != currentSelectedItem) {
-            onItemSelected(newItem)
-        }
+        val newIndex = (currentIndex + delta).coerceIn(0, points.lastIndex)
+        onItemSelected(items.getOrNull(newIndex))
     }
 
     @OptIn(ExperimentalKoalaPlotApi::class)

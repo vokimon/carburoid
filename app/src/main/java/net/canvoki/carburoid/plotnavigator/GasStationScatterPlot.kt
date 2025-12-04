@@ -82,6 +82,7 @@ fun GasStationScatterPlot(
                 getX = ::getX,
                 getY = ::getY,
                 selectedItem = selectedItem,
+                selectedIndex = selectedIndex,
                 onItemSelected = { item ->
                     selectedIndex = items.indexOfFirst { it.id == item?.id }.coerceAtLeast(0)
                 },
