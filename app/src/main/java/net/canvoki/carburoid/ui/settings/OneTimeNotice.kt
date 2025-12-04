@@ -30,7 +30,7 @@ fun OneTimeNotice(
     title: String = "Notice",
     message: String? = null,
     confirmText: String = stringResource(id = android.R.string.ok),
-    dialogContent: @Composable (() -> Unit)? = null
+    dialogContent: @Composable (() -> Unit)? = null,
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
     val scope = rememberCoroutineScope()
@@ -70,7 +70,7 @@ fun OneTimeNotice(
                 }) {
                     Text(text = confirmText)
                 }
-            }
+            },
         )
     }
 }
@@ -80,14 +80,14 @@ fun ExperimentalFeatureNotice(
     noticeId: String,
     message: String,
     title: String = "Experimental feature",
-    confirmText: String = android.R.string.ok.toString(),
-    dialogContent: @Composable (() -> Unit)? = null
+    confirmText: String = stringResource(id = android.R.string.ok),
+    dialogContent: @Composable (() -> Unit)? = null,
 ) {
     OneTimeNotice(
         noticeId = noticeId,
         title = title,
         message = message,
         confirmText = confirmText,
-        dialogContent = dialogContent
+        dialogContent = dialogContent,
     )
 }
