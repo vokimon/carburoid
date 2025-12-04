@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.product.CategorizedProductSelector
 import net.canvoki.carburoid.product.ProductManager
+import net.canvoki.carburoid.ui.settings.ExperimentalFeatureNotice
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
@@ -42,6 +43,10 @@ fun PlotNavigatorScreen(stations: List<GasStation>) {
                 )
             }
         }
+        ExperimentalFeatureNotice(
+            noticeId = "feature_plot_navitator_bla2",
+            message = "This is an experimental interface. Feedback on your experience using it is very welcome.",
+        )
     }
 }
 
