@@ -125,16 +125,15 @@ fun ScatterPlot(
         LinePlot2(
             data = points,
             symbol = { point ->
-                val stationPoint = point as StationPoint
-                val isSelected = stationPoint.item.id == currentSelectedItem?.id
+                point as StationPoint
+                val isSelected = point.index == currentIndex
                 Symbol(
                     fillBrush = SolidColor(if (isSelected) colors.primary else colors.tertiary),
                     outlineBrush = SolidColor(if (isSelected) colors.onPrimary else colors.onTertiary),
                     modifier =
                         Modifier
                             .clickable {
-                                val index = (point as StationPoint).index
-                                onIndexSelected(index)
+                                onIndexSelected(point.index)
                             }.size(if (isSelected) 12.dp else 8.dp),
                 )
             },
