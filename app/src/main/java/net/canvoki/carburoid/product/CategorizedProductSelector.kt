@@ -63,6 +63,7 @@ fun CategorizedProductSelector() {
                 selectedProduct = apiName
                 expanded = false
             },
+            modifier = Modifier.padding(start = 16.dp),
         )
     }
 
