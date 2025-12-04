@@ -86,13 +86,13 @@ class LocationSelector
             }
         }
 
-        fun setLocationDescription(description: String) {
+        private fun setLocationDescription(description: String) {
             textInputLayout.startIconDrawable = locationIcon
             textInputEditText.setText(description)
             log("Updating description to $description")
         }
 
-        fun setOnEditClickListener(listener: () -> Unit) {
+        private fun setOnEditClickListener(listener: () -> Unit) {
             textInputLayout.setEndIconOnClickListener { listener() }
         }
     }
