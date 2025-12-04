@@ -56,11 +56,13 @@ fun GasStationScatterPlot(
     modifier: Modifier = Modifier,
 ) {
     var selectedItem by remember { mutableStateOf<GasStation?>(null) }
+    var selectedIndex by remember { mutableStateOf(0) }
 
     val product by rememberUpdatedState(ProductManager.getCurrent())
 
     LaunchedEffect(items) {
         selectedItem = items.getOrNull(0)
+        selectedIndex = 0
     }
 
     fun getX(station: GasStation): Float? = station.distanceInMeters?.div(1000.0f)
@@ -78,7 +80,10 @@ fun GasStationScatterPlot(
                 getX = ::getX,
                 getY = ::getY,
                 selectedItem = selectedItem,
-                onItemSelected = { selectedItem = it },
+                onItemSelected = { item ->
+                    selectedItem = item
+                    selectedIndex = items.indexOfFirst { it.id == item?.id }.coerceAtLeast(0)
+                },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
