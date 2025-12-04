@@ -85,8 +85,7 @@ fun ScatterPlot(
     val (yMin, yMax) = yRange(points)
 
     fun changePage(delta: Int) {
-        val newIndex = (currentIndex + delta).coerceIn(0, points.lastIndex)
-        onIndexSelected(newIndex)
+        onIndexSelected((currentIndex + delta).coerceIn(0, points.lastIndex))
     }
 
     @OptIn(ExperimentalKoalaPlotApi::class)
@@ -104,8 +103,8 @@ fun ScatterPlot(
             LinePlot2(
                 data =
                     listOf(
-                        StationPoint(point.item, -1, point.x, yMin),
-                        StationPoint(point.item, -1, point.x, yMax),
+                        Point(point.x, yMin),
+                        Point(point.x, yMax),
                     ),
                 lineStyle =
                     LineStyle(
