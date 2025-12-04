@@ -88,7 +88,6 @@ class LocationPickerActivity : AppCompatActivity() {
         setupMap()
         setupSearchBox()
 
-
         if (savedInstanceState != null) {
             setStateFromSavedInstance(savedInstanceState)
         } else {

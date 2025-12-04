@@ -11,9 +11,4 @@ interface DistanceMethod {
      * Returns null if computation is not possible (e.g., missing coordinates).
      */
     fun computeDistance(station: GasStation): Float?
-
-    /**
-     * Returns a human-readable name for the reference (e.g., "Your Location").
-     */
-    fun getReferenceName(): String
 }

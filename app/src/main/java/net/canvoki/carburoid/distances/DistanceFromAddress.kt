@@ -23,5 +23,4 @@ class DistanceFromAddress(
         return referenceLocation.distanceTo(stationLoc)
     }
 
-    override fun getReferenceName(): String = "Reference Point"
 }

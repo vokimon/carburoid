@@ -21,8 +21,6 @@ class DummyDistanceMethod : DistanceMethod {
         station.longitude?.let {
             kotlin.math.abs(it).toFloat()
         }
-
-    override fun getReferenceName(): String = "Dummy"
 }
 
 fun dummyStation(
