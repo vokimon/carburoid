@@ -3,10 +3,10 @@ package net.canvoki.carburoid.ui
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.updatePadding
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.viewbinding.ViewBinding
 
 private fun setupInsetListeners(content: View) {
@@ -20,7 +20,7 @@ private fun setupInsetListeners(content: View) {
                 WindowInsetsCompat.Type.systemBars() or
                     WindowInsetsCompat.Type.displayCutout() or
                     //WindowInsetsCompat.Type.systemGestures() or
-                    0
+                    0,
             )
         v.updatePadding(
             left = initialLeft + bars.left,
@@ -39,9 +39,7 @@ fun AppCompatActivity.setContentViewWithInsets(layoutId: Int) {
     setupInsetListeners(content)
 }
 
-fun <T : ViewBinding> AppCompatActivity.setContentViewWithInsets(
-    inflate: (LayoutInflater) -> T
-): T {
+fun <T : ViewBinding> AppCompatActivity.setContentViewWithInsets(inflate: (LayoutInflater) -> T): T {
     WindowCompat.setDecorFitsSystemWindows(window, false)
     val binding = inflate(layoutInflater)
     setContentView(binding.root)
