@@ -32,4 +32,9 @@ object CurrentDistancePolicy {
      * Computes distance for the given station using the active strategy.
      */
     fun getDistance(station: GasStation): Float? = method?.computeDistance(station)
+
+    /**
+     * Stablishes if the GasStation is beyond seas.
+     */
+    fun isBeyondSea(station: GasStation): Boolean = method?.isBeyondSea(station) ?: false
 }

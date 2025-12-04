@@ -11,4 +11,9 @@ interface DistanceMethod {
      * Returns null if computation is not possible (e.g., missing coordinates).
      */
     fun computeDistance(station: GasStation): Float?
+
+    /**
+     * Tells whether the coordinates are considered in a different land mass.
+     */
+    fun isBeyondSea(station: GasStation): Boolean
 }

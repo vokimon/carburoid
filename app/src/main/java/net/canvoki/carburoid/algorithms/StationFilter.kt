@@ -1,5 +1,6 @@
 package net.canvoki.carburoid.algorithms
 
+import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.model.GasStation
 import java.time.Duration
 import java.time.Instant
@@ -24,6 +25,11 @@ class StationFilter(
             if (stationPrice == null) {
                 //log("Filtered non number ${station.price}")
                 continue
+            }
+            if (CurrentDistancePolicy.isBeyondSea(station)) {
+                if (config.hideBeyondSea) {
+                    continue
+                }
             }
             if (!station.isPublicPrice) {
                 if (config.onlyPublicPrices) {

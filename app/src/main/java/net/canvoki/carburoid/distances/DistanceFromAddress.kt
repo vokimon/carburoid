@@ -23,4 +23,17 @@ class DistanceFromAddress(
         return referenceLocation.distanceTo(stationLoc)
     }
 
+    override fun isBeyondSea(station: GasStation): Boolean {
+        val gasStationLandMass =
+            LandMass.of(
+                station.latitude!!,
+                station.longitude!!,
+            )
+        val thisLandMass =
+            LandMass.of(
+                referenceLocation.latitude,
+                referenceLocation.longitude,
+            )
+        return gasStationLandMass != thisLandMass
+    }
 }
