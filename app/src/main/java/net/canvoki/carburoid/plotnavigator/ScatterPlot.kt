@@ -70,11 +70,10 @@ fun ScatterPlot(
     val colors = MaterialTheme.colorScheme
 
     val currentIndex by rememberUpdatedState(selectedIndex)
-    val currentItems by rememberUpdatedState(items)
 
-    val points by remember(currentItems, getX, getY) {
+    val points by remember(items, getX, getY) {
         derivedStateOf {
-            currentItems.mapIndexed { index, item ->
+            items.mapIndexed { index, item ->
                 val x = getX(item) ?: 0f
                 val y = getY(item) ?: 0f
                 StationPoint(item = item, x = x, y = y, index = index)
