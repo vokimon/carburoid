@@ -64,13 +64,11 @@ fun ScatterPlot(
     getX: (GasStation) -> Float?,
     getY: (GasStation) -> Float?,
     onIndexSelected: (Int) -> Unit,
-    selectedItem: GasStation? = null,
     selectedIndex: Int,
     modifier: Modifier = Modifier,
 ) {
     val colors = MaterialTheme.colorScheme
 
-    val currentSelectedItem by rememberUpdatedState(selectedItem)
     val currentIndex by rememberUpdatedState(selectedIndex)
     val currentItems by rememberUpdatedState(items)
 
@@ -103,14 +101,12 @@ fun ScatterPlot(
         modifier = modifier.horizontalSwipe(onStep = ::changePage),
     ) {
         // Vertical line across the selected item
-        currentSelectedItem?.let { item ->
-            val x = getX(item) ?: return@let
-
+        points.getOrNull(currentIndex)?.let { point ->
             LinePlot2(
                 data =
                     listOf(
-                        StationPoint(item, -1, x, yMin),
-                        StationPoint(item, -1, x, yMax),
+                        StationPoint(point.item, -1, point.x, yMin),
+                        StationPoint(point.item, -1, point.x, yMax),
                     ),
                 lineStyle =
                     LineStyle(

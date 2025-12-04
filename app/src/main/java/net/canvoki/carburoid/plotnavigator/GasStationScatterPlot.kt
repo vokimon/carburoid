@@ -81,7 +81,6 @@ fun GasStationScatterPlot(
                 items = items,
                 getX = ::getX,
                 getY = ::getY,
-                selectedItem = selectedItem,
                 selectedIndex = selectedIndex,
                 onIndexSelected = { index ->
                     selectedIndex = index
