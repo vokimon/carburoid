@@ -63,7 +63,6 @@ fun ScatterPlot(
     items: List<GasStation>,
     getX: (GasStation) -> Float?,
     getY: (GasStation) -> Float?,
-    onItemSelected: (GasStation?) -> Unit,
     onIndexSelected: (Int) -> Unit,
     selectedItem: GasStation? = null,
     selectedIndex: Int,
