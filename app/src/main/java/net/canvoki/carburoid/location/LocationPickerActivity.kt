@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
@@ -66,6 +67,11 @@ class LocationPickerActivity : AppCompatActivity() {
         supportActionBar?.apply {
             title = getString(R.string.location_picker_title)
             setDisplayHomeAsUpEnabled(true)
+        }
+
+        onBackPressedDispatcher.addCallback(this) {
+            returnResult()
+            finish()
         }
 
         setupMap()
@@ -324,17 +330,14 @@ class LocationPickerActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        when (item.itemId) {
-            android.R.id.home -> { // ← back arrow in ActionBar
-                returnResult()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+        // ← back arrow in ActionBar
+        if (item.itemId == android.R.id.home) {
+            returnResult()
+            true
         }
-    override fun onBackPressed() {
-        returnResult()
-        super.onBackPressed()
-    }
+        else {
+            super.onOptionsItemSelected(item)
+        }
 
     override fun onResume() {
         super.onResume()
