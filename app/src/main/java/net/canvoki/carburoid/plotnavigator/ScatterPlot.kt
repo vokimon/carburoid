@@ -64,6 +64,7 @@ fun ScatterPlot(
     getX: (GasStation) -> Float?,
     getY: (GasStation) -> Float?,
     onItemSelected: (GasStation?) -> Unit,
+    onIndexSelected: (Int) -> Unit,
     selectedItem: GasStation? = null,
     selectedIndex: Int,
     modifier: Modifier = Modifier,
@@ -89,7 +90,7 @@ fun ScatterPlot(
 
     fun changePage(delta: Int) {
         val newIndex = (currentIndex + delta).coerceIn(0, points.lastIndex)
-        onItemSelected(items.getOrNull(newIndex))
+        onIndexSelected(newIndex)
     }
 
     @OptIn(ExperimentalKoalaPlotApi::class)
@@ -133,8 +134,8 @@ fun ScatterPlot(
                     modifier =
                         Modifier
                             .clickable {
-                                val item = (point as StationPoint).item
-                                onItemSelected(item)
+                                val index = (point as StationPoint).index
+                                onIndexSelected(index)
                             }.size(if (isSelected) 12.dp else 8.dp),
                 )
             },

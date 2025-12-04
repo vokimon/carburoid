@@ -85,6 +85,8 @@ fun GasStationScatterPlot(
                 selectedIndex = selectedIndex,
                 onItemSelected = { item ->
                     selectedIndex = items.indexOfFirst { it.id == item?.id }.coerceAtLeast(0)
+                onIndexSelected = { index ->
+                    selectedIndex = index
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
