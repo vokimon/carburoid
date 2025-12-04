@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,13 +56,14 @@ fun GasStationScatterPlot(
     items: List<GasStation>,
     modifier: Modifier = Modifier,
 ) {
-    var selectedItem by remember { mutableStateOf<GasStation?>(null) }
     var selectedIndex by remember { mutableStateOf(0) }
+    val selectedItem by derivedStateOf {
+        items.getOrNull(selectedIndex)
+    }
 
     val product by rememberUpdatedState(ProductManager.getCurrent())
 
     LaunchedEffect(items) {
-        selectedItem = items.getOrNull(0)
         selectedIndex = 0
     }
 
@@ -81,7 +83,6 @@ fun GasStationScatterPlot(
                 getY = ::getY,
                 selectedItem = selectedItem,
                 onItemSelected = { item ->
-                    selectedItem = item
                     selectedIndex = items.indexOfFirst { it.id == item?.id }.coerceAtLeast(0)
                 },
                 modifier = Modifier.fillMaxWidth(),
