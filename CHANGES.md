@@ -4,13 +4,18 @@
 
 - ✨ Categorized products for easy search
 - ✨ Recent products on top
-- 🚧 Experimental Plot view
-- 🐛 Product label and name overlaped Fixes #9
+- ✨ Hide stations distinct land masses: Peninsule, Canary, Balearic or Autonomous Cities.
+- 🚸 Location picker just saves on exit (instead accept or cancel)
+- 🌐 Translated product names and categories
+- 🌐 Missing translations for Location picker 'Accept' button
+- 💄 Detail view with the staion name in the AppBar
+- 🐛 Android 16 ui still slipped under the appbar and system bar (Fixes #2)
+- 🐛 Product label and name overlaped (Fixes #9)
 - 🐛 Osm links were not processed
 - 🐛 Filter on about to close/open did not apply inmediatelly
 - 🐛 Location and product texts non-editable to prevent weird state
-- 🌐 Missing translations for Location picker 'Accept' button
 - ♻️ Using ModelView for filtering GasStations
+- 🚧 Experimental Plot view
 
 ## 1.2.3 (2025-11-15)
 
