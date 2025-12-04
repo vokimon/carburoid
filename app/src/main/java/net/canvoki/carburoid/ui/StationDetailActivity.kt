@@ -27,7 +27,7 @@ import com.google.android.material.R as MaterialR
  * TODO: Move it to GasStation and unit test it
  */
 fun String.titlecase(): String {
-    val regex = Regex("""\p{L}+""")  // cualquier secuencia de letras
+    val regex = Regex("""\p{L}+""") // cualquier secuencia de letras
 
     return regex.replace(this) { match ->
         match.value.lowercase().replaceFirstChar { it.uppercase() }
