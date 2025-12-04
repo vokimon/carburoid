@@ -323,27 +323,17 @@ class LocationPickerActivity : AppCompatActivity() {
         map.controller.animateTo(point)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_pick_location, menu)
-        return true
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             android.R.id.home -> { // ← back arrow in ActionBar
-                returnCancel()
-                true
-            }
-            R.id.action_accept -> {
                 returnResult()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
-
-    private fun returnCancel() {
-        setResult(RESULT_CANCELED)
-        finish()
+    override fun onBackPressed() {
+        returnResult()
+        super.onBackPressed()
     }
 
     override fun onResume() {
