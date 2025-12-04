@@ -1,7 +1,5 @@
 # TODO
 
-- Single point plot crashes
-
 Do you want to help? This is my roadmap.
 
 - [ ] Location Search: When empty, autocomplete show later searches
@@ -49,6 +47,7 @@ Do you want to help? This is my roadmap.
 
 ## Done
 
+- [x] PlotView: Single point plot crashes
 - [x] Location Search: Always accept on back, get ride of the dialog nonsense mentality.
 - [x] Details view: Back button on AppBar
 - [x] Migrate state to ModelView

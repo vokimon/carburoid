@@ -334,8 +334,7 @@ class LocationPickerActivity : AppCompatActivity() {
         if (item.itemId == android.R.id.home) {
             returnResult()
             true
-        }
-        else {
+        } else {
             super.onOptionsItemSelected(item)
         }
 
