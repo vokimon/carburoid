@@ -6,8 +6,6 @@ import android.widget.FrameLayout
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocalGasStation
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -26,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -91,7 +90,7 @@ fun CategorizedProductSelector() {
             },
             leadingIcon = {
                 Icon(
-                    imageVector = Icons.Filled.LocalGasStation,
+                    painter = painterResource(R.drawable.ic_local_gas_station),
                     contentDescription = stringResource(R.string.product_selector_icon_description),
                 )
             },

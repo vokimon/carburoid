@@ -3,15 +3,12 @@ package net.canvoki.carburoid.plotnavigator
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,11 +24,13 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.product.CategorizedProductSelector
 import net.canvoki.carburoid.product.ProductManager
+import net.canvoki.carburoid.R
 import net.canvoki.carburoid.ui.settings.ExperimentalFeatureNotice
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
@@ -93,23 +92,23 @@ fun GasStationScatterPlot(
             )
         }
         GasStationCard(selectedItem)
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ){
+        ) {
             Button(
-                onClick={ selectedIndex = (selectedIndex - 1).coerceIn(0, currentItems.lastIndex) },
+                onClick = { selectedIndex = (selectedIndex - 1).coerceIn(0, currentItems.lastIndex) },
                 modifier = Modifier.weight(1f),
             ) {
-                Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "Closer")
+                Icon(painter = painterResource(R.drawable.ic_keyboard_arrow_left), contentDescription = "Closer")
                 Text("Closer")
             }
             Button(
-                onClick={ selectedIndex = (selectedIndex + 1).coerceIn(0, currentItems.lastIndex) },
+                onClick = { selectedIndex = (selectedIndex + 1).coerceIn(0, currentItems.lastIndex) },
                 modifier = Modifier.weight(1f),
             ) {
                 Text("Cheaper")
-                Icon(Icons.Default.KeyboardArrowRight, contentDescription = "Cheaper")
+                Icon(painter = painterResource(R.drawable.ic_keyboard_arrow_right), contentDescription = "Cheaper")
             }
         }
     }
