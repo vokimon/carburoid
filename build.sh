@@ -33,3 +33,10 @@ run ./gradlew assembleFlossDebug &&
 
 # Change gradle version
 # ./gradlew wrapper --gradle-version=8.14.3 --distribution-type=all
+
+# Fresh data
+# curl https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/ > devdata/stations-$(date -uI minutes).yaml
+
+
+# Product Frequencies
+# yq . devdata/stations-example-full.json | grep Precio | grep -v \"\" | sed 's/":.*//' | sed 's/.*Precio //' | sort | uniq -c | sort -n
