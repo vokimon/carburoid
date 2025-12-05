@@ -1,14 +1,22 @@
 package net.canvoki.carburoid.plotnavigator
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -16,8 +24,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.product.CategorizedProductSelector
 import net.canvoki.carburoid.product.ProductManager
@@ -56,21 +67,20 @@ fun GasStationScatterPlot(
     items: List<GasStation>,
     modifier: Modifier = Modifier,
 ) {
-    var selectedIndex by remember { mutableStateOf(0) }
+    var selectedIndex by rememberSaveable { mutableStateOf(0) }
     val selectedItem by derivedStateOf {
         items.getOrNull(selectedIndex)
     }
-
     val product by rememberUpdatedState(ProductManager.getCurrent())
+    val currentItems by rememberUpdatedState(items)
 
-    LaunchedEffect(items) {
+    LaunchedEffect(items.map { it.id }) {
         selectedIndex = 0
     }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Column {
             CategorizedProductSelector()
-            GasStationCard(selectedItem)
         }
         Material2KoalaTheme {
             ScatterPlot(
@@ -78,11 +88,29 @@ fun GasStationScatterPlot(
                 getX = { station: GasStation -> station.distanceInMeters?.div(1000.0f) },
                 getY = { station: GasStation -> station.prices[product]?.toFloat() },
                 selectedIndex = selectedIndex,
-                onIndexSelected = { index ->
-                    selectedIndex = index
-                },
-                modifier = Modifier.fillMaxWidth(),
+                onIndexSelected = { it -> selectedIndex = it },
+                modifier = Modifier.fillMaxWidth().weight(0.1f),
             )
+        }
+        GasStationCard(selectedItem)
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ){
+            Button(
+                onClick={ selectedIndex = (selectedIndex - 1).coerceIn(0, currentItems.lastIndex) },
+                modifier = Modifier.weight(1f),
+            ) {
+                Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "Closer")
+                Text("Closer")
+            }
+            Button(
+                onClick={ selectedIndex = (selectedIndex + 1).coerceIn(0, currentItems.lastIndex) },
+                modifier = Modifier.weight(1f),
+            ) {
+                Text("Cheaper")
+                Icon(Icons.Default.KeyboardArrowRight, contentDescription = "Cheaper")
+            }
         }
     }
 }
