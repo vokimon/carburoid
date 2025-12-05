@@ -20,6 +20,13 @@ object ProductCatalog {
     val categories: List<ProductCategory> by lazy {
         listOf(
             ProductCategory(
+                name = R.string.product_category_additives,
+                products =
+                    listOf(
+                        Product("Adblue", R.string.product_name_adblue),
+                    ),
+            ),
+            ProductCategory(
                 name = R.string.product_category_diesel,
                 products =
                     listOf(
@@ -34,13 +41,13 @@ object ProductCatalog {
                 name = R.string.product_category_gasoline,
                 products =
                     listOf(
-                        Product("Gasolina 95 E10", R.string.product_name_gasolina_95_e10),
-                        Product("Gasolina 95 E25", R.string.product_name_gasolina_95_e25),
                         Product("Gasolina 95 E5", R.string.product_name_gasolina_95_e5),
-                        Product("Gasolina 95 E5 Premium", R.string.product_name_gasolina_95_e5_premium),
-                        Product("Gasolina 95 E85", R.string.product_name_gasolina_95_e85),
-                        Product("Gasolina 98 E10", R.string.product_name_gasolina_98_e10),
                         Product("Gasolina 98 E5", R.string.product_name_gasolina_98_e5),
+                        Product("Gasolina 95 E5 Premium", R.string.product_name_gasolina_95_e5_premium),
+                        Product("Gasolina 95 E10", R.string.product_name_gasolina_95_e10),
+                        Product("Gasolina 98 E10", R.string.product_name_gasolina_98_e10),
+                        Product("Gasolina 95 E25", R.string.product_name_gasolina_95_e25),
+                        Product("Gasolina 95 E85", R.string.product_name_gasolina_95_e85),
                         Product("Gasolina Renovable", R.string.product_name_gasolina_renovable),
                         Product("Bioetanol", R.string.product_name_bioetanol),
                     ),
@@ -49,21 +56,14 @@ object ProductCatalog {
                 name = R.string.product_category_gaseous,
                 products =
                     listOf(
+                        Product("Gases licuados del petróleo", R.string.product_name_gases_licuados_del_petroleo),
                         Product("Gas Natural Comprimido", R.string.product_name_gas_natural_comprimido),
                         Product("Gas Natural Licuado", R.string.product_name_gas_natural_licuado),
                         Product("Biogas Natural Comprimido", R.string.product_name_biogas_natural_comprimido),
                         Product("Biogas Natural Licuado", R.string.product_name_biogas_natural_licuado),
-                        Product("Gases licuados del petróleo", R.string.product_name_gases_licuados_del_petroleo),
                         Product("Hidrogeno", R.string.product_name_hidrogeno),
                         Product("Amoniaco", R.string.product_name_amoniaco),
                         Product("Metanol", R.string.product_name_metanol),
-                    ),
-            ),
-            ProductCategory(
-                name = R.string.product_category_additives,
-                products =
-                    listOf(
-                        Product("Adblue", R.string.product_name_adblue),
                     ),
             ),
         )
