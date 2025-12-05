@@ -67,10 +67,6 @@ fun GasStationScatterPlot(
         selectedIndex = 0
     }
 
-    fun getX(station: GasStation): Float? = station.distanceInMeters?.div(1000.0f)
-
-    fun getY(station: GasStation): Float? = station.prices[product]?.toFloat()
-
     Column(modifier = Modifier.fillMaxWidth()) {
         Column {
             CategorizedProductSelector()
@@ -79,8 +75,8 @@ fun GasStationScatterPlot(
         Material2KoalaTheme {
             ScatterPlot(
                 items = items,
-                getX = ::getX,
-                getY = ::getY,
+                getX = { station: GasStation -> station.distanceInMeters?.div(1000.0f) },
+                getY = { station: GasStation -> station.prices[product]?.toFloat() },
                 selectedIndex = selectedIndex,
                 onIndexSelected = { index ->
                     selectedIndex = index
