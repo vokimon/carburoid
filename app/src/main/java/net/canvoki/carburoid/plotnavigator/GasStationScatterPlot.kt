@@ -26,16 +26,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.product.CategorizedProductSelector
 import net.canvoki.carburoid.product.ProductManager
-import net.canvoki.carburoid.R
 import net.canvoki.carburoid.ui.settings.ExperimentalFeatureNotice
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
-fun PlotNavigatorScreen(stations: List<GasStation>) {
+fun PlotNavigatorScreen(
+    stations: List<GasStation>,
+    allStations: List<GasStation>,
+) {
     MaterialTheme(
         colorScheme = ThemeSettings.effectiveColorScheme(),
     ) {
@@ -50,13 +53,18 @@ fun PlotNavigatorScreen(stations: List<GasStation>) {
             ) {
                 GasStationScatterPlot(
                     items = stations,
+                    allItems = allStations,
                     modifier = Modifier.fillMaxSize(),
                 )
             }
         }
         ExperimentalFeatureNotice(
-            noticeId = "feature_plot_navitator_bla2",
-            message = "This is an experimental interface. Feedback on your experience using it is very welcome.",
+            noticeId = "feature_plot_navigator_122",
+            title = "Experimental screen",
+            message =
+                """This is an work-in-progress screen. """ +
+                    """Here be dragons but your feed back is very wellcome. """ +
+                    """How does it feel to you? How should it look like?""",
         )
     }
 }
@@ -64,6 +72,7 @@ fun PlotNavigatorScreen(stations: List<GasStation>) {
 @Composable
 fun GasStationScatterPlot(
     items: List<GasStation>,
+    allItems: List<GasStation>,
     modifier: Modifier = Modifier,
 ) {
     var selectedIndex by rememberSaveable { mutableStateOf(0) }
@@ -84,6 +93,7 @@ fun GasStationScatterPlot(
         Material2KoalaTheme {
             ScatterPlot(
                 items = items,
+                allItems = allItems,
                 getX = { station: GasStation -> station.distanceInMeters?.div(1000.0f) },
                 getY = { station: GasStation -> station.prices[product]?.toFloat() },
                 selectedIndex = selectedIndex,

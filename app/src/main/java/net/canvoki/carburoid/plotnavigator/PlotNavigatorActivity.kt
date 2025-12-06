@@ -8,7 +8,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.core.view.WindowCompat
-import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.MainSharedViewModel
 import net.canvoki.carburoid.model.GasStation
 
@@ -25,7 +24,11 @@ class PlotNavigatorActivity : ComponentActivity() {
             val stations by viewModel.stationsUpdated.collectAsState(
                 initial = viewModel.getStationsToDisplay(),
             )
-            PlotNavigatorScreen(stations)
+            val allStations by viewModel.rawStationsUpdated.collectAsState(
+                initial = viewModel.getStations(),
+            )
+
+            PlotNavigatorScreen(stations, allStations)
         }
     }
 }
