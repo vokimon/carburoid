@@ -29,27 +29,30 @@ class MainSharedViewModel(
     private val _stationsUpdated = MutableSharedFlow<List<GasStation>>(replay = 0)
     val stationsUpdated: SharedFlow<List<GasStation>> = _stationsUpdated.asSharedFlow()
 
+    private val _rawStationsUpdated = MutableSharedFlow<List<GasStation>>(replay = 0)
+    val rawStationsUpdated: SharedFlow<List<GasStation>> = _rawStationsUpdated.asSharedFlow()
+
     init {
 
         // Observe product changes
         viewModelScope.launch {
             ProductManager.productChanged.collect {
                 log("VM EVENT product updated")
-                reloadStations()
+                reloadStations("Product change")
             }
         }
         // Observe changes on how to compute distance
         viewModelScope.launch {
             CurrentDistancePolicy.methodChanged.collect {
                 log("VM EVENT Distance policy updated")
-                reloadStations()
+                reloadStations("Distance policy change")
             }
         }
         // Observe filter changes
         viewModelScope.launch {
             FilterSettings.changes.collect {
                 log("VM EVENT Filter updated")
-                reloadStations()
+                reloadStations("Filters change")
             }
         }
         // Observe repository updates
@@ -58,7 +61,8 @@ class MainSharedViewModel(
                 when (event) {
                     is RepositoryEvent.UpdateReady -> {
                         log("VM EVENT Repository.UpdateReady")
-                        reloadStations()
+                        _rawStationsUpdated.emit(getStations())
+                        reloadStations("Data change")
                     }
                     else -> Unit
                 }
@@ -76,22 +80,19 @@ class MainSharedViewModel(
     /**
      * Returns stations filtered according to the given configuration.
      */
-    fun getStationsToDisplay(): List<GasStation> {
+    fun getStationsToDisplay(reason: String = "Unknonw"): List<GasStation> {
         val stations = getStations()
         val config = FilterSettings.config(getApplication())
-        return timeits("PROCESSING STATIONS") {
+        return timeits("PROCESSING STATIONS $reason") {
             StationFilter(config).filter(stations)
         }
     }
 
-    fun reloadStations() {
+    fun reloadStations(reason: String = "Unknonw") {
         viewModelScope.launch {
             _stationsReloadStarted.emit(Unit)
 
-            val stations =
-                timeits("PROCESSING STATIONS") {
-                    getStationsToDisplay()
-                }
+            val stations = getStationsToDisplay(reason)
 
             _stationsUpdated.emit(stations)
         }
