@@ -76,8 +76,10 @@ fun GasStationScatterPlot(
     modifier: Modifier = Modifier,
 ) {
     var selectedIndex by rememberSaveable { mutableStateOf(0) }
-    val selectedItem by derivedStateOf {
-        items.getOrNull(selectedIndex)
+    val selectedItem by remember {
+        derivedStateOf {
+            items.getOrNull(selectedIndex)
+        }
     }
     val product by rememberUpdatedState(ProductManager.getCurrent())
     val currentItems by rememberUpdatedState(items)
