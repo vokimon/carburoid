@@ -39,9 +39,9 @@
     <string name="product_category_gasoline">Gasoline</string>
     <string name="product_category_gaseous">Gaseous</string>
     <string name="product_category_additives">Additives</string>
-    <string name="product_name_gasoleo_a">Gasoleo A</string>
-    <string name="product_name_gasoleo_premium">Gasoleo Premium</string>
-    <string name="product_name_gasoleo_b">Gasoleo B</string>
+    <string name="product_name_gasoleo_a">Road Diesel (A)</string>
+    <string name="product_name_gasoleo_premium">Premium Diesel (A+)</string>
+    <string name="product_name_gasoleo_b">Off-road Diesel (B)</string>
     <string name="product_name_diesel_renovable">Renewable Diesel</string>
     <string name="product_name_gasolina_95_e10">Gasoline 95 E10</string>
     <string name="product_name_gasolina_95_e25">Gasoline 95 E25</string>

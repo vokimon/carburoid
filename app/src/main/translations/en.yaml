@@ -37,9 +37,9 @@ product_category_diesel: Diesel
 product_category_gasoline: Gasoline
 product_category_gaseous: Gaseous
 product_category_additives: Additives
-product_name_gasoleo_a: Gasoleo A
-product_name_gasoleo_premium: Gasoleo Premium
-product_name_gasoleo_b: Gasoleo B
+product_name_gasoleo_a: Road Diesel (A)
+product_name_gasoleo_premium: Premium Diesel (A+)
+product_name_gasoleo_b: Off-road Diesel (B)
 product_name_diesel_renovable: Renewable Diesel
 product_name_gasolina_95_e10: Gasoline 95 E10
 product_name_gasolina_95_e25: Gasoline 95 E25
