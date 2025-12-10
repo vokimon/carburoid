@@ -1,5 +1,7 @@
 package net.canvoki.carburoid.plotnavigator
 
+import kotlin.math.floor
+
 fun <T, X : Number, Y : Number> prepareHistogram2D(
     samples: List<T>,
     nBinsX: Int,
@@ -22,8 +24,8 @@ fun <T, X : Number, Y : Number> prepareHistogram2D(
         val x = xGetter(sample).toFloat()
         val y = yGetter(sample).toFloat()
 
-        val bx = (((x - xMin.toFloat()) / xRange) * nBinsX).toInt()
-        val by = (((y - yMin.toFloat()) / yRange) * nBinsY).toInt()
+        val bx = floor(((x - xMin.toFloat()) / xRange) * nBinsX).toInt()
+        val by = floor(((y - yMin.toFloat()) / yRange) * nBinsY).toInt()
 
         if (bx !in 0 until nBinsX) continue
         if (by !in 0 until nBinsY) continue
