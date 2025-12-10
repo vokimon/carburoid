@@ -41,7 +41,7 @@ fun Modifier.horizontalSwipe(
             }
         }
 
-        pointerInput(Unit) {
+        pointerInput(onStep) {
             awaitEachGesture {
                 val down = awaitFirstDown()
                 val startX = down.position.x

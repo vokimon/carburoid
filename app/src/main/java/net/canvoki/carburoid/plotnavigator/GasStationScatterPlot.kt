@@ -75,14 +75,14 @@ fun GasStationScatterPlot(
     allItems: List<GasStation>,
     modifier: Modifier = Modifier,
 ) {
+    val currentItems by rememberUpdatedState(items)
     var selectedIndex by rememberSaveable { mutableStateOf(0) }
     val selectedItem by remember {
         derivedStateOf {
-            items.getOrNull(selectedIndex)
+            currentItems.getOrNull(selectedIndex)
         }
     }
     val product by rememberUpdatedState(ProductManager.getCurrent())
-    val currentItems by rememberUpdatedState(items)
 
     LaunchedEffect(items.map { it.id }) {
         selectedIndex = 0
@@ -94,7 +94,7 @@ fun GasStationScatterPlot(
         }
         Material2KoalaTheme {
             ScatterPlot(
-                items = items,
+                items = currentItems,
                 allItems = allItems,
                 getX = { station: GasStation -> station.distanceInMeters?.div(1000.0f) },
                 getY = { station: GasStation -> station.prices[product]?.toFloat() },
