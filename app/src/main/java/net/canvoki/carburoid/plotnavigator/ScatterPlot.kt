@@ -124,16 +124,14 @@ fun ScatterPlot(
             val (xMin, xMax) = xRange(points)
             val (yMin, yMax) = yRange(points, allItems, getY)
 
-            prepareHistogram2D(
+            generateHistogram2D(
                 samples = validItems,
                 nBinsX = nXBins,
                 nBinsY = nYBins,
                 xGetter = { getX(it)!! },
                 yGetter = { getY(it)!! },
-                xMin = xMin,
-                xMax = xMax,
-                yMin = yMin,
-                yMax = yMax,
+                xDomain = xMin..xMax,
+                yDomain = yMin..yMax,
             )
         }
     }
@@ -155,7 +153,7 @@ fun ScatterPlot(
         yAxisLabels = { "%.03f€".format(it) },
         modifier = modifier.horizontalSwipe(onStep = ::changePage),
     ) {
-        val bins: BinGrid<Int> = histogram
+        val bins: HeatMapGrid<Int> = histogram
         val maxFrequency = bins.flatten().maxOrNull()?.takeIf { it != 0 } ?: 1
 
         histogram.firstOrNull()?.let {
@@ -163,8 +161,8 @@ fun ScatterPlot(
                 xDomain = xMin..xMax,
                 yDomain = yMin..yMax,
                 bins = histogram,
-                getAlpha = { it * 0.9f / maxFrequency },
-                getColor = { colors.outline },
+                alphaScale = { it * 0.9f / maxFrequency },
+                colorScale = { colors.outline },
             )
         }
 
