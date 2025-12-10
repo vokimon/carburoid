@@ -147,9 +147,10 @@ fun ScatterPlot(
         yAxisTitle = null,
         xAxisLabels = { "%.01f".format(it) },
         yAxisLabels = { "%.03f€".format(it) },
-        modifier = modifier.horizontalSwipe(onStep = { delta ->
-            onIndexSelected((currentIndex + delta).coerceIn(0, points.lastIndex))
-        }),
+        modifier =
+            modifier.horizontalSwipe(onStep = { delta ->
+                onIndexSelected((currentIndex + delta).coerceIn(0, points.lastIndex))
+            }),
     ) {
         val bins: HeatMapGrid<Int> = histogram
         val maxFrequency = bins.flatten().maxOrNull()?.takeIf { it != 0 } ?: 1
