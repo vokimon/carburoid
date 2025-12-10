@@ -328,9 +328,9 @@ def version_to_code(version, epoch=0) -> str:
 
 @dataclass
 class Config():
-    asset_id: str | None # assetlib id
-    category: int | None # assetlib category
-    previews: list
+    asset_id: str | None = None # assetlib id
+    category: int | None = None # assetlib category # TODO: Rename
+    previews: list = field(default_factory=list)
     description_files: list[str] = field(default_factory=lambda: ["README.md"])
 
     repo: str = field(default_factory=git.repo_name)
