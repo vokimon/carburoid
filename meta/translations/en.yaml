@@ -4,16 +4,24 @@
 project_name: Carburoid
 splash_motto: Fill up cheaper, closer
 short_description: Find Spanish gas stations by price and distance.
-full_description_md: |-
-  Features
-
-  - 🏛️ Up-to-date gas station data provided by the Ministry of Industry of Spain
-  - 🎯 Only relevant gas stations: either closer or cheaper than others
-  - 🕒 Smart about opening and closing hours
-  - 🗺️ Integrates with your preferred map application
-  - 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese...
-  - ☀️ Dark and Light themes
+full_description_md: "Features\n\n- \U0001F3DB️ Up-to-date gas station data provided
+  by the Ministry of Industry of Spain\n- \U0001F3AF Only relevant gas stations: either
+  closer or cheaper than others\n- \U0001F552 Smart about opening and closing hours\n-
+  \U0001F5FA️ Integrates with your preferred map application\n- \U0001F310 Translations
+  available in Spanish, Catalan, Basque, Galician, Aragonese...\n- ☀️ Dark and Light
+  themes\n"
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_3_0_md: "Product selector rewrite, many ui fixes and a new experimental
+  plot navigator\n\n- ✨ Product categories for easy search\n- ✨ Recent products on
+  top\n- ✨ Hide stations on a distinct land mass: Peninsule, Canary, Balearic or Autonomous
+  Cities. (Fixes #\n- \U0001F6B8 Location picker just accept on exit (instead accept
+  or cancel)\n- \U0001F310 Product names and categories translated\n- \U0001F484 Detail
+  view with the staion name in the AppBar\n- \U0001F41B Android 16 ui still slipped
+  under the appbar and system bar (Fixes #2)\n- \U0001F41B Product label and name
+  overlaped (Fixes #9)\n- \U0001F41B Osm links were not processed\n- \U0001F41B Filter
+  on about to close/open did not apply inmediatelly\n- \U0001F41B Location and product
+  texts non-editable to prevent weird state\n- ♻️ Using ModelView for filtering GasStations\n-
+  ♻️ Some classic Views migrated to Compose\n- \U0001F6A7 Experimental plot navigator"
 changes_1_2_3_md: "- \U0001F484 Less anoying data spinner for data refreshing\n- \U0001F310
   Spanish contained untranslated Catalan words (Fixes #4)\n    - Thanks to wuniversales
   for the report\n- \U0001F3D7️ agp upgraded back. FDroid server got an upgrade."

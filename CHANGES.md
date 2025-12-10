@@ -1,13 +1,14 @@
 # Change log
 
-## Unreleased
+## 1.3.0 (2025-12-10)
 
-- ✨ Categorized products for easy search
+Product selector rewrite, many ui fixes and a new experimental plot navigator
+
+- ✨ Product categories for easy search
 - ✨ Recent products on top
-- ✨ Hide stations distinct land masses: Peninsule, Canary, Balearic or Autonomous Cities.
-- 🚸 Location picker just saves on exit (instead accept or cancel)
-- 🌐 Translated product names and categories
-- 🌐 Missing translations for Location picker 'Accept' button
+- ✨ Hide stations on a distinct land mass: Peninsule, Canary, Balearic or Autonomous Cities. (Fixes #
+- 🚸 Location picker just accept on exit (instead accept or cancel)
+- 🌐 Product names and categories translated
 - 💄 Detail view with the staion name in the AppBar
 - 🐛 Android 16 ui still slipped under the appbar and system bar (Fixes #2)
 - 🐛 Product label and name overlaped (Fixes #9)
@@ -15,7 +16,8 @@
 - 🐛 Filter on about to close/open did not apply inmediatelly
 - 🐛 Location and product texts non-editable to prevent weird state
 - ♻️ Using ModelView for filtering GasStations
-- 🚧 Experimental Plot view
+- ♻️ Some classic Views migrated to Compose
+- 🚧 Experimental plot navigator
 
 ## 1.2.3 (2025-11-15)
 
