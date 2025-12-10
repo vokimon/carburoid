@@ -4,15 +4,11 @@ short_description: Encuentra gasolineras en España por precio y distancia
 full_description_md: |+
   Funcionalidades:
 
-  - Datos oficiales que envian las gasolineras al Ministerio de Industria de España
-  - Muestra solo las gasolineras relevantes: o más baratas o más cercanas que otras.
-  - Descarta las que no tienen tu producto
-  - Descarta las que están cerradas y no abren pronto
-  - Las que cierran o abren pronto, no se usan para descartar a otras, por si llegas más tarde o demasiado pronto
-  - Muestra las gasolineras descartadas deshabilitando cada criterio
-  - Pantallas de lista y detalle
-  - Abre la gasolinera en tu aplicacion de mapas favorita
-  - Traducciones al Español, Catalan, Vasco, Gallego, Aragonés y más por venir.
-  - Temas oscuro y claro
+  - 🏛️ Datos actualizados del Ministerio de Industria
+  - 🎯 Solo gasolineras relevantes: o más cercanas o más baratas que otras
+  - 🕒 Considera los horarios de apertura
+  - 🗺️ Se integra con la aplicació de mapas que uses
+  - 🌐 Traducciones al Español, Catalan, Vasco, Gallego, Aragonés...
+  - ☀️ Temas oscuro y claro
 
 keywords: gasolinera, estación de servicio, combustible, carburante, gasoil, diesel, gasolina

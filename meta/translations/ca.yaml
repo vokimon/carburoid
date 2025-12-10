@@ -4,15 +4,13 @@ short_description: Troba benzineres a Espanya per preu i distància
 full_description_md: |+
   Funcionalitats:
 
-  - Dades oficals que envien les benzineres al Ministeri d'Industria Espanyol
-  - Mostra només les benzineres rellevants: o més properes o més barates que d'altres
-  - Descarta les que no tenen el teu producte
-  - Descarta les que están tancades i no obriran aviat
-  - Les que tanquen o obren aviat es mostren pero no serveixen per descartar d'altres, per si no hi arribes a temps o massa d'hora
-  - Mostra les estacions descartades deshabilitant cada criteri
-  - Pantalles de llistat i detall
-  - Obre la benzinera amb l'aplicació de mapes que vulguis
-  - Traduccions a l'Espanyol, Català, Basc, Gallec, Aragonés i properament d'altres.
-  - Temes fosc i clar
+  Features
+
+  - 🏛️ Dades actualitzades del Ministeri d'Indústria
+  - 🎯 Només benzineres rellevants: o més properes o més barates que d'altres.
+  - 🕒 Considera els horaris d'apertura
+  - 🗺️ S'integra amb l'aplicació de mapes que prefereixis
+  - 🌐 Traduccions a l'Espanyol, Català, Basc, Gallec, Aragonés...
+  - ☀️ Temes fosc i clar
 
 keywords: benzinera, estació de servei, combustible, carburant, gasoil, diesel, gasolina

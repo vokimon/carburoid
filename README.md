@@ -9,20 +9,16 @@
 
 Find Spanish gas stations by price and distance.
 
-Features:
+Features
 
-- Uses official data sent by gas stations to the Ministry of Industry of Spain
-- Show only relevant gas stations: either closer or cheaper than others
-- Discards stations without your product
-- Discards closed stations unless they open soon
-- Stations opening or closing soon are not used to discard others, just in case you get there late or early
-- See discarded stations by disabling any filtering criteria
-- Station list and station detail views
-- Open a station location in your chosen map application
-- Translations to Spanish, Catalan, Basque, Galician, Aragonese...
-- Dark and Light themes
-
+- 🏛️ Up-to-date gas station data provided by the Ministry of Industry of Spain
+- 🎯 Only relevant gas stations: either closer or cheaper than others
+- 🕒 Smart about opening and closing hours
+- 🗺️ Integrates with your preferred map application
+- 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese...
+- ☀️ Dark and Light themes
 <!-- end-of-description -->
+
 
 <p align="center">
 <img width="22%" alt="Gas station list (dark theme)" src="media/01-StationList-Dark.png" />
