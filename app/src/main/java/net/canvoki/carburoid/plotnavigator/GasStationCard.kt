@@ -41,13 +41,6 @@ fun GasStationCard(
     onClick: (GasStation) -> Unit = {},
 ) {
     val context = LocalContext.current
-    val priceText = station?.price?.let { "%.03f €".format(it) } ?: "?"
-    val distance = station?.let { CurrentDistancePolicy.getDistance(it) }
-    val distanceText = distance?.let { "%.01f km".format(it / 1000) } ?: "?? km"
-    val locationText =
-        listOfNotNull(station?.city, station?.state)
-            .joinToString(" - ")
-            .ifEmpty { context.getString(R.string.station_no_city) }
 
     Column(
         modifier =
@@ -60,6 +53,14 @@ fun GasStationCard(
                 .padding(top = 8.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
+            val name = remember(station?.id, station?.name) { station?.name ?: context.getString(R.string.station_no_name) }
+            val address = remember(station?.id, station?.address) { station?.address ?: context.getString(R.string.station_no_address) }
+            val locationText = remember(station?.id, station?.city, station?.state) {
+                listOfNotNull(station?.city, station?.state)
+                    .joinToString(" - ")
+                    .ifEmpty { context.getString(R.string.station_no_city) }
+            }
+
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = station?.name ?: context.getString(R.string.station_no_name),
@@ -87,11 +88,18 @@ fun GasStationCard(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // <-- Replace previous pill Row with this composable -->
                 station?.let { OpeningStatusPill(it) }
             }
 
             Column(horizontalAlignment = Alignment.End) {
+                val priceText = remember(station?.id, station?.price) {
+                    station?.price?.let { "%.03f €".format(it) } ?: "?"
+                }
+                val distanceText = remember(station?.id, station?.let { CurrentDistancePolicy.getDistance(it) }) {
+                    val distance = station?.let { CurrentDistancePolicy.getDistance(it) }
+                    distance?.let { "%.01f km".format(it / 1000) } ?: "?? km"
+                }
+
                 Text(
                     text = if (station == null || station.isPublicPrice) priceText else "*$priceText",
                     style = MaterialTheme.typography.headlineMedium,
