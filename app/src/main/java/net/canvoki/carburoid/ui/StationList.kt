@@ -76,35 +76,35 @@ private fun StationListWrapper(
 }
 
 class StationListView
-@JvmOverloads
-constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-) : FrameLayout(context, attrs) {
-    private val composeView = ComposeView(context)
+    @JvmOverloads
+    constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+    ) : FrameLayout(context, attrs) {
+        private val composeView = ComposeView(context)
 
-    init {
-        composeView.layoutParams =
-            LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-        addView(composeView)
-        updateContent()
-    }
-
-    var stations: List<GasStation> = emptyList()
-        set(value) {
-            field = value
+        init {
+            composeView.layoutParams =
+                LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+            addView(composeView)
             updateContent()
         }
 
-    var onStationClicked: ((GasStation) -> Unit) = {}
-        set(value) {
-            field = value
-            updateContent()
-        }
+        var stations: List<GasStation> = emptyList()
+            set(value) {
+                field = value
+                updateContent()
+            }
 
-    private fun updateContent() {
-        composeView.setContent {
-            StationListWrapper(stations, onStationClicked = { station -> onStationClicked(station) })
+        var onStationClicked: ((GasStation) -> Unit) = {}
+            set(value) {
+                field = value
+                updateContent()
+            }
+
+        private fun updateContent() {
+            composeView.setContent {
+                StationListWrapper(stations, onStationClicked = { station -> onStationClicked(station) })
+            }
         }
     }
-}
