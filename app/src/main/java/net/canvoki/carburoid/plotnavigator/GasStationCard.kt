@@ -54,9 +54,10 @@ fun GasStationCard(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
-                val name = remember(station?.id, station?.name) {
-                    station?.name ?: context.getString(R.string.station_no_name)
-                }
+                val name =
+                    remember(station?.id, station?.name) {
+                        station?.name ?: context.getString(R.string.station_no_name)
+                    }
                 Text(
                     text = station?.name ?: context.getString(R.string.station_no_name),
                     style = MaterialTheme.typography.titleMedium,
@@ -66,11 +67,12 @@ fun GasStationCard(
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                 )
 
-                val locationText = remember(station?.id, station?.city, station?.state) {
-                    listOfNotNull(station?.city, station?.state)
-                        .joinToString(" - ")
-                        .ifEmpty { context.getString(R.string.station_no_city) }
-                }
+                val locationText =
+                    remember(station?.id, station?.city, station?.state) {
+                        listOfNotNull(station?.city, station?.state)
+                            .joinToString(" - ")
+                            .ifEmpty { context.getString(R.string.station_no_city) }
+                    }
 
                 Text(
                     text = locationText,

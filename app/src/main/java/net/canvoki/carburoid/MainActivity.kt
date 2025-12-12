@@ -76,8 +76,10 @@ class MainActivity : AppCompatActivity() {
         loadingPill = findViewById(R.id.loading_pill)
         stationList = findViewById(R.id.station_list)
 
-        gasStationAdapter = GasStationAdapter(this, emptyList(), ::onItemClicked)
+        gasStationAdapter = GasStationAdapter(this, emptyList(), ::openDetails)
         recyclerView.adapter = gasStationAdapter
+        stationList.stations = emptyList()
+        stationList.onStationClicked = ::openDetails
 
         showEmpty(getString(R.string.no_gas_stations))
 
@@ -281,7 +283,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun onItemClicked(station: GasStation) {
+    private fun openDetails(station: GasStation) {
         val intent = Intent(this, StationDetailActivity::class.java)
         intent.putExtra("station_id", station.id)
         startActivity(intent)

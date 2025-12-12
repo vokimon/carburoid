@@ -17,29 +17,33 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
+import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
-import net.canvoki.carburoid.ui.settings.ThemeSettings
 import net.canvoki.carburoid.plotnavigator.GasStationCard
+import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
 fun StationList(
     stations: List<GasStation>,
     refreshing: Boolean,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onStationClicked: (GasStation) -> Unit,
 ) {
     // State remembers position and caches elements
-    val pullToRefreshState = rememberPullToRefreshState()
+    val listState = rememberLazyListState()
+    val pullRefreshState = rememberPullToRefreshState()
 
     PullToRefreshBox(
-        state = pullToRefreshState,
+        state = pullRefreshState,
         isRefreshing = refreshing,
         onRefresh = onRefresh,
     ) {
-        val listState = rememberLazyListState()
-
         LazyColumn(
             state = listState,
             modifier = Modifier.fillMaxSize(),
@@ -47,20 +51,27 @@ fun StationList(
             items(
                 items = stations,
                 key = { it.id },
-                contentType = {"station"},
+                contentType = { "station" },
             ) { station ->
-                GasStationCard(station)
+                GasStationCard(station, onClick = {
+                    onStationClicked(station)
+                })
             }
         }
     }
 }
 
 @Composable
-private fun StationListWrapper(stations: List<GasStation>) {
+private fun StationListWrapper(
+    stations: List<GasStation>,
+    onStationClicked: (GasStation) -> Unit,
+) {
     MaterialTheme(
         colorScheme = ThemeSettings.effectiveColorScheme(),
     ) {
-        StationList(stations, refreshing=false, onRefresh={})
+        StationList(stations, refreshing = false, onRefresh = { log("pressed") }, onStationClicked = { s ->
+            onStationClicked(s)
+        })
     }
 }
 
@@ -69,8 +80,7 @@ class StationListView
 constructor(
     context: Context,
     attrs: AttributeSet? = null,
-): FrameLayout(context, attrs) {
-
+) : FrameLayout(context, attrs) {
     private val composeView = ComposeView(context)
 
     init {
@@ -86,7 +96,7 @@ constructor(
             updateContent()
         }
 
-    var onStationClick: ((GasStation) -> Unit)? = null
+    var onStationClicked: ((GasStation) -> Unit) = {}
         set(value) {
             field = value
             updateContent()
@@ -94,7 +104,7 @@ constructor(
 
     private fun updateContent() {
         composeView.setContent {
-            StationListWrapper(stations)
+            StationListWrapper(stations, onStationClicked = { station -> onStationClicked(station) })
         }
     }
 }
