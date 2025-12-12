@@ -53,22 +53,22 @@ fun GasStationCard(
                 .padding(top = 8.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            val name =
-                remember(station?.id, station?.name) {
-                    station?.name ?: context.getString(R.string.station_no_name)
-                }
-            val address =
-                remember(station?.id, station?.address) {
-                    station?.address ?: context.getString(R.string.station_no_address)
-                }
-            val locationText =
-                remember(station?.id, station?.city, station?.state) {
-                    listOfNotNull(station?.city, station?.state)
-                        .joinToString(" - ")
-                        .ifEmpty { context.getString(R.string.station_no_city) }
-                }
-
             Column(modifier = Modifier.weight(1f)) {
+                val name =
+                    remember(station?.id, station?.name) {
+                        station?.name ?: context.getString(R.string.station_no_name)
+                    }
+                val address =
+                    remember(station?.id, station?.address) {
+                        station?.address ?: context.getString(R.string.station_no_address)
+                    }
+                val locationText =
+                    remember(station?.id, station?.city, station?.state) {
+                        listOfNotNull(station?.city, station?.state)
+                            .joinToString(" - ")
+                            .ifEmpty { context.getString(R.string.station_no_city) }
+                    }
+
                 Text(
                     text = station?.name ?: context.getString(R.string.station_no_name),
                     style = MaterialTheme.typography.titleMedium,
