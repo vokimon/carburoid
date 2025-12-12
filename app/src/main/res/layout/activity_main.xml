@@ -9,10 +9,10 @@
         android:id="@+id/heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="vertical">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <net.canvoki.carburoid.product.CategorizedProductSelectorView
             android:id="@+id/product_selector"
@@ -25,14 +25,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp" />
-
     </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/heading"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -46,7 +44,7 @@
         android:textSize="16sp"
         android:layout_marginTop="8dp"
         android:visibility="gone"
-        android:gravity="center|center"
+        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/progress_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -57,30 +55,42 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:visibility="visible"
-        android:gravity="center|center"
+        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/heading"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
+    <LinearLayout
+        android:id="@+id/list_container"
+        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"
         app:layout_constraintTop_toBottomOf="@id/heading"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" >
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <net.canvoki.carburoid.ui.StationListView
+            android:id="@+id/station_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:visibility="gone" />
 
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/loading_pill"
@@ -92,10 +102,10 @@
         android:background="@drawable/shape_loading_pill"
         android:gravity="center_vertical"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/swipe_refresh_layout"
+        android:layout_margin="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="8dp">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ProgressBar
             android:id="@+id/loading_spinner"

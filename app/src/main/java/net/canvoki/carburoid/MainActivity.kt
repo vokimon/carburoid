@@ -30,6 +30,7 @@ import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.ui.StationDetailActivity
+import net.canvoki.carburoid.ui.StationListView
 import net.canvoki.carburoid.ui.setContentViewWithInsets
 
 class MainActivity : AppCompatActivity() {
@@ -56,6 +57,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var swipeRefreshLayout: androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     private lateinit var loadingPill: LinearLayout
     private lateinit var gasStationAdapter: GasStationAdapter
+    private lateinit var stationList: StationListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         log("onCreate")
@@ -72,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         progressText = findViewById(R.id.text_progress)
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
         loadingPill = findViewById(R.id.loading_pill)
+        stationList = findViewById(R.id.station_list)
 
         gasStationAdapter = GasStationAdapter(this, emptyList(), ::onItemClicked)
         recyclerView.adapter = gasStationAdapter
@@ -220,6 +223,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
                 recyclerView.visibility = View.GONE
+                stationList.visibility = View.GONE
                 spinner.visibility = View.GONE
                 progressText.visibility = View.GONE
                 emptyView.visibility = View.VISIBLE
@@ -232,6 +236,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
                 recyclerView.visibility = View.GONE
+                stationList.visibility = View.GONE
                 spinner.visibility = View.VISIBLE
                 progressText.visibility = View.VISIBLE
                 progressText.text = message ?: "---"
@@ -244,6 +249,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
                 recyclerView.visibility = View.VISIBLE
+                stationList.visibility = View.VISIBLE
                 spinner.visibility = View.GONE
                 progressText.visibility = View.GONE
                 emptyView.visibility = View.GONE
@@ -269,6 +275,7 @@ class MainActivity : AppCompatActivity() {
                 showEmpty(getString(R.string.no_gas_stations))
             } else {
                 gasStationAdapter.updateData(stations)
+                stationList.stations = stations
                 showContent()
             }
         }
