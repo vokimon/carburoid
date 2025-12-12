@@ -54,21 +54,9 @@ fun GasStationCard(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
-                val name =
-                    remember(station?.id, station?.name) {
-                        station?.name ?: context.getString(R.string.station_no_name)
-                    }
-                val address =
-                    remember(station?.id, station?.address) {
-                        station?.address ?: context.getString(R.string.station_no_address)
-                    }
-                val locationText =
-                    remember(station?.id, station?.city, station?.state) {
-                        listOfNotNull(station?.city, station?.state)
-                            .joinToString(" - ")
-                            .ifEmpty { context.getString(R.string.station_no_city) }
-                    }
-
+                val name = remember(station?.id, station?.name) {
+                    station?.name ?: context.getString(R.string.station_no_name)
+                }
                 Text(
                     text = station?.name ?: context.getString(R.string.station_no_name),
                     style = MaterialTheme.typography.titleMedium,
@@ -77,6 +65,13 @@ fun GasStationCard(
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                 )
+
+                val locationText = remember(station?.id, station?.city, station?.state) {
+                    listOfNotNull(station?.city, station?.state)
+                        .joinToString(" - ")
+                        .ifEmpty { context.getString(R.string.station_no_city) }
+                }
+
                 Text(
                     text = locationText,
                     style = MaterialTheme.typography.bodyMedium,
@@ -84,6 +79,11 @@ fun GasStationCard(
                     maxLines = 1,
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                 )
+
+                val address =
+                    remember(station?.id, station?.address) {
+                        station?.address ?: context.getString(R.string.station_no_address)
+                    }
                 Text(
                     text = station?.address ?: context.getString(R.string.station_no_address),
                     style = MaterialTheme.typography.bodySmall,
