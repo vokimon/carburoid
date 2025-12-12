@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -29,19 +30,24 @@ fun StationList(
     refreshing: Boolean,
     onRefresh: () -> Unit
 ) {
+    // State remembers position and caches elements
     val pullToRefreshState = rememberPullToRefreshState()
 
     PullToRefreshBox(
+        state = pullToRefreshState,
         isRefreshing = refreshing,
         onRefresh = onRefresh,
-        state = pullToRefreshState
     ) {
+        val listState = rememberLazyListState()
+
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            state = listState,
+            modifier = Modifier.fillMaxSize(),
         ) {
             items(
                 items = stations,
-                key = { it.id }
+                key = { it.id },
+                contentType = {"station"},
             ) { station ->
                 GasStationCard(station)
             }
