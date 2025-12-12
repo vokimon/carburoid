@@ -133,7 +133,7 @@ private fun OpeningStatusPill(station: GasStation) {
             Modifier
                 .clip(RoundedCornerShape(50.dp))
                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(horizontal = 12.dp, vertical = 4.dp),
+                .padding(horizontal = 12.dp, vertical = 2.dp),
     ) {
         Icon(
             painter = painterResource(id = openStatus.icon()),
