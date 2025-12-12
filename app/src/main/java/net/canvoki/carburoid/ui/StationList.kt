@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.ui.settings.ThemeSettings
+import net.canvoki.carburoid.plotnavigator.GasStationCard
 
 @Composable
 fun StationList(
@@ -42,10 +43,7 @@ fun StationList(
                 items = stations,
                 key = { it.id }
             ) { station ->
-                ListItem(
-                    headlineContent = { Text(station.name ?: "Unnamed") },
-                    supportingContent = { Text("ID: ${station.id}") }
-                )
+                GasStationCard(station)
             }
         }
     }
@@ -56,7 +54,6 @@ private fun StationListWrapper(stations: List<GasStation>) {
     MaterialTheme(
         colorScheme = ThemeSettings.effectiveColorScheme(),
     ) {
-        Text("Compose list placeholder")
         StationList(stations, refreshing=false, onRefresh={})
     }
 }

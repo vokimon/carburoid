@@ -52,12 +52,12 @@ fun GasStationCard(
     Column(
         modifier =
             modifier
-//            .fillMaxWidth()
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(),
                 ) { station?.let { onClick(station) } }
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 16.dp)
+                .padding(top = 8.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
