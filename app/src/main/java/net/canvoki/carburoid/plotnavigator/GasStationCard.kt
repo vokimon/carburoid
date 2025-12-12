@@ -53,13 +53,20 @@ fun GasStationCard(
                 .padding(top = 8.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            val name = remember(station?.id, station?.name) { station?.name ?: context.getString(R.string.station_no_name) }
-            val address = remember(station?.id, station?.address) { station?.address ?: context.getString(R.string.station_no_address) }
-            val locationText = remember(station?.id, station?.city, station?.state) {
-                listOfNotNull(station?.city, station?.state)
-                    .joinToString(" - ")
-                    .ifEmpty { context.getString(R.string.station_no_city) }
-            }
+            val name =
+                remember(station?.id, station?.name) {
+                    station?.name ?: context.getString(R.string.station_no_name)
+                }
+            val address =
+                remember(station?.id, station?.address) {
+                    station?.address ?: context.getString(R.string.station_no_address)
+                }
+            val locationText =
+                remember(station?.id, station?.city, station?.state) {
+                    listOfNotNull(station?.city, station?.state)
+                        .joinToString(" - ")
+                        .ifEmpty { context.getString(R.string.station_no_city) }
+                }
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
@@ -92,16 +99,19 @@ fun GasStationCard(
             }
 
             Column(horizontalAlignment = Alignment.End) {
-                val priceText = remember(station?.id, station?.price) {
-                    station?.price?.let { "%.03f €".format(it) } ?: "?"
-                }
-                val distanceText = remember(station?.id, station?.let { CurrentDistancePolicy.getDistance(it) }) {
-                    val distance = station?.let { CurrentDistancePolicy.getDistance(it) }
-                    distance?.let { "%.01f km".format(it / 1000) } ?: "?? km"
-                }
+                val priceText =
+                    remember(station?.id, station?.price) {
+                        val prefix = if (station?.isPublicPrice ?: false) "" else "*"
+                        station?.price?.let { prefix + "%.03f €".format(it) } ?: "?"
+                    }
+                val distanceText =
+                    remember(station?.id, station?.let { CurrentDistancePolicy.getDistance(it) }) {
+                        val distance = station?.let { CurrentDistancePolicy.getDistance(it) }
+                        distance?.let { "%.01f km".format(it / 1000) } ?: "?? km"
+                    }
 
                 Text(
-                    text = if (station == null || station.isPublicPrice) priceText else "*$priceText",
+                    text = priceText,
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     textAlign = TextAlign.End, // Aling digits
