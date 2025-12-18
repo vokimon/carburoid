@@ -14,11 +14,11 @@ theme_light: Clar
 theme_dark: Fosc
 theme_system: Automàtic (El del sistema)
 settings_category_station_filters: Filtrat de benzineres
-settings_filter_expensive: Oculta les cares i llunyanes
-settings_filter_expensive_summary: No les mostris si n'hi ha de més properes o barates. (Recomanat)
+settings_filter_expensive: Amaga les cares i llunyanes
+settings_filter_expensive_summary: No les mostris si n'hi ha de més properes i barates. (Recomanat)
 settings_filter_non_public: Només preus públics
-settings_filter_non_public_summary: Oculta preus que demanin afiliació.
-settings_filter_beyond_sea: Oculta benzineres a l'altre costat del mar
+settings_filter_non_public_summary: Amaga preus que demanin afiliació.
+settings_filter_beyond_sea: Amaga benzineres a l'altre costat del mar
 settings_filter_beyond_sea_summary: Mostra només les que estiguin a la teva zona (Península, Balears, Canàries o Ceuta i Melilla)
 settings_filter_closed: Mostra tancades si obren
 settings_filter_closed_summary: Establir un marge de temps per estacions que obriran aviat

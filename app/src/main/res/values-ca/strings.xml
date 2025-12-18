@@ -16,11 +16,11 @@
     <string name="theme_dark">Fosc</string>
     <string name="theme_system">Automàtic (El del sistema)</string>
     <string name="settings_category_station_filters">Filtrat de benzineres</string>
-    <string name="settings_filter_expensive">Oculta les cares i llunyanes</string>
-    <string name="settings_filter_expensive_summary">No les mostris si n\'hi ha de més properes o barates. (Recomanat)</string>
+    <string name="settings_filter_expensive">Amaga les cares i llunyanes</string>
+    <string name="settings_filter_expensive_summary">No les mostris si n\'hi ha de més properes i barates. (Recomanat)</string>
     <string name="settings_filter_non_public">Només preus públics</string>
-    <string name="settings_filter_non_public_summary">Oculta preus que demanin afiliació.</string>
-    <string name="settings_filter_beyond_sea">Oculta benzineres a l\'altre costat del mar</string>
+    <string name="settings_filter_non_public_summary">Amaga preus que demanin afiliació.</string>
+    <string name="settings_filter_beyond_sea">Amaga benzineres a l\'altre costat del mar</string>
     <string name="settings_filter_beyond_sea_summary">Mostra només les que estiguin a la teva zona (Península, Balears, Canàries o Ceuta i Melilla)</string>
     <string name="settings_filter_closed">Mostra tancades si obren</string>
     <string name="settings_filter_closed_summary">Establir un marge de temps per estacions que obriran aviat</string>
