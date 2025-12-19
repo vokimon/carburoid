@@ -5,6 +5,8 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.horizontalDrag
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -97,10 +99,10 @@ fun Modifier.horizontalSwipe(
 // Internal controller
 // -------------------------------------------
 private class StepwiseScrollController {
-    var direction: Int by mutableStateOf(0)
+    var direction: Int by mutableIntStateOf(0)
     var active: Boolean by mutableStateOf(false)
     var longPressActive: Boolean by mutableStateOf(false)
-    var lastDeltaX: Float by mutableStateOf(0f)
+    var lastDeltaX: Float by mutableFloatStateOf(0f)
 }
 
 private fun calculateDelay(
