@@ -28,6 +28,27 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.GasStationCard
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
+
+@Composable
+fun PullOnRefresh(
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    val pullRefreshState = rememberPullToRefreshState()
+    if (isRefreshing) {
+        content()
+    } else {
+        PullToRefreshBox(
+            state = pullRefreshState,
+            isRefreshing = false,
+            onRefresh = onRefresh,
+        ) {
+            content()
+        }
+    }
+}
+
 @Composable
 fun StationList(
     stations: List<GasStation>,
@@ -37,10 +58,8 @@ fun StationList(
 ) {
     // State remembers position and caches elements
     val listState = rememberLazyListState()
-    val pullRefreshState = rememberPullToRefreshState()
 
-    PullToRefreshBox(
-        state = pullRefreshState,
+    PullOnRefresh(
         isRefreshing = refreshing,
         onRefresh = onRefresh,
     ) {
@@ -61,17 +80,27 @@ fun StationList(
     }
 }
 
+/** Wraps the StationList Composable to have theme when
+ * included inside a view.
+ */
 @Composable
 private fun StationListWrapper(
     stations: List<GasStation>,
+    isRefreshing: Boolean,
     onStationClicked: (GasStation) -> Unit,
+    onRefresh: () -> Unit,
 ) {
     MaterialTheme(
         colorScheme = ThemeSettings.effectiveColorScheme(),
     ) {
-        StationList(stations, refreshing = false, onRefresh = { log("pressed") }, onStationClicked = { s ->
-            onStationClicked(s)
-        })
+        StationList(
+            stations = stations,
+            refreshing = isRefreshing,
+            onRefresh = onRefresh,
+            onStationClicked = { s ->
+                onStationClicked(s)
+            },
+        )
     }
 }
 
@@ -90,6 +119,12 @@ class StationListView
             updateContent()
         }
 
+        var isRefreshing: Boolean = false
+            set(value) {
+                field = value
+                updateContent()
+            }
+
         var stations: List<GasStation> = emptyList()
             set(value) {
                 field = value
@@ -102,9 +137,20 @@ class StationListView
                 updateContent()
             }
 
+        var onRefresh: (() -> Unit) = {}
+            set(value) {
+                field = value
+                updateContent()
+            }
+
         private fun updateContent() {
             composeView.setContent {
-                StationListWrapper(stations, onStationClicked = { station -> onStationClicked(station) })
+                StationListWrapper(
+                    stations = stations,
+                    onStationClicked = { station -> onStationClicked(station) },
+                    isRefreshing = isRefreshing,
+                    onRefresh = { onRefresh() },
+                )
             }
         }
     }

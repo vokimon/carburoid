@@ -50,13 +50,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var locationService: LocationService
-    private lateinit var recyclerView: RecyclerView
     private lateinit var spinner: ProgressBar
     private lateinit var emptyView: TextView
     private lateinit var progressText: TextView
-    private lateinit var swipeRefreshLayout: androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     private lateinit var loadingPill: LinearLayout
-    private lateinit var gasStationAdapter: GasStationAdapter
     private lateinit var stationList: StationListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,20 +63,18 @@ class MainActivity : AppCompatActivity() {
 
         setContentViewWithInsets(R.layout.activity_main)
 
-        recyclerView = findViewById(R.id.recycler_view)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
         spinner = findViewById(R.id.progress_bar)
         emptyView = findViewById(R.id.text_empty)
         progressText = findViewById(R.id.text_progress)
-        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout)
         loadingPill = findViewById(R.id.loading_pill)
         stationList = findViewById(R.id.station_list)
 
-        gasStationAdapter = GasStationAdapter(this, emptyList(), ::openDetails)
-        recyclerView.adapter = gasStationAdapter
         stationList.stations = emptyList()
         stationList.onStationClicked = ::openDetails
+        stationList.onRefresh = {
+            stationList.isRefreshing = true
+            repository.launchFetch()
+        }
 
         showEmpty(getString(R.string.no_gas_stations))
 
@@ -103,11 +98,6 @@ class MainActivity : AppCompatActivity() {
                 suggestAction = ::suggestAction,
             )
         locationSelector.bind(this, locationService)
-
-        swipeRefreshLayout.setOnRefreshListener {
-            swipeRefreshLayout.isRefreshing = false
-            repository.launchFetch()
-        }
 
         lifecycleScope.launch {
             repository.events.collect { event ->
@@ -143,7 +133,7 @@ class MainActivity : AppCompatActivity() {
     fun updateLoadingDataStatus() {
         val isUpdating = repository.isFetchInProgress()
         loadingPill.visibility = if (isUpdating) View.VISIBLE else View.GONE
-        swipeRefreshLayout.isEnabled = !isUpdating
+        stationList.isRefreshing = isUpdating
     }
 
     private fun useSavedLocation(savedInstanceState: Bundle?): Boolean {
@@ -224,7 +214,6 @@ class MainActivity : AppCompatActivity() {
     private fun showEmpty(message: String) {
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
-                recyclerView.visibility = View.GONE
                 stationList.visibility = View.GONE
                 spinner.visibility = View.GONE
                 progressText.visibility = View.GONE
@@ -237,7 +226,6 @@ class MainActivity : AppCompatActivity() {
     private fun showProgress(message: String?) {
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
-                recyclerView.visibility = View.GONE
                 stationList.visibility = View.GONE
                 spinner.visibility = View.VISIBLE
                 progressText.visibility = View.VISIBLE
@@ -250,7 +238,6 @@ class MainActivity : AppCompatActivity() {
     private fun showContent() {
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
-                recyclerView.visibility = View.VISIBLE
                 stationList.visibility = View.VISIBLE
                 spinner.visibility = View.GONE
                 progressText.visibility = View.GONE
@@ -273,10 +260,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun onStationsUpdated(stations: List<GasStation>) {
         timeits("UPDATING CONTENT") {
+            // TODO: Move empty label inside the station list and manage this internally
             if (stations.isEmpty()) {
                 showEmpty(getString(R.string.no_gas_stations))
             } else {
-                gasStationAdapter.updateData(stations)
                 stationList.stations = stations
                 showContent()
             }

@@ -33,7 +33,7 @@ import net.canvoki.carburoid.R
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
-fun CategorizedProductSelector() {
+fun CategorizedProductSelector(modifier: Modifier = Modifier) {
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
     var productSelection = remember { ProductSelection(context = context) }
@@ -79,6 +79,7 @@ fun CategorizedProductSelector() {
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = it },
+        modifier = modifier,
     ) {
         TextField(
             value = translateProductName(selectedProduct),
