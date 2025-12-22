@@ -14,8 +14,8 @@ theme_light: Light
 theme_dark: Dark
 theme_system: Auto (System Default)
 settings_category_station_filters: Station filters
-settings_filter_expensive: Hide expensive and further stations
-settings_filter_expensive_summary: Do not show an station if another nearer and cheaper exist. (Recommended)
+settings_filter_expensive: Hide irrelevant stations
+settings_filter_expensive_summary: A station is considered irrelevant if any other exists that is nearer and cheaper. (Recommended)
 settings_filter_non_public: Show only public prices
 settings_filter_non_public_summary: Hide prices requiring membership or anything else.
 settings_filter_beyond_sea: Hide stations beyond the sea

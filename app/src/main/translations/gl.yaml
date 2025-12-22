@@ -14,8 +14,8 @@ theme_light: Claro
 theme_dark: Escuro
 theme_system: Automático (Sistema)
 settings_category_station_filters: Filtrado de gasolineiras
-settings_filter_expensive: Oculta estacións caras e afastadas
-settings_filter_expensive_summary: Non amosar unha estación se existe outra máis próxima e máis barata. (Recomendado)
+settings_filter_expensive: Agochar non relevantes
+settings_filter_expensive_summary: Considérase non relevante unha estación de servizo se hai outra máis preto e máis barata. (Recomendado)
 settings_filter_non_public: Só prezos públicos
 settings_filter_non_public_summary: Oculta os prezos que requiran subscrición.
 settings_filter_beyond_sea: Oculta gasolineiras do outro lado do mar

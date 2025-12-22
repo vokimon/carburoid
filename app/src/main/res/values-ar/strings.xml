@@ -16,8 +16,8 @@
     <string name="theme_dark">غامق</string>
     <string name="theme_system">تلقائي (النظام)</string>
     <string name="settings_category_station_filters">تصفية محطات الوقود</string>
-    <string name="settings_filter_expensive">إخفاء المحطات الغالية والبعيدة</string>
-    <string name="settings_filter_expensive_summary">لا تعرض المحطات إذا كانت هناك محطات أقرب أو أرخص. (موصى به)</string>
+    <string name="settings_filter_expensive">اخفي مش ذات صلة</string>
+    <string name="settings_filter_expensive_summary">تعتبر المحطة مش ذات صلة إذا كانت كاين غيرها أقرب وبأسعار أرخص. (موصى به)</string>
     <string name="settings_filter_non_public">الأسعار العامة فقط</string>
     <string name="settings_filter_non_public_summary">إخفاء الأسعار التي تتطلب اشتراك</string>
     <string name="settings_filter_beyond_sea">اخفاء محطات الوقود على الجانب الآخر من البحر</string>

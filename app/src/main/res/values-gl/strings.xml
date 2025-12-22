@@ -16,8 +16,8 @@
     <string name="theme_dark">Escuro</string>
     <string name="theme_system">Automático (Sistema)</string>
     <string name="settings_category_station_filters">Filtrado de gasolineiras</string>
-    <string name="settings_filter_expensive">Oculta estacións caras e afastadas</string>
-    <string name="settings_filter_expensive_summary">Non amosar unha estación se existe outra máis próxima e máis barata. (Recomendado)</string>
+    <string name="settings_filter_expensive">Agochar non relevantes</string>
+    <string name="settings_filter_expensive_summary">Considérase non relevante unha estación de servizo se hai outra máis preto e máis barata. (Recomendado)</string>
     <string name="settings_filter_non_public">Só prezos públicos</string>
     <string name="settings_filter_non_public_summary">Oculta os prezos que requiran subscrición.</string>
     <string name="settings_filter_beyond_sea">Oculta gasolineiras do outro lado do mar</string>
