@@ -1,5 +1,11 @@
 # Change log
 
+## Unreleased
+
+- ✨ Application Intent to externally change the product (Partially addresses #5)
+- 🐛 Fix phantom station list when changing filters (Fixes #15)
+- ♻️ Application list migrated to Compose
+
 ## 1.3.0 (2025-12-10)
 
 Product selector rewrite, many ui fixes and a new experimental plot navigator
