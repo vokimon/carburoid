@@ -26,6 +26,7 @@ import net.canvoki.carburoid.location.LocationSelector
 import net.canvoki.carburoid.location.LocationService
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.PlotNavigatorActivity
+import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.ui.GasStationAdapter
@@ -35,6 +36,8 @@ import net.canvoki.carburoid.ui.setContentViewWithInsets
 
 class MainActivity : AppCompatActivity() {
     companion object {
+        const val ACTION_SELECT_PRODUCT = "net.canvoki.carburoid.ACTION_SELECT_PRODUCT"
+        const val EXTRA_PRODUCT = "net.canvoki.carburoid.EXTRA_PRODUCT"
         const val EXTRA_LOCATION = "location"
         const val EXTRA_SOURCE = "source"
     }
@@ -125,6 +128,21 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    private fun handleExternalProductIntent(intent: Intent): Boolean {
+        if (intent.action != ACTION_SELECT_PRODUCT) return false
+
+        val requestedProduct = intent.getStringExtra(EXTRA_PRODUCT)
+        if (requestedProduct == null) return false
+
+        val availableProducts = ProductManager.available()
+        if (availableProducts.contains(requestedProduct)) {
+            ProductManager.setCurrent(requestedProduct)
+            return true
+        }
+        log("Bad product '$requestedProduct' received as intent, available products: $availableProducts")
+        return false
+    }
+
     override fun onStart() {
         super.onStart()
         updateLoadingDataStatus()
@@ -179,6 +197,7 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+        if (handleExternalProductIntent(intent)) return
         useDeepLinkIntentLocation(intent)
     }
 
