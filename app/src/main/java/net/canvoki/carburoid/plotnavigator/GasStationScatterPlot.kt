@@ -35,6 +35,43 @@ import net.canvoki.carburoid.ui.settings.ExperimentalFeatureNotice
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
+fun ButtonCloser(
+    index: Int,
+    setIndex: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Button(
+        onClick = { setIndex(index - 1) },
+        modifier = modifier,
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_keyboard_arrow_left),
+            contentDescription = "Closer",
+        )
+        Text("Closer")
+    }
+}
+
+@Composable
+fun ButtonCheaper(
+    index: Int,
+    setIndex: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Button(
+        onClick = { setIndex(index + 1) },
+        modifier = modifier,
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_keyboard_arrow_right),
+            contentDescription = "Cheaper",
+        )
+        Text("Cheaper")
+    }
+}
+
+
+@Composable
 fun PlotNavigatorScreen(
     stations: List<GasStation>,
     allStations: List<GasStation>,
@@ -76,6 +113,7 @@ fun GasStationScatterPlot(
     modifier: Modifier = Modifier,
 ) {
     val currentItems by rememberUpdatedState(items)
+    val currentAllItems by rememberUpdatedState(allItems)
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
     val selectedItem by remember {
         derivedStateOf {
@@ -84,23 +122,25 @@ fun GasStationScatterPlot(
     }
     val product by rememberUpdatedState(ProductManager.getCurrent())
 
-    LaunchedEffect(items.map { it.id }) {
+    LaunchedEffect(currentItems.map { it.id }) {
         selectedIndex = 0
     }
 
+    fun selectIndex(index: Int) {
+        selectedIndex = index.coerceIn(0..currentItems.lastIndex)
+    }
+
     Column(modifier = Modifier.fillMaxWidth()) {
-        Column {
-            CategorizedProductSelector()
-        }
+        CategorizedProductSelector()
         Material2KoalaTheme {
             ScatterPlot(
                 items = currentItems,
-                allItems = allItems,
+                allItems = currentAllItems,
                 getX = { station: GasStation -> station.distanceInMeters?.div(1000.0f) },
                 getY = { station: GasStation -> station.prices[product]?.toFloat() },
                 selectedIndex = selectedIndex,
-                onIndexSelected = { it -> selectedIndex = it },
-                modifier = Modifier.fillMaxWidth().weight(0.1f),
+                onIndexSelected = ::selectIndex,
+                modifier = Modifier.weight(0.1f),
             )
         }
         GasStationCard(selectedItem)
@@ -108,20 +148,16 @@ fun GasStationScatterPlot(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Button(
-                onClick = { selectedIndex = (selectedIndex - 1).coerceIn(0, currentItems.lastIndex) },
+            ButtonCloser(
+                index = selectedIndex,
+                setIndex = ::selectIndex,
                 modifier = Modifier.weight(1f),
-            ) {
-                Icon(painter = painterResource(R.drawable.ic_keyboard_arrow_left), contentDescription = "Closer")
-                Text("Closer")
-            }
-            Button(
-                onClick = { selectedIndex = (selectedIndex + 1).coerceIn(0, currentItems.lastIndex) },
+            )
+            ButtonCheaper(
+                index = selectedIndex,
+                setIndex = ::selectIndex,
                 modifier = Modifier.weight(1f),
-            ) {
-                Text("Cheaper")
-                Icon(painter = painterResource(R.drawable.ic_keyboard_arrow_right), contentDescription = "Cheaper")
-            }
+            )
         }
     }
 }
