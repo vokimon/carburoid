@@ -70,7 +70,6 @@ fun ButtonCheaper(
     }
 }
 
-
 @Composable
 fun PlotNavigatorScreen(
     stations: List<GasStation>,

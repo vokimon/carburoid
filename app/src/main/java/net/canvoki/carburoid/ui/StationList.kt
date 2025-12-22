@@ -28,7 +28,6 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.GasStationCard
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
-
 @Composable
 fun PullOnRefresh(
     isRefreshing: Boolean,
