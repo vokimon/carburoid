@@ -31,10 +31,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.GasStationCard
-import net.canvoki.carburoid.R
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
@@ -58,6 +58,22 @@ fun PullOnRefresh(
 }
 
 @Composable
+fun NoStations(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(R.string.no_gas_stations),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            fontSize = 18.sp,
+        )
+    }
+}
+
+@Composable
 fun StationList(
     stations: List<GasStation>,
     refreshing: Boolean,
@@ -76,8 +92,8 @@ fun StationList(
         ) {
             if (stations.isEmpty()) {
                 item {
-                    Column(
-                        modifier = Modifier
+                    NoStations(
+                        Modifier
                             .fillParentMaxSize()
                             .padding(
                                 start = 16.dp,
@@ -85,19 +101,9 @@ fun StationList(
                                 end = 16.dp,
                                 bottom = 64.dp,
                             ),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Text(
-                            text= stringResource(R.string.no_gas_stations),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center,
-                            fontSize = 18.sp,
-                        )
-                    }
+                    )
                 }
-            }
-            else {
+            } else {
                 items(
                     items = stations,
                     key = { it.id },
