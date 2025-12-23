@@ -121,8 +121,8 @@ fun LocationSelector(
                 )
             }
         },
-        minLines = 2,
-        maxLines = 2,
+        minLines = 1,
+        maxLines = 1,
         textStyle = MaterialTheme.typography.bodyLarge,
         placeholder = {
             Text(

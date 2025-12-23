@@ -18,13 +18,13 @@
             android:id="@+id/product_selector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="8dp" />
 
         <net.canvoki.carburoid.location.LocationSelector
             android:id="@+id/location_selector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="8dp" />
     </LinearLayout>
 
     <net.canvoki.carburoid.ui.StationListView
@@ -65,6 +65,7 @@
             android:layout_height="wrap_content"
             android:text="@string/loading_new_data"
             android:textColor="?attr/colorOnPrimary" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
