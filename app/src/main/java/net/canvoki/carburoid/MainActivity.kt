@@ -53,9 +53,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var locationService: LocationService
-    private lateinit var spinner: ProgressBar
-    private lateinit var progressText: TextView
-    private lateinit var loadingPill: LinearLayout
+    private lateinit var downloadingPill: LinearLayout
     private lateinit var stationList: StationListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,9 +63,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentViewWithInsets(R.layout.activity_main)
 
-        spinner = findViewById(R.id.progress_bar)
-        progressText = findViewById(R.id.text_progress)
-        loadingPill = findViewById(R.id.loading_pill)
+        downloadingPill = findViewById(R.id.downloading_pill)
         stationList = findViewById(R.id.station_list)
 
         stationList.stations = emptyList()
@@ -77,11 +73,9 @@ class MainActivity : AppCompatActivity() {
             repository.launchFetch()
         }
 
-        showContent()
-
         lifecycleScope.launch {
             viewModel.stationsReloadStarted.collect {
-                showProgress(getString(R.string.refreshing_data))
+                stationList.isProcessing = true
             }
         }
 
@@ -89,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.stationsUpdated.collect { stations ->
                 timeits("UPDATING CONTENT") {
                     stationList.stations = stations
-                    showContent()
+                    stationList.isProcessing = false
                 }
             }
         }
@@ -151,9 +145,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun updateLoadingDataStatus() {
-        val isUpdating = repository.isFetchInProgress()
-        loadingPill.visibility = if (isUpdating) View.VISIBLE else View.GONE
-        stationList.isRefreshing = isUpdating
+        val isFetching = repository.isFetchInProgress()
+        downloadingPill.visibility = if (isFetching) View.VISIBLE else View.GONE
+        stationList.isRefreshing = isFetching
     }
 
     private fun useSavedLocation(savedInstanceState: Bundle?): Boolean {
@@ -230,27 +224,6 @@ class MainActivity : AppCompatActivity() {
                     action()
                 }
         snackbar.show()
-    }
-
-    private fun showProgress(message: String?) {
-        lifecycleScope.launch {
-            withContext(Dispatchers.Main) {
-                stationList.visibility = View.GONE
-                spinner.visibility = View.VISIBLE
-                progressText.visibility = View.VISIBLE
-                progressText.text = message ?: "---"
-            }
-        }
-    }
-
-    private fun showContent() {
-        lifecycleScope.launch {
-            withContext(Dispatchers.Main) {
-                stationList.visibility = View.VISIBLE
-                spinner.visibility = View.GONE
-                progressText.visibility = View.GONE
-            }
-        }
     }
 
     private fun openDetails(station: GasStation) {

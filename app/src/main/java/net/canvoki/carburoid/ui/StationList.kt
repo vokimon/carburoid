@@ -7,11 +7,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -61,6 +65,23 @@ fun PullOnRefresh(
 }
 
 @Composable
+fun LoadingPlaceholder(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = stringResource(R.string.refreshing_data),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontSize = 16.sp,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
 fun NoStationsPlaceholder(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier,
@@ -89,6 +110,7 @@ fun StationList(
     stations: List<GasStation>,
     refreshing: Boolean,
     onRefresh: () -> Unit,
+    processing: Boolean = false,
     onStationClicked: (GasStation) -> Unit,
 ) {
     val listState = rememberLazyListState()
@@ -97,32 +119,36 @@ fun StationList(
         isRefreshing = refreshing,
         onRefresh = onRefresh,
     ) {
-        LazyColumn(
-            state = listState,
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            if (stations.isEmpty()) {
-                item {
-                    NoStationsPlaceholder(
-                        Modifier
-                            .fillParentMaxSize()
-                            .padding(
-                                start = 16.dp,
-                                top = 0.dp,
-                                end = 16.dp,
-                                bottom = 64.dp,
-                            ),
-                    )
-                }
-            } else {
-                items(
-                    items = stations,
-                    key = { it.id },
-                    contentType = { "station" },
-                ) { station ->
-                    GasStationCard(station, onClick = {
-                        onStationClicked(station)
-                    })
+        if (processing) {
+            LoadingPlaceholder(Modifier.fillMaxSize())
+        } else {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                if (stations.isEmpty()) {
+                    item {
+                        NoStationsPlaceholder(
+                            Modifier
+                                .fillParentMaxSize()
+                                .padding(
+                                    start = 16.dp,
+                                    top = 0.dp,
+                                    end = 16.dp,
+                                    bottom = 64.dp,
+                                ),
+                        )
+                    }
+                } else {
+                    items(
+                        items = stations,
+                        key = { it.id },
+                        contentType = { "station" },
+                    ) { station ->
+                        GasStationCard(station, onClick = {
+                            onStationClicked(station)
+                        })
+                    }
                 }
             }
         }
@@ -136,6 +162,7 @@ fun StationList(
 private fun StationListWrapper(
     stations: List<GasStation>,
     isRefreshing: Boolean,
+    isProcessing: Boolean = false,
     onStationClicked: (GasStation) -> Unit,
     onRefresh: () -> Unit,
 ) {
@@ -145,6 +172,7 @@ private fun StationListWrapper(
         StationList(
             stations = stations,
             refreshing = isRefreshing,
+            processing = isProcessing,
             onRefresh = onRefresh,
             onStationClicked = { s ->
                 onStationClicked(s)
@@ -192,12 +220,19 @@ class StationListView
                 updateContent()
             }
 
+        var isProcessing: Boolean = false
+            set(value) {
+                field = value
+                updateContent()
+            }
+
         private fun updateContent() {
             composeView.setContent {
                 StationListWrapper(
                     stations = stations,
                     onStationClicked = { station -> onStationClicked(station) },
                     isRefreshing = isRefreshing,
+                    isProcessing = isProcessing,
                     onRefresh = { onRefresh() },
                 )
             }
