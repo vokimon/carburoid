@@ -33,6 +33,7 @@ import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.ui.StationDetailActivity
 import net.canvoki.carburoid.ui.StationListView
 import net.canvoki.carburoid.ui.setContentViewWithInsets
+import net.canvoki.carburoid.ui.openActivity
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         const val EXTRA_PRODUCT = "net.canvoki.carburoid.EXTRA_PRODUCT"
         const val EXTRA_LOCATION = "location"
         const val EXTRA_SOURCE = "source"
+        const val EXTRA_STATION_ID = "station_id"
     }
 
     private val app: CarburoidApplication
@@ -67,7 +69,11 @@ class MainActivity : AppCompatActivity() {
         stationList = findViewById(R.id.station_list)
 
         stationList.stations = emptyList()
-        stationList.onStationClicked = ::openDetails
+        stationList.onStationClicked = { station ->
+            openActivity<StationDetailActivity>() {
+                putExtra(EXTRA_STATION_ID, station.id)
+            }
+        }
         stationList.onRefresh = {
             stationList.isRefreshing = true
             repository.launchFetch()
@@ -179,14 +185,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
-            R.id.action_settings -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
-                true
-            }
-            R.id.action_chart -> {
-                startActivity(Intent(this, PlotNavigatorActivity::class.java))
-                true
-            }
+            R.id.action_settings -> openActivity<SettingsActivity>()
+            R.id.action_chart -> openActivity<PlotNavigatorActivity>()
             else -> super.onOptionsItemSelected(item)
         }
 
@@ -224,12 +224,6 @@ class MainActivity : AppCompatActivity() {
                     action()
                 }
         snackbar.show()
-    }
-
-    private fun openDetails(station: GasStation) {
-        val intent = Intent(this, StationDetailActivity::class.java)
-        intent.putExtra("station_id", station.id)
-        startActivity(intent)
     }
 
     override fun onRequestPermissionsResult(
