@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var locationService: LocationService
     private lateinit var spinner: ProgressBar
-    private lateinit var emptyView: TextView
     private lateinit var progressText: TextView
     private lateinit var loadingPill: LinearLayout
     private lateinit var stationList: StationListView
@@ -67,7 +66,6 @@ class MainActivity : AppCompatActivity() {
         setContentViewWithInsets(R.layout.activity_main)
 
         spinner = findViewById(R.id.progress_bar)
-        emptyView = findViewById(R.id.text_empty)
         progressText = findViewById(R.id.text_progress)
         loadingPill = findViewById(R.id.loading_pill)
         stationList = findViewById(R.id.station_list)
@@ -234,11 +232,9 @@ class MainActivity : AppCompatActivity() {
     private fun showEmpty(message: String) {
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
-                stationList.visibility = View.GONE
+                stationList.visibility = View.VISIBLE
                 spinner.visibility = View.GONE
                 progressText.visibility = View.GONE
-                emptyView.visibility = View.VISIBLE
-                emptyView.text = message
             }
         }
     }
@@ -250,7 +246,6 @@ class MainActivity : AppCompatActivity() {
                 spinner.visibility = View.VISIBLE
                 progressText.visibility = View.VISIBLE
                 progressText.text = message ?: "---"
-                emptyView.visibility = View.GONE
             }
         }
     }
@@ -261,7 +256,6 @@ class MainActivity : AppCompatActivity() {
                 stationList.visibility = View.VISIBLE
                 spinner.visibility = View.GONE
                 progressText.visibility = View.GONE
-                emptyView.visibility = View.GONE
             }
         }
     }
@@ -280,13 +274,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun onStationsUpdated(stations: List<GasStation>) {
         timeits("UPDATING CONTENT") {
-            // TODO: Move empty label inside the station list and manage this internally
-            if (stations.isEmpty()) {
-                showEmpty(getString(R.string.no_gas_stations))
-            } else {
-                stationList.stations = stations
-                showContent()
-            }
+            stationList.stations = stations
+            showContent()
         }
     }
 

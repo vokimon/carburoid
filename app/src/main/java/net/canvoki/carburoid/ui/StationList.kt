@@ -3,7 +3,10 @@ package net.canvoki.carburoid.ui
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,14 +21,20 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.GasStationCard
+import net.canvoki.carburoid.R
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
@@ -55,7 +64,6 @@ fun StationList(
     onRefresh: () -> Unit,
     onStationClicked: (GasStation) -> Unit,
 ) {
-    // State remembers position and caches elements
     val listState = rememberLazyListState()
 
     PullOnRefresh(
@@ -66,14 +74,39 @@ fun StationList(
             state = listState,
             modifier = Modifier.fillMaxSize(),
         ) {
-            items(
-                items = stations,
-                key = { it.id },
-                contentType = { "station" },
-            ) { station ->
-                GasStationCard(station, onClick = {
-                    onStationClicked(station)
-                })
+            if (stations.isEmpty()) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillParentMaxSize()
+                            .padding(
+                                start = 16.dp,
+                                top = 0.dp,
+                                end = 16.dp,
+                                bottom = 64.dp,
+                            ),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            text= stringResource(R.string.no_gas_stations),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                            fontSize = 18.sp,
+                        )
+                    }
+                }
+            }
+            else {
+                items(
+                    items = stations,
+                    key = { it.id },
+                    contentType = { "station" },
+                ) { station ->
+                    GasStationCard(station, onClick = {
+                        onStationClicked(station)
+                    })
+                }
             }
         }
     }

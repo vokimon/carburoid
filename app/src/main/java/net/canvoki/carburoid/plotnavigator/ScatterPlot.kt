@@ -165,7 +165,7 @@ fun ScatterPlot(
             )
         }
 
-        val currentPoint = points[currentIndex]
+        val currentPoint = points.getOrNull(currentIndex)
 
         currentPoint?.let {
             HorizontalLineAnnotation(it.y, LineStyle(SolidColor(colors.tertiary)))
