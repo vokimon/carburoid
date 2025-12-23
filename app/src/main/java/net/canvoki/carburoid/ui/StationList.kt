@@ -58,7 +58,7 @@ fun PullOnRefresh(
 }
 
 @Composable
-fun NoStations(modifier: Modifier = Modifier) {
+fun NoStationsPlaceholder(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -92,7 +92,7 @@ fun StationList(
         ) {
             if (stations.isEmpty()) {
                 item {
-                    NoStations(
+                    NoStationsPlaceholder(
                         Modifier
                             .fillParentMaxSize()
                             .padding(
