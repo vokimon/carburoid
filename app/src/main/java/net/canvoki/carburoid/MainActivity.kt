@@ -32,8 +32,8 @@ import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.ui.StationDetailActivity
 import net.canvoki.carburoid.ui.StationListView
-import net.canvoki.carburoid.ui.setContentViewWithInsets
 import net.canvoki.carburoid.ui.openActivity
+import net.canvoki.carburoid.ui.setContentViewWithInsets
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
 
         stationList.stations = emptyList()
         stationList.onStationClicked = { station ->
-            openActivity<StationDetailActivity>() {
+            openActivity<StationDetailActivity> {
                 putExtra(EXTRA_STATION_ID, station.id)
             }
         }

@@ -6,7 +6,7 @@ import androidx.activity.ComponentActivity
 
 fun Context.openActivity(
     activityClass: Class<out ComponentActivity>,
-    configure: Intent.() -> Unit = {}
+    configure: Intent.() -> Unit = {},
 ): Boolean {
     val intent = Intent(this, activityClass)
     intent.configure()
