@@ -124,7 +124,8 @@ class MainActivity : AppCompatActivity() {
         (
             useSavedLocation(savedInstanceState) ||
                 useDeepLinkIntentLocation(intent) ||
-                useDeviceLocation()
+                useDeviceLocation() ||
+                handleExternalProductIntent(intent)
         )
     }
 
