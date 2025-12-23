@@ -28,25 +28,25 @@ Do you want to help? This is my roadmap.
             </intent-filter>
             ```
     - [ ] material icon 'route'
-- [ ] Products: further increase the contrast among categories and products in the dropmenu
+- [x] Products: further increase the contrast among categories and products in the dropmenu
 - [ ] Products: Sort by popularity. How many gas station serve it. Now it is sorted by hand.
 - [ ] Product: Get product list from Ministry API
 - [ ] Product: Use short names (now that we are translating we could translate shorter)
 - [ ] Language: Asturian
 - [ ] Language: Aranese (Occitan)
-- [ ] Modernize code
-    - [ ] Migrate Activities to ViewBinding
-    - [ ] Migrate uses of android package to androidx
-    - [~] Compose
+- [~] Modernize code: Compose
+    - [ ] Move empty message inside StationList
+    - [ ] Move reloading message inside StationList
+    - [ ] Move error message inside StationList
 - [ ] Favorites
-- [ ] Plot view: Buttons `[Closer]` `[Cheaper]` to go each side
 - [ ] Plot view: Add Location Picker widget
 - [ ] Plot view: Add AppBar and back button
 - [ ] Plot view: Go to details on view
-- [ ] Plot view: Animation of the summary as feedback to the swipe
+- [ ] Plot view: Animation of the summary as feedback to the swipe left-right
 
 ## Done
 
+- [x] Plot view: Buttons `[Closer]` `[Cheaper]` to go each side
 - [x] PlotView: Single point plot crashes
 - [x] Location Search: Always accept on back, get ride of the dialog nonsense mentality.
 - [x] Details view: Back button on AppBar

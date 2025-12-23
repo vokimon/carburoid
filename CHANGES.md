@@ -3,8 +3,10 @@
 ## Unreleased
 
 - ✨ Application Intent to externally change the product (Partially addresses #5)
-- 🐛 Fix phantom station list when changing filters (Fixes #15)
-- ♻️ Application list migrated to Compose
+- 🐛 Plot Nav: Fix phantom station list when changing filters (Fixes #15)
+- 🌐 Filter settings: "Irreleval stations" instead "expensive and far", shorter and emphasizes 
+- 💄 Gas Station List: Background image on empty search
+- ♻️ Gas Station List: Migrated to Compose
 
 ## 1.3.0 (2025-12-10)
 
