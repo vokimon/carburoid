@@ -87,7 +87,10 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.stationsUpdated.collect { stations ->
-                onStationsUpdated(stations)
+                timeits("UPDATING CONTENT") {
+                    stationList.stations = stations
+                    showContent()
+                }
             }
         }
 
@@ -247,25 +250,6 @@ class MainActivity : AppCompatActivity() {
                 spinner.visibility = View.GONE
                 progressText.visibility = View.GONE
             }
-        }
-    }
-
-    private fun loadGasStations() {
-        onStationsReloadStarted()
-        lifecycleScope.launch {
-            val stations = viewModel.getStationsToDisplay()
-            onStationsUpdated(stations)
-        }
-    }
-
-    private fun onStationsReloadStarted() {
-        showProgress(getString(R.string.refreshing_data))
-    }
-
-    private fun onStationsUpdated(stations: List<GasStation>) {
-        timeits("UPDATING CONTENT") {
-            stationList.stations = stations
-            showContent()
         }
     }
 
