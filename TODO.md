@@ -43,6 +43,9 @@ Do you want to help? This is my roadmap.
 - [ ] Plot view: Add AppBar and back button
 - [ ] Plot view: Go to details on view
 - [ ] Plot view: Animation of the summary as feedback to the swipe left-right
+- [ ] Plot view: Disable cheaper/nearer buttons when on extremes.
+- [ ] Plot view: Rename "Cheaper" -> "Farther" when irrelevant filter is disabled.
+
 
 ## Done
 

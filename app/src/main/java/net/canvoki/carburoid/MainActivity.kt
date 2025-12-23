@@ -156,6 +156,10 @@ class MainActivity : AppCompatActivity() {
         stationList.isRefreshing = isFetching
     }
 
+    /**
+     * Retrieves location from activity status after pause/stop
+     * if available, else returns false.
+     */
     private fun useSavedLocation(savedInstanceState: Bundle?): Boolean {
         if (savedInstanceState == null) return false
         val saved = locationService.getSavedLocation() ?: return false
@@ -163,6 +167,10 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * Retrieves location from incoming Deep Link Intent,
+     * if available, else returns false.
+     */
     private fun useDeepLinkIntentLocation(intent: Intent?): Boolean {
         val location =
             intent?.let {
@@ -173,6 +181,10 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * Retrieves location asynchronously from location services,
+     * meanwhile it uses last location in settings or a fallback.
+     */
     private fun useDeviceLocation(): Boolean {
         locationService.refreshLocation()
         return true
