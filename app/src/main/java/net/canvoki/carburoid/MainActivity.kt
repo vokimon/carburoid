@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
             repository.launchFetch()
         }
 
-        showEmpty(getString(R.string.no_gas_stations))
+        showContent()
 
         lifecycleScope.launch {
             viewModel.stationsReloadStarted.collect {
@@ -227,16 +227,6 @@ class MainActivity : AppCompatActivity() {
                     action()
                 }
         snackbar.show()
-    }
-
-    private fun showEmpty(message: String) {
-        lifecycleScope.launch {
-            withContext(Dispatchers.Main) {
-                stationList.visibility = View.VISIBLE
-                spinner.visibility = View.GONE
-                progressText.visibility = View.GONE
-            }
-        }
     }
 
     private fun showProgress(message: String?) {
