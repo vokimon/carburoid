@@ -26,7 +26,7 @@ import net.canvoki.carburoid.location.LocationSelector
 import net.canvoki.carburoid.location.LocationService
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.PlotNavigatorActivity
-import net.canvoki.carburoid.product.ProductManager
+import net.canvoki.carburoid.product.ProductSelection
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.ui.GasStationAdapter
@@ -133,10 +133,11 @@ class MainActivity : AppCompatActivity() {
 
         val requestedProduct = intent.getStringExtra(EXTRA_PRODUCT)
         if (requestedProduct == null) return false
+        val selection = ProductSelection(this)
 
-        val availableProducts = ProductManager.available()
+        val availableProducts = selection.choices()
         if (availableProducts.contains(requestedProduct)) {
-            ProductManager.setCurrent(requestedProduct)
+            selection.setCurrent(requestedProduct)
             return true
         }
         log("Bad product '$requestedProduct' received as intent, available products: $availableProducts")
