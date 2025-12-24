@@ -6,6 +6,7 @@
 - 🐛 Plot Nav: Fix phantom station list when changing filters (Fixes #15)
 - 🌐 Filter settings: "Irreleval stations" instead "expensive and far", shorter and emphasizes 
 - 💄 Gas Station List: Background image on empty search
+- 🚸 Gas Station List: Scrollbar indicating how far we are from the closer - cheaper.
 - ♻️ Gas Station List: Migrated to Compose
 
 ## 1.3.0 (2025-12-10)
