@@ -1,5 +1,13 @@
 # Change log
 
+## 1.3.2 (2025-12-24)
+
+Working remote product setting
+
+- 🐛 Remote product setting mistakenly used lowlevel interface
+     skiping safeguards of high level interface and failed
+     to change the product on some conditions.
+
 ## 1.3.1 (2025-12-24)
 
 Gas Station List rewritten with Compose

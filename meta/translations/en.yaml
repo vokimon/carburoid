@@ -11,6 +11,9 @@ full_description_md: "Features\n\n- \U0001F3DB️ Up-to-date gas station data pr
   available in Spanish, Catalan, Basque, Galician, Aragonese...\n- ☀️ Dark and Light
   themes\n"
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_3_2_md: "Working remote product setting\n\n- \U0001F41B Remote product setting
+  mistakenly used lowlevel interface\n     skiping safeguards of high level interface
+  and failed\n     to change the product on some conditions."
 changes_1_3_1_md: "Gas Station List rewritten with Compose\n\n- ✨ Application Intent
   to externally change the product (Partially addresses #5)\n- \U0001F41B Plot Nav:
   Fix phantom station list when changing filters (Fixes #15)\n- \U0001F310 Filter
