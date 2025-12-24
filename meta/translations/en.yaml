@@ -11,6 +11,14 @@ full_description_md: "Features\n\n- \U0001F3DB️ Up-to-date gas station data pr
   available in Spanish, Catalan, Basque, Galician, Aragonese...\n- ☀️ Dark and Light
   themes\n"
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_3_1_md: "Gas Station List rewritten with Compose\n\n- ✨ Application Intent
+  to externally change the product (Partially addresses #5)\n- \U0001F41B Plot Nav:
+  Fix phantom station list when changing filters (Fixes #15)\n- \U0001F310 Filter
+  settings: \"Irreleval stations\" instead \"expensive and far\", shorter and emphasizes
+  intent\n- \U0001F6B8 Gas Station List: Scrollbar indicating how far we are from
+  the closer - cheaper.\n- \U0001F484 Gas Station List: Background image on empty
+  search\n- \U0001F484 Gas Station List: Product and Location selectors are more compact.\n-
+  ♻️ Gas Station List: Migrated to Compose"
 changes_1_3_0_md: "Product selector rewrite, many ui fixes and a new experimental
   plot navigator\n\n- ✨ Product categories for easy search\n- ✨ Recent products on
   top\n- ✨ Hide stations on a distinct land mass: Peninsule, Canary, Balearic or Autonomous

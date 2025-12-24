@@ -3,7 +3,7 @@ Funcionalidades:
 - 🏛️ Datos actualizados del Ministerio de Industria
 - 🎯 Solo gasolineras relevantes: o más cercanas o más baratas que otras
 - 🕒 Considera los horarios de apertura
-- 🗺️ Se integra con la aplicació de mapas que uses
-- 🌐 Traducciones al Español, Catalan, Vasco, Gallego, Aragonés...
+- 🗺️ Se integra con la aplicación de mapas que uses
+- 🌐 Traducciones al Español, Catalán, Vasco, Gallego, Aragonés...
 - ☀️ Temas oscuro y claro
 

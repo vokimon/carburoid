@@ -1,7 +1,5 @@
 Funcionalitats:
 
-Features
-
 - 🏛️ Dades actualitzades del Ministeri d'Indústria
 - 🎯 Només benzineres rellevants: o més properes o més barates que d'altres.
 - 🕒 Considera els horaris d'apertura

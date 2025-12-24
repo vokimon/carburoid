@@ -1,12 +1,15 @@
 # Change log
 
-## Unreleased
+## 1.3.1 (2025-12-24)
+
+Gas Station List rewritten with Compose
 
 - ✨ Application Intent to externally change the product (Partially addresses #5)
 - 🐛 Plot Nav: Fix phantom station list when changing filters (Fixes #15)
-- 🌐 Filter settings: "Irreleval stations" instead "expensive and far", shorter and emphasizes 
-- 💄 Gas Station List: Background image on empty search
+- 🌐 Filter settings: "Irreleval stations" instead "expensive and far", shorter and emphasizes intent
 - 🚸 Gas Station List: Scrollbar indicating how far we are from the closer - cheaper.
+- 💄 Gas Station List: Background image on empty search
+- 💄 Gas Station List: Product and Location selectors are more compact.
 - ♻️ Gas Station List: Migrated to Compose
 
 ## 1.3.0 (2025-12-10)
