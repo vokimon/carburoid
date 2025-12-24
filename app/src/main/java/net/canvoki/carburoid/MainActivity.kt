@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var locationService: LocationService
-    private lateinit var downloadingPill: LinearLayout
     private lateinit var stationList: StationListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +64,6 @@ class MainActivity : AppCompatActivity() {
 
         setContentViewWithInsets(R.layout.activity_main)
 
-        downloadingPill = findViewById(R.id.downloading_pill)
         stationList = findViewById(R.id.station_list)
 
         stationList.stations = emptyList()
@@ -75,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         stationList.onRefresh = {
-            stationList.isRefreshing = true
+            stationList.isDownloading = true
             repository.launchFetch()
         }
 
@@ -125,9 +123,9 @@ class MainActivity : AppCompatActivity() {
         (
             useSavedLocation(savedInstanceState) ||
                 useDeepLinkIntentLocation(intent) ||
-                useDeviceLocation() ||
-                handleExternalProductIntent(intent)
+                useDeviceLocation()
         )
+        handleExternalProductIntent(intent)
     }
 
     private fun handleExternalProductIntent(intent: Intent): Boolean {
@@ -152,8 +150,7 @@ class MainActivity : AppCompatActivity() {
 
     fun updateLoadingDataStatus() {
         val isFetching = repository.isFetchInProgress()
-        downloadingPill.visibility = if (isFetching) View.VISIBLE else View.GONE
-        stationList.isRefreshing = isFetching
+        stationList.isDownloading = isFetching
     }
 
     /**

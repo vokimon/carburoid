@@ -36,36 +36,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/downloading_pill"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        android:background="@drawable/shape_loading_pill"
-        android:gravity="center_vertical"
-        android:visibility="gone"
-        android:layout_margin="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ProgressBar
-            android:id="@+id/loading_spinner"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:indeterminate="true"
-            android:indeterminateTint="?attr/colorOnPrimary"
-            android:layout_marginEnd="8dp" />
-
-        <TextView
-            android:id="@+id/loading_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/loading_new_data"
-            android:textColor="?attr/colorOnPrimary" />
-
-    </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

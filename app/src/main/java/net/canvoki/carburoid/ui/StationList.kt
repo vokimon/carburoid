@@ -42,17 +42,19 @@ import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.GasStationCard
+import net.canvoki.carburoid.ui.DownloadingPill
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
 fun PullOnRefresh(
-    isRefreshing: Boolean,
+    isDownloading: Boolean,
     onRefresh: () -> Unit,
     content: @Composable () -> Unit,
 ) {
     val pullRefreshState = rememberPullToRefreshState()
-    if (isRefreshing) {
+    if (isDownloading) {
         content()
+        DownloadingPill()
     } else {
         PullToRefreshBox(
             state = pullRefreshState,
@@ -108,7 +110,7 @@ fun NoStationsPlaceholder(modifier: Modifier = Modifier) {
 @Composable
 fun StationList(
     stations: List<GasStation>,
-    refreshing: Boolean,
+    downloading: Boolean,
     onRefresh: () -> Unit,
     processing: Boolean = false,
     onStationClicked: (GasStation) -> Unit,
@@ -116,7 +118,7 @@ fun StationList(
     val listState = rememberLazyListState()
 
     PullOnRefresh(
-        isRefreshing = refreshing,
+        isDownloading = downloading,
         onRefresh = onRefresh,
     ) {
         if (processing) {
@@ -161,7 +163,7 @@ fun StationList(
 @Composable
 private fun StationListWrapper(
     stations: List<GasStation>,
-    isRefreshing: Boolean,
+    isDownloading: Boolean,
     isProcessing: Boolean = false,
     onStationClicked: (GasStation) -> Unit,
     onRefresh: () -> Unit,
@@ -171,7 +173,7 @@ private fun StationListWrapper(
     ) {
         StationList(
             stations = stations,
-            refreshing = isRefreshing,
+            downloading = isDownloading,
             processing = isProcessing,
             onRefresh = onRefresh,
             onStationClicked = { s ->
@@ -196,12 +198,6 @@ class StationListView
             updateContent()
         }
 
-        var isRefreshing: Boolean = false
-            set(value) {
-                field = value
-                updateContent()
-            }
-
         var stations: List<GasStation> = emptyList()
             set(value) {
                 field = value
@@ -220,6 +216,12 @@ class StationListView
                 updateContent()
             }
 
+        var isDownloading: Boolean = false
+            set(value) {
+                field = value
+                updateContent()
+            }
+
         var isProcessing: Boolean = false
             set(value) {
                 field = value
@@ -231,9 +233,9 @@ class StationListView
                 StationListWrapper(
                     stations = stations,
                     onStationClicked = { station -> onStationClicked(station) },
-                    isRefreshing = isRefreshing,
-                    isProcessing = isProcessing,
                     onRefresh = { onRefresh() },
+                    isDownloading = isDownloading,
+                    isProcessing = isProcessing,
                 )
             }
         }
