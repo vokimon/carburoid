@@ -54,10 +54,8 @@ private fun assertHistogram2D(
 
     fun snapshot(message: String): String =
         buildString {
-            if (message != null) {
-                append("$message\n")
-                append("\n")
-            }
+            append("$message\n")
+            append("\n")
             append("Expected histogram:\n")
             append(formatHistogram(expected))
             append("\nActual histogram:\n")
