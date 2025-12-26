@@ -69,6 +69,14 @@ object ProductCatalog {
         )
     }
 
+    val availableProducts: Set<String> by lazy {
+        categories
+            .asSequence()
+            .flatMap { it.products.asSequence() }
+            .map { it.apiName }
+            .toSet()
+    }
+
     private val productMap: Map<String, Product> by lazy {
         categories.flatMap { it.products }.associateBy { it.apiName }
     }

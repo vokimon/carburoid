@@ -62,7 +62,7 @@ class ProductSelection(
         ProductManager.setCurrent(product)
     }
 
-    fun choices(): List<String> = ProductManager.available()
+    fun choices(): Set<String> = ProductCatalog.availableProducts
 
     /**
      * Exposes the current product as Compose State.
