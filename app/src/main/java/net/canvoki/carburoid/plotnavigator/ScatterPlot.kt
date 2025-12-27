@@ -12,6 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import io.github.koalaplot.core.Symbol
+import io.github.koalaplot.core.heatmap.HeatMapGrid
+import io.github.koalaplot.core.heatmap.HeatMapPlot
+import io.github.koalaplot.core.heatmap.generateHistogram2D
 import io.github.koalaplot.core.line.LinePlot2
 import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.util.ExperimentalKoalaPlotApi

@@ -1,6 +1,6 @@
 @file:Suppress("MagicNumber")
 
-package net.canvoki.carburoid.plotnavigator
+package io.github.koalaplot.core.heatmap
 
 import org.junit.Test
 import kotlin.test.assertEquals

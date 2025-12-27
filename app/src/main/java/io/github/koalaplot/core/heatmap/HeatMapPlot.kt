@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.plotnavigator
+package io.github.koalaplot.core.heatmap
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
@@ -24,6 +24,16 @@ import kotlin.math.min
 
 public typealias HeatMapGrid<Z> = Array<Array<Z>>
 
+/**
+ * A HeatMap plot displays 2-dimensional data values as color.
+ *
+ * @param xDomain Domain for the x dimension.
+ * @param yDomain Domain for the y dimension.
+ * @param bins An 2D array of values.
+ * @param colorScale A mapping function from value to color.
+ * @param alphaScale A mapping function from value to alpha.
+ * @param animationSpec The [AnimationSpec] to use for animating the plot.
+ */
 @Composable
 public fun <X : Comparable<X>, Y : Comparable<Y>, Z> XYGraphScope<X, Y>.HeatMapPlot(
     xDomain: ClosedRange<X>,
@@ -72,23 +82,28 @@ public fun <X : Comparable<X>, Y : Comparable<Y>, Z> XYGraphScope<X, Y>.HeatMapP
             )
         val animationOffset = (1f - beta.value) / 2f
 
+        fun drawRect(
+            xi: Int,
+            yi: Int,
+        ) {
+            val value = bins[xi][yi] ?: return
+            val alpha = alphaScale(value) * beta.value
+            if (alpha <= 0f) return
+            val cellColor = colorScale(value)
+            val cellLeft = left + (xi + animationOffset) * cellWidth
+            val cellTop = bottom + (yi + 1 + animationOffset) * cellHeight
+
+            drawRect(
+                color = cellColor,
+                topLeft = Offset(cellLeft, cellTop),
+                size = cellSize,
+                alpha = alpha,
+            )
+        }
+
         for (xi in 0 until xBins) {
             for (yi in 0 until yBins) {
-                val value = bins[xi][yi] ?: continue
-
-                val alpha = alphaScale(value) * beta.value
-                if (alpha <= 0f) continue
-
-                val cellColor = colorScale(value)
-                val cellLeft = left + (xi + animationOffset) * cellWidth
-                val cellTop = bottom + (yi + 1 + animationOffset) * cellHeight
-
-                drawRect(
-                    color = cellColor,
-                    topLeft = Offset(cellLeft, cellTop),
-                    size = cellSize,
-                    alpha = alpha,
-                )
+                drawRect(xi, yi)
             }
         }
     }
