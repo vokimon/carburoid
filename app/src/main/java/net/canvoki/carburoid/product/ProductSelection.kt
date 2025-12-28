@@ -12,7 +12,10 @@ import androidx.compose.runtime.setValue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-// Coordinates the global state of the current selected product
+/**
+ * Coordinates the global state of the current selected product.
+ * That includes ProducManager and ProductPreferences.
+ */
 class ProductSelection(
     private val context: Context,
 ) {
