@@ -12,6 +12,7 @@ from yamlns import ns
 from rich import print
 from rich.columns import Columns
 import typer
+from typing import Annotated
 
 app = typer.Typer()
 
@@ -128,6 +129,56 @@ def fetch_icon(
             )
 
     print(f"[green]✔ Downloaded SVG for {icon_name} ({variant})[/green]")
+
+    vector_drawable = svg_to_vector_drawable(svg_content)
+
+    target = target_path(icon_name, flavor, project_root)
+    if not (project_root / 'app/src').is_dir():
+        print(f"[yellow]Project not detected in {project_root}. Should contain at least app/src. Saving it in current directory.[/yellow]")
+        target = Path(target.name)
+
+
+    print(f"[blue]→ Writing to {target}[/blue]")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(vector_drawable)
+
+    print("[bold green]✓ Done![/bold green]")
+
+@app.command()
+def import_icon(
+    icon_path: Annotated[
+        Path,
+        typer.Argument(
+            help="Material icon svg file",
+        ),
+    ],
+    variant: str = typer.Argument(
+        "baseline",
+        help="Icon style variant",
+        show_default=True,
+        case_sensitive=False,
+        autocompletion=lambda: VALID_VARIANTS,
+    ),
+    flavor: str = typer.Option(
+        "main",
+        help="Android source set flavor",
+    ),
+    project_root: Path = typer.Option(
+        Path("."),
+        file_okay=False,
+        exists=True,
+        help="Android project root directory"
+    ),
+):
+    """
+    Convert an svg icon to Vector Drawable (Android's format),
+    and place it into the proper path in the project,
+    so that they are available as "@drawable/ic_{name}"
+    """
+    icon_name = icon_path.stem
+    svg_content = icon_path.read_text()
+
+    print(f"[green]✔ Read {icon_path}[/green]")
 
     vector_drawable = svg_to_vector_drawable(svg_content)
 

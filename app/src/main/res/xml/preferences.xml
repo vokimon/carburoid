@@ -25,6 +25,7 @@
         <Preference
             android:key="translate_link"
             android:title="@string/settings_translate_title"
+            android:icon="@drawable/ic_weblate"
             android:summary="@string/settings_translate_summary">
             <intent
                 android:action="android.intent.action.VIEW"
