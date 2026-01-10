@@ -100,18 +100,20 @@ class MainActivity : AppCompatActivity() {
         val activity = this
         composeView.setContent {
             androidx.compose.material3.MaterialTheme(
-                colorScheme = net.canvoki.carburoid.ui.settings.ThemeSettings.effectiveColorScheme(),
+                colorScheme =
+                    net.canvoki.carburoid.ui.settings.ThemeSettings
+                        .effectiveColorScheme(),
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     CategorizedProductSelector(
-                        modifier = Modifier.padding(bottom  = 8.dp)
+                        modifier = Modifier.padding(bottom = 8.dp),
                     )
                     LocationSelector(
                         activity = activity,
                         service = locationService,
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        modifier = Modifier.padding(bottom = 8.dp),
                     )
                 }
             }
