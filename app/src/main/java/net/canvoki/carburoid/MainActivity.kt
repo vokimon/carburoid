@@ -9,8 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
@@ -52,7 +56,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var locationService: LocationService
-    private lateinit var stationList: StationListView
+
+    private var stations by mutableStateOf<List<GasStation>>(emptyList())
+    private var isProcessing by mutableStateOf(false)
+    private var isDownloading by mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         log("onCreate")
@@ -61,30 +68,17 @@ class MainActivity : AppCompatActivity() {
 
         setContentViewWithInsets(R.layout.activity_main)
 
-        stationList = findViewById(R.id.station_list)
-
-        stationList.stations = emptyList()
-        stationList.onStationClicked = { station ->
-            openActivity<StationDetailActivity> {
-                putExtra(EXTRA_STATION_ID, station.id)
-            }
-        }
-        stationList.onRefresh = {
-            stationList.isDownloading = true
-            repository.launchFetch()
-        }
-
         lifecycleScope.launch {
             viewModel.stationsReloadStarted.collect {
-                stationList.isProcessing = true
+                isProcessing = true
             }
         }
 
         lifecycleScope.launch {
-            viewModel.stationsUpdated.collect { stations ->
+            viewModel.stationsUpdated.collect { updatedStations ->
                 timeits("UPDATING CONTENT") {
-                    stationList.stations = stations
-                    stationList.isProcessing = false
+                    stations = updatedStations
+                    isProcessing = false
                 }
             }
         }
@@ -105,15 +99,34 @@ class MainActivity : AppCompatActivity() {
                         .effectiveColorScheme(),
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxSize(),
                 ) {
-                    CategorizedProductSelector(
-                        modifier = Modifier.padding(bottom = 8.dp),
-                    )
-                    LocationSelector(
-                        activity = activity,
-                        service = locationService,
-                        modifier = Modifier.padding(bottom = 8.dp),
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        CategorizedProductSelector(
+                            modifier = Modifier.padding(bottom = 8.dp),
+                        )
+                        LocationSelector(
+                            activity = activity,
+                            service = locationService,
+                            modifier = Modifier.padding(bottom = 8.dp),
+                        )
+                    }
+                    net.canvoki.carburoid.ui.StationList(
+                        stations = stations,
+                        downloading = isDownloading,
+                        processing = isProcessing,
+                        onRefresh = {
+                            isDownloading = true
+                            repository.launchFetch()
+                        },
+                        onStationClicked = { station ->
+                            openActivity<StationDetailActivity> {
+                                putExtra(EXTRA_STATION_ID, station.id)
+                            }
+                        },
+                        modifier = Modifier.weight(1f),
                     )
                 }
             }
@@ -168,8 +181,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun updateLoadingDataStatus() {
-        val isFetching = repository.isFetchInProgress()
-        stationList.isDownloading = isFetching
+        isDownloading = repository.isFetchInProgress()
     }
 
     /**
