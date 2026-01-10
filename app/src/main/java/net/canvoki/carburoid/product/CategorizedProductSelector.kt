@@ -120,33 +120,6 @@ fun CategorizedProductSelector(modifier: Modifier = Modifier) {
     }
 }
 
-class CategorizedProductSelectorView
-    @JvmOverloads
-    constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyle: Int = 0,
-    ) : FrameLayout(context, attrs, defStyle) {
-        private val composeView = ComposeView(context)
-
-        init {
-            addView(composeView)
-
-            composeView.setContent {
-                CategorizedProductSelectorWrapper()
-            }
-        }
-    }
-
-@Composable
-private fun CategorizedProductSelectorWrapper() {
-    MaterialTheme(
-        colorScheme = ThemeSettings.effectiveColorScheme(),
-    ) {
-        CategorizedProductSelector()
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {

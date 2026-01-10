@@ -135,38 +135,3 @@ fun LocationSelector(
     )
 }
 
-class LocationSelector
-    @JvmOverloads
-    constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0,
-    ) : FrameLayout(context, attrs, defStyleAttr) {
-        private val composeView = ComposeView(context)
-
-        init {
-            addView(
-                composeView,
-                LayoutParams(
-                    LayoutParams.MATCH_PARENT,
-                    LayoutParams.WRAP_CONTENT,
-                ),
-            )
-        }
-
-        fun bind(
-            activity: ComponentActivity,
-            service: LocationService,
-        ) {
-            composeView.setContent {
-                androidx.compose.material3.MaterialTheme(
-                    colorScheme = ThemeSettings.effectiveColorScheme(),
-                ) {
-                    LocationSelector(
-                        activity = activity,
-                        service = service,
-                    )
-                }
-            }
-        }
-    }
