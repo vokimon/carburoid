@@ -106,12 +106,12 @@ class MainActivity : AppCompatActivity() {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     CategorizedProductSelector(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        modifier = Modifier.padding(bottom  = 8.dp)
                     )
                     LocationSelector(
                         activity = activity,
                         service = locationService,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        modifier = Modifier.padding(bottom = 8.dp)
                     )
                 }
             }
