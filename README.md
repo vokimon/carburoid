@@ -42,7 +42,7 @@ You can stop scrolling when the distance is not worth the saving.
 
 ## License
 
-Copyright © 2025 David García Garzón
+Copyright © 2025-2026 David García Garzón
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
