@@ -23,6 +23,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp" />
 
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/composable_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
     </LinearLayout>
 
     <net.canvoki.carburoid.ui.StationListView
