@@ -32,7 +32,6 @@ import net.canvoki.carburoid.product.ProductSelection
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.ui.StationDetailActivity
-import net.canvoki.carburoid.ui.StationListView
 import net.canvoki.carburoid.ui.openActivity
 import net.canvoki.carburoid.ui.setContentViewWithInsets
 
