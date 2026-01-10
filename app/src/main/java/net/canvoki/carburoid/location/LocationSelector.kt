@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -80,7 +81,7 @@ fun LocationSelector(
                 .fillMaxWidth()
                 .heightIn(min = 56.dp),
         label = {
-            Text(activity.getString(R.string.location_selector_hint))
+            Text(stringResource(R.string.location_selector_hint))
         },
         leadingIcon = {
             IconButton(
@@ -95,7 +96,7 @@ fun LocationSelector(
                         painterResource(
                             if (refreshing) R.drawable.ic_refresh else R.drawable.ic_my_location,
                         ),
-                    contentDescription = activity.getString(R.string.location_selector_locate_device),
+                    contentDescription = stringResource(R.string.location_selector_locate_device),
                 )
             }
         },
@@ -117,7 +118,7 @@ fun LocationSelector(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_edit),
-                    contentDescription = activity.getString(R.string.location_selector_locate_device),
+                    contentDescription = stringResource(R.string.location_selector_locate_device),
                 )
             }
         },
@@ -126,7 +127,7 @@ fun LocationSelector(
         textStyle = MaterialTheme.typography.bodyLarge,
         placeholder = {
             Text(
-                text = activity.getString(R.string.location_selector_hint),
+                text = stringResource(R.string.location_selector_hint),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
