@@ -4,53 +4,85 @@
 project_name: Carburoid
 splash_motto: Fill up cheaper, closer
 short_description: Find Spanish gas stations by price and distance.
-full_description_md: "Features\n\n- \U0001F3DB️ Up-to-date gas station data provided
-  by the Ministry of Industry of Spain\n- \U0001F3AF Only relevant gas stations: either
-  closer or cheaper than others\n- \U0001F552 Smart about opening and closing hours\n-
-  \U0001F5FA️ Integrates with your preferred map application\n- \U0001F310 Translations
-  available in Spanish, Catalan, Basque, Galician, Aragonese...\n- ☀️ Dark and Light
-  themes\n"
+full_description_md: |-
+  Features:
+
+  - 🏛️ Up-to-date gas station data provided by the Ministry of Industry of Spain
+  - 🎯 Only relevant gas stations: either closer or cheaper than others
+  - 🕒 Smart about opening and closing hours
+  - 🗺️ Integrates with your preferred map application
+  - 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese...
+  - ☀️ Dark and Light themes
+
+  Carburoid shows only gas stations worth considering.
+  It hides a station if there’s another one that is both cheaper and closer.
+  This trims the list from tens of thousands down to just a few dozen truly relevant options.
+
+  The first station on the list is the closest one.
+  As you scroll down stations are farther and but also cheaper.
+  You can stop scrolling when the distance is not worth the saving.
 keywords: gas station, petrol, gasoline, gasoil, diesel
-changes_1_3_2_md: "Working remote product setting\n\n- \U0001F41B Remote product setting
-  mistakenly used lowlevel interface\n     skiping safeguards of high level interface
-  and failed\n     to change the product on some conditions."
-changes_1_3_1_md: "Gas Station List rewritten with Compose\n\n- ✨ Application Intent
-  to externally change the product (Partially addresses #5)\n- \U0001F41B Plot Nav:
-  Fix phantom station list when changing filters (Fixes #15)\n- \U0001F310 Filter
-  settings: \"Irreleval stations\" instead \"expensive and far\", shorter and emphasizes
-  intent\n- \U0001F6B8 Gas Station List: Scrollbar indicating how far we are from
-  the closer - cheaper.\n- \U0001F484 Gas Station List: Background image on empty
-  search\n- \U0001F484 Gas Station List: Product and Location selectors are more compact.\n-
-  ♻️ Gas Station List: Migrated to Compose"
-changes_1_3_0_md: "Product selector rewrite, many ui fixes and a new experimental
-  plot navigator\n\n- ✨ Product categories for easy search\n- ✨ Recent products on
-  top\n- ✨ Hide stations on a distinct land mass: Peninsule, Canary, Balearic or Autonomous
-  Cities. (Fixes #\n- \U0001F6B8 Location picker just accept on exit (instead accept
-  or cancel)\n- \U0001F310 Product names and categories translated\n- \U0001F484 Detail
-  view with the staion name in the AppBar\n- \U0001F41B Android 16 ui still slipped
-  under the appbar and system bar (Fixes #2)\n- \U0001F41B Product label and name
-  overlaped (Fixes #9)\n- \U0001F41B Osm links were not processed\n- \U0001F41B Filter
-  on about to close/open did not apply inmediatelly\n- \U0001F41B Location and product
-  texts non-editable to prevent weird state\n- ♻️ Using ModelView for filtering GasStations\n-
-  ♻️ Some classic Views migrated to Compose\n- \U0001F6A7 Experimental plot navigator"
-changes_1_2_3_md: "- \U0001F484 Less anoying data spinner for data refreshing\n- \U0001F310
-  Spanish contained untranslated Catalan words (Fixes #4)\n    - Thanks to wuniversales
-  for the report\n- \U0001F3D7️ agp upgraded back. FDroid server got an upgrade."
-changes_1_2_2_md: "- \U0001F3D7️ agp downgraded 8.13.0 -> 8.11.0 because fdroid build
-  server (Fixes #1)"
-changes_1_2_1_md: "Layout fixes on Android 15 and issues on language/rotation changes\n\n-
-  \U0001F484 Icons for some preferences\n- \U0001F310 Arabic added (via ChatGpt, sorry)\n-
-  \U0001F41B Clearer text for weblate link\n- \U0001F41B Android 15 slided the product
-  selector under the AppBar\n    - Thanks to Antonio Romero for the report\n- \U0001F41B
-  Memory leaks when stoping or pausing Location Picker\n- \U0001F41B Location picker
-  lost position when rotating the device\n- \U0001F41B Language changes flickered
-  and not fully applied\n- \U0001F41B Current position was lost on rotation or language
-  change"
-changes_1_2_0_md: "Edit your current position\n\n- ✨ By clicking the edit icon, enter
-  a edit position screen\n- ✨ Edit position with interactive map\n- ✨ Edit position
-  with utocompletion location search\n- ✨ GPS reposition by clicking on concentric
-  target icon\n- \U0001F4A5 Swipe does not update current positon, just reload gas
-  stations.\n- \U0001F484 Avoid flicker when updating the description"
+changes_1_3_2_md: |-
+  Working remote product setting
+
+  - 🐛 Remote product setting mistakenly used lowlevel interface
+       skiping safeguards of high level interface and failed
+       to change the product on some conditions.
+changes_1_3_1_md: |-
+  Gas Station List rewritten with Compose
+
+  - ✨ Application Intent to externally change the product (Partially addresses #5)
+  - 🐛 Plot Nav: Fix phantom station list when changing filters (Fixes #15)
+  - 🌐 Filter settings: "Irreleval stations" instead "expensive and far", shorter and emphasizes intent
+  - 🚸 Gas Station List: Scrollbar indicating how far we are from the closer - cheaper.
+  - 💄 Gas Station List: Background image on empty search
+  - 💄 Gas Station List: Product and Location selectors are more compact.
+  - ♻️ Gas Station List: Migrated to Compose
+changes_1_3_0_md: |-
+  Product selector rewrite, many ui fixes and a new experimental plot navigator
+
+  - ✨ Product categories for easy search
+  - ✨ Recent products on top
+  - ✨ Hide stations on a distinct land mass: Peninsule, Canary, Balearic or Autonomous Cities. (Fixes #
+  - 🚸 Location picker just accept on exit (instead accept or cancel)
+  - 🌐 Product names and categories translated
+  - 💄 Detail view with the staion name in the AppBar
+  - 🐛 Android 16 ui still slipped under the appbar and system bar (Fixes #2)
+  - 🐛 Product label and name overlaped (Fixes #9)
+  - 🐛 Osm links were not processed
+  - 🐛 Filter on about to close/open did not apply inmediatelly
+  - 🐛 Location and product texts non-editable to prevent weird state
+  - ♻️ Using ModelView for filtering GasStations
+  - ♻️ Some classic Views migrated to Compose
+  - 🚧 Experimental plot navigator
+changes_1_2_3_md: |-
+  - 💄 Less anoying data spinner for data refreshing
+  - 🌐 Spanish contained untranslated Catalan words (Fixes #4)
+      - Thanks to wuniversales for the report
+  - 🏗️ agp upgraded back. FDroid server got an upgrade.
+changes_1_2_2_md: '- 🏗️ agp downgraded 8.13.0 -> 8.11.0 because fdroid build server
+  (Fixes #1)'
+changes_1_2_1_md: |-
+  Layout fixes on Android 15 and issues on language/rotation changes
+
+  - 💄 Icons for some preferences
+  - 🌐 Arabic added (via ChatGpt, sorry)
+  - 🐛 Clearer text for weblate link
+  - 🐛 Android 15 slided the product selector under the AppBar
+      - Thanks to Antonio Romero for the report
+  - 🐛 Memory leaks when stoping or pausing Location Picker
+  - 🐛 Location picker lost position when rotating the device
+  - 🐛 Language changes flickered and not fully applied
+  - 🐛 Current position was lost on rotation or language change
+changes_1_2_0_md: |-
+  Edit your current position
+
+  - ✨ By clicking the edit icon, enter a edit position screen
+  - ✨ Edit position with interactive map
+  - ✨ Edit position with utocompletion location search
+  - ✨ GPS reposition by clicking on concentric target icon
+  - 💥 Swipe does not update current positon, just reload gas stations.
+  - 💄 Avoid flicker when updating the description
 changes_1_1_0_md: |-
   Bidirectional connection with mapping apps
 
@@ -58,23 +90,38 @@ changes_1_1_0_md: |-
   - ✨ Carburoid as handler for geo uri
   - ✨ Carburoid as handler for http OSD links
   - ✨ Carburoid as handler for http Google Maps links
-changes_1_0_3_md: "Even more FDroid tweaks:\n\n- \U0001F3D7️ Fdroid: Removed privative
-  dependency info only readable by Google\n- \U0001F3D7️ Cleaned warnings on optin
-  use of experimental api's on tests"
-changes_1_0_2_md: "FDroid tweaks:\n\n- \U0001F3D7️ Signed packages and related automations\n-
-  \U0001F3D7️ Informative apk names: appid-flavor-version-build.apk\n- \U0001F3D7️
-  bump to gradle 8.14"
-changes_1_0_1_md: "First version on FDroid, featuring:\n\n- \U0001F3D7️ floss and
-  nonfree flavors, using or not privative GPlay location services\n- \U0001F310 Galician
-  translation. Thanks Beatriz Plana\n- \U0001F310 Basque translation. Thanks Javier
-  Calzado Sànchez (javikalsan)\n- \U0001F41B After changing language, product list
-  disappeared\n- \U0001F41B Settings title was untranslated\n- \U0001F484 Icons, colors
-  and pill bg for open/closed status\n- \U0001F484 Translate preference moved down\n-
-  \U0001F484 Better Material support\n- ♻️  Station \"open status\" is more modular"
-changes_1_0_0_md: "First public release featuring:\n\n- ✨ Sort stations by distance
-  to your current position\n- ✨ Filter out stations without your product\n- ✨ Filter
-  out stations more expensive than nearest ones\n- ✨ Filter out closed stations unless
-  they open soon\n- ✨ Configuration to disable any of the previous settings\n- ✨ Gas
-  station details page\n- ✨ Open a gas station in your chosen map application\n- \U0001F310
-  Translations to Spanish, Catalan, Aragonese and more to come\n- \U0001F484 Dark
-  and Light themes"
+changes_1_0_3_md: |-
+  Even more FDroid tweaks:
+
+  - 🏗️ Fdroid: Removed privative dependency info only readable by Google
+  - 🏗️ Cleaned warnings on optin use of experimental api's on tests
+changes_1_0_2_md: |-
+  FDroid tweaks:
+
+  - 🏗️ Signed packages and related automations
+  - 🏗️ Informative apk names: appid-flavor-version-build.apk
+  - 🏗️ bump to gradle 8.14
+changes_1_0_1_md: |-
+  First version on FDroid, featuring:
+
+  - 🏗️ floss and nonfree flavors, using or not privative GPlay location services
+  - 🌐 Galician translation. Thanks Beatriz Plana
+  - 🌐 Basque translation. Thanks Javier Calzado Sànchez (javikalsan)
+  - 🐛 After changing language, product list disappeared
+  - 🐛 Settings title was untranslated
+  - 💄 Icons, colors and pill bg for open/closed status
+  - 💄 Translate preference moved down
+  - 💄 Better Material support
+  - ♻️  Station "open status" is more modular
+changes_1_0_0_md: |-
+  First public release featuring:
+
+  - ✨ Sort stations by distance to your current position
+  - ✨ Filter out stations without your product
+  - ✨ Filter out stations more expensive than nearest ones
+  - ✨ Filter out closed stations unless they open soon
+  - ✨ Configuration to disable any of the previous settings
+  - ✨ Gas station details page
+  - ✨ Open a gas station in your chosen map application
+  - 🌐 Translations to Spanish, Catalan, Aragonese and more to come
+  - 💄 Dark and Light themes

@@ -7,3 +7,11 @@ Funcionalidades:
 - 🌐 Traducciones al Español, Catalán, Vasco, Gallego, Aragonés...
 - ☀️ Temas oscuro y claro
 
+Carburoid muestra solo las gasolineras que merecen consideración.
+Oculta una gasolinera si hay otra a la vez más barata y cercana.
+Esto reduce la lista de decenas de miles a solo unas pocas docenas de opciones relevantes.
+
+La primera es la más cercana.
+Según bajas, se reduce el precio pero estarán más lejos.
+Puedes dejar de bajar cuando la distancia no te compense el ahorro.
+
