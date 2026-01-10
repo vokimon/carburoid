@@ -29,7 +29,6 @@ import net.canvoki.carburoid.plotnavigator.PlotNavigatorActivity
 import net.canvoki.carburoid.product.ProductSelection
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
-import net.canvoki.carburoid.ui.GasStationAdapter
 import net.canvoki.carburoid.ui.StationDetailActivity
 import net.canvoki.carburoid.ui.StationListView
 import net.canvoki.carburoid.ui.openActivity
