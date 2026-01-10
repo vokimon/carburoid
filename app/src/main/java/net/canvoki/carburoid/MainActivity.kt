@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.IntentCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -91,14 +92,24 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        var locationSelector = findViewById<LocationSelector>(R.id.location_selector)
         locationService =
             LocationService(
                 this,
                 notify = ::showToast,
                 suggestAction = ::suggestAction,
             )
-        locationSelector.bind(this, locationService)
+
+        val composeView = findViewById<ComposeView>(R.id.composable_view)
+        composeView.setContent {
+            androidx.compose.material3.MaterialTheme(
+                colorScheme = net.canvoki.carburoid.ui.settings.ThemeSettings.effectiveColorScheme(),
+            ) {
+                net.canvoki.carburoid.location.LocationSelector(
+                    activity = this,
+                    service = locationService,
+                )
+            }
+        }
 
         lifecycleScope.launch {
             repository.events.collect { event ->
