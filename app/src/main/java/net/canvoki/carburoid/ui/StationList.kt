@@ -134,6 +134,7 @@ fun StationList(
     onRefresh: () -> Unit,
     processing: Boolean = false,
     onStationClicked: (GasStation) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
 
@@ -143,11 +144,11 @@ fun StationList(
         listState = listState,
     ) {
         if (processing) {
-            LoadingPlaceholder(Modifier.fillMaxSize())
+            LoadingPlaceholder(modifier.fillMaxSize())
         } else {
             LazyColumn(
                 state = listState,
-                modifier = Modifier.fillMaxSize(),
+                modifier = modifier.fillMaxSize(),
             ) {
                 if (stations.isEmpty()) {
                     item {
