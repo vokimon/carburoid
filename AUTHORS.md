@@ -1,26 +1,5 @@
 # Contributors
 
-This file lists the people who have contributed to this project.
-Thanks to all contributors for their work!
-
-Note: The Git commit history is the authoritative record of authorship.
-This file provides a human-friendly summary that aims to be complete,
-but may unintentionally omit someone. 
-Please file an issue if you notice any missing contributions.
-
-## Code
-
-- David García Garzón (@vokimon) -- Original author and maintainer
-
-## Translations
-
-- David García Garzón (@vokimon) -- Spanish, Catalan
-- Beatriz Plana (@Beatrigz) -- Galician
-- Javier Calzado Sànchez (@javikalsan) -- Basque
-
-
-# Contributors
-
 This file lists the people who have contributed to **Carburoid**.
 Thanks to all contributors for their work!
 
