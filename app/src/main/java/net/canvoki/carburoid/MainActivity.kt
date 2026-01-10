@@ -7,26 +7,23 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 import androidx.core.content.IntentCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import net.canvoki.carburoid.algorithms.FilterSettings
-import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.location.LocationSelector
 import net.canvoki.carburoid.location.LocationService
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.PlotNavigatorActivity
+import net.canvoki.carburoid.product.CategorizedProductSelector
 import net.canvoki.carburoid.product.ProductSelection
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
@@ -100,14 +97,23 @@ class MainActivity : AppCompatActivity() {
             )
 
         val composeView = findViewById<ComposeView>(R.id.composable_view)
+        val activity = this
         composeView.setContent {
             androidx.compose.material3.MaterialTheme(
                 colorScheme = net.canvoki.carburoid.ui.settings.ThemeSettings.effectiveColorScheme(),
             ) {
-                net.canvoki.carburoid.location.LocationSelector(
-                    activity = this,
-                    service = locationService,
-                )
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    CategorizedProductSelector(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    )
+                    LocationSelector(
+                        activity = activity,
+                        service = locationService,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    )
+                }
             }
         }
 

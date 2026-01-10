@@ -5,25 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/heading"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/composable_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <net.canvoki.carburoid.product.CategorizedProductSelectorView
-            android:id="@+id/product_selector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" />
-
-        <androidx.compose.ui.platform.ComposeView
-            android:id="@+id/composable_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" />
-
-    </LinearLayout>
+        android:layout_height="wrap_content" />
 
     <net.canvoki.carburoid.ui.StationListView
         android:id="@+id/station_list"
