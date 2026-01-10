@@ -388,7 +388,7 @@ class Config():
 
     @classmethod
     def from_file(cls, filename):
-        config_yaml = yaml.safe_load(Path(filename).read_text())
+        config_yaml = ns.load(filename)
         return cls(**config_yaml)
 
     def __post_init__(self):
@@ -450,7 +450,7 @@ class Config():
         while not readme_lines[0].strip():
             readme_lines.pop(0)
         self.short_description = self.short_description or readme_lines.pop(0)
-        self.full_description = self.full_description or cutoff_on_mark('\n'.join(readme_lines).strip())
+        self.full_description = self.full_description or cutoff_on_mark('\n'.join(readme_lines)).strip()
 
 
 yaml_metadata = 'meta/overrides.yaml'
