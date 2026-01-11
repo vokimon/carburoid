@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var locationService: LocationService
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         log("onCreate")
 
@@ -73,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
             var isDownloading by mutableStateOf(repository.isFetchInProgress())
             var isProcessing by mutableStateOf(false)
-            var stations by mutableStateOf<List<GasStation>>(emptyList())
+            var stations by mutableStateOf<List<GasStation>>(viewModel.getStationsToDisplay())
 
             LaunchedEffect(repository) {
                 repository.events.collect { event ->
