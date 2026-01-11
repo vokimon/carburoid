@@ -29,15 +29,17 @@ Do you want to help? This is my roadmap.
             ```
     - [ ] material icon 'route'
 - [x] Products: further increase the contrast among categories and products in the dropmenu
+- [ ] Products: Update product list from: https://energia.serviciosmin.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/Listados/ProductosPetroliferos/
 - [ ] Products: Sort by popularity. How many gas station serve it. Now it is sorted by hand.
-- [ ] Product: Get product list from Ministry API
-- [ ] Product: Use short names (now that we are translating we could translate shorter)
+- [ ] Products: Disable or remove unavailable products.
+- [ ] Products: Use short names (now that we are translating we could translate shorter)
+- [ ] Products: What to do with official short names: G95E85 GOA GOA+ BGNL... 
 - [ ] Language: Asturian
 - [ ] Language: Aranese (Occitan)
 - [~] Modernize code: Compose
-    - [ ] Move empty message inside StationList
-    - [ ] Move reloading message inside StationList
-    - [ ] Move error message inside StationList
+    - [x] Move empty message inside StationList
+    - [x] Move reloading message inside StationList
+    - [ ] 
 - [ ] Favorites
 - [ ] Plot view: Add Location Picker widget
 - [ ] Plot view: Add AppBar and back button
@@ -45,6 +47,15 @@ Do you want to help? This is my roadmap.
 - [ ] Plot view: Animation of the summary as feedback to the swipe left-right
 - [ ] Plot view: Disable cheaper/nearer buttons when on extremes.
 - [ ] Plot view: Rename "Cheaper" -> "Farther" when irrelevant filter is disabled.
+- [ ] Station List: Add company icon
+- [ ] Discounts: https://geoportalgasolineras.es/geoportal-instalaciones/PlanesDescuento (portal, csv)
+    - [ ] https://geoportalgasolineras.es/geoportal/rest/discountPlans
+    - [ ] https://geoportalgasolineras.es/geoportal/rest/9999/planesDescuentoEstacion
+    - [ ] https://sede.serviciosmin.gob.es/en-US/datosabiertos/catalogo/precios-carburantes
+- [ ] Denuncia https://geoportalgasolineras.es/geoportal-instalaciones/IncoherenciaPrecios (form)
+- [ ] Other Countries:
+    - Listing (most outdated but gives clues): https://geoportalgasolineras.es/geoportal-instalaciones/GeoportalesEuropeos
+    - Portugal (portal, not api): https://precoscombustiveis.dgeg.gov.pt/
 
 
 ## Done

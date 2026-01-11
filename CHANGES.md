@@ -1,5 +1,16 @@
 # Change log
 
+## Unreleased
+
+- 📝 README: Describe what the application really does
+- ⚡️ Use a worker to refilter stations, not blocking UI
+- 🚸 Hide station list while recomputing filters, product and location changes
+- 💄 Watermark icon and bigger font in recomputing message
+- 💄 PlotNav: Reduce float precission axis labels
+- 💄 Icon for weblate link in settings
+- ♻️ Station list screen fully migrated to Compose
+- ♻️ UserMessageBus: Decoupled Snackbar messages
+
 ## 1.3.2 (2025-12-24)
 
 Working remote product setting
