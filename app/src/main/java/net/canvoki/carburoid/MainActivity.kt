@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
@@ -80,9 +81,9 @@ class MainActivity : ComponentActivity() {
             val viewModel = this@MainActivity.viewModel
             val repository = this@MainActivity.repository
 
-            var isDownloading by mutableStateOf(repository.isFetchInProgress())
-            var isProcessing by mutableStateOf(viewModel.isProcessingStations)
-            var stations by mutableStateOf<List<GasStation>>(viewModel.getStationsToDisplay())
+            var isDownloading by remember { mutableStateOf(repository.isFetchInProgress()) }
+            var isProcessing by remember { mutableStateOf(viewModel.isProcessingStations) }
+            var stations by remember { mutableStateOf<List<GasStation>>(viewModel.getStationsToDisplay()) }
 
             LaunchedEffect(repository) {
                 repository.events.collect { event ->
