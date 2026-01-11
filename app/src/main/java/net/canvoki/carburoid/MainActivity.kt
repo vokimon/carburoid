@@ -115,7 +115,6 @@ class MainActivity : AppCompatActivity() {
                         downloading = isDownloading,
                         processing = isProcessing,
                         onRefresh = {
-                            isDownloading = true
                             repository.launchFetch()
                         },
                         onStationClicked = { station ->
