@@ -87,9 +87,7 @@ class MainSharedViewModel(
     /**
      * Returns stations filtered according to the given configuration.
      */
-    fun getStationsToDisplay(): List<GasStation> {
-        return _stationsToDisplay
-    }
+    fun getStationsToDisplay(): List<GasStation> = _stationsToDisplay
 
     fun reloadStations(reason: String = "Unknonw") {
         // Cancel any existing job
