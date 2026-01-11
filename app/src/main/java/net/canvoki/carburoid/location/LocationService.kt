@@ -26,6 +26,7 @@ import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.distances.DistanceFromAddress
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.timeit
+import net.canvoki.carburoid.ui.usermessage.UserMessage
 import java.util.Locale
 
 class LocationService(
@@ -147,7 +148,7 @@ class LocationService(
     private fun handleDeviceLocationSuccess(location: Location?) {
         if (location == null) {
             setFallback()
-            notify(tr(R.string.location_not_available))
+            UserMessage.Info(tr(R.string.location_not_available)).post()
             return
         }
         saveLastRealLocation(location)
@@ -156,28 +157,30 @@ class LocationService(
 
     private fun handlePermissionDenied() {
         setFallback()
-        suggestAction(
-            tr(R.string.location_forbidden),
-            tr(R.string.location_permisions_concede),
-        ) {
-            openSystemPermissionsSettings()
-        }
+        UserMessage
+            .Suggestion(
+                tr(R.string.location_forbidden),
+                tr(R.string.location_permisions_concede),
+            ) {
+                openSystemPermissionsSettings()
+            }.post()
     }
 
     private fun handleDeviceLocationError(exception: Exception) {
         setFallback()
         log("Obtaining location: ${exception.message}")
-        notify(tr(R.string.location_error))
+        UserMessage.Info(tr(R.string.location_error)).post()
     }
 
     private fun handleLocationDisabled() {
         setFallback()
-        suggestAction(
-            tr(R.string.location_deactivated),
-            tr(R.string.location_activate),
-        ) {
-            openLocationSettings()
-        }
+        UserMessage
+            .Suggestion(
+                tr(R.string.location_deactivated),
+                tr(R.string.location_activate),
+            ) {
+                openLocationSettings()
+            }.post()
     }
 
     private fun updateDescription() {
