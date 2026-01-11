@@ -96,23 +96,24 @@ class MainSharedViewModel(
         // Cancel any existing job
         reloadJob?.cancel()
 
-        reloadJob = viewModelScope.launch {
-            _stationsReloadStarted.emit(Unit)
+        reloadJob =
+            viewModelScope.launch {
+                _stationsReloadStarted.emit(Unit)
 
-            val stations = getStations()
-            val config = FilterSettings.config(getApplication())
-            val newStations =
-                withContext(Dispatchers.Default) {
-                    timeits("PROCESSING STATIONS $reason") {
-                        Thread.sleep(2000)
-                        StationFilter(config).filter(stations)
+                val stations = getStations()
+                val config = FilterSettings.config(getApplication())
+                val newStations =
+                    withContext(Dispatchers.Default) {
+                        timeits("PROCESSING STATIONS $reason") {
+                            Thread.sleep(2000)
+                            StationFilter(config).filter(stations)
+                        }
                     }
-                }
-            // Only update if the job has not been cancelled
-            ensureActive()
-            _stationsToDisplay = newStations
+                // Only update if the job has not been cancelled
+                ensureActive()
+                _stationsToDisplay = newStations
 
-            _stationsUpdated.emit(_stationsToDisplay)
-        }
+                _stationsUpdated.emit(_stationsToDisplay)
+            }
     }
 }
