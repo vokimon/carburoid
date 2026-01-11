@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -54,9 +55,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var locationService: LocationService
 
-    private var stations by mutableStateOf<List<GasStation>>(emptyList())
-    private var isProcessing by mutableStateOf(false)
-    private var isDownloading by mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         log("onCreate")
@@ -65,42 +63,49 @@ class MainActivity : AppCompatActivity() {
 
         setContentViewWithInsets(R.layout.activity_main)
 
-        lifecycleScope.launch {
-            repository.events.collect { event ->
-                updateLoadingDataStatus()
-                when (event) {
-                    is RepositoryEvent.UpdateStarted -> {
-                        nolog("REPO EVENT UpdateStarted")
-                    }
-                    is RepositoryEvent.UpdateReady -> {
-                        nolog("REPO EVENT UpdateReady")
-                    }
-                    is RepositoryEvent.UpdateFailed -> {
-                        nolog("REPO EVENT UpdateFailed")
-                        UserMessage.Info(getString(R.string.failed_download, event.error)).post()
-                    }
-                }
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.stationsReloadStarted.collect {
-                isProcessing = true
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.stationsUpdated.collect { updatedStations ->
-                stations = updatedStations
-                isProcessing = false
-            }
-        }
-
         locationService = LocationService(this)
 
         val composeView = findViewById<ComposeView>(R.id.composable_view)
         val activity = this
         composeView.setContent {
+            val viewModel = this@MainActivity.viewModel
+            val repository = this@MainActivity.repository
+
+            var isDownloading by mutableStateOf(repository.isFetchInProgress())
+            var isProcessing by mutableStateOf(false)
+            var stations by mutableStateOf<List<GasStation>>(emptyList())
+
+            LaunchedEffect(repository) {
+                repository.events.collect { event ->
+                    isDownloading = repository.isFetchInProgress()
+                    when (event) {
+                        is RepositoryEvent.UpdateStarted -> {
+                            nolog("REPO EVENT UpdateStarted")
+                        }
+                        is RepositoryEvent.UpdateReady -> {
+                            nolog("REPO EVENT UpdateReady")
+                        }
+                        is RepositoryEvent.UpdateFailed -> {
+                            nolog("REPO EVENT UpdateFailed")
+                            UserMessage.Info(getString(R.string.failed_download, event.error)).post()
+                        }
+                    }
+                }
+            }
+
+            LaunchedEffect(viewModel) {
+                viewModel.stationsReloadStarted.collect {
+                    isProcessing = true
+                }
+            }
+
+            LaunchedEffect(viewModel) {
+                viewModel.stationsUpdated.collect { updatedStations ->
+                    stations = updatedStations
+                    isProcessing = false
+                }
+            }
+
             androidx.compose.material3.MaterialTheme(
                 colorScheme =
                     net.canvoki.carburoid.ui.settings.ThemeSettings
@@ -163,15 +168,6 @@ class MainActivity : AppCompatActivity() {
         }
         log("Bad product '$requestedProduct' received as intent, available products: $availableProducts")
         return false
-    }
-
-    override fun onStart() {
-        super.onStart()
-        updateLoadingDataStatus()
-    }
-
-    fun updateLoadingDataStatus() {
-        isDownloading = repository.isFetchInProgress()
     }
 
     /**
