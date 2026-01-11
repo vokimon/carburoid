@@ -88,18 +88,32 @@ fun PullOnRefresh(
 
 @Composable
 fun LoadingPlaceholder(modifier: Modifier = Modifier) {
-    Column(
+    Box(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        contentAlignment = Alignment.Center,
     ) {
-        Text(
-            text = stringResource(R.string.refreshing_data),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 16.sp,
+        Icon(
+            painter = painterResource(R.drawable.ic_local_gas_station),
+            contentDescription = null,
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .alpha(0.1f),
+            tint = MaterialTheme.colorScheme.onSurface,
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        CircularProgressIndicator()
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                text = stringResource(R.string.refreshing_data),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 18.sp,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            CircularProgressIndicator()
+        }
     }
 }
 
