@@ -148,8 +148,8 @@ fun ScatterPlot(
         yAxisModel = rememberFloatLinearAxisModel(yMin..yMax),
         xAxisTitle = null,
         yAxisTitle = null,
-        xAxisLabels = { "%.01f".format(it) },
-        yAxisLabels = { "%.03f€".format(it) },
+        xAxisLabels = { "%.0f".format(it) },
+        yAxisLabels = { "%.02f€".format(it) },
         modifier =
             modifier.horizontalSwipe(onStep = { delta ->
                 onIndexSelected((currentIndex + delta).coerceIn(0, points.lastIndex))
