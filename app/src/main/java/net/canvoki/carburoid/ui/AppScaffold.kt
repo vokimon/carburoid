@@ -12,11 +12,13 @@ import net.canvoki.carburoid.ui.usermessage.UserMessageSnackbarHost
 
 @Composable
 fun AppScaffold(
+    topBar: @Composable () -> Unit = {},
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     MaterialTheme(colorScheme = ThemeSettings.effectiveColorScheme()) {
         Scaffold(
+            topBar = topBar,
             snackbarHost = { UserMessageSnackbarHost() },
         ) { padding ->
             Column(

@@ -10,12 +10,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.IntentCompat
 import androidx.lifecycle.ViewModelProvider
@@ -64,8 +72,11 @@ class MainActivity : AppCompatActivity() {
 
         locationService = LocationService(this)
 
+        supportActionBar?.hide()
+
         val composeView = findViewById<ComposeView>(R.id.composable_view)
         val activity = this
+        @OptIn(ExperimentalMaterial3Api::class)
         composeView.setContent {
             val viewModel = this@MainActivity.viewModel
             val repository = this@MainActivity.repository
@@ -110,7 +121,31 @@ class MainActivity : AppCompatActivity() {
                     net.canvoki.carburoid.ui.settings.ThemeSettings
                         .effectiveColorScheme(),
             ) {
-                net.canvoki.carburoid.ui.AppScaffold {
+                net.canvoki.carburoid.ui.AppScaffold(
+                    topBar = {
+                        TopAppBar(
+                            title = { Text("Carburoid") },
+                            actions = {
+                                IconButton(
+                                    onClick = { openActivity<PlotNavigatorActivity>() },
+                                ) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_show_chart),
+                                        contentDescription = stringResource(R.string.menu_chart),
+                                    )
+                                }
+                                IconButton(
+                                    onClick = { openActivity<SettingsActivity>() },
+                                ) {
+                                    Icon(
+                                        contentDescription = stringResource(R.string.menu_settings),
+                                        painter = painterResource(R.drawable.ic_settings),
+                                    )
+                                }
+                            },
+                        )
+                    },
+                ) {
                     Column(
                         modifier = Modifier.fillMaxSize(),
                     ) {
