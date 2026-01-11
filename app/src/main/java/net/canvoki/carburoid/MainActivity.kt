@@ -113,35 +113,37 @@ class MainActivity : AppCompatActivity() {
                     net.canvoki.carburoid.ui.settings.ThemeSettings
                         .effectiveColorScheme(),
             ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
+                net.canvoki.carburoid.ui.AppScaffold {
                     Column(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxSize(),
                     ) {
-                        CategorizedProductSelector(
-                            modifier = Modifier.padding(bottom = 8.dp),
-                        )
-                        LocationSelector(
-                            activity = activity,
-                            service = locationService,
-                            modifier = Modifier.padding(bottom = 8.dp),
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            CategorizedProductSelector(
+                                modifier = Modifier.padding(bottom = 8.dp),
+                            )
+                            LocationSelector(
+                                activity = activity,
+                                service = locationService,
+                                modifier = Modifier.padding(bottom = 8.dp),
+                            )
+                        }
+                        net.canvoki.carburoid.ui.StationList(
+                            stations = stations,
+                            downloading = isDownloading,
+                            processing = isProcessing,
+                            onRefresh = {
+                                repository.launchFetch()
+                            },
+                            onStationClicked = { station ->
+                                openActivity<StationDetailActivity> {
+                                    putExtra(EXTRA_STATION_ID, station.id)
+                                }
+                            },
+                            modifier = Modifier.weight(1f),
                         )
                     }
-                    net.canvoki.carburoid.ui.StationList(
-                        stations = stations,
-                        downloading = isDownloading,
-                        processing = isProcessing,
-                        onRefresh = {
-                            repository.launchFetch()
-                        },
-                        onStationClicked = { station ->
-                            openActivity<StationDetailActivity> {
-                                putExtra(EXTRA_STATION_ID, station.id)
-                            }
-                        },
-                        modifier = Modifier.weight(1f),
-                    )
                 }
             }
         }
