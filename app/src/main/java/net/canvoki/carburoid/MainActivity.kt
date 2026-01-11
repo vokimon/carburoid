@@ -5,7 +5,8 @@ import android.location.Location
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.IntentCompat
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
@@ -42,7 +44,7 @@ import net.canvoki.carburoid.ui.openActivity
 import net.canvoki.carburoid.ui.setContentViewWithInsets
 import net.canvoki.carburoid.ui.usermessage.UserMessage
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     companion object {
         const val ACTION_SELECT_PRODUCT = "net.canvoki.carburoid.ACTION_SELECT_PRODUCT"
         const val EXTRA_PRODUCT = "net.canvoki.carburoid.EXTRA_PRODUCT"
@@ -68,16 +70,13 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        setContentViewWithInsets(R.layout.activity_main)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         locationService = LocationService(this)
 
-        supportActionBar?.hide()
-
-        val composeView = findViewById<ComposeView>(R.id.composable_view)
         val activity = this
         @OptIn(ExperimentalMaterial3Api::class)
-        composeView.setContent {
+        setContent {
             val viewModel = this@MainActivity.viewModel
             val repository = this@MainActivity.repository
 
