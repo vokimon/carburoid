@@ -89,6 +89,9 @@ class MainSharedViewModel(
      */
     fun getStationsToDisplay(): List<GasStation> = _stationsToDisplay
 
+    val isProcessingStations: Boolean
+        get() = reloadJob?.isActive == true
+
     fun reloadStations(reason: String = "Unknonw") {
         // Cancel any existing job
         reloadJob?.cancel()

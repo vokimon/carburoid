@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             val repository = this@MainActivity.repository
 
             var isDownloading by mutableStateOf(repository.isFetchInProgress())
-            var isProcessing by mutableStateOf(false)
+            var isProcessing by mutableStateOf(viewModel.isProcessingStations)
             var stations by mutableStateOf<List<GasStation>>(viewModel.getStationsToDisplay())
 
             LaunchedEffect(repository) {
