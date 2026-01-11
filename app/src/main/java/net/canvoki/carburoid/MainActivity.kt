@@ -5,8 +5,6 @@ import android.location.Location
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.IntentCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import net.canvoki.carburoid.location.LocationSelector
 import net.canvoki.carburoid.location.LocationService
@@ -99,10 +96,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        locationService =
-            LocationService(
-                this,
-            )
+        locationService = LocationService(this)
 
         val composeView = findViewById<ComposeView>(R.id.composable_view)
         val activity = this
