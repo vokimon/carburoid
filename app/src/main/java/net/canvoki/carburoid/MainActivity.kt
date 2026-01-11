@@ -75,10 +75,8 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.stationsUpdated.collect { updatedStations ->
-                timeits("UPDATING CONTENT") {
-                    stations = updatedStations
-                    isProcessing = false
-                }
+                stations = updatedStations
+                isProcessing = false
             }
         }
 
