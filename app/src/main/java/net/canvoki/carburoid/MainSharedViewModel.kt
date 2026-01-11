@@ -6,6 +6,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -35,6 +37,7 @@ class MainSharedViewModel(
     val rawStationsUpdated: SharedFlow<List<GasStation>> = _rawStationsUpdated.asSharedFlow()
 
     private var _stationsToDisplay: List<GasStation> = emptyList()
+    private var reloadJob: Job? = null
 
     init {
 
@@ -89,16 +92,25 @@ class MainSharedViewModel(
     }
 
     fun reloadStations(reason: String = "Unknonw") {
-        viewModelScope.launch {
+        // Cancel any existing job
+        reloadJob?.cancel()
+
+        reloadJob = viewModelScope.launch {
             _stationsReloadStarted.emit(Unit)
+
             val stations = getStations()
             val config = FilterSettings.config(getApplication())
-            val newStations = withContext(Dispatchers.Default) {
-                timeits("PROCESSING STATIONS $reason") {
-                    StationFilter(config).filter(stations)
+            val newStations =
+                withContext(Dispatchers.Default) {
+                    timeits("PROCESSING STATIONS $reason") {
+                        Thread.sleep(2000)
+                        StationFilter(config).filter(stations)
+                    }
                 }
-            }
+            // Only update if the job has not been cancelled
+            ensureActive()
             _stationsToDisplay = newStations
+
             _stationsUpdated.emit(_stationsToDisplay)
         }
     }
