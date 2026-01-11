@@ -32,6 +32,8 @@ class MainSharedViewModel(
     private val _rawStationsUpdated = MutableSharedFlow<List<GasStation>>(replay = 0)
     val rawStationsUpdated: SharedFlow<List<GasStation>> = _rawStationsUpdated.asSharedFlow()
 
+    private var _stationsToDisplay: List<GasStation> = emptyList()
+
     init {
 
         // Observe product changes
@@ -80,21 +82,19 @@ class MainSharedViewModel(
     /**
      * Returns stations filtered according to the given configuration.
      */
-    fun getStationsToDisplay(reason: String = "Unknonw"): List<GasStation> {
-        val stations = getStations()
-        val config = FilterSettings.config(getApplication())
-        return timeits("PROCESSING STATIONS $reason") {
-            StationFilter(config).filter(stations)
-        }
+    fun getStationsToDisplay(): List<GasStation> {
+        return _stationsToDisplay
     }
 
     fun reloadStations(reason: String = "Unknonw") {
         viewModelScope.launch {
             _stationsReloadStarted.emit(Unit)
-
-            val stations = getStationsToDisplay(reason)
-
-            _stationsUpdated.emit(stations)
+            val stations = getStations()
+            val config = FilterSettings.config(getApplication())
+            _stationsToDisplay = timeits("PROCESSING STATIONS $reason") {
+                StationFilter(config).filter(stations)
+            }
+            _stationsUpdated.emit(_stationsToDisplay)
         }
     }
 }
