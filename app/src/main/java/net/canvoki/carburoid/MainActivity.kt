@@ -68,6 +68,24 @@ class MainActivity : AppCompatActivity() {
         setContentViewWithInsets(R.layout.activity_main)
 
         lifecycleScope.launch {
+            repository.events.collect { event ->
+                updateLoadingDataStatus()
+                when (event) {
+                    is RepositoryEvent.UpdateStarted -> {
+                        nolog("REPO EVENT UpdateStarted")
+                    }
+                    is RepositoryEvent.UpdateReady -> {
+                        nolog("REPO EVENT UpdateReady")
+                    }
+                    is RepositoryEvent.UpdateFailed -> {
+                        nolog("REPO EVENT UpdateFailed")
+                        showToast(getString(R.string.failed_download, event.error))
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
             viewModel.stationsReloadStarted.collect {
                 isProcessing = true
             }
@@ -128,25 +146,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        lifecycleScope.launch {
-            repository.events.collect { event ->
-                when (event) {
-                    is RepositoryEvent.UpdateStarted -> {
-                        updateLoadingDataStatus()
-                        nolog("EVENT UpdateStarted")
-                    }
-                    is RepositoryEvent.UpdateReady -> {
-                        updateLoadingDataStatus()
-                        nolog("EVENT UpdateReady")
-                    }
-                    is RepositoryEvent.UpdateFailed -> {
-                        updateLoadingDataStatus()
-                        nolog("EVENT UpdateFailed")
-                        showToast(getString(R.string.failed_download, event.error))
-                    }
-                }
-            }
-        }
         (
             useSavedLocation(savedInstanceState) ||
                 useDeepLinkIntentLocation(intent) ||
