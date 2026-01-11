@@ -34,6 +34,7 @@ import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.ui.StationDetailActivity
 import net.canvoki.carburoid.ui.openActivity
 import net.canvoki.carburoid.ui.setContentViewWithInsets
+import net.canvoki.carburoid.ui.usermessage.UserMessage
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -79,7 +80,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     is RepositoryEvent.UpdateFailed -> {
                         nolog("REPO EVENT UpdateFailed")
-                        showToast(getString(R.string.failed_download, event.error))
+                        UserMessage.Info(getString(R.string.failed_download, event.error)).post()
                     }
                 }
             }
@@ -101,8 +102,6 @@ class MainActivity : AppCompatActivity() {
         locationService =
             LocationService(
                 this,
-                notify = ::showToast,
-                suggestAction = ::suggestAction,
             )
 
         val composeView = findViewById<ComposeView>(R.id.composable_view)
@@ -232,35 +231,6 @@ class MainActivity : AppCompatActivity() {
         setIntent(intent)
         if (handleExternalProductIntent(intent)) return
         useDeepLinkIntentLocation(intent)
-    }
-
-    private fun showToast(message: String) {
-        log(message)
-        val snackbar =
-            Snackbar.make(
-                findViewById<ViewGroup>(android.R.id.content),
-                message,
-                Snackbar.LENGTH_LONG,
-            )
-        snackbar.show()
-    }
-
-    private fun suggestAction(
-        message: String,
-        actionText: String,
-        action: () -> Unit,
-    ) {
-        log(message)
-        val snackbar =
-            Snackbar
-                .make(
-                    findViewById<ViewGroup>(android.R.id.content),
-                    message,
-                    Snackbar.LENGTH_LONG,
-                ).setAction(actionText) {
-                    action()
-                }
-        snackbar.show()
     }
 
     override fun onRequestPermissionsResult(

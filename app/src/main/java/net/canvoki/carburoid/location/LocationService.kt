@@ -31,8 +31,6 @@ import java.util.Locale
 
 class LocationService(
     private val activity: Activity,
-    private val notify: (String) -> Unit,
-    private val suggestAction: (String, String, () -> Unit) -> Unit,
 ) : CoroutineScope by MainScope() {
     private val _locationChanged = MutableSharedFlow<Location>(replay = 0)
     val locationChanged = _locationChanged.asSharedFlow()
