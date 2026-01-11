@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
@@ -91,9 +93,12 @@ class MainSharedViewModel(
             _stationsReloadStarted.emit(Unit)
             val stations = getStations()
             val config = FilterSettings.config(getApplication())
-            _stationsToDisplay = timeits("PROCESSING STATIONS $reason") {
-                StationFilter(config).filter(stations)
+            val newStations = withContext(Dispatchers.Default) {
+                timeits("PROCESSING STATIONS $reason") {
+                    StationFilter(config).filter(stations)
+                }
             }
+            _stationsToDisplay = newStations
             _stationsUpdated.emit(_stationsToDisplay)
         }
     }
