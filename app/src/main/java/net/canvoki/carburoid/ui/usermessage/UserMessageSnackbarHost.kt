@@ -26,7 +26,7 @@ fun UserMessageSnackbarHost() {
                         snackbarHostState.showSnackbar(
                             message = message.message,
                             actionLabel = message.actionLabel,
-                            duration = SnackbarDuration.Indefinite,
+                            duration = SnackbarDuration.Long,
                         )
                     if (result == SnackbarResult.ActionPerformed) {
                         message.action()
