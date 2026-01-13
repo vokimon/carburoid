@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- 💥 Not a change from us: Google Maps now shares imparseable opaque urls.
+     Workaround if you do not care about your privacy:
+     - First Share the location from GMaps to a browser
+     - Then share the url from the Browser to Carburoid
 - 📝 README: Describe what the application really does
 - ⚡️ Use a worker to refilter stations, not blocking UI
 - 🚸 Hide station list while recomputing filters, product and location changes

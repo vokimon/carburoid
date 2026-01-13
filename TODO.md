@@ -2,6 +2,11 @@
 
 Do you want to help? This is my roadmap.
 
+
+- [ ] DeepLinks: Notify the user when a sharing did'nt work (not able to parse)
+- [ ] DeepLinks: Google started to use opaque urls like https://maps.app.goo.gl/jweCgQbzCw9PretY6
+    - [ ] We could fetch the url, and take the coords from the 304 redirect
+    - [ ] We could explain the user how to do it (share with a browser, from browser share the url to Carburoid)
 - [ ] Location Search: When empty, autocomplete show later searches
 - [ ] Location Search: Prioritize near matches to the current position
 - [ ] Location Search: Feedback when doing a query
@@ -39,7 +44,11 @@ Do you want to help? This is my roadmap.
 - [~] Modernize code: Compose
     - [x] Move empty message inside StationList
     - [x] Move reloading message inside StationList
-    - [ ] 
+    - [x] Turn MainActivity AppCompatActivity -> ComponentActivity
+    - [x] Intent while running: Activity does not change
+    - [x] Intent, app not running: Coords are updated but description is not computed
+    - [x] Intent, app not running: Coords are updated but station list is not refiltered
+    - [ ] Changing the style in settings has no effect in main activity, it does on the rest of view open after, but not the main it gets the theme only if i change the language
 - [ ] Favorites
 - [ ] Plot view: Add Location Picker widget
 - [ ] Plot view: Add AppBar and back button
