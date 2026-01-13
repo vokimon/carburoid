@@ -53,6 +53,13 @@ fun LocationSelector(
         refreshing = false
     }
 
+    LaunchedEffect(Unit) {
+        // Only use device location if no fixed location exists
+        if (service.getCurrentLocation() == null) {
+            service.refreshLocation()
+        }
+    }
+
     val launcher =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.StartActivityForResult(),

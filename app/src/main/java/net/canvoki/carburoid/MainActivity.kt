@@ -74,6 +74,14 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         locationService = LocationService(this)
+        val startLocation =
+            locationFromSavedInstance(savedInstanceState)
+                ?: locationFromDeepLinkIntent(intent)
+        startLocation?.let {
+            locationService.setFixedLocation(it)
+        }
+
+        handleExternalProductIntent(intent)
 
         val activity = this
         @OptIn(ExperimentalMaterial3Api::class)
@@ -113,6 +121,16 @@ class MainActivity : ComponentActivity() {
                 viewModel.stationsUpdated.collect { updatedStations ->
                     stations = updatedStations
                     isProcessing = false
+                }
+            }
+
+            LaunchedEffect(startLocation, locationService) {
+                startLocation?.let {
+                    locationService.setFixedLocation(it)
+                } ?: run {
+                    if (locationService.getCurrentLocation() == null) {
+                        locationService.refreshLocation()
+                    }
                 }
             }
 
@@ -179,13 +197,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
-        (
-            useSavedLocation(savedInstanceState) ||
-                useDeepLinkIntentLocation(intent) ||
-                useDeviceLocation()
-        )
-        handleExternalProductIntent(intent)
     }
 
     private fun handleExternalProductIntent(intent: Intent): Boolean {
@@ -205,37 +216,25 @@ class MainActivity : ComponentActivity() {
     }
 
     /**
-     * Retrieves location from activity status after pause/stop
-     * if available, else returns false.
+     * Returns location retrieved from activity status after pause/stop
+     * if available, else returns null.
      */
-    private fun useSavedLocation(savedInstanceState: Bundle?): Boolean {
-        if (savedInstanceState == null) return false
-        val saved = locationService.getSavedLocation() ?: return false
-        locationService.setFixedLocation(saved)
-        return true
+    private fun locationFromSavedInstance(savedInstanceState: Bundle?): Location? {
+        if (savedInstanceState == null) return null
+        return locationService.getSavedLocation() ?: return null
     }
 
     /**
-     * Retrieves location from incoming Deep Link Intent,
-     * if available, else returns false.
+     * Returns location retrieved from incoming Deep Link Intent,
+     * if available, else returns null.
      */
-    private fun useDeepLinkIntentLocation(intent: Intent?): Boolean {
+    private fun locationFromDeepLinkIntent(intent: Intent?): Location? {
         val location =
             intent?.let {
                 IntentCompat.getParcelableExtra(it, MainActivity.EXTRA_LOCATION, Location::class.java)
-            } ?: return false
+            } ?: return null
 
-        locationService.setFixedLocation(location)
-        return true
-    }
-
-    /**
-     * Retrieves location asynchronously from location services,
-     * meanwhile it uses last location in settings or a fallback.
-     */
-    private fun useDeviceLocation(): Boolean {
-        locationService.refreshLocation()
-        return true
+        return location
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -254,7 +253,8 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         if (handleExternalProductIntent(intent)) return
-        useDeepLinkIntentLocation(intent)
+        val location = locationFromDeepLinkIntent(intent)
+        location?.let { locationService.setFixedLocation(it) }
     }
 
     override fun onRequestPermissionsResult(
