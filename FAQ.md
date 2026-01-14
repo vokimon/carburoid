@@ -87,32 +87,43 @@ It could be the selected product not being popular.
 The expected result for a common product like "Gasoleo A"
 is a list of between 10 and 20 gas stations.
 
+## Are you charging for the app?
 
-## Are you charging for the App?
+We may charge for downloads from **proprietary platforms**
+like the Apple App Store or Google Play if we ever publish Carburoid there.
+It will always be free if you install it via F-Droid, GitHub, or any other
+open-source repository.
 
-We will charge for downloads from **privative platforms**
-like Apple Store o Google Play if we upload Carburoid them.
-Always at no cost if you use F-Droid, Github or any other
-open source repository.
-You pay for the convenience of not having to download F-Droid first.
+You’d be paying for the convenience of not having to install F-Droid first.
 
-Remember 'Free' in FLOSS is not about price but freedom.
-Building and maintaining software has a cost
-and authors are entitled to charge you for copies,
-but not to restrict what you do with them within the license.
+Remember: in FLOSS, “free” refers to freedom, not price.
+Developing and maintaining software has real costs,
+and authors are entitled to charge for copies—
+but never to restrict what you do with them, as long as you comply with the license.
 
-Also you can also make donations either to Carburoid or F-Droid.
+You can also make **donations** to either Carburoid or F-Droid.
+If you’re saving money with Carburoid, it’s only fair
+to share a portion of those savings to help us keep going.
+Don’t you think so?
 
-## Could you change the licence to MIT or other similar?
+## Can this app work in countries other than Spain?
 
-No, Carburoid license is a very thoughtfull choice.
-GNU-AGPLv3+ grants many final user rights
-avoiding leaches to get benefits of our openness
-and removing those rights.
+That would require development, but we’re open to expanding
+or helping you adapt it for your country.
+It’s not an easy task, but it starts with finding a public fuel-price API
+similar to the one we use in Spain.
+Do that research for us and that will work a lot for us.
 
+What could be different:
 
+- API and the structure of the responses it gives
+- How to organize station addresses
+- Product list
+- Land masses (for Italy would be Peninsula, Sicily, Sardinia...)
 
+## Can you change the license to MIT or something similar?
 
-
-
-
+No. Carburoid’s license is a deliberate choice.
+GNU AGPLv3+ grants strong rights to end users
+and prevents leaches from taking our open work,
+and profiting from it while stripping away those freedoms granted to users.
