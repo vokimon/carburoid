@@ -31,7 +31,6 @@ import androidx.core.content.IntentCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
 import net.canvoki.carburoid.location.LocationSelector
 import net.canvoki.carburoid.location.LocationService
 import net.canvoki.carburoid.model.GasStation
@@ -134,66 +133,60 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            androidx.compose.material3.MaterialTheme(
-                colorScheme =
-                    net.canvoki.carburoid.ui.settings.ThemeSettings
-                        .effectiveColorScheme(),
+            net.canvoki.carburoid.ui.AppScaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text("Carburoid") },
+                        actions = {
+                            IconButton(
+                                onClick = { openActivity<PlotNavigatorActivity>() },
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_show_chart),
+                                    contentDescription = stringResource(R.string.menu_chart),
+                                )
+                            }
+                            IconButton(
+                                onClick = { openActivity<SettingsActivity>() },
+                            ) {
+                                Icon(
+                                    contentDescription = stringResource(R.string.menu_settings),
+                                    painter = painterResource(R.drawable.ic_settings),
+                                )
+                            }
+                        },
+                    )
+                },
             ) {
-                net.canvoki.carburoid.ui.AppScaffold(
-                    topBar = {
-                        TopAppBar(
-                            title = { Text("Carburoid") },
-                            actions = {
-                                IconButton(
-                                    onClick = { openActivity<PlotNavigatorActivity>() },
-                                ) {
-                                    Icon(
-                                        painter = painterResource(R.drawable.ic_show_chart),
-                                        contentDescription = stringResource(R.string.menu_chart),
-                                    )
-                                }
-                                IconButton(
-                                    onClick = { openActivity<SettingsActivity>() },
-                                ) {
-                                    Icon(
-                                        contentDescription = stringResource(R.string.menu_settings),
-                                        painter = painterResource(R.drawable.ic_settings),
-                                    )
-                                }
-                            },
-                        )
-                    },
+                Column(
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            CategorizedProductSelector(
-                                modifier = Modifier.padding(bottom = 8.dp),
-                            )
-                            LocationSelector(
-                                activity = activity,
-                                service = locationService,
-                                modifier = Modifier.padding(bottom = 8.dp),
-                            )
-                        }
-                        net.canvoki.carburoid.ui.StationList(
-                            stations = stations,
-                            downloading = isDownloading,
-                            processing = isProcessing,
-                            onRefresh = {
-                                repository.launchFetch()
-                            },
-                            onStationClicked = { station ->
-                                openActivity<StationDetailActivity> {
-                                    putExtra(EXTRA_STATION_ID, station.id)
-                                }
-                            },
-                            modifier = Modifier.weight(1f),
+                        CategorizedProductSelector(
+                            modifier = Modifier.padding(bottom = 8.dp),
+                        )
+                        LocationSelector(
+                            activity = activity,
+                            service = locationService,
+                            modifier = Modifier.padding(bottom = 8.dp),
                         )
                     }
+                    net.canvoki.carburoid.ui.StationList(
+                        stations = stations,
+                        downloading = isDownloading,
+                        processing = isProcessing,
+                        onRefresh = {
+                            repository.launchFetch()
+                        },
+                        onStationClicked = { station ->
+                            openActivity<StationDetailActivity> {
+                                putExtra(EXTRA_STATION_ID, station.id)
+                            }
+                        },
+                        modifier = Modifier.weight(1f),
+                    )
                 }
             }
         }
