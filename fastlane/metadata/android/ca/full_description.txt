@@ -1,3 +1,11 @@
+Carburoid mostra només les benzineres que mereixen consideració.
+Amaga una benzinera si n’hi ha una altra que és més barata i més a prop.
+Això redueix la llista de desenes de milers a només unes quantes dotzenes d’opcions rellevants.
+
+La primera que surt és la més propera.
+Segons baixes, el preu es redueix però també estan més lluny.
+Pots parar quan la distància ja no et compensi l'estalvi.
+
 Funcionalitats:
 
 - 🏛️ Dades actualitzades del Ministeri d'Indústria
@@ -6,12 +14,4 @@ Funcionalitats:
 - 🗺️ S'integra amb l'aplicació de mapes que prefereixis
 - 🌐 Traduccions a l'Espanyol, Català, Basc, Gallec, Aragonés...
 - ☀️ Temes fosc i clar
-
-Carburoid mostra només les benzineres que mereixen consideració.
-Amaga una benzinera si n’hi ha una altra que és més barata i més a prop.
-Això redueix la llista de desenes de milers a només unes quantes dotzenes d’opcions rellevants.
-
-La primera que surt és la més propera.
-Segons baixes, el preu es redueix però també estan més lluny.
-Pots parar quan la distància ja no et compensi l'estalvi.
 

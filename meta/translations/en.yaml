@@ -5,6 +5,14 @@ project_name: Carburoid
 splash_motto: Fill up cheaper, closer
 short_description: Find Spanish gas stations by price and distance.
 full_description_md: |-
+  Carburoid shows only gas stations worth considering.
+  A station is hidden if there’s any another one that is both cheaper and closer.
+  This trims the list from tens of thousands down to just a few dozen truly relevant options.
+
+  The first station on the list is the closest one.
+  As you scroll down stations are farther and but also cheaper.
+  You can stop scrolling when the distance is not worth for you the saving.
+
   Features:
 
   - 🏛️ Up-to-date gas station data provided by the Ministry of Industry of Spain
@@ -13,14 +21,6 @@ full_description_md: |-
   - 🗺️ Integrates with your preferred map application
   - 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese...
   - ☀️ Dark and Light themes
-
-  Carburoid shows only gas stations worth considering.
-  It hides a station if there’s another one that is both cheaper and closer.
-  This trims the list from tens of thousands down to just a few dozen truly relevant options.
-
-  The first station on the list is the closest one.
-  As you scroll down stations are farther and but also cheaper.
-  You can stop scrolling when the distance is not worth the saving.
 keywords: gas station, petrol, gasoline, gasoil, diesel
 changes_1_3_2_md: |-
   Working remote product setting
