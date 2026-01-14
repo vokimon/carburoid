@@ -8,11 +8,17 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.edit
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import net.canvoki.carburoid.R
 
 object ThemeSettings {
@@ -20,6 +26,9 @@ object ThemeSettings {
     private const val VALUE_LIGHT = "light"
     private const val VALUE_DARK = "dark"
     private const val VALUE_AUTO = "auto"
+
+    private val _themeMode = MutableStateFlow<String?>(null)
+    val themeMode: StateFlow<String?> = _themeMode
 
     fun registerIn(screen: PreferenceScreen) {
         val context = screen.context
@@ -31,6 +40,7 @@ object ThemeSettings {
             val mode = newValue as String
             saveAndApply(context, mode)
             updateSummary(themePref, context)
+            _themeMode.value = mode
             true
         }
     }
@@ -87,12 +97,20 @@ object ThemeSettings {
 
     @Composable
     fun effectiveColorScheme(): ColorScheme {
-        val isDark =
-            when (AppCompatDelegate.getDefaultNightMode()) {
-                AppCompatDelegate.MODE_NIGHT_NO -> false
-                AppCompatDelegate.MODE_NIGHT_YES -> true
-                else -> isSystemInDarkTheme()
-            }
-        return if (isDark) darkColorScheme() else lightColorScheme()
+        val context = LocalContext.current
+
+        val initialMode = remember { currentValue(context) ?: VALUE_AUTO }
+        val currentMode by _themeMode.collectAsState(initial = initialMode)
+        val isSystemDark = isSystemInDarkTheme()
+
+        return remember(currentMode) {
+            val isDark =
+                when (currentMode) {
+                    VALUE_LIGHT -> false
+                    VALUE_DARK -> true
+                    else -> isSystemDark
+                }
+            if (isDark) darkColorScheme() else lightColorScheme()
+        }
     }
 }
