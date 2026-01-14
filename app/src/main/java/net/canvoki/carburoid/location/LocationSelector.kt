@@ -56,6 +56,7 @@ fun LocationSelector(
     LaunchedEffect(Unit) {
         // Only use device location if no fixed location exists
         if (service.getCurrentLocation() == null) {
+            refreshing = true
             service.refreshLocation()
         }
     }
