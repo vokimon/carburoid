@@ -32,7 +32,6 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import net.canvoki.carburoid.location.LocationSelector
-import net.canvoki.carburoid.location.LocationService
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.PlotNavigatorActivity
 import net.canvoki.carburoid.product.CategorizedProductSelector
@@ -63,8 +62,6 @@ class MainActivity : ComponentActivity() {
         ViewModelProvider(this).get(MainSharedViewModel::class.java)
     }
 
-    private lateinit var locationService: LocationService
-
     override fun onCreate(savedInstanceState: Bundle?) {
         log("onCreate")
 
@@ -72,12 +69,11 @@ class MainActivity : ComponentActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        locationService = LocationService(this)
         val startLocation =
             locationFromSavedInstance(savedInstanceState)
                 ?: locationFromDeepLinkIntent(intent)
         startLocation?.let {
-            locationService.setFixedLocation(it)
+            app.locationService.setFixedLocation(it)
         }
 
         handleExternalProductIntent(intent)
@@ -123,9 +119,9 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            LaunchedEffect(startLocation, locationService) {
+            LaunchedEffect(startLocation) {
                 startLocation?.let {
-                    locationService.setFixedLocation(it)
+                    app.locationService.setFixedLocation(it)
                 }
             }
 
@@ -165,7 +161,6 @@ class MainActivity : ComponentActivity() {
                         )
                         LocationSelector(
                             activity = activity,
-                            service = locationService,
                             modifier = Modifier.padding(bottom = 8.dp),
                         )
                     }
@@ -210,7 +205,7 @@ class MainActivity : ComponentActivity() {
      */
     private fun locationFromSavedInstance(savedInstanceState: Bundle?): Location? {
         if (savedInstanceState == null) return null
-        return locationService.getSavedLocation() ?: return null
+        return app.locationService.getSavedLocation() ?: return null
     }
 
     /**
@@ -243,6 +238,6 @@ class MainActivity : ComponentActivity() {
         setIntent(intent)
         if (handleExternalProductIntent(intent)) return
         val location = locationFromDeepLinkIntent(intent)
-        location?.let { locationService.setFixedLocation(it) }
+        location?.let { app.locationService.setFixedLocation(it) }
     }
 }

@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import net.canvoki.carburoid.network.GasStationApiFactory
 import net.canvoki.carburoid.repository.GasStationRepository
+import net.canvoki.carburoid.location.LocationService
 import net.canvoki.carburoid.ui.settings.LanguageSettings
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 import java.io.File
@@ -15,6 +16,7 @@ class CarburoidApplication : Application() {
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     private lateinit var cacheFile: File
+    val locationService by lazy { LocationService(this) }
     lateinit var repository: GasStationRepository
         private set
 

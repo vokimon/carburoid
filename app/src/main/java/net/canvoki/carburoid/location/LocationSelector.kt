@@ -26,11 +26,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.ui.settings.ThemeSettings
@@ -38,9 +40,10 @@ import net.canvoki.carburoid.ui.settings.ThemeSettings
 @Composable
 fun LocationSelector(
     activity: ComponentActivity,
-    service: LocationService,
     modifier: Modifier = Modifier,
 ) {
+    val app = LocalContext.current.applicationContext as CarburoidApplication
+    val service = app.locationService
     val refreshAction = service.rememberLocationController()
 
     val descriptionFlowValue by service.descriptionUpdated.collectAsStateWithLifecycle(
