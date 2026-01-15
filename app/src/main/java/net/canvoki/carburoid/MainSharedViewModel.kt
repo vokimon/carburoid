@@ -75,6 +75,7 @@ class MainSharedViewModel(
                 }
             }
         }
+        reloadStations("Initial view model setup")
     }
 
     /**
