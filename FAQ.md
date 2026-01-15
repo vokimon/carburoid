@@ -117,6 +117,20 @@ using their official form:
 
 [Report inaccurate fuel prices](https://geoportalgasolineras.es/geoportal-instalaciones/IncoherenciaPrecios)
 
+## Why Carburoid ignores shared locations from Google Maps? How can I get them? {#gmaps-opaque-links}
+
+Google Maps has been descending into a privatization spiral.
+Originally, they shared standard `geo` links,
+Later, they switched to links to its website,
+which were still parseable to extract coordinates.
+However, recent versions (2025) they now share opaque links.
+Their content cannot be inspected and may include private data beyond the coordinates.
+
+At the cost of your privacy,
+if you still want to share a Google Maps location,
+the workaround is to share the link via a web browser first,
+then share the resulting (parseable) URL from the browser with Carburoid.
+
 ## Can this app work in countries other than Spain?
 
 That would require development, but we’re open to expanding
