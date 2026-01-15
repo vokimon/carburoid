@@ -1,7 +1,6 @@
 package net.canvoki.carburoid.location
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -35,7 +34,7 @@ import net.canvoki.carburoid.ui.usermessage.UserMessage
 import java.util.Locale
 
 class LocationService(
-    private val activity: Activity,
+    private val context: Context,
 ) : CoroutineScope by MainScope() {
     private val _locationChanged = MutableSharedFlow<Location>(replay = 0)
     val locationChanged = _locationChanged.asSharedFlow()
@@ -43,9 +42,9 @@ class LocationService(
     private val _descriptionUpdated = MutableSharedFlow<String>(replay = 0)
     val descriptionUpdated = _descriptionUpdated.asSharedFlow()
 
-    private val provider = LocationProvider(activity)
+    private val provider = LocationProvider(context)
 
-    private val prefs = activity.getSharedPreferences("location_prefs", Context.MODE_PRIVATE)
+    private val prefs = context.getSharedPreferences("location_prefs", Context.MODE_PRIVATE)
 
     private var currentLocation: Location? = null
 
@@ -55,7 +54,7 @@ class LocationService(
 
     private var geocodingJob: Job? = null
 
-    private fun tr(stringId: Int): String = activity.getString(stringId)
+    private fun tr(stringId: Int): String = context.getString(stringId)
 
     fun setFixedLocation(location: Location) {
         fixedLocation = location
@@ -73,7 +72,7 @@ class LocationService(
 
     private fun hasPermission(): Boolean =
         ContextCompat.checkSelfPermission(
-            activity,
+            context,
             Manifest.permission.ACCESS_FINE_LOCATION,
         ) == PackageManager.PERMISSION_GRANTED
 
@@ -189,7 +188,7 @@ class LocationService(
 
             try {
                 timeit("GEOCODING $location") {
-                    val geocoder = Geocoder(activity, Locale.getDefault())
+                    val geocoder = Geocoder(context, Locale.getDefault())
 
                     @Suppress("DEPRECATION")
                     val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
@@ -235,7 +234,7 @@ class LocationService(
     }
 
     fun isLocationDeviceEnabled(): Boolean {
-        val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return (
             locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
@@ -245,19 +244,19 @@ class LocationService(
     private fun openSystemPermissionsSettings() {
         val intent =
             Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = Uri.fromParts("package", activity.packageName, null)
+                data = Uri.fromParts("package", context.packageName, null)
             }
-        activity.startActivity(intent)
+        context.startActivity(intent)
     }
 
     private fun openLocationSettings() {
         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-        if (intent.resolveActivity(activity.packageManager) != null) {
-            activity.startActivity(intent)
+        if (intent.resolveActivity(context.packageManager) != null) {
+            context.startActivity(intent)
         } else {
             // Si no es pot obrir la configuració de localització, obre la configuració general
             val settingsIntent = Intent(Settings.ACTION_SETTINGS)
-            activity.startActivity(settingsIntent)
+            context.startActivity(settingsIntent)
         }
     }
 
