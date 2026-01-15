@@ -95,6 +95,7 @@ class LocationService(
         // called from onRequestPermissionsResult in the main activity
     }
 
+    @Deprecated("To be removed when Compose migration is completed")
     fun processPermission(
         requestCode: Int,
         results: IntArray,
@@ -102,7 +103,12 @@ class LocationService(
         if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return
         }
-        if (results.isNotEmpty() && results[0] == PackageManager.PERMISSION_GRANTED) {
+        val isGranted = results.isNotEmpty() && results[0] == PackageManager.PERMISSION_GRANTED
+        onPermissionResult(isGranted)
+    }
+
+    fun onPermissionResult(isGranted: Boolean) {
+        if (isGranted) {
             requestDeviceLocation()
         } else {
             handlePermissionDenied()
