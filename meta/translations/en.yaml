@@ -22,6 +22,23 @@ full_description_md: |-
   - 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese...
   - ☀️ Dark and Light themes
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_3_3_md: |-
+  Main screen migrated to Compose plus visual and UX improvements
+
+  - 🚸 On landscape, side by side product and location selectors gives more space to the list
+  - 🚸 Avoid blocking the UI while refiltering stations
+  - 🚸 Show a placeholder message while refiltering stations
+  - 💥 Not a change from us: Google Maps now shares imparseable opaque urls.
+       Workaround if you do not care about your privacy:
+       - First Share the location from GMaps to a browser
+       - Then share the url from the Browser to Carburoid
+  - 📝 README: Describe what the application really does
+  - 📝 Added a FAQ document with common questions
+  - 💄 Loading placeholder with watermark icon and bigger font
+  - 💄 PlotNav: Reduce float precission axis labels
+  - 💄 Icon for weblate link in settings
+  - ♻️ Station list screen fully migrated to Compose
+  - ♻️ UserMessageBus: Decoupled Compose based Snackbar messages
 changes_1_3_2_md: |-
   Working remote product setting
 

@@ -1,20 +1,23 @@
 # Change log
 
-## Unreleased
+## 1.3.3 (2026-01-15)
 
+Main screen migrated to Compose plus visual and UX improvements
+
+- 🚸 On landscape, side by side product and location selectors gives more space to the list
+- 🚸 Avoid blocking the UI while refiltering stations
+- 🚸 Show a placeholder message while refiltering stations
 - 💥 Not a change from us: Google Maps now shares imparseable opaque urls.
      Workaround if you do not care about your privacy:
      - First Share the location from GMaps to a browser
      - Then share the url from the Browser to Carburoid
 - 📝 README: Describe what the application really does
-- 🚸 On landscape, side by side product and location selectors gives more space to the list
-- ⚡️ Use a worker to refilter stations, not blocking UI
-- 🚸 Hide station list while recomputing filters, product and location changes
-- 💄 Watermark icon and bigger font in recomputing message
+- 📝 Added a FAQ document with common questions
+- 💄 Loading placeholder with watermark icon and bigger font
 - 💄 PlotNav: Reduce float precission axis labels
 - 💄 Icon for weblate link in settings
 - ♻️ Station list screen fully migrated to Compose
-- ♻️ UserMessageBus: Decoupled Snackbar messages
+- ♻️ UserMessageBus: Decoupled Compose based Snackbar messages
 
 ## 1.3.2 (2025-12-24)
 
