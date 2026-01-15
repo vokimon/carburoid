@@ -2,6 +2,7 @@
 
 Do you want to help? This is my roadmap.
 
+- [ ] Fix: In Landscape, empty List does not expands as cool as Loading list does.
 - [ ] Fix: If resolved location description is the same, the icon keeps loading
 - [ ] The Data loader pill and the snackbar compete vor the lower part of screeen
 - [ ] Data loading performance: Use kotlin serialization instead of gson
@@ -56,7 +57,7 @@ Do you want to help? This is my roadmap.
     - [x] Intent, app not running: Coords are updated but station list is not refiltered
     - [x] Changing the style in settings has no effect in main activity, it does on the rest of view open after, but not the main it gets the theme only if i change the language
 - [ ] Favorites
-- [ ] Plot view: Add Location Picker widget
+- [ ] Plot view: Add Location Selector widget
 - [ ] Plot view: Add AppBar and back button
 - [ ] Plot view: Go to details on view
 - [ ] Plot view: Animation of the summary as feedback to the swipe left-right

@@ -100,7 +100,6 @@ fun CategorizedProductSelector(modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
         )
-
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },

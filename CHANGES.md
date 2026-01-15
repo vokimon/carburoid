@@ -7,6 +7,7 @@
      - First Share the location from GMaps to a browser
      - Then share the url from the Browser to Carburoid
 - 📝 README: Describe what the application really does
+- 🚸 On landscape, side by side product and location selectors gives more space to the list
 - ⚡️ Use a worker to refilter stations, not blocking UI
 - 🚸 Hide station list while recomputing filters, product and location changes
 - 💄 Watermark icon and bigger font in recomputing message
