@@ -1,0 +1,123 @@
+package net.canvoki.carburoid
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import net.canvoki.carburoid.MainSharedViewModel
+import net.canvoki.carburoid.R
+import net.canvoki.carburoid.location.LocationSelector
+import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.product.CategorizedProductSelector
+import net.canvoki.carburoid.repository.GasStationRepository
+import net.canvoki.carburoid.repository.RepositoryEvent
+import net.canvoki.carburoid.ui.AppScaffold
+import net.canvoki.carburoid.ui.StationList
+import net.canvoki.carburoid.ui.usermessage.UserMessage
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun StationListScreen(
+    viewModel: MainSharedViewModel,
+    repository: GasStationRepository,
+    onStationClicked: (GasStation) -> Unit,
+    onPlotNavigatorClick: () -> Unit,
+    onSettingsClick: () -> Unit,
+) {
+    var isDownloading by remember { mutableStateOf(repository.isFetchInProgress()) }
+    var isProcessing by remember { mutableStateOf(viewModel.isProcessingStations) }
+    var stations by remember { mutableStateOf<List<GasStation>>(viewModel.getStationsToDisplay()) }
+    val failedDownloadFormat = stringResource(R.string.failed_download)
+
+    LaunchedEffect(repository) {
+        repository.events.collect { event ->
+            isDownloading = repository.isFetchInProgress()
+            when (event) {
+                is RepositoryEvent.UpdateStarted -> {
+                    nolog("REPO EVENT UpdateStarted")
+                }
+                is RepositoryEvent.UpdateReady -> {
+                    nolog("REPO EVENT UpdateReady")
+                }
+                is RepositoryEvent.UpdateFailed -> {
+                    nolog("REPO EVENT UpdateFailed")
+                    UserMessage.Info(failedDownloadFormat.format(event.error)).post()
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(viewModel) {
+        viewModel.stationsReloadStarted.collect {
+            isProcessing = true
+        }
+    }
+
+    LaunchedEffect(viewModel) {
+        viewModel.stationsUpdated.collect { updatedStations ->
+            stations = updatedStations
+            isProcessing = false
+        }
+    }
+
+    AppScaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Carburoid") },
+                actions = {
+                    IconButton(onClick = onPlotNavigatorClick) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_show_chart),
+                            contentDescription = stringResource(R.string.menu_chart),
+                        )
+                    }
+                    IconButton(onClick = onSettingsClick) {
+                        Icon(
+                            contentDescription = stringResource(R.string.menu_settings),
+                            painter = painterResource(R.drawable.ic_settings),
+                        )
+                    }
+                },
+            )
+        },
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                CategorizedProductSelector(
+                    modifier = Modifier.padding(bottom = 8.dp),
+                )
+                LocationSelector(
+                    modifier = Modifier.padding(bottom = 8.dp),
+                )
+            }
+            StationList(
+                stations = stations,
+                downloading = isDownloading,
+                processing = isProcessing,
+                onRefresh = { repository.launchFetch() },
+                onStationClicked = onStationClicked,
+                modifier = Modifier.weight(1f),
+            )
+        }
+    }
+}
