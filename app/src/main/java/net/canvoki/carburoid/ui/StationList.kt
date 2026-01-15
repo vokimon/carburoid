@@ -57,11 +57,12 @@ fun PullOnRefresh(
     isDownloading: Boolean,
     onRefresh: () -> Unit,
     listState: LazyListState,
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     val pullRefreshState = rememberPullToRefreshState()
 
-    Box(Modifier.fillMaxSize()) {
+    Box(modifier) {
         if (isDownloading) {
             content()
             DownloadingPill()
@@ -156,13 +157,14 @@ fun StationList(
         isDownloading = downloading,
         onRefresh = onRefresh,
         listState = listState,
+        modifier = modifier,
     ) {
         if (processing) {
-            LoadingPlaceholder(modifier.fillMaxSize())
+            LoadingPlaceholder(Modifier.fillMaxSize())
         } else {
             LazyColumn(
                 state = listState,
-                modifier = modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
             ) {
                 if (stations.isEmpty()) {
                     item {
