@@ -2,7 +2,13 @@
 
 Do you want to help? This is my roadmap.
 
-
+- [ ] Fix: If resolved location description is the same, the icon keeps loading
+- [ ] The Data loader pill and the snackbar compete vor the lower part of screeen
+- [ ] Data loading performance: Use kotlin serialization instead of gson
+- [ ] Support other countries
+    - [ ] Split GasStation, the interface, and SpanishGasStation the implementation with deserialization logic
+    - [ ] Support for different ProductCatalogs
+    - [ ] Support for different LandMass sets
 - [ ] DeepLinks: Notify the user when a sharing did'nt work (not able to parse)
 - [ ] DeepLinks: Google started to use opaque urls like https://maps.app.goo.gl/jweCgQbzCw9PretY6
     - [ ] We could fetch the url, and take the coords from the 304 redirect
@@ -48,7 +54,7 @@ Do you want to help? This is my roadmap.
     - [x] Intent while running: Activity does not change
     - [x] Intent, app not running: Coords are updated but description is not computed
     - [x] Intent, app not running: Coords are updated but station list is not refiltered
-    - [ ] Changing the style in settings has no effect in main activity, it does on the rest of view open after, but not the main it gets the theme only if i change the language
+    - [x] Changing the style in settings has no effect in main activity, it does on the rest of view open after, but not the main it gets the theme only if i change the language
 - [ ] Favorites
 - [ ] Plot view: Add Location Picker widget
 - [ ] Plot view: Add AppBar and back button

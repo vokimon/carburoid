@@ -23,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -79,55 +80,9 @@ class MainActivity : ComponentActivity() {
 
         @OptIn(ExperimentalMaterial3Api::class)
         setContent {
-            val viewModel = this@MainActivity.viewModel
-            val repository = this@MainActivity.repository
-
-            var isDownloading by remember { mutableStateOf(repository.isFetchInProgress()) }
-            var isProcessing by remember { mutableStateOf(viewModel.isProcessingStations) }
-            var stations by remember { mutableStateOf<List<GasStation>>(viewModel.getStationsToDisplay()) }
-
-            LaunchedEffect(repository) {
-                repository.events.collect { event ->
-                    isDownloading = repository.isFetchInProgress()
-                    when (event) {
-                        is RepositoryEvent.UpdateStarted -> {
-                            nolog("REPO EVENT UpdateStarted")
-                        }
-                        is RepositoryEvent.UpdateReady -> {
-                            nolog("REPO EVENT UpdateReady")
-                        }
-                        is RepositoryEvent.UpdateFailed -> {
-                            nolog("REPO EVENT UpdateFailed")
-                            UserMessage.Info(getString(R.string.failed_download, event.error)).post()
-                        }
-                    }
-                }
-            }
-
-            LaunchedEffect(viewModel) {
-                viewModel.stationsReloadStarted.collect {
-                    isProcessing = true
-                }
-            }
-
-            LaunchedEffect(viewModel) {
-                viewModel.stationsUpdated.collect { updatedStations ->
-                    stations = updatedStations
-                    isProcessing = false
-                }
-            }
-
-            LaunchedEffect(startLocation) {
-                startLocation?.let {
-                    app.locationService.setFixedLocation(it)
-                }
-            }
-
             StationListScreen(
-                stations = stations,
-                downloading = isDownloading,
-                processing = isProcessing,
-                onRefresh = { repository.launchFetch() },
+                viewModel = viewModel,
+                repository = repository,
                 onStationClicked = { station ->
                     openActivity<StationDetailActivity> {
                         putExtra(EXTRA_STATION_ID, station.id)
@@ -142,14 +97,48 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun StationListScreen(
-        stations: List<GasStation>,
-        downloading: Boolean,
-        processing: Boolean,
-        onRefresh: () -> Unit,
+        viewModel: MainSharedViewModel,
+        repository: GasStationRepository,
         onStationClicked: (GasStation) -> Unit,
         onPlotNavigatorClick: () -> Unit,
         onSettingsClick: () -> Unit,
     ) {
+        var isDownloading by remember { mutableStateOf(repository.isFetchInProgress()) }
+        var isProcessing by remember { mutableStateOf(viewModel.isProcessingStations) }
+        var stations by remember { mutableStateOf<List<GasStation>>(viewModel.getStationsToDisplay()) }
+        val failedDownloadFormat = stringResource(R.string.failed_download)
+
+        LaunchedEffect(repository) {
+            repository.events.collect { event ->
+                isDownloading = repository.isFetchInProgress()
+                when (event) {
+                    is RepositoryEvent.UpdateStarted -> {
+                        nolog("REPO EVENT UpdateStarted")
+                    }
+                    is RepositoryEvent.UpdateReady -> {
+                        nolog("REPO EVENT UpdateReady")
+                    }
+                    is RepositoryEvent.UpdateFailed -> {
+                        nolog("REPO EVENT UpdateFailed")
+                        UserMessage.Info(failedDownloadFormat.format(event.error)).post()
+                    }
+                }
+            }
+        }
+
+        LaunchedEffect(viewModel) {
+            viewModel.stationsReloadStarted.collect {
+                isProcessing = true
+            }
+        }
+
+        LaunchedEffect(viewModel) {
+            viewModel.stationsUpdated.collect { updatedStations ->
+                stations = updatedStations
+                isProcessing = false
+            }
+        }
+
         AppScaffold(
             topBar = {
                 TopAppBar(
@@ -186,9 +175,9 @@ class MainActivity : ComponentActivity() {
                 }
                 StationList(
                     stations = stations,
-                    downloading = downloading,
-                    processing = processing,
-                    onRefresh = onRefresh,
+                    downloading = isDownloading,
+                    processing = isProcessing,
+                    onRefresh = { repository.launchFetch() },
                     onStationClicked = onStationClicked,
                     modifier = Modifier.weight(1f),
                 )
