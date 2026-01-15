@@ -2,7 +2,7 @@
 
 Do you want to help? This is my roadmap.
 
-- [ ] Fix: In Landscape, empty List does not expands as cool as Loading list does.
+- [x] Fix: In Landscape, empty List does not expands as cool as Loading list does.
 - [ ] Fix: If resolved location description is the same, the icon keeps loading
 - [ ] The Data loader pill and the snackbar compete vor the lower part of screeen
 - [ ] Data loading performance: Use kotlin serialization instead of gson
@@ -68,7 +68,7 @@ Do you want to help? This is my roadmap.
     - [ ] https://geoportalgasolineras.es/geoportal/rest/discountPlans
     - [ ] https://geoportalgasolineras.es/geoportal/rest/9999/planesDescuentoEstacion
     - [ ] https://sede.serviciosmin.gob.es/en-US/datosabiertos/catalogo/precios-carburantes
-- [ ] Denuncia https://geoportalgasolineras.es/geoportal-instalaciones/IncoherenciaPrecios (form)
+- [ ] Report price incoherences: https://geoportalgasolineras.es/geoportal-instalaciones/IncoherenciaPrecios (form)
 - [ ] Other Countries:
     - Listing (most outdated but gives clues): https://geoportalgasolineras.es/geoportal-instalaciones/GeoportalesEuropeos
     - Portugal (portal, not api): https://precoscombustiveis.dgeg.gov.pt/

@@ -159,36 +159,24 @@ fun StationList(
         listState = listState,
         modifier = modifier,
     ) {
-        if (processing) {
-            LoadingPlaceholder(Modifier.fillMaxSize())
-        } else {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                if (stations.isEmpty()) {
-                    item {
-                        NoStationsPlaceholder(
-                            Modifier
-                                .fillParentMaxSize()
-                                .padding(
-                                    start = 16.dp,
-                                    top = 0.dp,
-                                    end = 16.dp,
-                                    bottom = 64.dp,
-                                ),
-                        )
-                    }
-                } else {
-                    items(
-                        items = stations,
-                        key = { it.id },
-                        contentType = { "station" },
-                    ) { station ->
-                        GasStationCard(station, onClick = {
-                            onStationClicked(station)
-                        })
-                    }
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            if (processing) {
+                // Out of LazyColumn to disable reloading
+                item { LoadingPlaceholder(Modifier.fillMaxSize().fillParentMaxSize()) }
+            } else if (stations.isEmpty()) {
+                item { NoStationsPlaceholder(Modifier.fillMaxSize().fillParentMaxSize()) }
+            } else {
+                items(
+                    items = stations,
+                    key = { it.id },
+                    contentType = { "station" },
+                ) { station ->
+                    GasStationCard(station, onClick = {
+                        onStationClicked(station)
+                    })
                 }
             }
         }
