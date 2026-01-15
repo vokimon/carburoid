@@ -41,6 +41,8 @@ fun LocationSelector(
     service: LocationService,
     modifier: Modifier = Modifier,
 ) {
+    val refreshAction = service.rememberLocationController()
+
     val descriptionFlowValue by service.descriptionUpdated.collectAsStateWithLifecycle(
         initialValue = service.getCurrentLocationDescription(),
     )
@@ -48,6 +50,9 @@ fun LocationSelector(
     var description by remember { mutableStateOf(descriptionFlowValue) }
     var refreshing by remember { mutableStateOf(false) }
 
+    // TODO: Fix: use eventFlow not value update.
+    // refreshing has to be updated, not when the value changes,
+    // but when the value arribes event if it is the same.
     LaunchedEffect(descriptionFlowValue) {
         description = descriptionFlowValue
         refreshing = false
@@ -57,7 +62,7 @@ fun LocationSelector(
         // Only use device location if no fixed location exists
         if (service.getCurrentLocation() == null) {
             refreshing = true
-            service.refreshLocation()
+            refreshAction.invoke()
         }
     }
 
@@ -96,7 +101,7 @@ fun LocationSelector(
                 onClick = {
                     log("REFRESHING ON ICON PRESS")
                     refreshing = true
-                    service.refreshLocation()
+                    refreshAction.invoke()
                 },
             ) {
                 Icon(

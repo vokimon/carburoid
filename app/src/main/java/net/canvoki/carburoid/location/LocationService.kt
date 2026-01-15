@@ -10,6 +10,11 @@ import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -50,10 +55,6 @@ class LocationService(
 
     private var geocodingJob: Job? = null
 
-    companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
-    }
-
     private fun tr(stringId: Int): String = activity.getString(stringId)
 
     fun setFixedLocation(location: Location) {
@@ -62,16 +63,7 @@ class LocationService(
         setLocation(location)
     }
 
-    fun useDeviceLocation() {
-        fixedLocation = null
-        refreshLocation()
-    }
-
-    fun refreshLocation() {
-        if (!hasPermission()) {
-            requestPermission()
-            return
-        }
+    private fun refreshDeviceLocation() {
         if (!isLocationDeviceEnabled()) {
             handleLocationDisabled()
             return
@@ -84,28 +76,6 @@ class LocationService(
             activity,
             Manifest.permission.ACCESS_FINE_LOCATION,
         ) == PackageManager.PERMISSION_GRANTED
-
-    private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            activity,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            LOCATION_PERMISSION_REQUEST_CODE,
-        )
-        // result is asynchronously retrieved by processPermission
-        // called from onRequestPermissionsResult in the main activity
-    }
-
-    @Deprecated("To be removed when Compose migration is completed")
-    fun processPermission(
-        requestCode: Int,
-        results: IntArray,
-    ) {
-        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
-            return
-        }
-        val isGranted = results.isNotEmpty() && results[0] == PackageManager.PERMISSION_GRANTED
-        onPermissionResult(isGranted)
-    }
 
     fun onPermissionResult(isGranted: Boolean) {
         if (isGranted) {
@@ -292,4 +262,29 @@ class LocationService(
     }
 
     fun getCurrentLocation(): Location? = fixedLocation ?: currentLocation
+
+    @Composable
+    fun rememberLocationController(): () -> Unit {
+        val permissionLauncher =
+            rememberLauncherForActivityResult(
+                ActivityResultContracts.RequestPermission(),
+            ) { isGranted ->
+                onPermissionResult(isGranted)
+            }
+        val refresh = {
+            val hasPermission = hasPermission()
+            if (!hasPermission) {
+                permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            } else {
+                refreshDeviceLocation()
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            if (getCurrentLocation() == null) {
+                refresh()
+            }
+        }
+        return remember(this) { refresh }
+    }
 }

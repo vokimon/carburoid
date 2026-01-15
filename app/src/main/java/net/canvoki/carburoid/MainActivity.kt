@@ -126,10 +126,6 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(startLocation, locationService) {
                 startLocation?.let {
                     locationService.setFixedLocation(it)
-                } ?: run {
-                    if (locationService.getCurrentLocation() == null) {
-                        locationService.refreshLocation()
-                    }
                 }
             }
 
@@ -248,14 +244,5 @@ class MainActivity : ComponentActivity() {
         if (handleExternalProductIntent(intent)) return
         val location = locationFromDeepLinkIntent(intent)
         location?.let { locationService.setFixedLocation(it) }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray,
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        locationService.processPermission(requestCode, grantResults)
     }
 }
