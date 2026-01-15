@@ -1,12 +1,12 @@
 package net.canvoki.carburoid.location
 
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.content.Context
 import android.location.Location
 import com.google.android.gms.location.LocationServices
 
 class LocationProvider(
-    private val activity: Activity,
+    private val activity: Context,
 ) {
     fun getLastKnownLocation(
         onSuccess: (Location?) -> Unit,
