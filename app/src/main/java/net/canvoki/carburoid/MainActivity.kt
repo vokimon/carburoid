@@ -16,21 +16,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.IntentCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import net.canvoki.carburoid.location.LocationSelector
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.PlotNavigatorActivity
@@ -38,9 +36,10 @@ import net.canvoki.carburoid.product.CategorizedProductSelector
 import net.canvoki.carburoid.product.ProductSelection
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
+import net.canvoki.carburoid.ui.AppScaffold
 import net.canvoki.carburoid.ui.StationDetailActivity
+import net.canvoki.carburoid.ui.StationList
 import net.canvoki.carburoid.ui.openActivity
-import net.canvoki.carburoid.ui.setContentViewWithInsets
 import net.canvoki.carburoid.ui.usermessage.UserMessage
 
 class MainActivity : ComponentActivity() {
@@ -78,7 +77,6 @@ class MainActivity : ComponentActivity() {
 
         handleExternalProductIntent(intent)
 
-        val activity = this
         @OptIn(ExperimentalMaterial3Api::class)
         setContent {
             val viewModel = this@MainActivity.viewModel
@@ -125,60 +123,75 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            net.canvoki.carburoid.ui.AppScaffold(
-                topBar = {
-                    TopAppBar(
-                        title = { Text("Carburoid") },
-                        actions = {
-                            IconButton(
-                                onClick = { openActivity<PlotNavigatorActivity>() },
-                            ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_show_chart),
-                                    contentDescription = stringResource(R.string.menu_chart),
-                                )
-                            }
-                            IconButton(
-                                onClick = { openActivity<SettingsActivity>() },
-                            ) {
-                                Icon(
-                                    contentDescription = stringResource(R.string.menu_settings),
-                                    painter = painterResource(R.drawable.ic_settings),
-                                )
-                            }
-                        },
-                    )
+            StationListScreen(
+                stations = stations,
+                downloading = isDownloading,
+                processing = isProcessing,
+                onRefresh = { repository.launchFetch() },
+                onStationClicked = { station ->
+                    openActivity<StationDetailActivity> {
+                        putExtra(EXTRA_STATION_ID, station.id)
+                    }
                 },
+                onPlotNavigatorClick = { openActivity<PlotNavigatorActivity>() },
+                onSettingsClick = { openActivity<SettingsActivity>() },
+            )
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    private fun StationListScreen(
+        stations: List<GasStation>,
+        downloading: Boolean,
+        processing: Boolean,
+        onRefresh: () -> Unit,
+        onStationClicked: (GasStation) -> Unit,
+        onPlotNavigatorClick: () -> Unit,
+        onSettingsClick: () -> Unit,
+    ) {
+        AppScaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("Carburoid") },
+                    actions = {
+                        IconButton(onClick = onPlotNavigatorClick) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_show_chart),
+                                contentDescription = stringResource(R.string.menu_chart),
+                            )
+                        }
+                        IconButton(onClick = onSettingsClick) {
+                            Icon(
+                                contentDescription = stringResource(R.string.menu_settings),
+                                painter = painterResource(R.drawable.ic_settings),
+                            )
+                        }
+                    },
+                )
+            },
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
             ) {
                 Column(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        CategorizedProductSelector(
-                            modifier = Modifier.padding(bottom = 8.dp),
-                        )
-                        LocationSelector(
-                            activity = activity,
-                            modifier = Modifier.padding(bottom = 8.dp),
-                        )
-                    }
-                    net.canvoki.carburoid.ui.StationList(
-                        stations = stations,
-                        downloading = isDownloading,
-                        processing = isProcessing,
-                        onRefresh = {
-                            repository.launchFetch()
-                        },
-                        onStationClicked = { station ->
-                            openActivity<StationDetailActivity> {
-                                putExtra(EXTRA_STATION_ID, station.id)
-                            }
-                        },
-                        modifier = Modifier.weight(1f),
+                    CategorizedProductSelector(
+                        modifier = Modifier.padding(bottom = 8.dp),
+                    )
+                    LocationSelector(
+                        modifier = Modifier.padding(bottom = 8.dp),
                     )
                 }
+                StationList(
+                    stations = stations,
+                    downloading = downloading,
+                    processing = processing,
+                    onRefresh = onRefresh,
+                    onStationClicked = onStationClicked,
+                    modifier = Modifier.weight(1f),
+                )
             }
         }
     }

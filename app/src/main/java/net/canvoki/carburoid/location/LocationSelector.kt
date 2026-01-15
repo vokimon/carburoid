@@ -39,7 +39,6 @@ import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
 fun LocationSelector(
-    activity: ComponentActivity,
     modifier: Modifier = Modifier,
 ) {
     val app = LocalContext.current.applicationContext as CarburoidApplication
@@ -121,7 +120,7 @@ fun LocationSelector(
                 onClick = {
                     val current = service.getCurrentLocation()
                     val intent =
-                        Intent(activity, LocationPickerActivity::class.java).apply {
+                        Intent(app, LocationPickerActivity::class.java).apply {
                             putExtra(LocationPickerActivity.EXTRA_CURRENT_LAT, current?.latitude)
                             putExtra(LocationPickerActivity.EXTRA_CURRENT_LON, current?.longitude)
                             putExtra(
