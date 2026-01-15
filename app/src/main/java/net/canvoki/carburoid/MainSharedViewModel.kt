@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import net.canvoki.carburoid.BuildConfig
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
@@ -106,7 +107,9 @@ class MainSharedViewModel(
                 val newStations =
                     withContext(Dispatchers.Default) {
                         timeits("PROCESSING STATIONS $reason") {
-                            Thread.sleep(2000)
+                            if (BuildConfig.DEBUG) {
+                                Thread.sleep(500)
+                            }
                             StationFilter(config).filter(stations)
                         }
                     }
