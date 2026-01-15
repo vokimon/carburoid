@@ -106,6 +106,17 @@ If you’re saving money with Carburoid, it’s only fair
 to share a portion of those savings to help us keep going.
 Don’t you think so?
 
+## What should I do if the prices don’t match what’s shown in the app?
+
+Fuel prices are updated by the Ministry every 30 minutes.
+First, make sure you have the latest data by **pulling down to refresh** the station list.
+
+If the price still appears incorrect after refreshing,
+you can report the discrepancy directly to Spain’s Ministry of Industry
+using their official form:
+
+[Report inaccurate fuel prices](https://geoportalgasolineras.es/geoportal-instalaciones/IncoherenciaPrecios)
+
 ## Can this app work in countries other than Spain?
 
 That would require development, but we’re open to expanding
