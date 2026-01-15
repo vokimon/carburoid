@@ -8,7 +8,7 @@ import org.junit.Test
 import java.util.Locale
 
 @Suppress("ktlint:standard:max-line-length")
-val fullJsonCase = """{"IDEESS":1234,"Rótulo":"Test Station","Dirección":"Calle Principal 123","Localidad":"Madrid","Provincia":"Madrid","Latitud":"40,4168","Longitud (WGS84)":"-3,7038","Tipo Venta":"P","Horario":"L-D: 24H","prices":{"Gasolina 95":1.234},"Precio Gasolina 95":"1,234"}"""
+val fullJsonCase = """{"IDEESS":1234,"Rótulo":"Test Station","Dirección":"Calle Principal 123","Localidad":"Madrid","Provincia":"Madrid","Latitud":"40,4168","Longitud (WGS84)":"-3,7038","Tipo Venta":"P","Horario":"L-D: 24H","Precio Gasolina 95":"1,234"}"""
 
 class GasStationTest {
     private lateinit var originalLocale: Locale
@@ -231,7 +231,7 @@ class GasStationTest {
     @Test
     fun `toJson with data`() {
         val gasStation =
-            GasStation(
+            GasStationGson(
                 id = 1234,
                 name = "Test Station",
                 address = "Calle Principal 123",
@@ -255,7 +255,7 @@ class GasStationTest {
     @Test
     fun `toJson with nulls`() {
         val gasStation =
-            GasStation(
+            GasStationGson(
                 id = 1234, // Not null
                 name = null,
                 address = null,
@@ -270,14 +270,14 @@ class GasStationTest {
         val json = gasStation.toJson()
 
         //println("JSON serialitzat: $json")
-        assertEquals("""{"IDEESS":1234,"Tipo Venta":"R","Horario":"L-D: 24H","prices":{}}""", json)
+        assertEquals("""{"IDEESS":1234,"Tipo Venta":"R","Horario":"L-D: 24H"}""", json)
     }
 
     @Test
     fun `toJson with exotic locale, arab`() {
         Locale.setDefault(Locale.forLanguageTag("ar")) // Arabic serializes its own numbers
         val gasStation =
-            GasStation(
+            GasStationGson(
                 id = 1234,
                 name = "Test Station",
                 address = "Calle Principal 123",
@@ -301,7 +301,7 @@ class GasStationTest {
     @Test
     fun testRoundTrip() {
         val originalStation =
-            GasStation(
+            GasStationGson(
                 id = 1234,
                 name = "Test Station",
                 address = "Calle Principal 123",

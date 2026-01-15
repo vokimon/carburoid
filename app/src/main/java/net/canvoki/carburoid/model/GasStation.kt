@@ -24,7 +24,7 @@ import java.time.ZoneId
 private val gson: Gson by lazy {
     GsonBuilder()
         .registerTypeAdapter(
-            GasStation::class.java,
+            GasStationGson::class.java,
             GasStationJsonAdapter(GsonBuilder().create()),
         ).create()
 }
@@ -33,7 +33,7 @@ fun preprocessSpanishNumbers(json: String): String = Regex("\"([+-]?\\d+),(\\d+)
 
 data class GasStationResponse(
     @SerializedName("ListaEESSPrecio")
-    val stations: List<GasStation>,
+    val stations: List<GasStationGson>,
     @SerializedName("Fecha")
     @JsonAdapter(SpanishDateTypeAdapter::class)
     val downloadDate: Instant? = null,
@@ -53,69 +53,97 @@ data class GasStationResponse(
     }
 }
 
-data class GasStation(
+interface GasStation {
+    val id: Int
+    val name: String?
+    val address: String?
+    val city: String?
+    val state: String?
+    val latitude: Double?
+    val longitude: Double?
+    val isPublicPrice: Boolean
+    val openingHours: OpeningHours?
+    val prices: Map<String, Double?>
+
+    val distanceInMeters: Float?
+
+    val price: Double?
+        get() = prices[ProductManager.getCurrent()]
+
+    fun toJson(): String
+
+    fun timeZone(): ZoneId
+
+    fun computeDistance()
+
+    fun openStatus(instant: Instant) =
+        openingHours?.getStatus(instant, timeZone())
+            ?: OpeningStatus(isOpen = false, until = null)
+
+    companion object {
+        fun parse(json: String): GasStation = GasStationGson.parse(json)
+    }
+}
+
+abstract class BaseGasStation : GasStation {
+    private var _distanceInMeters: Float? = null
+    override val distanceInMeters: Float?
+        get() = _distanceInMeters
+
+    override fun computeDistance() {
+        _distanceInMeters = CurrentDistancePolicy.getDistance(this)
+    }
+}
+
+data class GasStationGson(
     @SerializedName("IDEESS")
-    val id: Int,
+    override val id: Int,
     @SerializedName("Rótulo")
-    val name: String?,
+    override val name: String?,
     @SerializedName("Dirección")
-    val address: String?,
+    override val address: String?,
     @SerializedName("Localidad")
-    val city: String?,
+    override val city: String?,
     @SerializedName("Provincia")
-    val state: String?,
+    override val state: String?,
     @SerializedName("Latitud")
     @JsonAdapter(SpanishFloatTypeAdapter::class)
-    val latitude: Double?,
+    override val latitude: Double?,
     @SerializedName("Longitud (WGS84)")
     @JsonAdapter(SpanishFloatTypeAdapter::class)
-    val longitude: Double?,
+    override val longitude: Double?,
     @SerializedName("Tipo Venta")
     @JsonAdapter(SaleTypeAdapter::class)
-    val isPublicPrice: Boolean = true,
+    override val isPublicPrice: Boolean = true,
     @SerializedName("Horario")
     @JsonAdapter(OpeningHoursAdapter::class)
-    val openingHours: OpeningHours? = OpeningHours.parse("L-D: 24H"),
-    val prices: Map<String, Double?> = emptyMap(),
-) {
-    var distanceInMeters: Float? = null
-        private set
+    override val openingHours: OpeningHours? = OpeningHours.parse("L-D: 24H"),
+    override val prices: Map<String, Double?> = emptyMap(),
+) : BaseGasStation() {
+    override fun toJson(): String = gson.toJson(this)
 
-    fun computeDistance() {
-        distanceInMeters = CurrentDistancePolicy.getDistance(this)
-    }
-
-    fun timeZone(): ZoneId =
+    override fun timeZone(): ZoneId =
         if ((longitude ?: 0.0) > -10.0) {
             ZoneId.of("Europe/Madrid")
         } else {
             ZoneId.of("Atlantic/Canary")
         }
 
-    fun openStatus(instant: Instant) =
-        openingHours?.getStatus(instant, timeZone())
-            ?: OpeningStatus(isOpen = false, until = null)
-
-    val price: Double?
-        get() = prices[ProductManager.getCurrent()]
-
-    fun toJson(): String = gson.toJson(this)
-
     companion object {
-        fun parse(json: String): GasStation = gson.fromJson(preprocessSpanishNumbers(json), GasStation::class.java)
+        fun parse(json: String): GasStation = gson.fromJson(preprocessSpanishNumbers(json), GasStationGson::class.java)
     }
 }
 
 // ✅ Custom Adapter that reuses Gson’s default adapter and adds `prices` field
 class GasStationJsonAdapter(
     private val gson: Gson,
-) : JsonDeserializer<GasStation>,
-    JsonSerializer<GasStation> {
+) : JsonDeserializer<GasStationGson>,
+    JsonSerializer<GasStationGson> {
     override fun deserialize(
         json: JsonElement,
         typeOfT: Type,
         context: JsonDeserializationContext,
-    ): GasStation {
+    ): GasStationGson {
         val jsonObject = json.asJsonObject
         // Price processing
         val prices = mutableMapOf<String, Double?>()
@@ -133,12 +161,12 @@ class GasStationJsonAdapter(
             }
         }
 
-        val base = gson.fromJson(jsonObject, GasStation::class.java)
+        val base = gson.fromJson(jsonObject, GasStationGson::class.java)
         return base.copy(prices = prices)
     }
 
     override fun serialize(
-        src: GasStation,
+        src: GasStationGson,
         typeOfSrc: Type,
         context: JsonSerializationContext,
     ): JsonElement {
@@ -150,7 +178,7 @@ class GasStationJsonAdapter(
                 jsonObject.addProperty("Precio $product", toSpanishFloat(it))
             }
         }
-
+        jsonObject.remove("prices")
         return jsonObject
     }
 }

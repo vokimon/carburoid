@@ -3,6 +3,7 @@ package net.canvoki.carburoid.algorithms
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.distances.DistanceMethod
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.model.GasStationGson
 import net.canvoki.carburoid.model.OpeningHours
 import net.canvoki.carburoid.test.atMadridInstant
 import org.junit.After
@@ -32,7 +33,7 @@ fun dummyStation(
     isPublicPrice: Boolean = true,
     hours: String = "L-D: 24H",
 ): GasStation =
-    GasStation(
+    GasStationGson(
         id = index,
         name = "Station $index at $distance km, $price €",
         address = "Address $index",

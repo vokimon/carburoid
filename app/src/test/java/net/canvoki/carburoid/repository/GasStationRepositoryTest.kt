@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import net.canvoki.carburoid.json.toSpanishFloat
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.model.GasStationGson
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
 import net.canvoki.carburoid.test.deferredCalls
@@ -54,7 +55,7 @@ class GasStationRepositoryTest {
         GasStationResponse(
             stations =
                 listOf(
-                    GasStation(
+                    GasStationGson(
                         id = 666,
                         name = "Station 1",
                         address = "Address 1",
@@ -504,13 +505,10 @@ class GasStationRepositoryTest {
             )
         }
 
-    private fun writeCache(
-        downloadDate: Instant?,
-        stations: List<GasStation>? = null,
-    ) {
+    private fun writeCache(downloadDate: Instant?) {
         val response =
             GasStationResponse(
-                stations = stations ?: emptyList(),
+                stations = emptyList(),
                 downloadDate = downloadDate,
             )
         cacheFile.writeText(Gson().toJson(response))
