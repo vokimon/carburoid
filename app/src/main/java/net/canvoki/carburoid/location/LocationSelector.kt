@@ -38,9 +38,7 @@ import net.canvoki.carburoid.log
 import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
-fun LocationSelector(
-    modifier: Modifier = Modifier,
-) {
+fun LocationSelector(modifier: Modifier = Modifier) {
     val app = LocalContext.current.applicationContext as CarburoidApplication
     val service = app.locationService
     val refreshAction = service.rememberLocationController()
