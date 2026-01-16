@@ -1,7 +1,5 @@
 package net.canvoki.carburoid.model
 
-import net.canvoki.carburoid.json.postprocessSpanishNumbers
-import net.canvoki.carburoid.json.preprocessSpanishNumbers
 import net.canvoki.carburoid.product.ProductManager
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -12,7 +10,7 @@ import java.util.Locale
 @Suppress("ktlint:standard:max-line-length")
 val fullJsonCase = """{"IDEESS":1234,"Rótulo":"Test Station","Dirección":"Calle Principal 123","Localidad":"Madrid","Provincia":"Madrid","Latitud":"40,4168","Longitud (WGS84)":"-3,7038","Tipo Venta":"P","Horario":"L-D: 24H","Precio Gasolina 95":"1,234"}"""
 
-class GasStationTest {
+open class GasStationTest {
     private lateinit var originalLocale: Locale
 
     @Before
@@ -26,15 +24,35 @@ class GasStationTest {
         Locale.setDefault(originalLocale)
     }
 
-    @Test
-    fun `preprocessSpanishNumbers`() {
-        assertEquals("23.323", preprocessSpanishNumbers("\"23,323\""))
+    open fun parseResponse(string: String): GasStation {
+        val response = GasStationResponse.parse(string)
+        return response.stations.first()
     }
 
-    @Test
-    fun `preprocessSpanishNumbers with negative numbers`() {
-        assertEquals("-23.323", preprocessSpanishNumbers("\"-23,323\""))
-    }
+    open fun parseStation(string: String): GasStation = GasStationGson.parse(string)
+
+    open fun newGasStation(
+        id: Int,
+        name: String?,
+        address: String?,
+        city: String?,
+        state: String?,
+        latitude: Double?,
+        longitude: Double?,
+        isPublicPrice: Boolean,
+        prices: Map<String, Double?>,
+    ): GasStation =
+        GasStationGson(
+            id = id,
+            name = name,
+            address = address,
+            city = city,
+            state = state,
+            latitude = latitude,
+            longitude = longitude,
+            isPublicPrice = isPublicPrice,
+            prices = prices,
+        )
 
     @Test
     fun `parse station with valid coordinates`() {
@@ -42,6 +60,7 @@ class GasStationTest {
         val json =
             """
             {
+                "IDEESS": "666",
                 "Rótulo": "REPSOL",
                 "Dirección": "Calle Mayor 1",
                 "Localidad": "Madrid",
@@ -54,8 +73,7 @@ class GasStationTest {
             }
             """.trimIndent()
 
-        // Parse with Gson
-        val station = GasStation.parse(json)
+        val station = parseStation(json)
 
         // Verify computed properties
         assertEquals("REPSOL", station.name)
@@ -72,6 +90,7 @@ class GasStationTest {
         val json =
             """
             {
+                "IDEESS": "666",
                 "Rótulo": "CEPSA",
                 "Dirección": "Gran Vía 2",
                 "Localidad": "Madrid",
@@ -83,7 +102,7 @@ class GasStationTest {
             }
             """.trimIndent()
 
-        val station = GasStation.parse(json)
+        val station = parseStation(json)
 
         // Should be null for blank/whitespace
         assertEquals(null, station.latitude)
@@ -95,6 +114,7 @@ class GasStationTest {
         val json =
             """
             {
+                "IDEESS": "666",
                 "Rótulo": "CEPSA",
                 "Dirección": "Gran Vía 2",
                 "Localidad": "Madrid",
@@ -106,7 +126,7 @@ class GasStationTest {
             }
             """.trimIndent()
 
-        val station = GasStation.parse(json)
+        val station = parseStation(json)
 
         assertEquals(mapOf("Gasoleo A" to 1.670), station.prices)
     }
@@ -116,6 +136,7 @@ class GasStationTest {
         val json =
             """
             {
+                "IDEESS": "666",
                 "Rótulo": "CEPSA",
                 "Dirección": "Gran Vía 2",
                 "Localidad": "Madrid",
@@ -127,7 +148,7 @@ class GasStationTest {
             }
             """.trimIndent()
 
-        val station = GasStation.parse(json)
+        val station = parseStation(json)
 
         assertEquals(
             mapOf(
@@ -139,9 +160,10 @@ class GasStationTest {
     }
 
     fun twoProductsStation(): GasStation =
-        GasStation.parse(
+        parseStation(
             """
             {
+                "IDEESS": "666",
                 "Rótulo": "CEPSA",
                 "Dirección": "Gran Vía 2",
                 "Localidad": "Madrid",
@@ -187,6 +209,7 @@ class GasStationTest {
             {
                 "ListaEESSPrecio": [
                     {
+                        "IDEESS": "666",
                         "Rótulo": "REPSOL",
                         "Dirección": "Calle Mayor 1",
                         "Localidad": "Madrid",
@@ -200,8 +223,7 @@ class GasStationTest {
             }
             """.trimIndent()
 
-        val response = GasStationResponse.parse(json)
-        val station = response.stations.first()
+        val station = parseResponse(json)
 
         assertEquals(40.4168, station.latitude!!, 0.0001)
         assertEquals(-3.7038, station.longitude!!, 0.0001)
@@ -212,6 +234,7 @@ class GasStationTest {
         val json =
             """
             {
+                "IDEESS": "666",
                 "Rótulo": "REPSOL",
                 "Dirección": "Calle Mayor 1",
                 "Localidad": "Madrid",
@@ -224,7 +247,7 @@ class GasStationTest {
             """.trimIndent()
 
         // Parse with Gson
-        val station = GasStation.parse(json)
+        val station = parseStation(json)
 
         // Verify computed properties
         assertEquals(null, station.openingHours)
@@ -233,7 +256,7 @@ class GasStationTest {
     @Test
     fun `toJson with data`() {
         val gasStation =
-            GasStationGson(
+            newGasStation(
                 id = 1234,
                 name = "Test Station",
                 address = "Calle Principal 123",
@@ -257,7 +280,7 @@ class GasStationTest {
     @Test
     fun `toJson with nulls`() {
         val gasStation =
-            GasStationGson(
+            newGasStation(
                 id = 1234, // Not null
                 name = null,
                 address = null,
@@ -279,7 +302,7 @@ class GasStationTest {
     fun `toJson with exotic locale, arab`() {
         Locale.setDefault(Locale.forLanguageTag("ar")) // Arabic serializes its own numbers
         val gasStation =
-            GasStationGson(
+            newGasStation(
                 id = 1234,
                 name = "Test Station",
                 address = "Calle Principal 123",
@@ -303,7 +326,7 @@ class GasStationTest {
     @Test
     fun testRoundTrip() {
         val originalStation =
-            GasStationGson(
+            newGasStation(
                 id = 1234,
                 name = "Test Station",
                 address = "Calle Principal 123",
@@ -317,11 +340,46 @@ class GasStationTest {
 
         val json = originalStation.toJson()
         //println("JSON serialitzat: $json")
-        val deserializedStation = GasStation.parse(json)
+        val deserializedStation = parseStation(json)
 
         assertEquals(originalStation.id, deserializedStation.id)
         assertEquals(originalStation.latitude, deserializedStation.latitude)
         assertEquals(originalStation.longitude, deserializedStation.longitude)
         assertEquals(originalStation.prices, deserializedStation.prices)
     }
+}
+
+class SpanishGasStationTest : GasStationTest() {
+
+    override fun parseResponse(string: String): GasStation {
+        val response = SpanishGasStationResponse.parse(string)
+        return response.stations.first()
+    }
+
+    override fun parseStation(string: String): GasStation {
+        return SpanishGasStation.parse(string)
+    }
+
+    override fun newGasStation(
+        id: Int,
+        name: String?,
+        address: String?,
+        city: String?,
+        state: String?,
+        latitude: Double?,
+        longitude: Double?,
+        isPublicPrice: Boolean,
+        prices: Map<String, Double?>,
+    ): GasStation =
+        SpanishGasStation(
+            id = id,
+            name = name,
+            address = address,
+            city = city,
+            state = state,
+            latitude = latitude,
+            longitude = longitude,
+            isPublicPrice = isPublicPrice,
+            prices = prices,
+        )
 }

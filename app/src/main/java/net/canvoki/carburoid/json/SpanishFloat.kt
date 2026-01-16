@@ -8,14 +8,15 @@ fun toSpanishFloat(value: Double?): String? = value?.toString()?.replace(".", ",
 
 fun fromSpanishFloat(value: String?): Double? = value?.replace(',', '.')?.toDoubleOrNull()
 
-fun preprocessSpanishNumbers(json: String): String = Regex("\"([+-]?\\d+),(\\d+)\"").replace(json, "$1.$2")
+fun preprocessSpanishNumbers(json: String): String = Regex("\"([+-]?\\d+),(\\d+)\"").replace(json, "\"$1.$2\"")
 
 fun postprocessSpanishNumbers(json: String): String = Regex("\"([+-]?\\d+)[.](\\d+)\"").replace(json, "\"$1,$2\"")
 
 class SpanishFloatTypeAdapter : TypeAdapter<Double?>() {
     override fun read(reader: JsonReader): Double? =
         try {
-            reader.nextDouble()
+            val s = reader.nextString()
+            fromSpanishFloat(s)
         } catch (e: Exception) {
             reader.skipValue()
             null

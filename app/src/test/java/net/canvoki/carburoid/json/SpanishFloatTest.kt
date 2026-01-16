@@ -9,12 +9,12 @@ import org.junit.Test
 class SpanishFloatTest {
     @Test
     fun `preprocessSpanishNumbers`() {
-        assertEquals("23.323", preprocessSpanishNumbers("\"23,323\""))
+        assertEquals("\"23.323\"", preprocessSpanishNumbers("\"23,323\""))
     }
 
     @Test
     fun `preprocessSpanishNumbers with negative numbers`() {
-        assertEquals("-23.323", preprocessSpanishNumbers("\"-23,323\""))
+        assertEquals("\"-23.323\"", preprocessSpanishNumbers("\"-23,323\""))
     }
 
     @Test

@@ -4,6 +4,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.plugin.compose' version '2.2.20'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '2.3.0'
 }
 
 def versionPropsFile = rootProject.file("version.properties")
@@ -148,6 +149,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
     implementation 'com.squareup.retrofit2:converter-scalars:3.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:latest'
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:latest"
     implementation 'org.osmdroid:osmdroid-android:6.1.20'
     implementation 'org.osmdroid:osmdroid-wms:6.1.20'
     implementation 'io.github.koalaplot:koalaplot-core-android:0.10.4'
@@ -160,6 +162,7 @@ dependencies {
     testImplementation 'com.google.code.gson:gson:2.13.2'
     testImplementation "io.mockk:mockk:1.14.6"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:latest"
+    testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:latest")
     testImplementation "org.jetbrains.kotlin:kotlin-test:latest"
     testImplementation "org.robolectric:robolectric:4.16"
 

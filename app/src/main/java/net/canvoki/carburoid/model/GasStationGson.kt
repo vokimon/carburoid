@@ -13,6 +13,7 @@ import net.canvoki.carburoid.json.OpeningHoursAdapter
 import net.canvoki.carburoid.json.SaleTypeAdapter
 import net.canvoki.carburoid.json.SpanishDateTypeAdapter
 import net.canvoki.carburoid.json.SpanishFloatTypeAdapter
+import net.canvoki.carburoid.json.fromSpanishFloat
 import net.canvoki.carburoid.json.postprocessSpanishNumbers
 import net.canvoki.carburoid.json.preprocessSpanishNumbers
 import net.canvoki.carburoid.json.toSpanishFloat
@@ -103,7 +104,7 @@ class GasStationJsonAdapter(
                 val price =
                     when {
                         value.isJsonNull -> null
-                        value.isJsonPrimitive && value.asJsonPrimitive.isNumber -> value.asDouble
+                        value.isJsonPrimitive && value.asJsonPrimitive.isString -> fromSpanishFloat(value.asString)
                         else -> null
                     }
                 val product = key.removePrefix("Precio ")
@@ -122,7 +123,6 @@ class GasStationJsonAdapter(
     ): JsonElement {
         val jsonObject = gson.toJsonTree(src).asJsonObject
 
-        // ✅ Add dynamic price fields
         for ((product, price) in src.prices) {
             price?.let {
                 jsonObject.addProperty("Precio $product", toSpanishFloat(it))
