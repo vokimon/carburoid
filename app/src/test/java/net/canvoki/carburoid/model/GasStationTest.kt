@@ -1,5 +1,7 @@
 package net.canvoki.carburoid.model
 
+import net.canvoki.carburoid.json.postprocessSpanishNumbers
+import net.canvoki.carburoid.json.preprocessSpanishNumbers
 import net.canvoki.carburoid.product.ProductManager
 import org.junit.After
 import org.junit.Assert.assertEquals
