@@ -2,11 +2,18 @@ package net.canvoki.carburoid
 
 import androidx.test.platform.app.InstrumentationRegistry
 import net.canvoki.carburoid.model.GasStationResponse
+import net.canvoki.carburoid.model.SpanishGasStationResponse
 import org.junit.Test
 import java.io.File
 import java.time.Instant
 
-class LoadBenchmarkTest {
+open class LoadBenchmarkGsonTest {
+
+    open fun parse(jsonContent: String): Int {
+        val response = GasStationResponse.parse(jsonContent)
+        return response.stations.size
+    }
+
     @Test
     fun testParsingPerformance() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -19,9 +26,8 @@ class LoadBenchmarkTest {
 
         repeat(iterations) {
             val startTime = System.currentTimeMillis()
-            val response = GasStationResponse.parse(jsonContent)
+            size = parse(jsonContent)
             val endTime = System.currentTimeMillis()
-            size = response?.stations?.size ?: 0
             times.add(endTime - startTime)
             log("Iteration $it: ${endTime - startTime}ms, stations: $size")
         }
@@ -30,7 +36,7 @@ class LoadBenchmarkTest {
         val minTime = times.minOrNull()
         val maxTime = times.maxOrNull()
 
-        log("Parsing stats:")
+        log("Parsing stats: $this")
         log("  Average: ${avgTime}ms")
         log("  Min: ${minTime}ms")
         log("  Max: ${maxTime}ms")
@@ -53,5 +59,12 @@ class LoadBenchmarkTest {
 
         // Mostra el contingut acumulat del fitxer
         log("BENCHMARK_RESULTS: " + resultLine)
+    }
+}
+
+class LoadBenchmarkKSerialTest: LoadBenchmarkGsonTest() {
+    override fun parse(jsonContent: String): Int {
+        val response = SpanishGasStationResponse.parse(jsonContent)
+        return response.stations.size
     }
 }
