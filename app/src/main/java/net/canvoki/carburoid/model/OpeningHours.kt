@@ -325,7 +325,7 @@ class OpeningHours {
             }
 
             for ((start, end) in dayIntervals) {
-                if (start != closingAt && start != closingAt?.plusMinutes(1)) {
+                if (start != closingAt && start != closingAt.plusMinutes(1)) {
                     // Gap detected
                     return closingDay to closingAt
                 }
@@ -444,7 +444,7 @@ class OpeningHours {
 
             if (parts.size == 1) return listOf(start)
 
-            val end = parts[1]?.let { parseDayShort(it) }
+            val end = parseDayShort(parts.get(1))
             val allDays = DayOfWeek.values().toList()
             val startIndex = allDays.indexOf(start)
             val endIndex = allDays.indexOf(end)

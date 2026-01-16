@@ -203,7 +203,7 @@ class LocationService(
                             address.locality,
                             address.adminArea,
                             address.countryName,
-                        ).filter { it?.isNotBlank() == true }.joinToString(", ")
+                        ).filter { it.isNotBlank() == true }.joinToString(", ")
                     }
                 }
             } catch (e: Exception) {

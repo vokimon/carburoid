@@ -47,7 +47,7 @@ class StationFilter(
 
             var status = station.openStatus(Instant.now())
             if (config.hideClosedMarginInMinutes < 7 * 24 * 60) {
-                if (status?.isOpen != true) {
+                if (status.isOpen != true) {
                     if (status.until == null) {
                         //log("Filtered permanently closed station ${station.name} ${station.city}")
                         continue
