@@ -35,8 +35,10 @@ run ./gradlew assembleFlossDebug &&
 # ./gradlew wrapper --gradle-version=8.14.3 --distribution-type=all
 
 # Fresh data
-# curl https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/ > devdata/stations-$(date -uI minutes).yaml
+# curl https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/ > devdata/stations-$(date -uI minutes).json
 
+# Fresh french data
+# curl https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/records?limit=-1 > devdata/stations-france-$(date -uI minutes).json
 
 # Product Frequencies
 # yq . devdata/stations-example-full.json | grep Precio | grep -v \"\" | sed 's/":.*//' | sed 's/.*Precio //' | sort | uniq -c | sort -n

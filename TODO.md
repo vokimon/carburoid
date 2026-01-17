@@ -76,7 +76,14 @@ Do you want to help? This is my roadmap.
 - [ ] Other Countries:
     - Listing (most outdated but gives clues): https://geoportalgasolineras.es/geoportal-instalaciones/GeoportalesEuropeos
     - Portugal (portal, not api): https://precoscombustiveis.dgeg.gov.pt/
-
+    - Germany: https://creativecommons.tankerkoenig.de/swagger/
+    - France:
+        - portal: https://www.prix-carburants.gouv.fr/ (portal)
+        - spec: https://www.prix-carburants.gouv.fr/rubrique/opendata/
+        - spec: https://www.data.gouv.fr/datasets/fuel-prices-in-france
+        - url: https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/records?limit=-1&include_links=true&include_app_metas
+        - brand: curl 'https://www.prix-carburants.gouv.fr/map/recuperer_infos_pdv/36100003'   --compressed   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:145.0) Gecko/20100101 Firefox/145.0'   -H 'Accept: */*'   -H 'Accept-Language: ca,en-US;q=0.7,en;q=0.3'   -H 'Accept-Encoding: gzip, deflate, br, zstd'   -H 'Referer: https://www.prix-carburants.gouv.fr/'   -H 'x-requested-with: XMLHttpRequest'   -H 'Connection: keep-alive'   -H 'Cookie: visid_incap_3031704=8zpXEhBVSVKze0FK8gtMwGEwQmkAAAAAQUIPAAAAAAAOkGXNP3/InPIUJGP7EzA+; incap_ses_507_3031704=D401VUe8bVyHuK1lUDoJB8fta2kAAAAAv3xpGGAHh275p+KP92tVMQ==; public=5gkldnq9vn8aek8gcsg97c18ft'   -H 'Sec-Fetch-Dest: empty'   -H 'Sec-Fetch-Mode: cors'   -H 'Sec-Fetch-Site: same-origin'   -H 'Priority: u=4'   -H 'TE: trailers'
+        - station detail page: curl https://www.prix-carburants.gouv.fr/station/36150001
 
 ## Done
 
