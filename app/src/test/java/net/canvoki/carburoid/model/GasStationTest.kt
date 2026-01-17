@@ -350,15 +350,12 @@ open class GasStationTest {
 }
 
 class SpanishGasStationTest : GasStationTest() {
-
     override fun parseResponse(string: String): GasStation {
         val response = SpanishGasStationResponse.parse(string)
         return response.stations.first()
     }
 
-    override fun parseStation(string: String): GasStation {
-        return SpanishGasStation.parse(string)
-    }
+    override fun parseStation(string: String): GasStation = SpanishGasStation.parse(string)
 
     override fun newGasStation(
         id: Int,

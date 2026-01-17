@@ -1,5 +1,10 @@
 # Change log
 
+## Unreleased
+
+- ⚡️ Using a faster data loading library (Gson -> Kotlin Serialization) 20% speed up.
+- ♻️  API format abstraction. A step towards supporting for other countries.
+
 ## 1.3.3 (2026-01-15)
 
 Main screen migrated to Compose plus visual and UX improvements

@@ -8,7 +8,6 @@ import java.io.File
 import java.time.Instant
 
 open class LoadBenchmarkGsonTest {
-
     open fun parse(jsonContent: String): Int {
         val response = GasStationResponse.parse(jsonContent)
         return response.stations.size
@@ -20,7 +19,7 @@ open class LoadBenchmarkGsonTest {
         val inputStream = context.resources.openRawResource(R.raw.sample_gas_stations)
         val jsonContent = inputStream.bufferedReader().use { it.readText() }
 
-        val iterations = 1
+        val iterations = 10
         val times = mutableListOf<Long>()
         var size = 0
 
@@ -62,7 +61,7 @@ open class LoadBenchmarkGsonTest {
     }
 }
 
-class LoadBenchmarkKSerialTest: LoadBenchmarkGsonTest() {
+class LoadBenchmarkKSerialTest : LoadBenchmarkGsonTest() {
     override fun parse(jsonContent: String): Int {
         val response = SpanishGasStationResponse.parse(jsonContent)
         return response.stations.size

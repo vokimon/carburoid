@@ -5,7 +5,11 @@ Do you want to help? This is my roadmap.
 - [x] Fix: In Landscape, empty List does not expands as cool as Loading list does.
 - [ ] Fix: If resolved location description is the same, the icon keeps loading
 - [ ] The Data loader pill and the snackbar compete vor the lower part of screeen
+    - Benchmark: ~28xx ms en el FP4
 - [ ] Data loading performance: Use kotlin serialization instead of gson
+    - [x] Split interface and gson implementation
+    - [x] Create a Kotlin Serialization version to GSon -> Works but slower
+    - [x] Optimize Kotlin Serialization version -> Now 20% faster than GSon
 - [ ] Support other countries
     - [ ] Split GasStation, the interface, and SpanishGasStation the implementation with deserialization logic
     - [ ] Support for different ProductCatalogs

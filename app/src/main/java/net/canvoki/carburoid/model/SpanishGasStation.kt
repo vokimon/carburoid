@@ -3,13 +3,19 @@ package net.canvoki.carburoid.model
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.Transient
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.buildClassSerialDescriptor
+import kotlinx.serialization.descriptors.element
 import kotlinx.serialization.encodeToString
+import kotlinx.serialization.encoding.CompositeDecoder
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.encoding.decodeStructure
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonEncoder
@@ -118,9 +124,7 @@ data class SpanishGasStationResponse(
     @Serializable(with = SpanishDateTypeSerializer::class)
     val downloadDate: Instant? = null,
 ) {
-    fun toJson(): String {
-        return postprocessSpanishNumbers(json.encodeToString(this))
-    }
+    fun toJson(): String = postprocessSpanishNumbers(json.encodeToString(this))
 
     companion object {
         fun parse(jsonStr: String): SpanishGasStationResponse {
@@ -171,18 +175,16 @@ data class SpanishGasStation(
 
     companion object {
         fun parse(jsonStr: String): SpanishGasStation {
-            val preprocessed =
-                timeits("PREPROCESSAT SINGLE STATION") { preprocessSpanishNumbers(jsonStr) }
-            return timeits("PARSE SINGLE STATION") {
-                json.decodeFromString(SpanishGasStationSerializer, preprocessed)
-            }
+            val preprocessed = preprocessSpanishNumbers(jsonStr)
+            return json.decodeFromString(SpanishGasStationSerializer, preprocessed)
         }
     }
 }
 
 object SpanishGasStationSerializer : KSerializer<SpanishGasStation> {
+    const val PRICE_PREFIX = "Precio "
+
     val delegate = SpanishGasStation.serializer()
-    val pricePrefix = "Precio "
 
     override val descriptor = delegate.descriptor
 
@@ -190,25 +192,56 @@ object SpanishGasStationSerializer : KSerializer<SpanishGasStation> {
         val jsonDecoder = decoder as JsonDecoder
         val obj = jsonDecoder.decodeJsonElement().jsonObject
 
-        // Decode annotated fields
-        val base = jsonDecoder.json.decodeFromJsonElement(delegate, obj)
+        // Extract fixed fields manually
+        val id =
+            obj["IDEESS"]?.jsonPrimitive?.content?.toInt()
+                ?: throw IllegalArgumentException("Missing IDEESS")
 
-        // Extract dynamic prices
-        val prices =
-            buildMap<String, Double?> {
-                obj.forEach { (key, value) ->
-                    if (key.startsWith(pricePrefix)) {
-                        val product = key.removePrefix(pricePrefix)
-                        put(
-                            product,
-                            value.jsonPrimitive.content
-                                .replace(",", ".")
-                                .toDoubleOrNull(),
-                        )
-                    }
-                }
+        val name = obj["Rótulo"]?.jsonPrimitive?.content
+        val address = obj["Dirección"]?.jsonPrimitive?.content
+        val city = obj["Localidad"]?.jsonPrimitive?.content
+        val state = obj["Provincia"]?.jsonPrimitive?.content
+
+        val latitude =
+            obj["Latitud"]
+                ?.jsonPrimitive
+                ?.content
+                ?.toDoubleOrNull()
+
+        val longitude =
+            obj["Longitud (WGS84)"]
+                ?.jsonPrimitive
+                ?.content
+                ?.toDoubleOrNull()
+
+        val saleType = obj["Tipo Venta"]?.jsonPrimitive?.content ?: "P"
+        val isPublicPrice = saleType.uppercase() == "P"
+
+        val rawOpeningHours = obj["Horario"]?.jsonPrimitive?.content ?: "L-D: 24H"
+        val openingHours = OpeningHours.parse(rawOpeningHours)
+
+        // Extract prices
+        val prices = mutableMapOf<String, Double?>()
+        for ((key, value) in obj) {
+            if (key.startsWith(PRICE_PREFIX)) {
+                val product = key.removePrefix(PRICE_PREFIX)
+                val price = value.jsonPrimitive.content.toDoubleOrNull()
+                prices[product] = price
             }
-        return base.copy(prices = prices)
+        }
+
+        return SpanishGasStation(
+            id = id,
+            name = name,
+            address = address,
+            city = city,
+            state = state,
+            latitude = latitude,
+            longitude = longitude,
+            isPublicPrice = isPublicPrice,
+            openingHours = openingHours,
+            prices = prices,
+        )
     }
 
     override fun serialize(
@@ -218,12 +251,13 @@ object SpanishGasStationSerializer : KSerializer<SpanishGasStation> {
         val jsonEncoder = encoder as JsonEncoder
         // Encode annotated fields
         val baseObject = jsonEncoder.json.encodeToJsonElement(delegate, value).jsonObject
+        // Extract dynamic prices
         val fullObject =
             buildJsonObject {
                 baseObject.forEach { (k, v) -> put(k, v) }
                 value.prices.forEach { (product, price) ->
-                    if (price !==null) {
-                        put(pricePrefix + product, JsonPrimitive(price.toString()))
+                    if (price !== null) {
+                        put(PRICE_PREFIX + product, JsonPrimitive(price.toString()))
                     }
                 }
             }
