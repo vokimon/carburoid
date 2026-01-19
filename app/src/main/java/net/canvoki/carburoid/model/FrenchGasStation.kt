@@ -80,7 +80,7 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
 
         // Parse ID (integer from string content)
         val id = obj["id"]?.jsonPrimitive?.content?.toInt() ?: error("Missing id")
-        val name = id.toString()
+        val name = id.toString() // TODO: Obtain name
         val address = obj["adresse"]?.jsonPrimitive?.content
         val city = obj["ville"]?.jsonPrimitive?.content
         val state = obj["departement"]?.jsonPrimitive?.content
@@ -99,7 +99,7 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
                 ?.toLongOrNull()
                 ?.let { it / 100000.0 }
 
-        // Temporary: all stations open 24/7
+        // TODO: Parse french format for opening hours
         val openingHours = OpeningHours.parse("L-D: 24H")
 
         // Extract prices: any field ending with "_prix"
