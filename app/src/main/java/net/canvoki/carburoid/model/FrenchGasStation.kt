@@ -49,11 +49,12 @@ data class FrenchGasStationResponse(
 data class FrenchGasStation(
     override val id: Int,
     override val name: String?,
+    override val latitude: Double?,
+    override val longitude: Double?,
     override val address: String?,
     override val city: String?,
     override val state: String?,
-    override val latitude: Double?,
-    override val longitude: Double?,
+    @Transient
     override val openingHours: OpeningHours?,
     @Transient
     override val prices: Map<String, Double?> = emptyMap(),
@@ -137,9 +138,9 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
                 value.address?.let { put("adresse", JsonPrimitive(it)) }
                 value.city?.let { put("ville", JsonPrimitive(it)) }
                 value.state?.let { put("departement", JsonPrimitive(it)) }
-                value.latitude?.let { put("latitude", JsonPrimitive((it * 100000).toLong())) }
-                value.longitude?.let { put("longitude", JsonPrimitive((it * 100000).toLong())) }
-                put("horaires_jour", JsonPrimitive("L-D: 24H"))
+                value.latitude?.let { put("latitude", JsonPrimitive((it * 100_000).toLong().toString())) }
+                value.longitude?.let { put("longitude", JsonPrimitive((it * 100_000).toLong().toString())) }
+                //put("horaires_jour", JsonPrimitive("L-D: 24H"))
                 for ((product, price) in value.prices) {
                     if (price != null) {
                         put("${product}_prix", JsonPrimitive(price))
