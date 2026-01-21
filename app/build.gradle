@@ -137,36 +137,36 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.13.0'
-    implementation "androidx.activity:activity-compose"
-    implementation "androidx.compose.ui:ui"
-    implementation "androidx.compose.material3:material3"
-    implementation "androidx.compose.ui:ui-tooling-preview"
+    implementation 'androidx.activity:activity-compose'
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-    implementation "androidx.datastore:datastore-preferences:1.2.0"
+    implementation 'androidx.datastore:datastore-preferences:1.2.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.9.4'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation 'com.squareup.retrofit2:retrofit:3.0.0'
     implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
     implementation 'com.squareup.retrofit2:converter-scalars:3.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:latest'
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:latest"
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:latest'
     implementation 'org.osmdroid:osmdroid-android:6.1.20'
     implementation 'org.osmdroid:osmdroid-wms:6.1.20'
     implementation 'io.github.koalaplot:koalaplot-core-android:0.10.4'
 
-    debugImplementation "androidx.compose.ui:ui-tooling"
+    debugImplementation 'androidx.compose.ui:ui-tooling'
 
     nonfreeImplementation 'com.google.android.gms:play-services-location:21.3.0'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'com.google.code.gson:gson:2.13.2'
-    testImplementation "io.mockk:mockk:1.14.6"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:latest"
-    testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:latest")
-    testImplementation "org.jetbrains.kotlin:kotlin-test:latest"
-    testImplementation "org.robolectric:robolectric:4.16"
+    testImplementation 'io.mockk:mockk:1.14.6'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:latest'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:latest'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test:latest'
+    testImplementation 'org.robolectric:robolectric:4.16'
 
-    androidTestImplementation "androidx.test:core:1.7.0"
+    androidTestImplementation 'androidx.test:core:1.7.0'
     androidTestImplementation 'androidx.test.ext:junit:1.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:latest"
