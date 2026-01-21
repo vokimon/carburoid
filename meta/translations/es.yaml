@@ -3,12 +3,9 @@ splash_motto: Llena al mejor precio, más cerca
 short_description: Encuentra gasolineras en España por precio y distancia
 full_description_md: |+
   Carburoid muestra solo las gasolineras que merecen consideración.
-  Oculta una gasolinera si hay otra a la vez más barata y cercana.
-  Esto reduce la lista de decenas de miles a solo unas pocas docenas de opciones relevantes.
-
-  La primera es la más cercana.
-  Según bajas, se reduce el precio pero estarán más lejos.
-  Puedes dejar de bajar cuando la distancia no te compense el ahorro.
+  Ordenadas por distancia, si una gasolinera es más cara que las más cercanas, no se muestra.
+  Esto reduce la lista de miles a unas docenas.
+  Para escoger una, solo baja en la lista para mejorar el precio hasta que la distancia no te compense.
 
   Funcionalidades:
 

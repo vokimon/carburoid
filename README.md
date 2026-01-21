@@ -10,12 +10,9 @@
 Find Spanish gas stations by price and distance.
 
 Carburoid shows only gas stations worth considering.
-A station is hidden if there’s any another one that is both cheaper and closer.
-This trims the list from tens of thousands down to just a few dozen truly relevant options.
-
-The first station on the list is the closest one.
-As you scroll down stations are farther and but also cheaper.
-You can stop scrolling when the distance is not worth for you the saving.
+Sorted by distance, whenever a station is more expensive than the closer ones, it is hidden.
+This reduces the list from thousands to a few dozens.
+To choose a station, just scroll down to improve the price until the distance is not worth for you the saving.
 
 Features:
 
