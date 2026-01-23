@@ -22,6 +22,20 @@ class FrenchGasStationTest {
         return result
     }
 
+    private fun assertJsonEqual(
+        expected: String,
+        result: String,
+    ) {
+        assertEquals(canonicalizeJson(expected), canonicalizeJson(result))
+    }
+
+    private fun assertDataEqual(
+        expected: Any,
+        result: Any,
+    ) {
+        assertEquals(expected.toString(), result.toString())
+    }
+
     private fun baseCase(
         id: Int = 77170013,
         latitude: Double? = 48.70100,
@@ -52,52 +66,80 @@ class FrenchGasStationTest {
         city: String? = "Brie-Comte-Robert",
         state: String? = "Seine-et-Marne",
         prices: Map<String, Double> = emptyMap(),
+    ): String =
+        json.encodeToString(
+            JsonObject.serializer(),
+            buildJsonObject {
+                put("id", id)
+                address?.let { put("adresse", it) }
+                city?.let { put("ville", it) }
+                state?.let { put("departement", it) }
+                latitude?.let { put("latitude", it) }
+                longitude?.let { put("longitude", it) }
+                for (product in listOf("gazole", "sp95", "e10")) {
+                    if (product in prices) {
+                        put(product + "_prix", prices[product])
+                    }
+                }
+            },
+        )
 
-    ): String = json.encodeToString(JsonObject.serializer(), buildJsonObject {
-        put("id", id)
-        address?.let { put("adresse", it) }
-        city?.let { put("ville", it) }
-        state?.let { put("departement", it) }
-        latitude?.let { put("latitude", it) }
-        longitude?.let { put("longitude", it) }
-        for (product in listOf("gazole", "sp95", "e10")) {
-            if (product in prices) {
-                put(product + "_prix", prices[product])
-            }
-        }
-    })
-
-    private fun assertParseAs(json: String, expected: FrenchGasStation) {
-        assertEquals(
-            canonicalizeJson(json),
-            canonicalizeJson(expected.toJson()),
+    @Test
+    fun `French Station dumping basic case`() {
+        val json = baseCase().toJson()
+        assertJsonEqual(
+            expected = frenchStationJson(),
+            result = json,
         )
     }
-
 
     @Test
     fun `French Station parsing basic case`() {
-        assertParseAs(frenchStationJson(), baseCase())
-    }
-
-    @Test
-    fun `French Station parsing fields as null`() {
-        assertParseAs(frenchStationJson(city = null), baseCase(city = null))
-    }
-
-    @Test
-    fun `French Station parsing prices`() {
-        assertParseAs(
-            frenchStationJson(prices = mapOf("gazole" to 1.2)),
-            baseCase(prices = mapOf("gazole" to 1.2)),
+        val json = frenchStationJson()
+        val read = FrenchGasStation.parse(json)
+        assertDataEqual(
+            result = read,
+            expected = baseCase(),
         )
     }
 
     @Test
-    fun `French Station dumps basic case`() {
-        assertEquals(
-            baseCase().toJson(),
-            frenchStationJson(),
+    fun `French Station dump skips null fields`() {
+        val json = baseCase(city = null).toJson()
+        assertJsonEqual(
+            expected = frenchStationJson(city = null),
+            result = json,
+        )
+    }
+
+    @Test
+    fun `French Station parsing sets missing fields null`() {
+        val json = frenchStationJson(city = null)
+        val read = FrenchGasStation.parse(json)
+        assertDataEqual(
+            result = read,
+            expected = baseCase(city = null),
+        )
+    }
+
+    @Test
+    fun `French Station dump adds _prix suffix to product prices`() {
+        val prices = mapOf("gazole" to 1.2)
+        val json = baseCase(prices = prices).toJson()
+        assertJsonEqual(
+            expected = frenchStationJson(prices = prices),
+            result = json,
+        )
+    }
+
+    @Test
+    fun `French Station parsing collects _prix suffixed as product map price`() {
+        val prices = mapOf("gazole" to 1.2)
+        val json = frenchStationJson(prices = prices)
+        val read = FrenchGasStation.parse(json)
+        assertDataEqual(
+            result = read,
+            expected = baseCase(prices = prices),
         )
     }
 
@@ -127,22 +169,28 @@ class FrenchGasStationTest {
 
     // Response
 
-    private fun assertJsonEqual(result: String, expected: String) {
-        assertEquals(canonicalizeJson(result), canonicalizeJson(expected))
+    @Test
+    fun `French response dump renames attribute stations to results`() {
+        val response =
+            FrenchGasStationResponse(
+                stations =
+                    listOf(
+                        baseCase(),
+                    ),
+            )
+        assertJsonEqual(
+            expected = "{\"results\": [${ frenchStationJson() }]}",
+            result = response.toJson(),
+        )
     }
 
     @Test
-    fun `French response`() {
-        val response = FrenchGasStationResponse(
-            stations = listOf(
-                baseCase(),
-            ),
-        )
-        assertJsonEqual(
-            "{\"results\": [${ frenchStationJson() }]}",
-            response.toJson(),
+    fun `French response parse`() {
+        val json = "{\"results\": [${ frenchStationJson() }]}"
+        val result = FrenchGasStationResponse.parse(json)
+        assertDataEqual(
+            expected = FrenchGasStationResponse(stations = listOf(baseCase())),
+            result = result,
         )
     }
-   
-
 }
