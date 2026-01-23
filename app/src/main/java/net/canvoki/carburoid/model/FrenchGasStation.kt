@@ -14,6 +14,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.SerialName
 import net.canvoki.carburoid.timeits
 import java.time.ZoneId
 
@@ -29,7 +30,7 @@ private val json by lazy {
 
 @Serializable
 data class FrenchGasStationResponse(
-    val totalCount: Int,
+    @SerialName("results")
     val stations: List<
         @Serializable(with = FrenchGasStationSerializer::class)
         FrenchGasStation,

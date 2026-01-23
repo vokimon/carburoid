@@ -15,6 +15,12 @@ private val json by lazy {
 }
 
 class FrenchGasStationTest {
+    private fun canonicalizeJson(json: String): String {
+        //print("Original:\n$json\n")
+        val result = Json.parseToJsonElement(json).toString()
+        //print("Canonical:\n$result\n")
+        return result
+    }
 
     private fun baseCase(
         id: Int = 77170013,
@@ -62,7 +68,10 @@ class FrenchGasStationTest {
     })
 
     private fun assertParseAs(json: String, expected: FrenchGasStation) {
-        assertEquals(FrenchGasStation.parse(json).toString(), expected.toString())
+        assertEquals(
+            canonicalizeJson(json),
+            canonicalizeJson(expected.toJson()),
+        )
     }
 
 
@@ -115,4 +124,25 @@ class FrenchGasStationTest {
         val station = baseCase()
         assertEquals("Europe/Paris", station.timeZone().id)
     }
+
+    // Response
+
+    private fun assertJsonEqual(result: String, expected: String) {
+        assertEquals(canonicalizeJson(result), canonicalizeJson(expected))
+    }
+
+    @Test
+    fun `French response`() {
+        val response = FrenchGasStationResponse(
+            stations = listOf(
+                baseCase(),
+            ),
+        )
+        assertJsonEqual(
+            "{\"results\": [${ frenchStationJson() }]}",
+            response.toJson(),
+        )
+    }
+   
+
 }
