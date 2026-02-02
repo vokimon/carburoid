@@ -37,7 +37,7 @@ data class GasStationResponseGson(
     @SerializedName("Fecha")
     @JsonAdapter(SpanishDateTypeAdapter::class)
     override val downloadDate: Instant? = null,
-): GasStationResponse {
+) : GasStationResponse {
     fun toJson(): String = postprocessSpanishNumbers(gson.toJson(this))
 
     companion object {

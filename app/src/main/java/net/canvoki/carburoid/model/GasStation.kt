@@ -57,4 +57,3 @@ interface GasStationResponse {
     val downloadDate: Instant?
         get() = Instant.now()
 }
-
