@@ -153,6 +153,9 @@ dependencies {
     implementation 'org.osmdroid:osmdroid-android:6.1.20'
     implementation 'org.osmdroid:osmdroid-wms:6.1.20'
     implementation 'io.github.koalaplot:koalaplot-core-android:0.10.4'
+    implementation("io.ktor:ktor-client-core:3.4.0")
+    implementation("io.ktor:ktor-client-cio:3.4.0")
+    implementation("io.ktor:ktor-client-content-negotiation:3.4.0")
 
     debugImplementation 'androidx.compose.ui:ui-tooling'
 

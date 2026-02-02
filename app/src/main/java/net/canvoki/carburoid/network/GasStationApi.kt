@@ -1,23 +1,49 @@
 package net.canvoki.carburoid.network
 
-import retrofit2.http.GET
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.call.body
+import io.ktor.client.request.get
 
-// https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/
+
+object HttpClientHolder {
+
+    val client: HttpClient = HttpClient(CIO) {
+        install(HttpTimeout) {
+            requestTimeoutMillis = 30_000
+        }
+    }
+}
 
 interface GasStationApi {
-    @GET("PreciosCarburantes/EstacionesTerrestres/")
     suspend fun getGasStations(): String
 }
 
-object GasStationApiFactory {
-    fun create(): GasStationApi = retrofit.create(GasStationApi::class.java)
+object SpainGasStationApi : GasStationApi {
 
-    private val retrofit =
-        retrofit2.Retrofit
-            .Builder()
-            .baseUrl("https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/")
-            .addConverterFactory(
-                retrofit2.converter.scalars.ScalarsConverterFactory
-                    .create(),
-            ).build()
+    // https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/
+    private const val ENDPOINT =
+        "https://sedeaplicaciones.minetur.gob.es/" +
+        "ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"
+
+    override suspend fun getGasStations(): String {
+        return HttpClientHolder.client
+            .get(ENDPOINT)
+            .body()
+    }
 }
+
+
+object FranceGasStationApi : GasStationApi {
+
+    private const val ENDPOINT = "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/records?limit=-1&include_links=true&include_app_metas"
+
+    override suspend fun getGasStations(): String {
+        return HttpClientHolder.client
+            .get(ENDPOINT)
+            .body()
+    }
+}
+
+

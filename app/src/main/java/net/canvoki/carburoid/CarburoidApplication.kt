@@ -4,8 +4,8 @@ import android.app.Application
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import net.canvoki.carburoid.country.CountryRegistry
 import net.canvoki.carburoid.location.LocationService
-import net.canvoki.carburoid.network.GasStationApiFactory
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.ui.settings.LanguageSettings
 import net.canvoki.carburoid.ui.settings.ThemeSettings
@@ -43,7 +43,8 @@ class CarburoidApplication : Application() {
     }
 
     fun setupRepository(): GasStationRepository {
-        val api = GasStationApiFactory.create()
+        val country = CountryRegistry.getCountry("ES")
+        val api = country.api
         val repository =
             GasStationRepository(
                 api = api,
