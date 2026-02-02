@@ -28,7 +28,39 @@ object ProductCatalog {
     typealias Product = net.canvoki.carburoid.product.Product
     typealias ProductCategory = net.canvoki.carburoid.product.ProductCategory
 
-    val categories: List<ProductCategory> by lazy {
+    private var provider: ProductCatalogProvider = SpainProductCatalog
+
+    val categories: List<ProductCategory> get() = provider.categories
+
+    val availableProducts: Set<String> by lazy {
+        categories
+            .asSequence()
+            .flatMap { it.products.asSequence() }
+            .map { it.apiName }
+            .toSet()
+    }
+
+    private val productMap: Map<String, Product> by lazy {
+        categories.flatMap { it.products }.associateBy { it.apiName }
+    }
+
+    fun productName(
+        apiName: String,
+        context: Context,
+    ): String {
+        val product = productMap[apiName]
+        return product?.name?.let { context.getString(it) } ?: apiName
+    }
+
+    @Composable
+    fun productName(apiName: String): String {
+        val product = productMap[apiName]
+        return product?.name?.let { stringResource(it) } ?: apiName
+    }
+}
+
+object SpainProductCatalog : ProductCatalogProvider {
+    override val categories: List<ProductCategory> by lazy {
         listOf(
             ProductCategory(
                 name = R.string.product_category_additives,
@@ -79,33 +111,8 @@ object ProductCatalog {
             ),
         )
     }
-
-    val availableProducts: Set<String> by lazy {
-        categories
-            .asSequence()
-            .flatMap { it.products.asSequence() }
-            .map { it.apiName }
-            .toSet()
-    }
-
-    private val productMap: Map<String, Product> by lazy {
-        categories.flatMap { it.products }.associateBy { it.apiName }
-    }
-
-    fun productName(
-        apiName: String,
-        context: Context,
-    ): String {
-        val product = productMap[apiName]
-        return product?.name?.let { context.getString(it) } ?: apiName
-    }
-
-    @Composable
-    fun productName(apiName: String): String {
-        val product = productMap[apiName]
-        return product?.name?.let { stringResource(it) } ?: apiName
-    }
 }
+
 
 @Composable
 fun translateProductName(apiName: String): String = ProductCatalog.productName(apiName)
