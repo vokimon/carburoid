@@ -4,8 +4,8 @@ package net.canvoki.carburoid.country
 object CountryRegistry {
     private val providers: Map<String, CountryImplementation> =
         mapOf(
-            "ES" to SpainImplementation(),
-            "FR" to FranceImplementation(),
+            "ES" to SpainImplementation,
+            "FR" to FranceImplementation,
         )
 
     fun getCountry(countryCode: String): CountryImplementation = providers[countryCode] ?: providers["ES"]!!
