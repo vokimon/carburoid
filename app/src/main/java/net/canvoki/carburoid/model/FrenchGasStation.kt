@@ -92,13 +92,13 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
             obj["latitude"]
                 ?.jsonPrimitive
                 ?.content
-                ?.toLongOrNull()
+                ?.toDoubleOrNull()
                 ?.let { it / 100000.0 }
         val longitude =
             obj["longitude"]
                 ?.jsonPrimitive
                 ?.content
-                ?.toLongOrNull()
+                ?.toDoubleOrNull()
                 ?.let { it / 100000.0 }
 
         // TODO: Parse french format for opening hours
