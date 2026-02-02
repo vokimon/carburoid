@@ -26,7 +26,7 @@ open class GasStationTest {
     }
 
     open fun parseResponse(string: String): GasStation {
-        val response = GasStationResponse.parse(string)
+        val response = GasStationResponseGson.parse(string)
         return response.stations.first()
     }
 

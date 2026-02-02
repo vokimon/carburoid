@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
+import net.canvoki.carburoid.model.SpanishGasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
 import net.canvoki.carburoid.nolog
 import net.canvoki.carburoid.timeit
@@ -33,7 +34,7 @@ class GasStationRepository(
     private val cacheFile: File,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
     private val parser: Parser? = { json ->
-        GasStationResponse.parse(json)
+        SpanishGasStationResponse.parse(json)
     },
 ) {
     companion object {

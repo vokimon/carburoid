@@ -48,6 +48,7 @@ class CarburoidApplication : Application() {
         val repository =
             GasStationRepository(
                 api = api,
+                parser = { json -> country.parse(json) },
                 cacheFile = cacheFile,
                 scope = appScope,
             )

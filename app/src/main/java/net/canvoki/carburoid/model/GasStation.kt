@@ -51,3 +51,10 @@ abstract class BaseGasStation : GasStation {
         _distanceInMeters = CurrentDistancePolicy.getDistance(this)
     }
 }
+
+interface GasStationResponse {
+    val stations: List<GasStation>
+    val downloadDate: Instant?
+        get() = Instant.now()
+}
+

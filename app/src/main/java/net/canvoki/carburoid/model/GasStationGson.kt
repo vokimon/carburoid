@@ -31,23 +31,23 @@ private val gson: Gson by lazy {
         ).create()
 }
 
-data class GasStationResponse(
+data class GasStationResponseGson(
     @SerializedName("ListaEESSPrecio")
-    val stations: List<GasStationGson>,
+    override val stations: List<GasStationGson>,
     @SerializedName("Fecha")
     @JsonAdapter(SpanishDateTypeAdapter::class)
-    val downloadDate: Instant? = null,
-) {
+    override val downloadDate: Instant? = null,
+): GasStationResponse {
     fun toJson(): String = postprocessSpanishNumbers(gson.toJson(this))
 
     companion object {
-        fun parse(json: String): GasStationResponse {
+        fun parse(json: String): GasStationResponseGson {
             val preprocessed =
                 timeits("PREPROCESSAT") {
                     preprocessSpanishNumbers(json)
                 }
             return timeits("PARSE") {
-                gson.fromJson(preprocessed, GasStationResponse::class.java)
+                gson.fromJson(preprocessed, GasStationResponseGson::class.java)
             }
         }
     }

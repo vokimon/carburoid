@@ -114,16 +114,16 @@ object NullableStringSerializer : NullableSerializer<String>(
 )
 
 @Serializable
-data class SpanishGasStationResponse(
+data class SpanishGasStationResponse (
     @SerialName("ListaEESSPrecio")
-    val stations: List<
+    override val stations: List<
         @Serializable(with = SpanishGasStationSerializer::class)
         SpanishGasStation,
     >,
     @SerialName("Fecha")
     @Serializable(with = SpanishDateTypeSerializer::class)
-    val downloadDate: Instant? = null,
-) {
+    override val downloadDate: Instant? = null,
+): GasStationResponse {
     fun toJson(): String = postprocessSpanishNumbers(json.encodeToString(this))
 
     companion object {

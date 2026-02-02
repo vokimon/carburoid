@@ -29,13 +29,13 @@ private val json by lazy {
 }
 
 @Serializable
-data class FrenchGasStationResponse(
+data class FrenchGasStationResponse (
     @SerialName("results")
-    val stations: List<
+    override val stations: List<
         @Serializable(with = FrenchGasStationSerializer::class)
         FrenchGasStation,
     >,
-) {
+): GasStationResponse {
     fun toJson(): String = json.encodeToString(FrenchGasStationResponse.serializer(), this)
 
     companion object {
