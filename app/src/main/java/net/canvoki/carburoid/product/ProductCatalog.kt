@@ -6,16 +6,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import net.canvoki.carburoid.R
 
-object ProductCatalog {
-    data class Product(
-        val apiName: String,
-        @field:StringRes val name: Int? = null,
-    )
+interface ProductCatalogProvider {
+    val categories: List<ProductCategory>
+    val availableProducts: Set<String>
+        get() = categories.flatMap { it.products }.map { it.apiName }.toSet()
+    val productMap: Map<String, Product>
+        get() = categories.flatMap { it.products }.associateBy { it.apiName }
+}
 
-    data class ProductCategory(
-        @field:StringRes val name: Int,
-        val products: List<Product>,
-    )
+data class Product(
+    val apiName: String,
+    @field:StringRes val name: Int? = null,
+)
+
+data class ProductCategory(
+    @field:StringRes val name: Int,
+    val products: List<Product>,
+)
+
+object ProductCatalog {
+    typealias Product = net.canvoki.carburoid.product.Product
+    typealias ProductCategory = net.canvoki.carburoid.product.ProductCategory
 
     val categories: List<ProductCategory> by lazy {
         listOf(
