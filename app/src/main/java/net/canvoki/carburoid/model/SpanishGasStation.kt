@@ -120,9 +120,6 @@ data class SpanishGasStationResponse(
         @Serializable(with = SpanishGasStationSerializer::class)
         SpanishGasStation,
     >,
-    @SerialName("Fecha")
-    @Serializable(with = SpanishDateTypeSerializer::class)
-    override val downloadDate: Instant? = null,
 ) : GasStationResponse {
     fun toJson(): String = postprocessSpanishNumbers(json.encodeToString(this))
 

@@ -34,9 +34,6 @@ private val gson: Gson by lazy {
 data class GasStationResponseGson(
     @SerializedName("ListaEESSPrecio")
     override val stations: List<GasStationGson>,
-    @SerializedName("Fecha")
-    @JsonAdapter(SpanishDateTypeAdapter::class)
-    override val downloadDate: Instant? = null,
 ) : GasStationResponse {
     fun toJson(): String = postprocessSpanishNumbers(gson.toJson(this))
 

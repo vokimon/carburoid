@@ -111,10 +111,11 @@ class GasStationRepository(
 
     fun isExpired(): Boolean {
         val p = parsed ?: return true
-        val date = p.downloadDate ?: return true
+        val cacheInstant =
+            Instant.ofEpochMilli(cacheFile.lastModified())
 
         val deadline = Instant.now().minus(Duration.ofMinutes(MINUTES_TO_EXPIRE))
-        if (date <= deadline) return true
+        if (cacheInstant <= deadline) return true
         // up-to-date cache
         return false
     }

@@ -54,6 +54,4 @@ abstract class BaseGasStation : GasStation {
 
 interface GasStationResponse {
     val stations: List<GasStation>
-    val downloadDate: Instant?
-        get() = Instant.now()
 }

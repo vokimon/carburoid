@@ -509,9 +509,12 @@ class GasStationRepositoryTest {
         val response =
             GasStationResponseGson(
                 stations = emptyList(),
-                downloadDate = downloadDate,
             )
         cacheFile.writeText(Gson().toJson(response))
+
+        if (downloadDate != null) {
+            cacheFile.setLastModified(downloadDate.toEpochMilli())
+        }
     }
 
     @Test
@@ -529,15 +532,6 @@ class GasStationRepositoryTest {
             val repository = GasStationRepository(api, cacheFile, this)
 
             assertEquals(false, repository.isExpired())
-        }
-
-    @Test
-    fun `isExpired, true if unknown date`() =
-        runTest {
-            writeCache(null)
-            val repository = GasStationRepository(api, cacheFile, this)
-
-            assertEquals(true, repository.isExpired())
         }
 
     @Test
