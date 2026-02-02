@@ -6,12 +6,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import net.canvoki.carburoid.R
 
-interface ProductCatalogProvider {
-    val categories: List<ProductCategory>
-    val availableProducts: Set<String>
-        get() = categories.flatMap { it.products }.map { it.apiName }.toSet()
-    val productMap: Map<String, Product>
-        get() = categories.flatMap { it.products }.associateBy { it.apiName }
+abstract class ProductCatalogProvider {
+    abstract val categories: List<ProductCategory>
+    val availableProducts: Set<String> by lazy {
+        categories.flatMap { it.products }.map { it.apiName }.toSet()
+    }
+    val productMap: Map<String, Product> by lazy {
+        categories.flatMap { it.products }.associateBy { it.apiName }
+    }
 }
 
 data class Product(
@@ -32,34 +34,24 @@ object ProductCatalog {
 
     val categories: List<ProductCategory> get() = provider.categories
 
-    val availableProducts: Set<String> by lazy {
-        categories
-            .asSequence()
-            .flatMap { it.products.asSequence() }
-            .map { it.apiName }
-            .toSet()
-    }
-
-    private val productMap: Map<String, Product> by lazy {
-        categories.flatMap { it.products }.associateBy { it.apiName }
-    }
+    val availableProducts: Set<String> get() = provider.availableProducts
 
     fun productName(
         apiName: String,
         context: Context,
     ): String {
-        val product = productMap[apiName]
+        val product = provider.productMap[apiName]
         return product?.name?.let { context.getString(it) } ?: apiName
     }
 
     @Composable
     fun productName(apiName: String): String {
-        val product = productMap[apiName]
+        val product = provider.productMap[apiName]
         return product?.name?.let { stringResource(it) } ?: apiName
     }
 }
 
-object SpainProductCatalog : ProductCatalogProvider {
+object SpainProductCatalog : ProductCatalogProvider() {
     override val categories: List<ProductCategory> by lazy {
         listOf(
             ProductCategory(
