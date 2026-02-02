@@ -5,30 +5,11 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import net.canvoki.carburoid.model.OpeningHours
+import net.canvoki.carburoid.test.assertJsonEqual
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-private val json by lazy {
-    Json {
-        prettyPrint = true
-    }
-}
-
 class FrenchGasStationTest {
-    private fun canonicalizeJson(json: String): String {
-        //print("Original:\n$json\n")
-        val result = Json.parseToJsonElement(json).toString()
-        //print("Canonical:\n$result\n")
-        return result
-    }
-
-    private fun assertJsonEqual(
-        expected: String,
-        result: String,
-    ) {
-        assertEquals(canonicalizeJson(expected), canonicalizeJson(result))
-    }
-
     private fun assertDataEqual(
         expected: Any,
         result: Any,
@@ -67,7 +48,7 @@ class FrenchGasStationTest {
         state: String? = "Seine-et-Marne",
         prices: Map<String, Double> = emptyMap(),
     ): String =
-        json.encodeToString(
+        Json.encodeToString(
             JsonObject.serializer(),
             buildJsonObject {
                 put("id", id)
