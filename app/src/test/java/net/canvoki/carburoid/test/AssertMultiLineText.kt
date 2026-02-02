@@ -3,6 +3,10 @@ package net.canvoki.carburoid.test
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.AbstractDelta
 import com.github.difflib.patch.DeltaType
+import org.junit.Assert.assertEquals as standardAssertEquals
+
+// This file defines assertEquals to have a easy to
+// read output for multiline text.
 
 private const val RED = "\u001B[31m❮"
 private const val GREEN = "\u001B[32m❮"
@@ -155,3 +159,36 @@ fun assertEquals(
 
     throw AssertionError(message)
 }
+
+// Example overloads that call JUnit4 assertEquals
+fun assertEquals(
+    expected: Int,
+    actual: Int,
+) = standardAssertEquals(expected, actual)
+
+fun assertEquals(
+    expected: Long,
+    actual: Long,
+) = standardAssertEquals(expected, actual)
+
+fun assertEquals(
+    expected: Boolean,
+    actual: Boolean,
+) = standardAssertEquals(expected, actual)
+
+fun assertEquals(
+    expected: Double,
+    actual: Double,
+    delta: Double,
+) = standardAssertEquals(expected, actual, delta)
+
+fun assertEquals(
+    expected: Float,
+    actual: Float,
+    delta: Float,
+) = standardAssertEquals(expected, actual, delta)
+
+fun <T> assertEquals(
+    expected: T,
+    actual: T,
+) = standardAssertEquals(expected, actual)
