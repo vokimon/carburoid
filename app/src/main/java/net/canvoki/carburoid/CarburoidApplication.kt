@@ -43,7 +43,7 @@ class CarburoidApplication : Application() {
     }
 
     fun setupRepository(): GasStationRepository {
-        val country = CountryRegistry.getCountry("ES")
+        val country = CountryRegistry.current
         val api = country.api
         val repository =
             GasStationRepository(

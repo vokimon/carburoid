@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import net.canvoki.carburoid.R
+import net.canvoki.carburoid.country.CountryRegistry
 
 abstract class ProductCatalogProvider {
     abstract val categories: List<ProductCategory>
@@ -30,7 +31,7 @@ object ProductCatalog {
     typealias Product = net.canvoki.carburoid.product.Product
     typealias ProductCategory = net.canvoki.carburoid.product.ProductCategory
 
-    private var provider: ProductCatalogProvider = SpainProductCatalog
+    private var provider: ProductCatalogProvider = CountryRegistry.current.productCatalog
 
     val categories: List<ProductCategory> get() = provider.categories
 
