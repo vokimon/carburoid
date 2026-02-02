@@ -38,8 +38,8 @@ private val json by lazy {
         ignoreUnknownKeys = true
         explicitNulls = false
         encodeDefaults = true
-        prettyPrint = false // TODO move to true
-        //prettyPrintIndent = "  "
+        prettyPrint = true
+        prettyPrintIndent = "  "
     }
 }
 

@@ -1,6 +1,7 @@
 package net.canvoki.carburoid.model
 
 import net.canvoki.carburoid.product.ProductManager
+import net.canvoki.carburoid.test.assertJsonEqual
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -271,7 +272,7 @@ open class GasStationTest {
         val json = gasStation.toJson()
 
         //println("JSON serialitzat: $json")
-        assertEquals(
+        assertJsonEqual(
             fullJsonCase,
             json,
         )
@@ -295,7 +296,7 @@ open class GasStationTest {
         val json = gasStation.toJson()
 
         //println("JSON serialitzat: $json")
-        assertEquals("""{"IDEESS":1234,"Tipo Venta":"R","Horario":"L-D: 24H"}""", json)
+        assertJsonEqual("""{"IDEESS":1234,"Tipo Venta":"R","Horario":"L-D: 24H"}""", json)
     }
 
     @Test
@@ -316,11 +317,7 @@ open class GasStationTest {
 
         val json = gasStation.toJson()
 
-        //println("JSON serialitzat: $json")
-        assertEquals(
-            fullJsonCase,
-            json,
-        )
+        assertJsonEqual(fullJsonCase, json)
     }
 
     @Test
