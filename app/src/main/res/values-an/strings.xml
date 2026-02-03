@@ -96,4 +96,8 @@
     <string name="location_picker_no_results">No se trobó garra ubicación</string>
     <string name="loading_new_data">Descargando datos nuevos…</string>
     <string name="dialog_accept">Acceptar</string>
+    <string name="settings_country_title">Proveedor de datos</string>
+    <string name="settings_country_summary">Tría o proveedor de datos de precios de carburants</string>
+    <string name="settings_country_es">España</string>
+    <string name="settings_country_fr">Francia</string>
 </resources>

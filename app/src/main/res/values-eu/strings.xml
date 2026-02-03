@@ -96,4 +96,8 @@
     <string name="location_picker_no_results">Ez da kokapenik aurkitu</string>
     <string name="loading_new_data">Datu berriak deskargatzen…</string>
     <string name="dialog_accept">Onartu</string>
+    <string name="settings_country_title">Datu hornitzailea</string>
+    <string name="settings_country_summary">Aukeratu erregaien prezioen datuen hornitzailea</string>
+    <string name="settings_country_es">Espainia</string>
+    <string name="settings_country_fr">Frantzia</string>
 </resources>

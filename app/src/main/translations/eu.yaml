@@ -94,3 +94,7 @@ location_picker_searching: Bilatzen…
 location_picker_no_results: Ez da kokapenik aurkitu
 loading_new_data: Datu berriak deskargatzen…
 dialog_accept: Onartu
+settings_country_title: Datu hornitzailea
+settings_country_summary: Aukeratu erregaien prezioen datuen hornitzailea
+settings_country_es: Espainia
+settings_country_fr: Frantzia

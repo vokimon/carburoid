@@ -94,4 +94,7 @@ location_picker_searching: Searching…
 location_picker_no_results: No locations found
 loading_new_data: Downloading new data…
 dialog_accept: Accept
-
+settings_country_title: Data provider
+settings_country_summary: Select the provider of fuel price data
+settings_country_es: Spain
+settings_country_fr: France

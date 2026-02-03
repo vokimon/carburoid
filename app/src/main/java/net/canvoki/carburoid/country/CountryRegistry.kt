@@ -1,7 +1,7 @@
 package net.canvoki.carburoid.country
 
 object CountryRegistry {
-    private const val DEFAULT_COUNTRY_CODE = "ES"
+    const val DEFAULT_COUNTRY_CODE = "ES"
 
     private val implementations =
         listOf(

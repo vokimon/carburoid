@@ -96,4 +96,8 @@
     <string name="location_picker_no_results">No locations found</string>
     <string name="loading_new_data">Downloading new data…</string>
     <string name="dialog_accept">Accept</string>
+    <string name="settings_country_title">Data provider</string>
+    <string name="settings_country_summary">Select the provider of fuel price data</string>
+    <string name="settings_country_es">Spain</string>
+    <string name="settings_country_fr">France</string>
 </resources>

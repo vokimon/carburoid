@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import net.canvoki.carburoid.country.CountryRegistry
+import net.canvoki.carburoid.country.CountrySettings
 import net.canvoki.carburoid.location.LocationService
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.ui.settings.LanguageSettings
@@ -28,6 +29,7 @@ class CarburoidApplication : Application() {
         super.onCreate()
         LanguageSettings.apply(this)
         ThemeSettings.apply(this)
+        CountrySettings.apply(this)
         setupDebugData()
         repository = setupRepository()
     }

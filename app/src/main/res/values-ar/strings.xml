@@ -96,4 +96,8 @@
     <string name="location_picker_no_results">لم يتم العثور على مواقع</string>
     <string name="loading_new_data">جارٍ تنزيل بيانات جديدة…</string>
     <string name="dialog_accept">قبول</string>
+    <string name="settings_country_title">مزود البيانات</string>
+    <string name="settings_country_summary">اختار الجهة اللي كتوفّر معطيات أسعار الوقود</string>
+    <string name="settings_country_es">إسبانيا</string>
+    <string name="settings_country_fr">فرنسا</string>
 </resources>

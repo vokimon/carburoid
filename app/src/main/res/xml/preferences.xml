@@ -32,6 +32,13 @@
                 android:data="https://hosted.weblate.org/projects/carburoid/carburoid-ui/" />
         </Preference>
 
+        <ListPreference
+            android:key="app_country"
+            android:title="@string/settings_country_title"
+            android:icon="@drawable/ic_system_update_alt"
+            android:summary="@string/settings_country_summary"
+            android:defaultValue="system" />
+
     </PreferenceCategory>
 
     <!-- Group: Station Filtering -->

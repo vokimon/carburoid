@@ -94,3 +94,7 @@ location_picker_searching: Buscando…
 location_picker_no_results: Non se atoparon ubicacións
 loading_new_data: Descargando datos novos…
 dialog_accept: Aceptar
+settings_country_title: Provedor de datos
+settings_country_summary: Selecciona o provedor de datos de prezos dos carburantes
+settings_country_es: España
+settings_country_fr: Francia

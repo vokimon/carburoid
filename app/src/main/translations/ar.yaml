@@ -94,3 +94,7 @@ location_picker_searching: جار البحث…
 location_picker_no_results: لم يتم العثور على مواقع
 loading_new_data: جارٍ تنزيل بيانات جديدة…
 dialog_accept: قبول
+settings_country_title: مزود البيانات
+settings_country_summary: اختار الجهة اللي كتوفّر معطيات أسعار الوقود
+settings_country_es: إسبانيا
+settings_country_fr: فرنسا
