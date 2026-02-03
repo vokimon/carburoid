@@ -4,5 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
-    <!-- Settings will be added here -->
+
+    <!-- Legacy options -->
+    <FrameLayout
+        android:id="@+id/settings_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Current options -->
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose_settings_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
