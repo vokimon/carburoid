@@ -9,7 +9,6 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,9 +33,29 @@ object ThemeSettings {
     private val _themeMode = MutableStateFlow<String?>(null)
     val themeMode: StateFlow<String?> = _themeMode
 
+    private var prefListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
+
+    fun initialize(context: Context) {
+        if (prefListener != null) return
+
+        val prefs = preferences(context)
+        prefListener =
+            SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+                if (key == KEY) {
+                    _themeMode.value = currentValue(context) ?: VALUE_AUTO
+                }
+            }
+        prefs.registerOnSharedPreferenceChangeListener(prefListener)
+
+        _themeMode.value = currentValue(context) ?: VALUE_AUTO
+        apply(context)
+    }
+
     fun registerIn(screen: PreferenceScreen) {
         val context = screen.context
         val themePref = screen.findPreference<ListPreference>(KEY) ?: return
+
+        initialize(context)
 
         updateSummary(themePref, context)
 
@@ -44,7 +63,6 @@ object ThemeSettings {
             val mode = newValue as String
             saveAndApply(context, mode)
             updateSummary(themePref, context)
-            _themeMode.value = mode
             true
         }
     }
@@ -59,9 +77,7 @@ object ThemeSettings {
     }
 
     private fun preferences(context: Context): SharedPreferences =
-        PreferenceManager.getDefaultSharedPreferences(
-            context,
-        )
+        PreferenceManager.getDefaultSharedPreferences(context)
 
     private fun currentValue(context: Context): String? {
         val prefs = preferences(context)
@@ -73,9 +89,7 @@ object ThemeSettings {
         value: String,
     ) {
         val prefs = preferences(context)
-        prefs.edit {
-            putString(KEY, value)
-        }
+        prefs.edit { putString(KEY, value) }
     }
 
     private fun saveAndApply(
@@ -102,7 +116,6 @@ object ThemeSettings {
     @Composable
     fun effectiveColorScheme(): ColorScheme {
         val context = LocalContext.current
-
         val initialMode = remember { currentValue(context) ?: VALUE_AUTO }
         val currentMode by _themeMode.collectAsState(initial = initialMode)
         val isSystemDark = isSystemInDarkTheme()
@@ -123,7 +136,9 @@ object ThemeSettings {
         val context = LocalContext.current
         val resources = context.resources
 
-        var currentValue by remember { mutableStateOf("auto") }
+        val currentValue by _themeMode.collectAsState(
+            initial = currentValue(context),
+        )
 
         val entries = remember(resources) { resources.getStringArray(R.array.theme_entries) }
         val values = remember(resources) { resources.getStringArray(R.array.theme_values) }
@@ -139,8 +154,10 @@ object ThemeSettings {
             summary = summary,
             icon = R.drawable.ic_brightness_medium,
             options = options,
-            value = currentValue,
-            onChange = { currentValue = it },
+            value = currentValue ?: VALUE_AUTO,
+            onChange = { newValue ->
+                saveAndApply(context, newValue)
+            },
         )
     }
 }

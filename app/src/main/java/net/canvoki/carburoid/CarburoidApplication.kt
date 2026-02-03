@@ -28,7 +28,7 @@ class CarburoidApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         LanguageSettings.apply(this)
-        ThemeSettings.apply(this)
+        ThemeSettings.initialize(this)
         CountrySettings.apply(this)
         setupDebugData()
         repository = setupRepository()

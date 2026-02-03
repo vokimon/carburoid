@@ -35,7 +35,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
-import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
 fun LocationSelector(modifier: Modifier = Modifier) {

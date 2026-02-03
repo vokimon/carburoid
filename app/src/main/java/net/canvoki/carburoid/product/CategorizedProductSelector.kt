@@ -30,7 +30,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.canvoki.carburoid.R
-import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
 fun CategorizedProductSelector(modifier: Modifier = Modifier) {
