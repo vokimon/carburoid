@@ -37,6 +37,7 @@
     <!-- Group: Station Filtering -->
     <PreferenceCategory
         android:title="@string/settings_category_station_filters"
+        android:icon="@drawable/ic_filter_alt"
         android:key="category_filtering">
 
         <SwitchPreferenceCompat
