@@ -16,7 +16,6 @@ fun PreferenceCategory(
         text = title,
         style = MaterialTheme.typography.labelLarge,
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.95f),
-        modifier = Modifier.padding(start = 56.dp, top = 24.dp, bottom = 8.dp),
     )
     content()
 }
