@@ -61,11 +61,10 @@ fun ListPreference(
                             modifier =
                                 Modifier
                                     .fillMaxWidth()
-                                    .padding(16.dp)
                                     .clickable {
                                         onChange(optionValue)
                                         showDialog = false
-                                    },
+                                    }.padding(16.dp),
                         ) {
                             RadioButton(
                                 selected = value == optionValue,
