@@ -15,16 +15,19 @@ import java.io.FileNotFoundException
 class CarburoidApplication : Application() {
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
-    private lateinit var cacheFile: File
     val locationService by lazy { LocationService(this) }
     lateinit var repository: GasStationRepository
         private set
+    val cacheFile: File
+        get() {
+            val countryCode = CountryRegistry.current.countryCode
+            return File(filesDir, "gas_stations_cache_${countryCode.lowercase()}.json")
+        }
 
     override fun onCreate() {
         super.onCreate()
         LanguageSettings.apply(this)
         ThemeSettings.apply(this)
-        cacheFile = File(filesDir, "gas_stations_cache.json")
         setupDebugData()
         repository = setupRepository()
     }
@@ -33,7 +36,8 @@ class CarburoidApplication : Application() {
         if (cacheFile.exists()) return
         val mockJson =
             try {
-                assets.open("stations-debug.json").bufferedReader().use { it.readText() }
+                val countryCode = CountryRegistry.current.countryCode
+                assets.open("stations-debug-${countryCode.lowercase()}.json").bufferedReader().use { it.readText() }
             } catch (e: FileNotFoundException) {
                 log("MOCK DATA NOT FOUND. RELEASE?")
                 return
@@ -44,10 +48,9 @@ class CarburoidApplication : Application() {
 
     fun setupRepository(): GasStationRepository {
         val country = CountryRegistry.current
-        val api = country.api
         val repository =
             GasStationRepository(
-                api = api,
+                api = country.api,
                 parser = { json -> country.parse(json) },
                 cacheFile = cacheFile,
                 scope = appScope,
