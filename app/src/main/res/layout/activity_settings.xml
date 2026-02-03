@@ -2,19 +2,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <!-- Legacy options -->
-    <FrameLayout
-        android:id="@+id/settings_fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <!-- Current options -->
-    <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/compose_settings_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+    android:orientation="vertical" >
 </LinearLayout>
