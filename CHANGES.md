@@ -2,8 +2,11 @@
 
 ## Unreleased
 
-- ⚡️ Using a faster data loading library (Gson -> Kotlin Serialization) 20% speed up.
-- ♻️  API format abstraction. A step towards supporting for other countries.
+- ✨ French gas stations (with limitations)
+- ♻️ Data source option: Enables support for countries other than Spain
+- ⚡️ Using a faster data loading library (Gson -> Kotlin Serialization) 20% speed up
+- 💄 Icon for filter options
+- ♻️  API format abstraction. A step towards supporting for other countries
 
 ## 1.3.3 (2026-01-15)
 
