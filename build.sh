@@ -7,20 +7,21 @@ run() {
     "$@"
 }
 
+run ./gradlew spotlessApply &&
 run ./gradlew assembleFlossDebug &&
-    run ./gradlew testFlossDebug &&
-    if [ "$1" = "w" ] ; then
-        run waydroid app remove net.canvoki.carburoid &&
-        run waydroid app install $(ls -t app/build/outputs/apk/floss/debug/net.canvoki.carburoid-*.apk | head -n 1)  &&
-        run waydroid app launch net.canvoki.carburoid &&
-        true
-    else
-        (run adb uninstall net.canvoki.carburoid || true ) &&
-        run ./gradlew installFlossDebug &&
-        run adb shell am start -n net.canvoki.carburoid/.MainActivity &&
-        true
-    fi &&
-    echo done
+run ./gradlew testFlossDebug &&
+if [ "$1" = "w" ] ; then
+    run waydroid app remove net.canvoki.carburoid &&
+    run waydroid app install $(ls -t app/build/outputs/apk/floss/debug/net.canvoki.carburoid-*.apk | head -n 1)  &&
+    run waydroid app launch net.canvoki.carburoid &&
+    true
+else
+    (run adb uninstall net.canvoki.carburoid || true ) &&
+    run ./gradlew installFlossDebug &&
+    run adb shell am start -n net.canvoki.carburoid/.MainActivity &&
+    true
+fi &&
+echo done
 
 
 # adb shell cmd uimode night no
