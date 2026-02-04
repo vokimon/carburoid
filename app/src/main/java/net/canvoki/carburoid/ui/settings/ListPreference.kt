@@ -33,7 +33,7 @@ fun ListPreference(
     title: String,
     summary: String,
     @DrawableRes icon: Int,
-    options: List<Pair<String, String>>, // (label, value)
+    options: List<Pair<String, String>>, // (value, label)
     value: String,
     onChange: (String) -> Unit,
 ) {
@@ -58,7 +58,7 @@ fun ListPreference(
             title = { Text(title) },
             text = {
                 LazyColumn {
-                    items(options) { (label, optionValue) ->
+                    items(options) { (optionValue, label) ->
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier =

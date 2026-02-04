@@ -140,13 +140,13 @@ object ThemeSettings {
             initial = currentValue(context),
         )
 
-        val entries = remember(resources) { resources.getStringArray(R.array.theme_entries) }
         val values = remember(resources) { resources.getStringArray(R.array.theme_values) }
-        val options = remember(entries, values) { entries.zip(values) }
+        val entries = remember(resources) { resources.getStringArray(R.array.theme_entries) }
+        val options = remember(values, entries) { values.zip(entries) }
 
         val title = stringResource(R.string.settings_theme)
         val summary =
-            options.find { it.second == currentValue }?.first
+            options.find { it.first == currentValue }?.second
                 ?: stringResource(R.string.theme_system)
 
         ListPreference(

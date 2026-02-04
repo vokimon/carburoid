@@ -164,7 +164,7 @@ object LanguageSettings {
 
         var currentValue by rememberLanguage()
 
-        val systemOption = stringResource(R.string.language_system_default) to "system"
+        val systemOption = "system" to stringResource(R.string.language_system_default)
         val supportedCodes =
             remember(resources) {
                 resources.getStringArray(R.array.supported_language_codes).toList()
@@ -174,15 +174,14 @@ object LanguageSettings {
             remember(supportedCodes) {
                 val languageOptions =
                     supportedCodes.map { code ->
-                        val label = languageName(context, code)
-                        label to code
+                        code to languageName(context, code)
                     }
                 listOf(systemOption) + languageOptions
             }
 
         val title = stringResource(R.string.settings_language_title)
         val summary =
-            options.find { it.second == currentValue }?.first
+            options.find { it.first == currentValue }?.second
                 ?: stringResource(R.string.language_system_default)
 
         ListPreference(
