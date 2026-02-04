@@ -29,14 +29,11 @@ private fun rememberPreferenceState(
                     state.value = prefs.getString(key, defaultValue) ?: defaultValue
                 }
             }
-
         prefs.registerOnSharedPreferenceChangeListener(listener)
-
         onDispose {
             prefs.unregisterOnSharedPreferenceChangeListener(listener)
         }
     }
-
     return state
 }
 
@@ -55,21 +52,7 @@ fun rememberMutablePreference(
 ): MutableState<String> {
     val context = LocalContext.current
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-    val state = remember { mutableStateOf(prefs.getString(key, defaultValue) ?: defaultValue) }
-
-    DisposableEffect(key, context) {
-        val listener =
-            SharedPreferences.OnSharedPreferenceChangeListener { _, changedKey ->
-                if (changedKey == key) {
-                    state.value = prefs.getString(key, defaultValue) ?: defaultValue
-                }
-            }
-        prefs.registerOnSharedPreferenceChangeListener(listener)
-        onDispose {
-            prefs.unregisterOnSharedPreferenceChangeListener(listener)
-        }
-    }
-
+    val state = rememberPreferenceState(key, defaultValue)
     return object : MutableState<String> {
         override var value: String
             get() = state.value
