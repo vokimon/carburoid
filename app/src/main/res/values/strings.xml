@@ -3,6 +3,7 @@
     <string name="language_code">en</string>
     <string name="language_name">English</string>
     <string name="app_name">Carburoid</string>
+    <string name="menu_back">Back</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_chart">Chart</string>
     <string name="settings_category_language_appearance">Language and appearance</string>

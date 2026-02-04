@@ -5,7 +5,8 @@ import android.os.Bundle
 import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.preference.Preference
@@ -21,45 +22,14 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentViewWithInsets(R.layout.activity_settings)
+        supportActionBar?.hide()
 
-        supportActionBar?.setTitle(R.string.menu_settings)
-
-        supportFragmentManager
-            .beginTransaction()
-            .replace(android.R.id.content, SettingsFragment())
-            .commit()
+        val composeView =
+            ComposeView(this).apply {
+                setContent {
+                    SettingsScreen(Modifier.fillMaxSize())
+                }
+            }
+        setContentView(composeView)
     }
 }
-
-class SettingsFragment : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(
-        savedInstanceState: Bundle?,
-        rootKey: String?,
-    ) {
-        setPreferencesFromResource(R.xml.preferences, rootKey)
-    }
-}
-
-// transitional while view -> compose migration
-class ComposePreference
-    @JvmOverloads
-    constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = android.R.attr.preferenceStyle,
-    ) : Preference(context, attrs, defStyleAttr) {
-        override fun onBindViewHolder(holder: PreferenceViewHolder) {
-            super.onBindViewHolder(holder)
-            val rootView = holder.itemView as? ViewGroup ?: return
-            rootView.removeAllViews()
-            rootView.addView(
-                ComposeView(context).apply {
-                    setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-                    setContent { SettingsScreen() }
-                },
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-            )
-        }
-    }

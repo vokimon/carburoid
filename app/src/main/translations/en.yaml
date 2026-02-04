@@ -1,6 +1,7 @@
 language_code: en
 language_name: English
 app_name: Carburoid
+menu_back: Back
 menu_settings: Settings
 menu_chart: Chart
 settings_category_language_appearance: Language and appearance

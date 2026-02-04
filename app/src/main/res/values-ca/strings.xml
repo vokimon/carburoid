@@ -3,6 +3,7 @@
     <string name="language_code">ca</string>
     <string name="language_name">Català</string>
     <string name="app_name">Carburoid</string>
+    <string name="menu_back">Enrere</string>
     <string name="menu_settings">Configuració</string>
     <string name="menu_chart">Gràfic</string>
     <string name="settings_category_language_appearance">Llengua i aparença</string>

@@ -37,7 +37,6 @@ import net.canvoki.carburoid.ui.AppScaffold
 import net.canvoki.carburoid.ui.StationList
 import net.canvoki.carburoid.ui.usermessage.UserMessage
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StationListScreen(
     viewModel: MainSharedViewModel,
@@ -87,6 +86,7 @@ fun StationListScreen(
 
     AppScaffold(
         topBar = {
+            @OptIn(ExperimentalMaterial3Api::class)
             TopAppBar(
                 title = { Text("Carburoid") },
                 actions = {
