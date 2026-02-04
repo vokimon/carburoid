@@ -53,16 +53,18 @@ fun rememberMutablePreference(
     val context = LocalContext.current
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
     val state = rememberPreferenceState(key, defaultValue)
-    return object : MutableState<String> {
-        override var value: String
-            get() = state.value
-            set(value) {
-                state.value = value
-                prefs.edit { putString(key, value) }
-            }
+    return remember {
+        object : MutableState<String> {
+            override var value: String
+                get() = state.value
+                set(value) {
+                    state.value = value
+                    prefs.edit { putString(key, value) }
+                }
 
-        override fun component1(): String = value
+            override fun component1(): String = value
 
-        override fun component2(): (String) -> Unit = { newValue -> value = newValue }
+            override fun component2(): (String) -> Unit = { newValue -> value = newValue }
+        }
     }
 }
