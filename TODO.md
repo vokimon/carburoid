@@ -2,17 +2,8 @@
 
 Do you want to help? This is my roadmap.
 
-- [!] Settings compose migration
-    - [x] Create a Component inside the Preferences
-    - [x] PreferenceCatategory
-    - [x] ListPreference
-    - [x] LinkPreference
-    - [ ] SwitchPreference
-    - [x] Preference reactive state
-    - [x] Migrate ThemeSettings
-    - [x] Migrate LanguageSettings
-    - [x] Migrate CountrySettings
-    - [ ] Migrate FilterSettings
+- [ ] ListPreference dialog: visual cue to indicate options available on scroll
+- [x] Better style for PreferenceCategory
 - [ ] Products: Either international common names or translations to avoid transient status after changing country
 - [ ] Fix: Regression: on network failures should not auto-retry
 - [x] use cache file timestamp and ignore downloadDate
@@ -67,14 +58,6 @@ Do you want to help? This is my roadmap.
 - [ ] Products: What to do with official short names: G95E85 GOA GOA+ BGNL... 
 - [ ] Language: Asturian
 - [ ] Language: Aranese (Occitan)
-- [~] Modernize code: Compose
-    - [x] Move empty message inside StationList
-    - [x] Move reloading message inside StationList
-    - [x] Turn MainActivity AppCompatActivity -> ComponentActivity
-    - [x] Intent while running: Activity does not change
-    - [x] Intent, app not running: Coords are updated but description is not computed
-    - [x] Intent, app not running: Coords are updated but station list is not refiltered
-    - [x] Changing the style in settings has no effect in main activity, it does on the rest of view open after, but not the main it gets the theme only if i change the language
 - [ ] Favorites
 - [ ] Plot view: Add Location Selector widget
 - [ ] Plot view: Add AppBar and back button
@@ -118,6 +101,25 @@ Do you want to help? This is my roadmap.
 
 ## Done
 
+- [x] Settings compose migration
+    - [x] Create a Component inside the Preferences
+    - [x] PreferenceCatategory
+    - [x] ListPreference
+    - [x] LinkPreference
+    - [x] SwitchPreference
+    - [x] Preference reactive state
+    - [x] Migrate ThemeSettings
+    - [x] Migrate LanguageSettings
+    - [x] Migrate CountrySettings
+    - [x] Migrate FilterSettings
+- [x] Modernize code: Compose
+    - [x] Move empty message inside StationList
+    - [x] Move reloading message inside StationList
+    - [x] Turn MainActivity AppCompatActivity -> ComponentActivity
+    - [x] Intent while running: Activity does not change
+    - [x] Intent, app not running: Coords are updated but description is not computed
+    - [x] Intent, app not running: Coords are updated but station list is not refiltered
+    - [x] Changing the style in settings has no effect in main activity, it does on the rest of view open after, but not the main it gets the theme only if i change the language
 - [x] Plot view: Buttons `[Closer]` `[Cheaper]` to go each side
 - [x] PlotView: Single point plot crashes
 - [x] Location Search: Always accept on back, get ride of the dialog nonsense mentality.
