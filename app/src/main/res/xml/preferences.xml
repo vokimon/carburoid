@@ -4,46 +4,6 @@
         android:key="compose_preferences"
         android:title="" />
 
-    <!-- Group: Language Appearance -->
-    <PreferenceCategory
-        android:title="@string/settings_category_language_appearance"
-        android:key="category_filtering">
-
-        <ListPreference
-            app:key="dark_mode"
-            app:title="@string/settings_theme"
-            app:summary="%s"
-            android:icon="@drawable/ic_brightness_medium"
-            app:entries="@array/theme_entries"
-            app:entryValues="@array/theme_values"
-            app:defaultValue="auto" />
-
-        <ListPreference
-            android:key="app_language"
-            android:title="@string/settings_language_title"
-            android:icon="@drawable/ic_translate"
-            android:summary="@string/settings_language_summary"
-            android:defaultValue="system" />
-
-        <Preference
-            android:key="translate_link"
-            android:title="@string/settings_translate_title"
-            android:icon="@drawable/ic_weblate"
-            android:summary="@string/settings_translate_summary">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="https://hosted.weblate.org/projects/carburoid/carburoid-ui/" />
-        </Preference>
-
-        <ListPreference
-            android:key="app_country"
-            android:title="@string/settings_country_title"
-            android:icon="@drawable/ic_system_update_alt"
-            android:summary="@string/settings_country_summary"
-            android:defaultValue="system" />
-
-    </PreferenceCategory>
-
     <!-- Group: Station Filtering -->
     <PreferenceCategory
         android:title="@string/settings_category_station_filters"

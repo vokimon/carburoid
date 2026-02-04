@@ -42,23 +42,6 @@ object LanguageSettings {
         apply(context)
     }
 
-    fun registerIn(screen: PreferenceScreen) {
-        val context = screen.context
-        val languagePref = screen.findPreference<ListPreference>(KEY) ?: return
-
-        updateSummary(languagePref, context)
-        updateEntries(languagePref, context)
-
-        languagePref.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
-            val languageCode = newValue as String
-            setPreferencesLanguage(context, languageCode)
-            apply(context)
-            updateEntries(languagePref, context)
-            updateSummary(languagePref, context)
-            true
-        }
-    }
-
     private fun getAvailableLanguages(context: Context): List<LanguageOption> {
         val systemLanguageOption =
             LanguageOption(
@@ -91,26 +74,6 @@ object LanguageSettings {
                 setLocale(Locale.forLanguageTag(code))
             },
         ).getString(R.string.language_name)
-
-    private fun updateSummary(
-        preference: ListPreference,
-        context: Context,
-    ) {
-        val currentCode = getPreferencesLanguage(context)
-        val languages = getAvailableLanguages(context)
-        val currentLanguage = languages.find { it.code == currentCode }
-
-        preference.summary = currentLanguage?.name ?: context.getString(R.string.language_system_default)
-    }
-
-    private fun updateEntries(
-        preference: ListPreference,
-        context: Context,
-    ) {
-        val languages = getAvailableLanguages(context)
-        preference.entries = languages.map { it.name }.toTypedArray()
-        preference.entryValues = languages.map { it.code }.toTypedArray()
-    }
 
     private fun getPrefs(context: Context): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 

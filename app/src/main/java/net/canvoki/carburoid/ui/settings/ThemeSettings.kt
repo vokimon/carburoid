@@ -51,22 +51,6 @@ object ThemeSettings {
         apply(context)
     }
 
-    fun registerIn(screen: PreferenceScreen) {
-        val context = screen.context
-        val themePref = screen.findPreference<ListPreference>(KEY) ?: return
-
-        initialize(context)
-
-        updateSummary(themePref, context)
-
-        themePref.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
-            val mode = newValue as String
-            saveAndApply(context, mode)
-            updateSummary(themePref, context)
-            true
-        }
-    }
-
     fun apply(context: Context) {
         val themeMode = currentValue(context)
         when (themeMode) {
@@ -98,19 +82,6 @@ object ThemeSettings {
     ) {
         setCurrentValue(context, mode)
         apply(context)
-    }
-
-    private fun updateSummary(
-        preference: ListPreference,
-        context: Context,
-    ) {
-        val current = currentValue(context)
-        preference.summary =
-            when (current) {
-                VALUE_LIGHT -> context.getString(R.string.theme_light)
-                VALUE_DARK -> context.getString(R.string.theme_dark)
-                else -> context.getString(R.string.theme_system)
-            }
     }
 
     @Composable

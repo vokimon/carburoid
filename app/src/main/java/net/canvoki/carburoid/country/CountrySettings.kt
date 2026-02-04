@@ -31,24 +31,6 @@ object CountrySettings {
         apply(context)
     }
 
-    /** Register the country setting in a PreferenceScreen */
-    fun registerIn(screen: PreferenceScreen) {
-        val context = screen.context
-        val countryPref = screen.findPreference<ListPreference>(KEY) ?: return
-
-        updateSummary(countryPref, context)
-        updateEntries(countryPref, context)
-
-        countryPref.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
-            val countryCode = newValue as String
-            setPreferencesValue(context, countryCode)
-            apply(context)
-            updateEntries(countryPref, context)
-            updateSummary(countryPref, context)
-            true
-        }
-    }
-
     fun apply(context: Context) {
         CountryRegistry.setCurrent(getPreferencesValue(context))
     }
@@ -60,22 +42,6 @@ object CountrySettings {
                 nameResId = country.nameResId,
             )
         }
-
-    private fun updateSummary(
-        preference: ListPreference,
-        context: Context,
-    ) {
-        preference.summary = context.getString(current(context).nameResId)
-    }
-
-    private fun updateEntries(
-        preference: ListPreference,
-        context: Context,
-    ) {
-        val countries = getAvailableCountries()
-        preference.entries = countries.map { context.getString(it.nameResId) }.toTypedArray()
-        preference.entryValues = countries.map { it.code }.toTypedArray()
-    }
 
     private fun getPrefs(context: Context): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 

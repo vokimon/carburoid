@@ -40,10 +40,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         rootKey: String?,
     ) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
-
-        LanguageSettings.registerIn(preferenceScreen)
-        ThemeSettings.registerIn(preferenceScreen)
-        CountrySettings.registerIn(preferenceScreen)
         FilterSettings.registerIn(preferenceScreen)
     }
 }
