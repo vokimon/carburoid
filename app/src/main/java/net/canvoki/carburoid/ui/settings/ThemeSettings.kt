@@ -28,11 +28,13 @@ object ThemeSettings {
 
     private fun apply(context: Context) {
         val themeMode = currentValue(context)
-        when (themeMode) {
-            VALUE_LIGHT -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            VALUE_DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            VALUE_AUTO -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-        }
+        AppCompatDelegate.setDefaultNightMode(
+            when (themeMode) {
+                VALUE_LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
+                VALUE_DARK -> AppCompatDelegate.MODE_NIGHT_YES
+                else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            },
+        )
     }
 
     private fun preferences(context: Context): SharedPreferences =

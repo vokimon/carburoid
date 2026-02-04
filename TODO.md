@@ -2,6 +2,18 @@
 
 Do you want to help? This is my roadmap.
 
+- [!] Settings compose migration
+    - [x] Create a Component inside the Preferences
+    - [x] PreferenceCatategory
+    - [x] ListPreference
+    - [x] LinkPreference
+    - [ ] SwitchPreference
+    - [x] Preference reactive state
+    - [x] Migrate ThemeSettings
+    - [x] Migrate LanguageSettings
+    - [x] Migrate CountrySettings
+    - [ ] Migrate FilterSettings
+- [ ] Products: Either international common names or translations to avoid transient status after changing country
 - [ ] Fix: Regression: on network failures should not auto-retry
 - [x] use cache file timestamp and ignore downloadDate
 - [ ] Upgrade koalaplot and clean heatmap dupped code
