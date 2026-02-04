@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceManager
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
+import net.canvoki.carburoid.ui.settings.ListPreference
 import net.canvoki.carburoid.ui.settings.SwitchPreference
 import net.canvoki.carburoid.ui.settings.rememberMutablePreference
 
@@ -116,11 +118,7 @@ object FilterSettings {
 
     @Composable
     fun Preference() {
-        var hideExpensive by rememberMutablePreference(
-            key = KEY_HIDE_EXPENSIVE,
-            defaultValue = true,
-        )
-
+        var hideExpensive by rememberMutablePreference(KEY_HIDE_EXPENSIVE, true)
         SwitchPreference(
             title = stringResource(R.string.settings_filter_expensive),
             summary = stringResource(R.string.settings_filter_expensive_summary),
@@ -128,6 +126,55 @@ object FilterSettings {
             checked = hideExpensive,
             onCheckedChange = {
                 hideExpensive = it
+                apply()
+            },
+        )
+
+        var onlyPublicPrices by rememberMutablePreference(KEY_ONLY_PUBLIC_PRICES, true)
+        SwitchPreference(
+            title = stringResource(R.string.settings_filter_non_public),
+            summary = stringResource(R.string.settings_filter_non_public_summary),
+            iconResId = R.drawable.ic_filter_alt,
+            checked = onlyPublicPrices,
+            onCheckedChange = { newValue ->
+                onlyPublicPrices = newValue
+                apply()
+            },
+        )
+
+        var hideBeyondSea by rememberMutablePreference(KEY_HIDE_BEYOND_SEA, true)
+        SwitchPreference(
+            title = stringResource(R.string.settings_filter_beyond_sea),
+            summary = stringResource(R.string.settings_filter_beyond_sea_summary),
+            iconResId = R.drawable.ic_filter_alt,
+            checked = hideBeyondSea,
+            onCheckedChange = { newValue ->
+                hideBeyondSea = newValue
+                apply()
+            },
+        )
+
+        var hideClosedMargin by rememberMutablePreference(KEY_HIDE_CLOSED_MARGIN_MINUTES, "30")
+
+        val context = LocalContext.current
+        val resources = context.resources
+
+        val labels = remember(resources) { resources.getStringArray(R.array.settings_filter_closed_labels) }
+        val values = remember(resources) { resources.getStringArray(R.array.settings_filter_closed_values) }
+        val options = remember(labels, values) { values.zip(labels) } // (value, label)
+
+        val selectedLabel = options.find { it.first == hideClosedMargin }?.second ?: hideClosedMargin
+        val originalSummary = stringResource(R.string.settings_filter_closed_summary)
+        val fullSummary = "$originalSummary\n - $selectedLabel"
+
+        ListPreference(
+            title = stringResource(R.string.settings_filter_closed),
+            summary = fullSummary,
+            icon = R.drawable.ic_filter_alt,
+            options = options,
+            value = hideClosedMargin,
+            onChange = { newValue ->
+                hideClosedMargin = newValue
                 apply()
             },
         )
