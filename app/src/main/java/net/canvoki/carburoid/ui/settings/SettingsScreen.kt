@@ -31,8 +31,8 @@ fun SettingsScreen() {
                 LanguageSettings.Preference()
                 LinkPreference(
                     url = "https://hosted.weblate.org/projects/carburoid/carburoid-ui/",
-                    title = stringResource(R.string.settings_translate_title),
-                    summary = stringResource(R.string.settings_translate_summary),
+                    title = stringResource(R.string.settings_translate_summary),
+                    summary = stringResource(R.string.settings_translate_title),
                     iconResId = R.drawable.ic_weblate,
                 )
                 CountrySettings.Preference()
