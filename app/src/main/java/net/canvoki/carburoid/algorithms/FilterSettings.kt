@@ -28,20 +28,10 @@ object FilterSettings {
     private const val KEY_HIDE_CLOSED_MARGIN_MINUTES = "hide_closed_margin_minutes"
     private const val KEY_HIDE_BEYOND_SEA = "hide_beyond_sea"
 
-    val DEFAULT_CLOSED_MARGIN = 2 * 60
-
-    private val relevantKeys =
-        setOf(
-            KEY_HIDE_EXPENSIVE,
-            KEY_ONLY_PUBLIC_PRICES,
-            KEY_HIDE_CLOSED_MARGIN_MINUTES,
-            KEY_HIDE_BEYOND_SEA,
-        )
+    val DEFAULT_CLOSED_MARGIN = (2 * 60).toString()
 
     private val _changes = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     val changes: Flow<Unit> get() = _changes.asSharedFlow()
-
-    private var listener: SharedPreferences.OnSharedPreferenceChangeListener? = null
 
     fun apply() {
         _changes.tryEmit(Unit)
@@ -58,30 +48,6 @@ object FilterSettings {
                     ?: default.hideClosedMarginInMinutes,
             hideBeyondSea = prefs.getBoolean(KEY_HIDE_BEYOND_SEA, default.hideBeyondSea),
         )
-    }
-
-    private fun updateSummary(
-        screen: PreferenceScreen,
-        preference: SharedPreferences,
-        context: Context,
-        key: String,
-    ) {
-        if (key != KEY_HIDE_CLOSED_MARGIN_MINUTES) return
-
-        val listPreference = screen.findPreference<ListPreference>(key)
-        listPreference?.let {
-            val originalSummary = context.getString(R.string.settings_filter_closed_summary)
-            val selectedValue = preference.getString(key, null) ?: DEFAULT_CLOSED_MARGIN.toString()
-
-            // Carregar l'etiqueta corresponent al valor
-            val labels = context.resources.getStringArray(R.array.settings_filter_closed_labels)
-            val values = context.resources.getStringArray(R.array.settings_filter_closed_values)
-
-            val index = values.indexOf(selectedValue)
-            val selectedLabel = if (index >= 0 && index < labels.size) labels[index] else selectedValue
-
-            it.summary = "${originalSummary}\n - $selectedLabel"
-        }
     }
 
     private fun preferences(context: Context): SharedPreferences =
@@ -129,7 +95,7 @@ object FilterSettings {
 
         var hideClosedMargin by rememberMutablePreference(
             KEY_HIDE_CLOSED_MARGIN_MINUTES,
-            DEFAULT_CLOSED_MARGIN.toString(),
+            DEFAULT_CLOSED_MARGIN,
         )
 
         val context = LocalContext.current
