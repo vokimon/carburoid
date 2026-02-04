@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.core.content.ContextCompat
+import net.canvoki.carburoid.R
 
 @Composable
 fun LinkPreference(
@@ -27,6 +28,13 @@ fun LinkPreference(
         leadingContent = {
             Icon(
                 painter = painterResource(iconResId),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        },
+        trailingContent = {
+            Icon(
+                painter = painterResource(R.drawable.ic_arrow_outward),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )
