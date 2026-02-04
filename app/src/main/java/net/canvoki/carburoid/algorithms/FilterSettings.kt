@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.ui.settings.SwitchPreference
+import net.canvoki.carburoid.ui.settings.rememberMutablePreference
 
 object FilterSettings {
     private const val PREFS_NAME = "app_settings"
@@ -37,6 +38,10 @@ object FilterSettings {
     val changes: Flow<Unit> get() = _changes.asSharedFlow()
 
     private var listener: SharedPreferences.OnSharedPreferenceChangeListener? = null
+
+    fun apply() {
+        _changes.tryEmit(Unit)
+    }
 
     fun registerIn(screen: PreferenceScreen) {
         val context = screen.context
@@ -111,14 +116,20 @@ object FilterSettings {
 
     @Composable
     fun Preference() {
-        var hideExpensive by remember { mutableStateOf(true) }
+        var hideExpensive by rememberMutablePreference(
+            key = KEY_HIDE_EXPENSIVE,
+            defaultValue = true,
+        )
 
         SwitchPreference(
             title = stringResource(R.string.settings_filter_expensive),
             summary = stringResource(R.string.settings_filter_expensive_summary),
             iconResId = R.drawable.ic_filter_alt,
             checked = hideExpensive,
-            onCheckedChange = { hideExpensive = it },
+            onCheckedChange = {
+                hideExpensive = it
+                apply()
+            },
         )
     }
 }
