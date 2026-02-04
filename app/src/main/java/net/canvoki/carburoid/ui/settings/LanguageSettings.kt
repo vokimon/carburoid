@@ -140,12 +140,6 @@ object LanguageSettings {
             }
     }
 
-    private fun getConfiguredLocale(context: Context): Locale {
-        val lang = getPreferencesLanguage(context)
-        if (lang == SYSTEM_LANGUAGE) return systemLocale!!
-        return Locale.forLanguageTag(lang)
-    }
-
     fun apply(context: Context) {
         // Retrieve system language before we apply any language
         holdSystemLocale(context)
