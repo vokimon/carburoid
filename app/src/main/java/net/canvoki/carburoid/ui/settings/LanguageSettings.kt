@@ -71,25 +71,22 @@ object LanguageSettings {
         val languages = mutableListOf<LanguageOption>()
 
         for (code in supportedCodes) {
-            val localizedContext = createLocalizedContext(context, code)
-            val languageName = localizedContext.getString(R.string.language_name)
-            languages.add(LanguageOption(code, languageName))
+            languages.add(LanguageOption(code, languageName(context, code)))
         }
 
         availableLanguagesCache = languages
         return listOf(systemLanguageOption) + languages
     }
 
-    private fun createLocalizedContext(
+    private fun languageName(
         context: Context,
-        languageCode: String,
-    ): Context {
-        val locale = Locale.forLanguageTag(languageCode)
-        val config = Configuration(context.resources.configuration)
-        config.setLocale(locale)
-
-        return context.createConfigurationContext(config)
-    }
+        code: String,
+    ) = context
+        .createConfigurationContext(
+            Configuration().apply {
+                setLocale(Locale.forLanguageTag(code))
+            },
+        ).getString(R.string.language_name)
 
     private fun updateSummary(
         preference: ListPreference,
@@ -183,8 +180,7 @@ object LanguageSettings {
             remember(supportedCodes) {
                 val languageOptions =
                     supportedCodes.map { code ->
-                        val localizedContext = createLocalizedContext(context, code)
-                        val label = localizedContext.getString(R.string.language_name)
+                        val label = languageName(context, code)
                         label to code
                     }
                 listOf(systemOption) + languageOptions
