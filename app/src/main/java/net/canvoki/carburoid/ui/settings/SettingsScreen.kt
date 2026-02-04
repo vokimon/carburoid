@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import net.canvoki.carburoid.R
-import net.canvoki.carburoid.ui.settings.ListPreference
 import net.canvoki.carburoid.ui.settings.PreferenceCategory
 
 @Composable
@@ -27,6 +26,7 @@ fun SettingsScreen() {
                 title = stringResource(R.string.settings_category_language_appearance),
             ) {
                 ThemeSettings.Preference()
+                LanguageSettings.Preference()
             }
         }
     }

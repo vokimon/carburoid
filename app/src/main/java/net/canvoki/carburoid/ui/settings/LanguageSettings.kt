@@ -7,6 +7,13 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.edit
 import androidx.core.os.LocaleListCompat
 import androidx.preference.ListPreference
@@ -15,6 +22,8 @@ import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
+import net.canvoki.carburoid.ui.settings.ListPreference
+import net.canvoki.carburoid.ui.settings.rememberMutablePreference
 import java.util.Locale
 
 object LanguageSettings {
@@ -143,10 +152,59 @@ object LanguageSettings {
     fun apply(context: Context) {
         // Retrieve system language before we apply any language
         holdSystemLocale(context)
-        val locale = getConfiguredLocale(context)
-        log("Applying language ${locale.language}")
-        Locale.setDefault(locale)
-        val locales = LocaleListCompat.create(locale)
+        val lang = getPreferencesLanguage(context)
+        val locales =
+            if (lang == SYSTEM_LANGUAGE) {
+                LocaleListCompat.getEmptyLocaleList() // let system decide
+            } else {
+                LocaleListCompat.create(Locale.forLanguageTag(lang))
+            }
+
         AppCompatDelegate.setApplicationLocales(locales)
+    }
+
+    @Composable
+    fun rememberLanguage() = rememberMutablePreference(KEY, SYSTEM_LANGUAGE)
+
+    @Composable
+    fun Preference() {
+        val context = LocalContext.current
+        val resources = context.resources
+
+        var currentValue by rememberLanguage()
+
+        val systemOption = stringResource(R.string.language_system_default) to "system"
+        val supportedCodes =
+            remember(resources) {
+                resources.getStringArray(R.array.supported_language_codes).toList()
+            }
+
+        val options =
+            remember(supportedCodes) {
+                val languageOptions =
+                    supportedCodes.map { code ->
+                        val localizedContext = createLocalizedContext(context, code)
+                        val label = localizedContext.getString(R.string.language_name)
+                        label to code
+                    }
+                listOf(systemOption) + languageOptions
+            }
+
+        val title = stringResource(R.string.settings_language_title)
+        val summary =
+            options.find { it.second == currentValue }?.first
+                ?: stringResource(R.string.language_system_default)
+
+        ListPreference(
+            title = title,
+            summary = summary,
+            icon = R.drawable.ic_translate,
+            options = options,
+            value = currentValue,
+            onChange = { newValue ->
+                currentValue = newValue
+                apply(context)
+            },
+        )
     }
 }
