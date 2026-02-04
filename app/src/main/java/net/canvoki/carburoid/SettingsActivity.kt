@@ -38,7 +38,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         rootKey: String?,
     ) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
-        FilterSettings.registerIn(preferenceScreen)
     }
 }
 

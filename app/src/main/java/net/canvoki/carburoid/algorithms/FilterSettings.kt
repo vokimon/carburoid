@@ -28,6 +28,8 @@ object FilterSettings {
     private const val KEY_HIDE_CLOSED_MARGIN_MINUTES = "hide_closed_margin_minutes"
     private const val KEY_HIDE_BEYOND_SEA = "hide_beyond_sea"
 
+    val DEFAULT_CLOSED_MARGIN = 2 * 60
+
     private val relevantKeys =
         setOf(
             KEY_HIDE_EXPENSIVE,
@@ -44,35 +46,6 @@ object FilterSettings {
     fun apply() {
         _changes.tryEmit(Unit)
     }
-
-    fun registerIn(screen: PreferenceScreen) {
-        val context = screen.context
-        val prefs = preferences(context)
-
-        // unregister(context) // ✅ Safe unregister in case it's already registered
-
-        updateSummary(screen, prefs, context, KEY_HIDE_CLOSED_MARGIN_MINUTES)
-
-        listener =
-            SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-                log("Changed $key")
-                updateSummary(screen, prefs, context, key ?: "")
-                if (key in relevantKeys) {
-                    _changes.tryEmit(Unit)
-                }
-            }
-
-        prefs.registerOnSharedPreferenceChangeListener(listener)
-    }
-
-    fun unregister(context: Context) {
-        listener?.let {
-            preferences(context).unregisterOnSharedPreferenceChangeListener(it)
-            listener = null
-        }
-    }
-
-    val DEFAULT_CLOSED_MARGIN = 2 * 60
 
     fun config(context: Context): FilterConfig {
         val prefs = preferences(context)
@@ -154,7 +127,10 @@ object FilterSettings {
             },
         )
 
-        var hideClosedMargin by rememberMutablePreference(KEY_HIDE_CLOSED_MARGIN_MINUTES, "30")
+        var hideClosedMargin by rememberMutablePreference(
+            KEY_HIDE_CLOSED_MARGIN_MINUTES,
+            DEFAULT_CLOSED_MARGIN.toString(),
+        )
 
         val context = LocalContext.current
         val resources = context.resources
@@ -164,12 +140,11 @@ object FilterSettings {
         val options = remember(labels, values) { values.zip(labels) } // (value, label)
 
         val selectedLabel = options.find { it.first == hideClosedMargin }?.second ?: hideClosedMargin
-        val originalSummary = stringResource(R.string.settings_filter_closed_summary)
-        val fullSummary = "$originalSummary\n - $selectedLabel"
+        val summary = stringResource(R.string.settings_filter_closed_summary)
 
         ListPreference(
             title = stringResource(R.string.settings_filter_closed),
-            summary = fullSummary,
+            summary = summary,
             icon = R.drawable.ic_door_front,
             options = options,
             value = hideClosedMargin,
@@ -177,6 +152,7 @@ object FilterSettings {
                 hideClosedMargin = newValue
                 apply()
             },
+            trailingText = selectedLabel,
         )
     }
 }

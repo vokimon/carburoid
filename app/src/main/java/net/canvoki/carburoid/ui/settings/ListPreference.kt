@@ -36,6 +36,7 @@ fun ListPreference(
     options: List<Pair<String, String>>, // (value, label)
     value: String,
     onChange: (String) -> Unit,
+    trailingText: String? = null,
 ) {
     var showDialog by remember { mutableStateOf(false) }
 
@@ -50,6 +51,15 @@ fun ListPreference(
             )
         },
         modifier = Modifier.clickable { showDialog = true },
+        trailingContent = {
+            if (trailingText != null) {
+                Text(
+                    text = trailingText,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.outline,
+                )
+            }
+        },
     )
 
     if (showDialog) {
