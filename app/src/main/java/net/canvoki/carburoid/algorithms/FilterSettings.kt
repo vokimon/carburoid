@@ -122,7 +122,7 @@ object FilterSettings {
         SwitchPreference(
             title = stringResource(R.string.settings_filter_expensive),
             summary = stringResource(R.string.settings_filter_expensive_summary),
-            iconResId = R.drawable.ic_filter_alt,
+            iconResId = R.drawable.ic_euro,
             checked = hideExpensive,
             onCheckedChange = {
                 hideExpensive = it
@@ -134,7 +134,7 @@ object FilterSettings {
         SwitchPreference(
             title = stringResource(R.string.settings_filter_non_public),
             summary = stringResource(R.string.settings_filter_non_public_summary),
-            iconResId = R.drawable.ic_filter_alt,
+            iconResId = R.drawable.ic_price_check,
             checked = onlyPublicPrices,
             onCheckedChange = { newValue ->
                 onlyPublicPrices = newValue
@@ -146,7 +146,7 @@ object FilterSettings {
         SwitchPreference(
             title = stringResource(R.string.settings_filter_beyond_sea),
             summary = stringResource(R.string.settings_filter_beyond_sea_summary),
-            iconResId = R.drawable.ic_filter_alt,
+            iconResId = R.drawable.ic_water,
             checked = hideBeyondSea,
             onCheckedChange = { newValue ->
                 hideBeyondSea = newValue
@@ -170,7 +170,7 @@ object FilterSettings {
         ListPreference(
             title = stringResource(R.string.settings_filter_closed),
             summary = fullSummary,
-            icon = R.drawable.ic_filter_alt,
+            icon = R.drawable.ic_door_front,
             options = options,
             value = hideClosedMargin,
             onChange = { newValue ->
