@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import net.canvoki.carburoid.R
+import net.canvoki.carburoid.ui.settings.LinkPreference
 import net.canvoki.carburoid.ui.settings.PreferenceCategory
 
 @Composable
@@ -27,6 +28,12 @@ fun SettingsScreen() {
             ) {
                 ThemeSettings.Preference()
                 LanguageSettings.Preference()
+                LinkPreference(
+                    url = "https://hosted.weblate.org/projects/carburoid/carburoid-ui/",
+                    title = stringResource(R.string.settings_translate_title),
+                    summary = stringResource(R.string.settings_translate_summary),
+                    iconResId = R.drawable.ic_weblate,
+                )
             }
         }
     }
