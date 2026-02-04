@@ -8,20 +8,26 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
 @Composable
@@ -70,63 +77,108 @@ fun ListPreference(
     )
 
     if (showDialog) {
-        AlertDialog(
+        Dialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(title) },
-            text = {
-                Box(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth(),
+        ) {
+            Surface(
+                shape = MaterialTheme.shapes.extraLarge,
+                tonalElevation = 6.dp,
+                // No explicit width/height — let Dialog handle it naturally
+            ) {
+                Column(
+                    modifier = Modifier.padding(start = 24.dp, top = 16.dp, end = 24.dp, bottom = 12.dp),
                 ) {
-                    LazyColumn(
-                        contentPadding = PaddingValues(top = 8.dp, bottom = 48.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
-                    ) {
-                        items(options) { (optionValue, label) ->
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier =
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .clickable {
-                                            onChange(optionValue)
-                                            showDialog = false
-                                        }.padding(16.dp),
-                            ) {
-                                RadioButton(
-                                    selected = value == optionValue,
-                                    onClick = null,
-                                )
-                                Text(label, modifier = Modifier.padding(start = 8.dp))
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(bottom = 12.dp),
+                    )
+
+                    val listState = rememberLazyListState()
+
+                    val showTopFade by remember(listState) {
+                        derivedStateOf { listState.canScrollBackward }
+                    }
+                    val showBottomFade by remember(listState) {
+                        derivedStateOf { listState.canScrollForward }
+                    }
+
+                    Box(modifier = Modifier.weight(1f, fill = false)) {
+                        LazyColumn(
+                            state = listState,
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                            contentPadding =
+                                PaddingValues(
+                                    top = if (showTopFade) 24.dp else 8.dp,
+                                    bottom = if (showBottomFade) 24.dp else 8.dp,
+                                ),
+                        ) {
+                            items(options) { (optionValue, label) ->
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier =
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .clickable {
+                                                onChange(optionValue)
+                                                showDialog = false
+                                            }.padding(vertical = 8.dp),
+                                ) {
+                                    RadioButton(selected = value == optionValue, onClick = null)
+                                    Text(label, modifier = Modifier.padding(start = 8.dp))
+                                }
                             }
                         }
-                    }
-                    Box(
-                        modifier =
-                            Modifier
-                                .align(Alignment.BottomCenter)
-                                .fillMaxWidth()
-                                .height(8.dp)
-                                .background(
-                                    Brush.verticalGradient(
-                                        colors =
-                                            listOf(
-                                                Color.Transparent,
-                                                MaterialTheme.colorScheme.surface.copy(alpha = 0.3f),
+
+                        // Top fade
+                        if (showTopFade) {
+                            Box(
+                                modifier =
+                                    Modifier
+                                        .align(Alignment.TopCenter)
+                                        .fillMaxWidth()
+                                        .height(4.dp)
+                                        .background(
+                                            Brush.verticalGradient(
+                                                colors =
+                                                    listOf(
+                                                        MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                                                        Color.Transparent,
+                                                    ),
                                             ),
-                                    ),
-                                ),
-                    )
+                                        ),
+                            )
+                        }
+
+                        // Bottom fade
+                        if (showBottomFade) {
+                            Box(
+                                modifier =
+                                    Modifier
+                                        .align(Alignment.BottomCenter)
+                                        .fillMaxWidth()
+                                        .height(4.dp)
+                                        .background(
+                                            Brush.verticalGradient(
+                                                colors =
+                                                    listOf(
+                                                        Color.Transparent,
+                                                        MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                                                    ),
+                                            ),
+                                        ),
+                            )
+                        }
+                    }
+                    // Cancel button — now always visible
+                    TextButton(
+                        onClick = { showDialog = false },
+                        modifier = Modifier.align(Alignment.End),
+                    ) {
+                        Text(stringResource(android.R.string.cancel))
+                    }
                 }
-            },
-            confirmButton = {},
-            dismissButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text(stringResource(android.R.string.cancel))
-                }
-            },
-            properties = DialogProperties(usePlatformDefaultWidth = false),
-        )
+            }
+        }
     }
 }
