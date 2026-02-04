@@ -15,9 +15,7 @@ import androidx.preference.PreferenceViewHolder
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.country.CountrySettings
 import net.canvoki.carburoid.ui.setContentViewWithInsets
-import net.canvoki.carburoid.ui.settings.LanguageSettings
 import net.canvoki.carburoid.ui.settings.SettingsScreen
-import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
