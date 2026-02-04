@@ -38,6 +38,10 @@ object LanguageSettings {
         val name: String, // Nom en el seu propi idioma
     )
 
+    fun initialize(context: Context) {
+        apply(context)
+    }
+
     fun registerIn(screen: PreferenceScreen) {
         val context = screen.context
         val languagePref = screen.findPreference<ListPreference>(KEY) ?: return

@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import net.canvoki.carburoid.R
+import net.canvoki.carburoid.country.CountrySettings
 import net.canvoki.carburoid.ui.settings.LinkPreference
 import net.canvoki.carburoid.ui.settings.PreferenceCategory
 
@@ -34,6 +35,7 @@ fun SettingsScreen() {
                     summary = stringResource(R.string.settings_translate_summary),
                     iconResId = R.drawable.ic_weblate,
                 )
+                CountrySettings.Preference()
             }
         }
     }
