@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import net.canvoki.carburoid.R
+import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.country.CountrySettings
 import net.canvoki.carburoid.ui.settings.LinkPreference
 import net.canvoki.carburoid.ui.settings.PreferenceCategory
@@ -36,6 +37,12 @@ fun SettingsScreen() {
                     iconResId = R.drawable.ic_weblate,
                 )
                 CountrySettings.Preference()
+            }
+            PreferenceCategory(
+                title = stringResource(R.string.settings_category_station_filters),
+                // TODO: icon="@drawable/ic_filter_alt
+            ) {
+                FilterSettings.Preference()
             }
         }
     }

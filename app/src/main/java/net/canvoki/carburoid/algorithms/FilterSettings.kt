@@ -2,6 +2,12 @@ package net.canvoki.carburoid.algorithms
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
@@ -10,6 +16,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
+import net.canvoki.carburoid.ui.settings.SwitchPreference
 
 object FilterSettings {
     private const val PREFS_NAME = "app_settings"
@@ -101,4 +108,17 @@ object FilterSettings {
         PreferenceManager.getDefaultSharedPreferences(
             context,
         )
+
+    @Composable
+    fun Preference() {
+        var hideExpensive by remember { mutableStateOf(true) }
+
+        SwitchPreference(
+            title = stringResource(R.string.settings_filter_expensive),
+            summary = stringResource(R.string.settings_filter_expensive_summary),
+            iconResId = R.drawable.ic_filter_alt,
+            checked = hideExpensive,
+            onCheckedChange = { hideExpensive = it },
+        )
+    }
 }
