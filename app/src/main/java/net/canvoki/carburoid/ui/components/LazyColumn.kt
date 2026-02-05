@@ -29,7 +29,7 @@ import androidx.compose.foundation.lazy.LazyColumn as AndroidXLazyColumn
 /**
  * Drop-in replacement for [androidx.compose.foundation.lazy.LazyColumn]
  * with subtle indicators of scrollability.
-  */
+ */
 @Composable
 fun LazyColumn(
     modifier: Modifier = Modifier,

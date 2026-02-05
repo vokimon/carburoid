@@ -15,8 +15,21 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import net.canvoki.carburoid.log
 import net.canvoki.carburoid.timeits
 import java.time.ZoneId
+
+private val apiProducts =
+    listOf(
+        "gazole" to "Gasoleo A",
+        "sp95" to "Gasolina 95 E5",
+        "sp98" to "Gasolina 98 E5",
+        "e10" to "Gasolina 95 E10",
+        "e85" to "Gasolina 95 E85",
+        "gplc" to "Gases licuados del petróleo",
+    )
+val fromApiProduct = apiProducts.toMap()
+val toApiProduct = apiProducts.associate { (french, common) -> common to french }
 
 // JSON configuration
 private val json by lazy {
@@ -108,7 +121,13 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
         val prices = mutableMapOf<String, Double?>()
         for ((key, value) in obj) {
             if (key.endsWith(PRICE_SUFFIX)) {
-                val product = key.removeSuffix(PRICE_SUFFIX)
+                val apiProduct = key.removeSuffix(PRICE_SUFFIX)
+                val product = fromApiProduct[apiProduct]
+                if (product == null) {
+                    // TODO: Collect missing products
+                    log("MISSING PRODUCT: FR $apiProduct")
+                    continue
+                }
                 val priceStr = value.jsonPrimitive.content
                 val price = priceStr.toDoubleOrNull()
                 prices[product] = price
@@ -143,8 +162,9 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
                 value.longitude?.let { put("longitude", JsonPrimitive((it * 100_000).toLong().toString())) }
                 //put("horaires_jour", JsonPrimitive("L-D: 24H"))
                 for ((product, price) in value.prices) {
+                    val apiProduct = toApiProduct[product]
                     if (price != null) {
-                        put("${product}_prix", JsonPrimitive(price))
+                        put("${apiProduct}_prix", JsonPrimitive(price))
                     }
                 }
             }

@@ -105,22 +105,24 @@ class FrenchGasStationTest {
 
     @Test
     fun `French Station dump adds _prix suffix to product prices`() {
-        val prices = mapOf("gazole" to 1.2)
-        val json = baseCase(prices = prices).toJson()
+        val commonPrices = mapOf("Gasoleo A" to 1.2)
+        val frenchPrices = mapOf("gazole" to 1.2)
+        val json = baseCase(prices = commonPrices).toJson()
         assertJsonEqual(
-            expected = frenchStationJson(prices = prices),
+            expected = frenchStationJson(prices = frenchPrices),
             result = json,
         )
     }
 
     @Test
     fun `French Station parsing collects _prix suffixed as product map price`() {
-        val prices = mapOf("gazole" to 1.2)
-        val json = frenchStationJson(prices = prices)
+        val commonPrices = mapOf("Gasoleo A" to 1.2)
+        val frenchPrices = mapOf("gazole" to 1.2)
+        val json = frenchStationJson(prices = frenchPrices)
         val read = FrenchGasStation.parse(json)
         assertDataEqual(
             result = read,
-            expected = baseCase(prices = prices),
+            expected = baseCase(prices = commonPrices),
         )
     }
 
