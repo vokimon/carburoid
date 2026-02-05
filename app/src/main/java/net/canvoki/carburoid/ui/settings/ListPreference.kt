@@ -86,7 +86,7 @@ fun ListPreference(
                 // No explicit width/height — let Dialog handle it naturally
             ) {
                 Column(
-                    modifier = Modifier.padding(start = 24.dp, top = 16.dp, end = 24.dp, bottom = 12.dp),
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
                 ) {
                     Text(
                         text = title,

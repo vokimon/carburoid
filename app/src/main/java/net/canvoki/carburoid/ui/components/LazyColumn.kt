@@ -55,7 +55,6 @@ fun LazyColumn(
             reverseLayout = reverseLayout,
             verticalArrangement = verticalArrangement,
             horizontalAlignment = horizontalAlignment,
-            modifier = Modifier.fillMaxSize(),
             content = content,
         )
 
