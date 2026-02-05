@@ -7,6 +7,7 @@ import kotlinx.coroutines.SupervisorJob
 import net.canvoki.carburoid.country.CountryRegistry
 import net.canvoki.carburoid.country.CountrySettings
 import net.canvoki.carburoid.location.LocationService
+import net.canvoki.carburoid.network.GasStationApi
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.ui.settings.LanguageSettings
 import net.canvoki.carburoid.ui.settings.ThemeSettings
@@ -49,11 +50,14 @@ class CarburoidApplication : Application() {
     }
 
     fun setupRepository(): GasStationRepository {
-        val country = CountryRegistry.current
         val repository =
             GasStationRepository(
-                api = country.api,
-                parser = { json -> country.parse(json) },
+                // TODO: This is convoluted, we might want to rethink how to inject the api
+                api =
+                    object : GasStationApi {
+                        override suspend fun getGasStations() = CountryRegistry.current.api.getGasStations()
+                    },
+                parser = { json -> CountryRegistry.current.parse(json) },
                 cacheFile = cacheFile,
                 scope = appScope,
             )
