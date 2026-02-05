@@ -5,8 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -50,18 +48,10 @@ fun LazyColumn(
     // Compensate the fade with content padding
     val layoutDirection = LocalLayoutDirection.current
 
-    val combinedPadding =
-        PaddingValues(
-            start = contentPadding.calculateStartPadding(layoutDirection),
-            top = fadeHeight + contentPadding.calculateTopPadding(),
-            end = contentPadding.calculateEndPadding(layoutDirection),
-            bottom = (fadeHeight * 6) + contentPadding.calculateBottomPadding(),
-        )
-
     Box(modifier = modifier) {
         AndroidXLazyColumn(
             state = state,
-            contentPadding = combinedPadding,
+            contentPadding = contentPadding,
             reverseLayout = reverseLayout,
             verticalArrangement = verticalArrangement,
             horizontalAlignment = horizontalAlignment,
