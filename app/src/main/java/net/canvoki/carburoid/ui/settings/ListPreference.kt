@@ -90,7 +90,8 @@ fun ListPreference(
                 ) {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(bottom = 12.dp),
                     )
 
