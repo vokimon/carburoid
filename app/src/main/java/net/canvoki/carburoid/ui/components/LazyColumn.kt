@@ -28,11 +28,8 @@ import androidx.compose.foundation.lazy.LazyColumn as AndroidXLazyColumn
 
 /**
  * Drop-in replacement for [androidx.compose.foundation.lazy.LazyColumn]
- * with subtle fade indicators.
- *
- * Automatically adds padding proportional to [fadeHeight] to ensure fades are visible,
- * and adds it to any user-provided [contentPadding].
- */
+ * with subtle indicators of scrollability.
+  */
 @Composable
 fun LazyColumn(
     modifier: Modifier = Modifier,
