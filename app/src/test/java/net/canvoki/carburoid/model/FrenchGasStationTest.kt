@@ -57,10 +57,8 @@ class FrenchGasStationTest {
                 state?.let { put("departement", it) }
                 latitude?.let { put("latitude", it) }
                 longitude?.let { put("longitude", it) }
-                for (product in listOf("gazole", "sp95", "e10")) {
-                    if (product in prices) {
-                        put(product + "_prix", prices[product])
-                    }
+                for ((product, price) in prices) {
+                    put(product + "_prix", price)
                 }
             },
         )
@@ -103,10 +101,30 @@ class FrenchGasStationTest {
         )
     }
 
+    // Prices dict using french api ids
+    val frenchPrices =
+        mapOf(
+            "gazole" to 1.2,
+            "sp95" to 1.3,
+            "sp98" to 1.4,
+            "e10" to 1.5,
+            "e85" to 1.6,
+            "gplc" to 1.7,
+        )
+
+    // Prices dict using common ids
+    val commonPrices =
+        mapOf(
+            "Gasoleo A" to 1.2,
+            "Gasolina 95 E5" to 1.3,
+            "Gasolina 98 E5" to 1.4,
+            "Gasolina 95 E10" to 1.5,
+            "Gasolina 95 E85" to 1.6,
+            "Gases licuados del petróleo" to 1.7,
+        )
+
     @Test
     fun `French Station dump adds _prix suffix to product prices`() {
-        val commonPrices = mapOf("Gasoleo A" to 1.2)
-        val frenchPrices = mapOf("gazole" to 1.2)
         val json = baseCase(prices = commonPrices).toJson()
         assertJsonEqual(
             expected = frenchStationJson(prices = frenchPrices),
@@ -116,8 +134,29 @@ class FrenchGasStationTest {
 
     @Test
     fun `French Station parsing collects _prix suffixed as product map price`() {
-        val commonPrices = mapOf("Gasoleo A" to 1.2)
-        val frenchPrices = mapOf("gazole" to 1.2)
+        val json = frenchStationJson(prices = frenchPrices)
+        val read = FrenchGasStation.parse(json)
+        assertDataEqual(
+            result = read,
+            expected = baseCase(prices = commonPrices),
+        )
+    }
+
+    @Test
+    fun `French Station dump just passes by unsupported products`() {
+        val commonPrices = mapOf("Gasoleo A Premium" to 1.2)
+        val frenchPrices = emptyMap<String, Double>()
+        val json = baseCase(prices = commonPrices).toJson()
+        assertJsonEqual(
+            expected = frenchStationJson(prices = frenchPrices),
+            result = json,
+        )
+    }
+
+    @Test
+    fun `French Station parsing ignores unsupported `() {
+        val frenchPrices = mapOf("unsupported" to 1.2)
+        val commonPrices = emptyMap<String, Double>()
         val json = frenchStationJson(prices = frenchPrices)
         val read = FrenchGasStation.parse(json)
         assertDataEqual(
@@ -148,6 +187,16 @@ class FrenchGasStationTest {
     fun `timeZone is EuropeParis until fully implemented`() {
         val station = baseCase()
         assertEquals("Europe/Paris", station.timeZone().id)
+    }
+
+    @Test
+    fun `product mappings are bijective`() {
+        assertEquals(apiProducts.size, fromApiProduct.size)
+        assertEquals(apiProducts.size, toApiProduct.size)
+        for ((french, common) in apiProducts) {
+            assertEquals(common, fromApiProduct[french])
+            assertEquals(french, toApiProduct[common])
+        }
     }
 
     // Response

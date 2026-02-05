@@ -19,7 +19,7 @@ import net.canvoki.carburoid.log
 import net.canvoki.carburoid.timeits
 import java.time.ZoneId
 
-private val apiProducts =
+val apiProducts =
     listOf(
         "gazole" to "Gasoleo A",
         "sp95" to "Gasolina 95 E5",
@@ -162,10 +162,10 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
                 value.longitude?.let { put("longitude", JsonPrimitive((it * 100_000).toLong().toString())) }
                 //put("horaires_jour", JsonPrimitive("L-D: 24H"))
                 for ((product, price) in value.prices) {
+                    if (price == null) continue
                     val apiProduct = toApiProduct[product]
-                    if (price != null) {
-                        put("${apiProduct}_prix", JsonPrimitive(price))
-                    }
+                    if (apiProduct == null) continue
+                    put("${apiProduct}_prix", JsonPrimitive(price))
                 }
             }
         jsonEncoder.encodeJsonElement(obj)
