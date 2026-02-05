@@ -39,6 +39,7 @@ private val json by lazy {
         explicitNulls = false
         encodeDefaults = true
         prettyPrint = true
+        @OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
         prettyPrintIndent = "  "
     }
 }
