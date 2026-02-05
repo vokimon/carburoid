@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import net.canvoki.carburoid.R
+import net.canvoki.carburoid.country.CountrySettings
 
 @Composable
 fun CategorizedProductSelector(modifier: Modifier = Modifier) {
@@ -38,8 +39,8 @@ fun CategorizedProductSelector(modifier: Modifier = Modifier) {
     var productSelection = remember { ProductSelection(context = context) }
     var selectedProduct by productSelection.asState()
     var recentSelections = productSelection.recent()
-
-    val productCategories = ProductCatalog.categories
+    val country = CountrySettings.rememberCountry()
+    val productCategories = country.productCatalog.categories
 
     @Composable
     fun CategoryHeader(
