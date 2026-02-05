@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
@@ -41,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import net.canvoki.carburoid.ui.components.LazyColumn
 
 @Composable
 fun ListPreference(
@@ -94,82 +94,27 @@ fun ListPreference(
                         modifier = Modifier.padding(bottom = 12.dp),
                     )
 
-                    val listState = rememberLazyListState()
-
-                    val showTopFade by remember(listState) {
-                        derivedStateOf { listState.canScrollBackward }
-                    }
-                    val showBottomFade by remember(listState) {
-                        derivedStateOf { listState.canScrollForward }
-                    }
-
-                    Box(modifier = Modifier.weight(1f, fill = false)) {
-                        LazyColumn(
-                            state = listState,
-                            verticalArrangement = Arrangement.spacedBy(4.dp),
-                            contentPadding =
-                                PaddingValues(
-                                    top = if (showTopFade) 24.dp else 8.dp,
-                                    bottom = if (showBottomFade) 24.dp else 8.dp,
-                                ),
-                        ) {
-                            items(options) { (optionValue, label) ->
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier =
-                                        Modifier
-                                            .fillMaxWidth()
-                                            .clickable {
-                                                onChange(optionValue)
-                                                showDialog = false
-                                            }.padding(vertical = 8.dp),
-                                ) {
-                                    RadioButton(selected = value == optionValue, onClick = null)
-                                    Text(label, modifier = Modifier.padding(start = 8.dp))
-                                }
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.weight(1f, fill = false),
+                    ) {
+                        items(options) { (optionValue, label) ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            onChange(optionValue)
+                                            showDialog = false
+                                        }.padding(vertical = 8.dp),
+                            ) {
+                                RadioButton(selected = value == optionValue, onClick = null)
+                                Text(label, modifier = Modifier.padding(start = 8.dp))
                             }
                         }
-
-                        // Top fade
-                        if (showTopFade) {
-                            Box(
-                                modifier =
-                                    Modifier
-                                        .align(Alignment.TopCenter)
-                                        .fillMaxWidth()
-                                        .height(4.dp)
-                                        .background(
-                                            Brush.verticalGradient(
-                                                colors =
-                                                    listOf(
-                                                        MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
-                                                        Color.Transparent,
-                                                    ),
-                                            ),
-                                        ),
-                            )
-                        }
-
-                        // Bottom fade
-                        if (showBottomFade) {
-                            Box(
-                                modifier =
-                                    Modifier
-                                        .align(Alignment.BottomCenter)
-                                        .fillMaxWidth()
-                                        .height(4.dp)
-                                        .background(
-                                            Brush.verticalGradient(
-                                                colors =
-                                                    listOf(
-                                                        Color.Transparent,
-                                                        MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
-                                                    ),
-                                            ),
-                                        ),
-                            )
-                        }
                     }
+
                     // Cancel button — now always visible
                     TextButton(
                         onClick = { showDialog = false },
