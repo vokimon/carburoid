@@ -32,6 +32,7 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
         Column(
             modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
         ) {
+            CountrySettings.Preference()
             PreferenceCategory(
                 title = stringResource(R.string.settings_category_language_appearance),
             ) {
@@ -43,7 +44,6 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
                     summary = stringResource(R.string.settings_translate_title),
                     iconResId = R.drawable.ic_weblate,
                 )
-                CountrySettings.Preference()
             }
             PreferenceCategory(
                 title = stringResource(R.string.settings_category_station_filters),
