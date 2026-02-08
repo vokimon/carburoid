@@ -1,15 +1,14 @@
 package net.canvoki.carburoid
 
 import androidx.test.platform.app.InstrumentationRegistry
-import net.canvoki.carburoid.model.GasStationResponseGson
 import net.canvoki.carburoid.model.SpanishGasStationResponse
 import org.junit.Test
 import java.io.File
 import java.time.Instant
 
-open class LoadBenchmarkGsonTest {
-    open fun parse(jsonContent: String): Int {
-        val response = GasStationResponseGson.parse(jsonContent)
+class LoadBenchmarkTest {
+    fun parse(jsonContent: String): Int {
+        val response = SpanishGasStationResponse.parse(jsonContent)
         return response.stations.size
     }
 
@@ -58,12 +57,5 @@ open class LoadBenchmarkGsonTest {
 
         // Mostra el contingut acumulat del fitxer
         log("BENCHMARK_RESULTS: " + resultLine)
-    }
-}
-
-class LoadBenchmarkKSerialTest : LoadBenchmarkGsonTest() {
-    override fun parse(jsonContent: String): Int {
-        val response = SpanishGasStationResponse.parse(jsonContent)
-        return response.stations.size
     }
 }

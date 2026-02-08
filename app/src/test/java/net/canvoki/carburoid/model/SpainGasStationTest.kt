@@ -11,7 +11,6 @@ import java.util.Locale
 @Suppress("ktlint:standard:max-line-length")
 val fullJsonCase = """{"IDEESS":1234,"Rótulo":"Test Station","Dirección":"Calle Principal 123","Localidad":"Madrid","Provincia":"Madrid","Latitud":"40,4168","Longitud (WGS84)":"-3,7038","Tipo Venta":"P","Horario":"L-D: 24H","Precio Gasolina 95":"1,234"}"""
 
-
 abstract class GasStationFixture {
     private lateinit var originalLocale: Locale
 
@@ -329,38 +328,6 @@ abstract class GasStationFixture {
         assertEquals(originalStation.longitude, deserializedStation.longitude)
         assertEquals(originalStation.prices, deserializedStation.prices)
     }
-}
-
-class GsonGasStationTest : GasStationFixture() {
-    override fun parseResponse(string: String): GasStation {
-        val response = GasStationResponseGson.parse(string)
-        return response.stations.first()
-    }
-
-    override fun parseStation(string: String): GasStation = GasStationGson.parse(string)
-
-    open override fun newGasStation(
-        id: Int,
-        name: String?,
-        address: String?,
-        city: String?,
-        state: String?,
-        latitude: Double?,
-        longitude: Double?,
-        isPublicPrice: Boolean,
-        prices: Map<String, Double?>,
-    ): GasStation =
-        GasStationGson(
-            id = id,
-            name = name,
-            address = address,
-            city = city,
-            state = state,
-            latitude = latitude,
-            longitude = longitude,
-            isPublicPrice = isPublicPrice,
-            prices = prices,
-        )
 }
 
 class SpanishGasStationTest : GasStationFixture() {
