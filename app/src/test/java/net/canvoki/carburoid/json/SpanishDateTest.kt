@@ -64,48 +64,4 @@ class SpanishDateTest {
             "2024-03-31T01:15:00Z",
             "31/03/2024 2:15:00",
         )
-
-    private val adapter = SpanishDateTypeAdapter()
-
-    @Test
-    fun `type adapter reads invalid date as null`() {
-        val reader = JsonReader(java.io.StringReader("\"not a date\""))
-
-        val result = adapter.read(reader)
-
-        assertEquals(null, result)
-    }
-
-    @Test
-    fun `type adapter reads valid date`() {
-        val reader = JsonReader(java.io.StringReader("\"01/06/2024 9:30:45\""))
-        val expected = Instant.parse("2024-06-01T07:30:45Z")
-
-        val result = adapter.read(reader)
-
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `type adapter writes null`() {
-        val writer = java.io.StringWriter()
-        val jsonWriter = JsonWriter(writer)
-
-        adapter.write(jsonWriter, null)
-        jsonWriter.flush()
-
-        assertEquals("null", writer.toString())
-    }
-
-    @Test
-    fun `type adapter writes valid date`() {
-        val writer = java.io.StringWriter()
-        val jsonWriter = JsonWriter(writer)
-        val input = Instant.parse("2024-06-01T07:30:45Z") // UTC
-
-        adapter.write(jsonWriter, input)
-        jsonWriter.flush()
-
-        assertEquals("\"01/06/2024 9:30:45\"", writer.toString())
-    }
 }

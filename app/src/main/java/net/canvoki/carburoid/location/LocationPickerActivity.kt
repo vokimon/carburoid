@@ -250,7 +250,7 @@ class LocationPickerActivity : AppCompatActivity() {
         Thread {
             try {
                 val response = call.execute()
-                val body = response.body?.string() ?: return@Thread
+                val body = response.body.string()
                 val array = JSONArray(body)
 
                 val newSuggestions = mutableListOf<Suggestion>()
@@ -295,7 +295,7 @@ class LocationPickerActivity : AppCompatActivity() {
                         .header("User-Agent", packageName)
                         .build()
                 val response = client.newCall(request).execute()
-                val body = response.body?.string() ?: return@Thread
+                val body = response.body.string()
                 val json = JSONObject(body)
                 val displayName = json.optString("display_name", "")
 

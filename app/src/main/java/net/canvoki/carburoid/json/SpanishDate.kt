@@ -1,8 +1,5 @@
 package net.canvoki.carburoid.json
 
-import com.google.gson.TypeAdapter
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonWriter
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -24,27 +21,5 @@ fun fromSpanishDate(spanishDate: String?): Instant? {
         localDateTime.atZone(MADRID_ZONE).toInstant()
     } catch (e: Exception) {
         null
-    }
-}
-
-class SpanishDateTypeAdapter : TypeAdapter<Instant?>() {
-    override fun write(
-        out: JsonWriter,
-        value: Instant?,
-    ) {
-        if (value == null) {
-            out.nullValue()
-        } else {
-            out.value(toSpanishDate(value))
-        }
-    }
-
-    override fun read(`in`: JsonReader): Instant? {
-        val raw = `in`.nextString()
-        return try {
-            fromSpanishDate(raw)
-        } catch (e: Exception) {
-            null
-        }
     }
 }
