@@ -1,6 +1,5 @@
 package net.canvoki.carburoid.repository
 
-import com.google.gson.Gson
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred

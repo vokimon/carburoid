@@ -1,7 +1,7 @@
 package net.canvoki.carburoid
 
 import androidx.test.platform.app.InstrumentationRegistry
-import net.canvoki.carburoid.model.GasStationResponse
+import net.canvoki.carburoid.model.GasStationResponseGson
 import net.canvoki.carburoid.model.SpanishGasStationResponse
 import org.junit.Test
 import java.io.File
@@ -9,7 +9,7 @@ import java.time.Instant
 
 open class LoadBenchmarkGsonTest {
     open fun parse(jsonContent: String): Int {
-        val response = GasStationResponse.parse(jsonContent)
+        val response = GasStationResponseGson.parse(jsonContent)
         return response.stations.size
     }
 
