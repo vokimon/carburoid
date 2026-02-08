@@ -1,7 +1,7 @@
 package net.canvoki.carburoid.test
 
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.advanceUntilIdle
 
 /**
  * Drains all immediately runnable coroutines in the test dispatcher.
@@ -9,5 +9,5 @@ import kotlinx.coroutines.test.runCurrent
  */
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 fun TestScope.yieldUntilIdle() {
-    repeat(5) { runCurrent() }
+    advanceUntilIdle()
 }
