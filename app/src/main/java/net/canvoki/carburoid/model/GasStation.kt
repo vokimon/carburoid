@@ -38,7 +38,7 @@ interface GasStation {
     fun toJson(): String
 
     companion object {
-        fun parse(json: String): GasStation = GasStationGson.parse(json)
+        fun parse(json: String): GasStation = SpanishGasStation.parse(json)
     }
 }
 

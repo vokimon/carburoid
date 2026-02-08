@@ -11,6 +11,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.buildJsonArray
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import net.canvoki.carburoid.json.toSpanishFloat
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
@@ -36,12 +41,21 @@ class GasStationRepositoryTest {
     private lateinit var tempDir: File
     private lateinit var api: GasStationApi
     private lateinit var cacheFile: File
-    //private lateinit var repository: GasStationRepository
 
-    fun jsonResponse(stations: List<Map<String, Any>> = emptyList()): String =
-        Gson().toJson(
-            mapOf("ListaEESSPrecio" to stations),
-        )
+    suspend fun setupStations(stations: List<JsonObject>) {
+        val response = jsonResponse(stations = stations)
+        cacheFile.writeText(response)
+    }
+
+    fun jsonResponse(stations: List<JsonObject> = emptyList()): String =
+        buildJsonObject {
+            put(
+                "ListaEESSPrecio",
+                buildJsonArray {
+                    stations.forEach { add(it) }
+                },
+            )
+        }.toString()
 
     fun baseCacheContent(price: Double = 0.4) =
         jsonResponse(
@@ -55,34 +69,29 @@ class GasStationRepositoryTest {
         index: Int,
         distance: Double,
         price: Double?,
-    ): Map<String, Any> =
-        mapOf(
-            "IDEESS" to "$index",
-            "Rótulo" to "Station $index at $distance km, $price €",
-            "Dirección" to "Address $index",
-            "Localidad" to "A city",
-            "Provincia" to "A state",
-            "Precio Gasoleo A" to (toSpanishFloat(price) ?: ""),
-            "Latitud" to "40,4168",
-            "Longitud (WGS84)" to (toSpanishFloat(distance) ?: ""),
-            "Tipo Venta" to "P",
-        )
+    ): JsonObject =
+        buildJsonObject {
+            put("IDEESS", "$index")
+            put("Rótulo", "Station $index at $distance km, $price €")
+            put("Dirección", "Address $index")
+            put("Localidad", "A city")
+            put("Provincia", "A state")
+            put("Precio Gasoleo A", (toSpanishFloat(price) ?: ""))
+            put("Latitud", "40,4168")
+            put("Longitud (WGS84)", (toSpanishFloat(distance) ?: ""))
+            put("Tipo Venta", "P")
+        }
 
     private fun writeCache(downloadDate: Instant?) {
         val response =
             SpanishGasStationResponse(
                 stations = emptyList(),
             )
-        cacheFile.writeText(Gson().toJson(response))
+        cacheFile.writeText(response.toJson())
 
         if (downloadDate != null) {
             cacheFile.setLastModified(downloadDate.toEpochMilli())
         }
-    }
-
-    suspend fun setupStations(stations: List<Map<String, Any>>) {
-        val response = jsonResponse(stations = stations)
-        cacheFile.writeText(response)
     }
 
     private fun dataExample() =
