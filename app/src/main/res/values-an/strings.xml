@@ -19,6 +19,7 @@
     <string name="settings_category_station_filters">Filtro de gasolineras</string>
     <string name="settings_filter_expensive">Amagar irrelevantes</string>
     <string name="settings_filter_expensive_summary">Una gasolinera se considera irrelevante si n\'i hai bella atro que sía más preta y más barata. (Recomendau)</string>
+    <string name="settings_filter_expensive_warning">Carburoid ye diseñada pa funcionar con este filtro activau. Desactivar-lo amuestra muitas mas estacions, lo que ralentiza considerablement l\'aplicación. Considera tornar-lo a activar mas adelante.</string>
     <string name="settings_filter_non_public">Nomás preus públicos</string>
     <string name="settings_filter_non_public_summary">Amagar preus que demanden afiliación.</string>
     <string name="settings_filter_beyond_sea">Amaga gasolineras al otro lado d\'o mar</string>
@@ -101,4 +102,7 @@
     <string name="settings_country_summary">Tría o proveedor de datos de precios de carburants</string>
     <string name="settings_country_es">España</string>
     <string name="settings_country_fr">Francia</string>
+    <string name="settings_country_fr_warning_wip">Os datos d\'as gasolineras francesas encara son en fese de desarrollo. No i hai nombres d\'estacions ni horarios disponibles.</string>
+    <string name="settings_warning_dialog_wip">En fese de desarrollo</string>
+    <string name="warning_dialog_title">Atención</string>
 </resources>

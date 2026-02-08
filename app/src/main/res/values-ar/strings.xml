@@ -19,6 +19,7 @@
     <string name="settings_category_station_filters">تصفية محطات الوقود</string>
     <string name="settings_filter_expensive">اخفي مش ذات صلة</string>
     <string name="settings_filter_expensive_summary">تعتبر المحطة مش ذات صلة إذا كانت كاين غيرها أقرب وبأسعار أرخص. (موصى به)</string>
+    <string name="settings_filter_expensive_warning">كاربورويد صممت باش تخدم مع هاذ الفلتر مفعل. تعطيلو بيعرض عدد كبير من المحطات الإضافية، اللي يخلي التطبيق يصبح بطيئاً بشكل كبير. فكر في تفعيلو تاني لاحقاً.</string>
     <string name="settings_filter_non_public">الأسعار العامة فقط</string>
     <string name="settings_filter_non_public_summary">إخفاء الأسعار التي تتطلب اشتراك</string>
     <string name="settings_filter_beyond_sea">اخفاء محطات الوقود على الجانب الآخر من البحر</string>
@@ -101,4 +102,7 @@
     <string name="settings_country_summary">اختار الجهة اللي كتوفّر معطيات أسعار الوقود</string>
     <string name="settings_country_es">إسبانيا</string>
     <string name="settings_country_fr">فرنسا</string>
+    <string name="settings_country_fr_warning_wip">بيانات محطات البنزين الفرنسية ما زالت قيد التطوير. ما فيش أسماء المحطات ولا مواقيت التشغيل متاحة حالياً.</string>
+    <string name="settings_warning_dialog_wip">قيد التطوير</string>
+    <string name="warning_dialog_title">تحذير</string>
 </resources>

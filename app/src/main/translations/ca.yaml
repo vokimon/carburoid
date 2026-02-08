@@ -17,6 +17,7 @@ theme_system: Automàtic (El del sistema)
 settings_category_station_filters: Filtrat de benzineres
 settings_filter_expensive: Amaga les irrelevants
 settings_filter_expensive_summary: Una benzinera es considera irrelevant si n'hi ha cap altra de més propera i barata. (Recomanat)
+settings_filter_expensive_warning: Carburoid està dissenyada per funcionar amb aquest filtre activat. Desactivar-lo mostra moltes més estacions, la qual cosa ralentitza considerablement l'aplicació. Considera tornar-lo a activar més endavant.
 settings_filter_non_public: Només preus públics
 settings_filter_non_public_summary: Amaga preus que demanin afiliació.
 settings_filter_beyond_sea: Amaga benzineres a l'altre costat del mar
@@ -99,3 +100,7 @@ settings_country_title: Proveïdor de dades
 settings_country_summary: Selecciona el proveïdor de dades de preus del carburant
 settings_country_es: Espanya
 settings_country_fr: França
+settings_country_fr_warning_wip: Les dades de les gasolineres franceses encara són en fase de desenvolupament. No hi ha noms d'estacions ni horaris disponibles.
+settings_warning_dialog_wip: En desenvolupament
+warning_dialog_title: Advertència
+

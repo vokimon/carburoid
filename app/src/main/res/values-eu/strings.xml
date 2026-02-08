@@ -19,6 +19,7 @@
     <string name="settings_category_station_filters">Estazioko iragazkiak</string>
     <string name="settings_filter_expensive">Ezkutatu garrantzigabeak</string>
     <string name="settings_filter_expensive_summary">Gune bat garrantzigabetzat hartzen da beste bat badago hurbilagoa eta merkeagoa. (Gomendatua)</string>
+    <string name="settings_filter_expensive_warning">Carburoid diseinatuta dago iragazki hau gaituta funtzionatzeko. Desgaitzeak gasolinategi gehiago erakusten ditu, eta horrek aplikazioa nabarmen moteldu egiten du. Kontsideratu berriro gaitzea geroago.</string>
     <string name="settings_filter_non_public">Prezio publikoak bakarrik erakutsi</string>
     <string name="settings_filter_non_public_summary">Ezkutatu bazkidetza edo beste edozer eskatzen duten prezioak.</string>
     <string name="settings_filter_beyond_sea">Itsas bestaldeko gasolindegiak ezkutatu</string>
@@ -101,4 +102,7 @@
     <string name="settings_country_summary">Aukeratu erregaien prezioen datuen hornitzailea</string>
     <string name="settings_country_es">Espainia</string>
     <string name="settings_country_fr">Frantzia</string>
+    <string name="settings_country_fr_warning_wip">Gasolinategi frantsesen datuak oraindik garapen-fasean daude. Ez dago oraindik izenik edo irekiera-ordurik eskuragarri.</string>
+    <string name="settings_warning_dialog_wip">Garapen-fasean</string>
+    <string name="warning_dialog_title">Abisua</string>
 </resources>

@@ -17,6 +17,7 @@ theme_system: Automático (Sistema)
 settings_category_station_filters: Filtrado de gasolineiras
 settings_filter_expensive: Agochar non relevantes
 settings_filter_expensive_summary: Considérase non relevante unha estación de servizo se hai outra máis preto e máis barata. (Recomendado)
+settings_filter_expensive_warning: Carburoid está deseñada para funcionar con este filtro activado. Desactivalo amosa moitas máis estacións, o que ralentiza considerablemente a aplicación. Considera reactivalo máis adiante.
 settings_filter_non_public: Só prezos públicos
 settings_filter_non_public_summary: Oculta os prezos que requiran subscrición.
 settings_filter_beyond_sea: Oculta gasolineiras do outro lado do mar
@@ -99,3 +100,7 @@ settings_country_title: Provedor de datos
 settings_country_summary: Selecciona o provedor de datos de prezos dos carburantes
 settings_country_es: España
 settings_country_fr: Francia
+settings_country_fr_warning_wip: Os datos das gasolineras francesas aínda están en desenvolvemento. Aínda non hai nomes de estacións nin horarios dispoñibles.
+settings_warning_dialog_wip: En desenvolvemento
+warning_dialog_title: Aviso
+

@@ -36,7 +36,9 @@ object FranceGasStationApi : GasStationApi {
         "https://data.economie.gouv.fr/" +
             "api/explore/v2.1/catalog/" +
             "datasets/prix-des-carburants-en-france-flux-instantane-v2/" +
+            // full dataset
             "exports/json?limit=-1" +
+            // Remove redundant fields to save size
             "&select=exclude(services),exclude(prix),exclude(rupture),exclude(horaires)"
 
     override suspend fun getGasStations(): String =

@@ -3,8 +3,11 @@ package net.canvoki.carburoid.country
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.DrawableRes
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -18,6 +21,7 @@ import net.canvoki.carburoid.R
 import net.canvoki.carburoid.country.CountryRegistry
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.ui.settings.ListPreference
+import net.canvoki.carburoid.ui.settings.OneTimeNotice
 import net.canvoki.carburoid.ui.settings.rememberMutablePreference
 
 object CountrySettings {
@@ -82,6 +86,7 @@ object CountrySettings {
 
         // Reactive state synced with SharedPreferences
         var currentValue by rememberMutableCountry()
+        var showFrenchWarning by remember { mutableStateOf(false) }
 
         val countries = getAvailableCountries()
         val options =
@@ -102,7 +107,15 @@ object CountrySettings {
             onChange = { newCode ->
                 currentValue = newCode
                 apply(context)
+                showFrenchWarning = newCode == "FR"
             },
         )
+        if (showFrenchWarning) {
+            OneTimeNotice(
+                noticeId = "wip-data-source-france-123",
+                title = stringResource(R.string.settings_warning_dialog_wip),
+                message = stringResource(R.string.settings_country_fr_warning_wip),
+            )
+        }
     }
 }

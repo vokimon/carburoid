@@ -19,6 +19,7 @@
     <string name="settings_category_station_filters">Station filters</string>
     <string name="settings_filter_expensive">Hide irrelevant stations</string>
     <string name="settings_filter_expensive_summary">A station is considered irrelevant if any other exists that is nearer and cheaper. (Recommended)</string>
+    <string name="settings_filter_expensive_warning">Carburoid is designed to work with this filter enabled. Disabling it shows many more stations, which significantly slows down the application. Consider re-enabling it later.</string>
     <string name="settings_filter_non_public">Show only public prices</string>
     <string name="settings_filter_non_public_summary">Hide prices requiring membership or anything else.</string>
     <string name="settings_filter_beyond_sea">Hide stations beyond the sea</string>
@@ -101,4 +102,7 @@
     <string name="settings_country_summary">Select the provider of fuel price data</string>
     <string name="settings_country_es">Spain</string>
     <string name="settings_country_fr">France</string>
+    <string name="settings_country_fr_warning_wip">French gas station data is still work in progress. Station names and operating hours are not yet available.</string>
+    <string name="settings_warning_dialog_wip">Work in progress</string>
+    <string name="warning_dialog_title">Warning</string>
 </resources>

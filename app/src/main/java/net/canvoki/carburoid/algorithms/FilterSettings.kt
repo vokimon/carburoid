@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.ui.settings.ListPreference
+import net.canvoki.carburoid.ui.settings.OneTimeNotice
 import net.canvoki.carburoid.ui.settings.SwitchPreference
 import net.canvoki.carburoid.ui.settings.rememberMutablePreference
 
@@ -58,6 +59,7 @@ object FilterSettings {
     @Composable
     fun Preference() {
         var hideExpensive by rememberMutablePreference(KEY_HIDE_EXPENSIVE, true)
+        var showHideExpensiveDisabledWarning by remember { mutableStateOf(false) }
         SwitchPreference(
             title = stringResource(R.string.settings_filter_expensive),
             summary = stringResource(R.string.settings_filter_expensive_summary),
@@ -66,8 +68,16 @@ object FilterSettings {
             onCheckedChange = {
                 hideExpensive = it
                 apply()
+                showHideExpensiveDisabledWarning = hideExpensive == false
             },
         )
+        if (showHideExpensiveDisabledWarning) {
+            OneTimeNotice(
+                noticeId = "hide_expensive_disabled",
+                title = stringResource(R.string.warning_dialog_title),
+                message = stringResource(R.string.settings_filter_expensive_warning),
+            )
+        }
 
         var onlyPublicPrices by rememberMutablePreference(KEY_ONLY_PUBLIC_PRICES, true)
         SwitchPreference(
