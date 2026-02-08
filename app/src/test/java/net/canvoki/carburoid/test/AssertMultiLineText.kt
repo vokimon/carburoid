@@ -91,6 +91,7 @@ private fun contextAfter(
 fun assertEquals(
     expected: String,
     actual: String,
+    message: String? = null,
     contextLines: Int = 3,
 ) {
     val expectedLines = expected.lines()
@@ -100,8 +101,11 @@ fun assertEquals(
 
     if (patch.deltas.isEmpty()) return
 
-    val message =
+    val fullMessage =
         buildString {
+            if (message != null) {
+                appendLine(message)
+            }
             appendLine("Multiline diff (expected vs actual):")
             appendLine()
 
@@ -157,38 +161,56 @@ fun assertEquals(
             }
         }
 
-    throw AssertionError(message)
+    throw AssertionError(fullMessage)
 }
 
 // Example overloads that call JUnit4 assertEquals
 fun assertEquals(
     expected: Int,
     actual: Int,
-) = standardAssertEquals(expected, actual)
+    message: String? = null,
+) = if (message == null) standardAssertEquals(expected, actual) else standardAssertEquals(message, expected, actual)
 
 fun assertEquals(
     expected: Long,
     actual: Long,
-) = standardAssertEquals(expected, actual)
+    message: String? = null,
+) = if (message == null) standardAssertEquals(expected, actual) else standardAssertEquals(message, expected, actual)
 
 fun assertEquals(
     expected: Boolean,
     actual: Boolean,
-) = standardAssertEquals(expected, actual)
+    message: String? = null,
+) = if (message == null) standardAssertEquals(expected, actual) else standardAssertEquals(message, expected, actual)
 
 fun assertEquals(
     expected: Double,
     actual: Double,
     delta: Double,
-) = standardAssertEquals(expected, actual, delta)
+    message: String? = null,
+) = if (message ==
+    null
+) {
+    standardAssertEquals(expected, actual, delta)
+} else {
+    standardAssertEquals(message, expected, actual, delta)
+}
 
 fun assertEquals(
     expected: Float,
     actual: Float,
     delta: Float,
-) = standardAssertEquals(expected, actual, delta)
+    message: String? = null,
+) = if (message ==
+    null
+) {
+    standardAssertEquals(expected, actual, delta)
+} else {
+    standardAssertEquals(message, expected, actual, delta)
+}
 
-fun <T> assertEquals(
-    expected: T,
-    actual: T,
-) = standardAssertEquals(expected, actual)
+fun assertEquals(
+    expected: Any?,
+    actual: Any?,
+    message: String? = null,
+) = if (message == null) standardAssertEquals(expected, actual) else standardAssertEquals(message, expected, actual)
