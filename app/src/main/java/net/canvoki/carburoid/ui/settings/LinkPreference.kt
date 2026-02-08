@@ -41,8 +41,7 @@ fun LinkPreference(
         },
         modifier =
             Modifier.clickable {
-                ContextCompat.startActivity(
-                    context,
+                context.startActivity(
                     android.content.Intent(
                         android.content.Intent.ACTION_VIEW,
                         android.net.Uri.parse(url),
