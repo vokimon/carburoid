@@ -211,14 +211,14 @@ class FrenchGasStationTest {
                     ),
             )
         assertJsonEqual(
-            expected = "{\"results\": [${ frenchStationJson() }]}",
+            expected = "[${ frenchStationJson() }]",
             result = response.toJson(),
         )
     }
 
     @Test
     fun `French response parse`() {
-        val json = "{\"results\": [${ frenchStationJson() }]}"
+        val json = "[${ frenchStationJson() }]"
         val result = FrenchGasStationResponse.parse(json)
         assertDataEqual(
             expected = FrenchGasStationResponse(stations = listOf(baseCase())),

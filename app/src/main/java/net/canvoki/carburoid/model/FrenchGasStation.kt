@@ -4,6 +4,7 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
@@ -43,18 +44,15 @@ private val json by lazy {
 
 @Serializable
 data class FrenchGasStationResponse(
-    @SerialName("results")
-    override val stations: List<
-        @Serializable(with = FrenchGasStationSerializer::class)
-        FrenchGasStation,
-    >,
+    override val stations: List<FrenchGasStation>,
 ) : GasStationResponse {
-    fun toJson(): String = json.encodeToString(FrenchGasStationResponse.serializer(), this)
+    fun toJson(): String = json.encodeToString(ListSerializer(FrenchGasStation.serializer()), stations)
 
     companion object {
         fun parse(jsonStr: String): FrenchGasStationResponse =
             timeits("PARSE_FRENCH") {
-                json.decodeFromString<FrenchGasStationResponse>(jsonStr)
+                val stations = json.decodeFromString<List<FrenchGasStation>>(jsonStr)
+                FrenchGasStationResponse(stations)
             }
     }
 }
