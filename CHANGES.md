@@ -6,6 +6,7 @@ French gas stations and Compose/Material3 Settings rewrite
 
 - ✨ Data source option: Enables support for countries other than Spain
 - ✨ French gas stations (with limitations)
+- 🚸 One time warning when disabling expensive filter
 - 💄 Settings page rewritten on Compose/Material 3
 - ⚡️ Using a faster data loading library (Gson -> Kotlin Serialization) 20% speed up
 - ♻️  API format abstraction. A step towards supporting for other countries
