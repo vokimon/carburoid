@@ -1,7 +1,11 @@
 package net.canvoki.carburoid.repository
 
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -10,14 +14,14 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.model.SpanishGasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
-import net.canvoki.carburoid.nolog
 import net.canvoki.carburoid.timeit
 import java.io.File
 import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicBoolean
+import net.canvoki.carburoid.nolog as log
 
-typealias Parser = (String) -> GasStationResponse
+typealias Parser = suspend (String) -> GasStationResponse
 
 sealed class RepositoryEvent {
     object UpdateStarted : RepositoryEvent()
@@ -31,11 +35,12 @@ sealed class RepositoryEvent {
 
 class GasStationRepository(
     private val api: GasStationApi,
-    private val cacheFile: File,
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
+    private var cacheFile: File,
     private val parser: Parser? = { json ->
         SpanishGasStationResponse.parse(json)
     },
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) {
     companion object {
         const val MINUTES_TO_EXPIRE = 30L
@@ -46,24 +51,79 @@ class GasStationRepository(
 
     private var cache: String? = null
     private var parsed: GasStationResponse? = null
+    private var currentFetchJob: Job? = null
 
     init {
-        if (cacheFile.exists()) {
-            try {
-                cache = cacheFile.readText()
-                cache?.let {
-                    parsed = parser?.invoke(it)
-                    nolog("REUSING PREVIOUS CACHE")
-                }
-            } catch (e: Exception) {
-                cache = null
-                parsed = null
-                cacheFile.delete()
-            }
-        }
+        updateFromCache()
     }
 
-    private val isBackgroundUpdateRunning = AtomicBoolean(false)
+    private fun updateFromCache() {
+        cache = null
+        parsed = null
+        if (!cacheFile.exists()) {
+            scope.launch(ioDispatcher) {
+                _events.emit(RepositoryEvent.UpdateReady)
+            }
+            return
+        }
+
+        val holder =
+            object {
+                var job: Job? = null
+            }
+        holder.job =
+            scope.launch(ioDispatcher) {
+                try {
+                    _events.emit(RepositoryEvent.UpdateStarted)
+                    coroutineContext.ensureActive()
+
+                    log("LOADING PREVIOUS CACHE")
+                    val response = cacheFile.readText()
+                    //log("RESPONSE $response")
+                    coroutineContext.ensureActive()
+
+                    var success = false
+                    val newParsed = timeit("PARSING") { parser?.invoke(response) }
+                    coroutineContext.ensureActive()
+                    if (newParsed != null) {
+                        cache = response
+                        parsed = newParsed
+                        currentFetchJob = null
+                        _events.emit(RepositoryEvent.UpdateReady)
+                        success = true
+                    }
+                    if (!success && currentFetchJob == holder.job) {
+                        log("ERROR LOADING PREVIOUS CACHE RETURNING NULL")
+                        cache = null
+                        parsed = null
+                        cacheFile.delete()
+                        currentFetchJob = null
+                        _events.emit(RepositoryEvent.UpdateFailed("Error loading previous data"))
+                    }
+                } catch (e: CancellationException) {
+                    log("CACHE LOAD CANCELLED")
+                    if (currentFetchJob == holder.job) {
+                        currentFetchJob = null
+                    }
+                } catch (e: Exception) {
+                    log("ERROR LOADING PREVIOUS CACHE $e")
+                    cache = null
+                    parsed = null
+                    cacheFile.delete()
+                    currentFetchJob = null
+                    val message = e.message ?: e::class.simpleName ?: "Unknown"
+                    _events.emit(RepositoryEvent.UpdateFailed(message))
+                }
+            }
+
+        currentFetchJob = holder.job
+    }
+
+    fun setCache(cacheFile: File) {
+        log("RESETING CACHE: $cacheFile")
+        this.cacheFile = cacheFile
+        updateFromCache()
+    }
 
     fun getData(): GasStationResponse? {
         if (isExpired()) {
@@ -74,50 +134,64 @@ class GasStationRepository(
 
     fun getStationById(id: Int): GasStation? = getData()?.stations?.find { it.id == id }
 
-    fun launchFetch() {
-        if (!isBackgroundUpdateRunning.compareAndSet(false, true)) { // expected, new value
-            nolog("ALREADY FETCHING, QUIT")
-            return
-        }
-        scope.launch {
-            _events.emit(RepositoryEvent.UpdateStarted)
-            try {
-                val response =
-                    timeit("FETCH") {
-                        api.getGasStations()
-                    }
-
-                if (parser != null) {
-                    parsed =
-                        timeit("PARSING FETCH") {
-                            parser(response)
-                        }
-                }
-                saveToCache(response)
-                isBackgroundUpdateRunning.set(false)
-                _events.emit(RepositoryEvent.UpdateReady)
-            } catch (e: Exception) {
-                val message = e.message ?: e::class.simpleName ?: "Unknown"
-                nolog("FETCH ERROR $message")
-                nolog(e.stackTraceToString())
-                _events.emit(RepositoryEvent.UpdateFailed(message))
-            } finally {
-                isBackgroundUpdateRunning.set(false)
-            }
-        }
+    fun cancelFetchIfInProgress() {
+        currentFetchJob?.cancel()
     }
 
-    fun isFetchInProgress() = isBackgroundUpdateRunning.get()
+    fun launchFetch() {
+        if (currentFetchJob?.isActive == true) {
+            log("FETCH ALREADY IN PROGRESS, SKIPPING")
+            return
+        }
+        // To safely refer to it from the coroutine
+        val holder =
+            object {
+                var job: Job? = null
+            }
+        holder.job =
+            scope.launch(ioDispatcher) {
+                try {
+                    _events.emit(RepositoryEvent.UpdateStarted)
+                    coroutineContext.ensureActive()
+
+                    val response = timeit("FETCH") { api.getGasStations() }
+                    coroutineContext.ensureActive()
+
+                    val newParsed = timeit("PARSING") { parser?.invoke(response) }
+                    coroutineContext.ensureActive()
+
+                    if (currentFetchJob == holder.job) {
+                        saveToCache(response)
+                        cache = response
+                        parsed = newParsed
+                        currentFetchJob = null
+                        _events.emit(RepositoryEvent.UpdateReady)
+                    }
+                } catch (e: CancellationException) {
+                    log("FETCH CANCELLED")
+                    if (currentFetchJob == holder.job) {
+                        currentFetchJob = null
+                    }
+                } catch (e: Exception) {
+                    val message = e.message ?: e::class.simpleName ?: "Unknown"
+                    log("FETCH ERROR: $message")
+                    if (currentFetchJob == holder.job) {
+                        currentFetchJob = null
+                        _events.emit(RepositoryEvent.UpdateFailed(message))
+                    }
+                }
+            }
+
+        currentFetchJob = holder.job
+    }
+
+    fun isFetchInProgress(): Boolean = currentFetchJob?.isActive == true
 
     fun isExpired(): Boolean {
         val p = parsed ?: return true
-        val cacheInstant =
-            Instant.ofEpochMilli(cacheFile.lastModified())
-
+        val cacheInstant = Instant.ofEpochMilli(cacheFile.lastModified())
         val deadline = Instant.now().minus(Duration.ofMinutes(MINUTES_TO_EXPIRE))
-        if (cacheInstant <= deadline) return true
-        // up-to-date cache
-        return false
+        return cacheInstant <= deadline
     }
 
     suspend fun saveToCache(response: String) {

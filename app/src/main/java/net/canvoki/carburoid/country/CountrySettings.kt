@@ -13,6 +13,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
+import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.country.CountryRegistry
 import net.canvoki.carburoid.log
@@ -28,11 +29,18 @@ object CountrySettings {
     )
 
     fun initialize(context: Context) {
-        apply(context)
+        updateRegistry(context)
+    }
+
+    private fun updateRegistry(context: Context) {
+        CountryRegistry.setCurrent(getPreferencesValue(context))
     }
 
     fun apply(context: Context) {
-        CountryRegistry.setCurrent(getPreferencesValue(context))
+        updateRegistry(context)
+        val app = context.applicationContext as CarburoidApplication
+        app.repository.cancelFetchIfInProgress()
+        app.repository.setCache(app.cacheFile)
     }
 
     private fun getAvailableCountries(): List<CountryOption> =
