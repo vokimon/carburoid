@@ -38,8 +38,10 @@ echo done
 # Fresh data
 # curl https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/ > devdata/stations-$(date -uI minutes).json
 
-# Fresh french data
+# Fresh french data (Old record based, limited to 100 items pages)
 # curl https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/records?limit=-1 > devdata/stations-france-$(date -uI minutes).json
+# Fresh french data (New export based, full data set)
+# curl "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/exports/json?limit=-1&select=exclude(services),exclude(prix),exclude(rupture),exclude(horaires)" | jq . - > devdata/stations-france-$(date -uI minutes).json
 
 # Product Frequencies
 # yq . devdata/stations-example-full.json | grep Precio | grep -v \"\" | sed 's/":.*//' | sed 's/.*Precio //' | sort | uniq -c | sort -n
