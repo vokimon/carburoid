@@ -6,12 +6,9 @@ splash_motto: Fill up cheaper, closer
 short_description: Find Spanish gas stations by price and distance.
 full_description_md: |-
   Carburoid shows only gas stations worth considering.
-  A station is hidden if there’s any another one that is both cheaper and closer.
-  This trims the list from tens of thousands down to just a few dozen truly relevant options.
-
-  The first station on the list is the closest one.
-  As you scroll down stations are farther and but also cheaper.
-  You can stop scrolling when the distance is not worth for you the saving.
+  Sorted by distance, whenever a station is more expensive than the closer ones, it is hidden.
+  This reduces the list from thousands to a few dozens.
+  To choose a station, just scroll down to improve the price until the distance is not worth for you the saving.
 
   Features:
 
@@ -22,6 +19,14 @@ full_description_md: |-
   - 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese...
   - ☀️ Dark and Light themes
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_4_0_md: |-
+  French gas stations and Compose/Material3 Settings rewrite
+
+  - ✨ Data source option: Enables support for countries other than Spain
+  - ✨ French gas stations (with limitations)
+  - 💄 Settings page rewritten on Compose/Material 3
+  - ⚡️ Using a faster data loading library (Gson -> Kotlin Serialization) 20% speed up
+  - ♻️  API format abstraction. A step towards supporting for other countries
 changes_1_3_3_md: |-
   Main screen migrated to Compose plus visual and UX improvements
 

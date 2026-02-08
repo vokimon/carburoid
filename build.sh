@@ -45,3 +45,4 @@ echo done
 
 # Product Frequencies
 # yq . devdata/stations-example-full.json | grep Precio | grep -v \"\" | sed 's/":.*//' | sed 's/.*Precio //' | sort | uniq -c | sort -n
+

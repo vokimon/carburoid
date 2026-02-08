@@ -1,6 +1,6 @@
 # Change log
 
-## Unreleased
+## 1.4.0 (2026-02-08)
 
 French gas stations and Compose/Material3 Settings rewrite
 
