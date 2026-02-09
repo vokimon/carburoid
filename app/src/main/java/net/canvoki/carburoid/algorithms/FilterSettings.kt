@@ -113,7 +113,7 @@ object FilterSettings {
 
         val labels = remember(resources) { resources.getStringArray(R.array.settings_filter_closed_labels) }
         val values = remember(resources) { resources.getStringArray(R.array.settings_filter_closed_values) }
-        val options = remember(labels, values) { values.zip(labels) } // (value, label)
+        val options = remember(labels, values) { values.zip(labels) }
 
         val selectedLabel = options.find { it.first == hideClosedMargin }?.second ?: hideClosedMargin
         val summary = stringResource(R.string.settings_filter_closed_summary)

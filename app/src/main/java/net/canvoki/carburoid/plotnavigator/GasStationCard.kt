@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -54,12 +55,13 @@ fun GasStationCard(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
+                val noName = stringResource(R.string.station_no_name)
                 val name =
                     remember(station?.id, station?.name) {
-                        station?.name ?: context.getString(R.string.station_no_name)
+                        station?.name ?: noName
                     }
                 Text(
-                    text = station?.name ?: context.getString(R.string.station_no_name),
+                    text = station?.name ?: stringResource(R.string.station_no_name),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                     maxLines = 1,
@@ -67,11 +69,12 @@ fun GasStationCard(
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                 )
 
+                val noCity = stringResource(R.string.station_no_city)
                 val locationText =
                     remember(station?.id, station?.city, station?.state) {
                         listOfNotNull(station?.city, station?.state)
                             .joinToString(" - ")
-                            .ifEmpty { context.getString(R.string.station_no_city) }
+                            .ifEmpty { noCity }
                     }
 
                 Text(
@@ -82,12 +85,13 @@ fun GasStationCard(
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                 )
 
+                val noAddress = stringResource(R.string.station_no_address)
                 val address =
                     remember(station?.id, station?.address) {
-                        station?.address ?: context.getString(R.string.station_no_address)
+                        station?.address ?: noAddress
                     }
                 Text(
-                    text = station?.address ?: context.getString(R.string.station_no_address),
+                    text = address,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline,
                     maxLines = 1,
