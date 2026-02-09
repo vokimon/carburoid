@@ -23,6 +23,7 @@ private val json =
         explicitNulls = false
         encodeDefaults = true
         prettyPrint = true
+        @OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
         prettyPrintIndent = "  "
     }
 
