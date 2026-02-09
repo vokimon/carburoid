@@ -18,6 +18,8 @@ import io.github.koalaplot.core.heatmap.generateHistogram2D
 import io.github.koalaplot.core.line.LinePlot2
 import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.util.ExperimentalKoalaPlotApi
+import io.github.koalaplot.core.xygraph.AxisContent
+import io.github.koalaplot.core.xygraph.AxisStyle
 import io.github.koalaplot.core.xygraph.HorizontalLineAnnotation
 import io.github.koalaplot.core.xygraph.Point
 import io.github.koalaplot.core.xygraph.VerticalLineAnnotation
@@ -146,10 +148,18 @@ fun ScatterPlot(
     XYGraph(
         xAxisModel = rememberFloatLinearAxisModel(xMin..xMax),
         yAxisModel = rememberFloatLinearAxisModel(yMin..yMax),
-        xAxisTitle = null,
-        yAxisTitle = null,
-        xAxisLabels = { "%.0f".format(it) },
-        yAxisLabels = { "%.02f€".format(it) },
+        xAxisContent =
+            AxisContent(
+                title = { null },
+                labels = { it.toInt() },
+                style = AxisStyle(),
+            ),
+        yAxisContent =
+            AxisContent(
+                title = { null },
+                labels = { "%.02f€".format(it) },
+                style = AxisStyle(),
+            ),
         modifier =
             modifier.horizontalSwipe(onStep = { delta ->
                 onIndexSelected((currentIndex + delta).coerceIn(0, points.lastIndex))
