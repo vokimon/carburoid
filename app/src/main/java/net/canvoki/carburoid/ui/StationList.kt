@@ -147,9 +147,9 @@ fun StationList(
     stations: List<GasStation>,
     downloading: Boolean,
     onRefresh: () -> Unit,
+    modifier: Modifier = Modifier,
     processing: Boolean = false,
     onStationClicked: (GasStation) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
 

@@ -15,8 +15,8 @@ import net.canvoki.carburoid.ui.usermessage.UserMessageSnackbarHost
 
 @Composable
 fun AppScaffold(
-    topBar: @Composable () -> Unit = {},
     modifier: Modifier = Modifier,
+    topBar: @Composable () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit,
 ) {
     MaterialTheme(

@@ -29,14 +29,14 @@ fun isLandscape(): Boolean {
 interface FlowScope {
     fun Modifier.weight(
         weight: Float,
-        fill: Boolean = true,
+        fill: Boolean = false,
     ): Modifier
 }
 
 @Composable
 fun Flow(
-    horizontal: Boolean = false,
     modifier: Modifier = Modifier,
+    horizontal: Boolean = false,
     gap: Dp = 0.dp,
     content: @Composable FlowScope.() -> Unit,
 ) {
