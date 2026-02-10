@@ -29,7 +29,7 @@ fun isLandscape(): Boolean {
 interface FlowScope {
     fun Modifier.weight(
         weight: Float,
-        fill: Boolean = false,
+        fill: Boolean = true,
     ): Modifier
 }
 
