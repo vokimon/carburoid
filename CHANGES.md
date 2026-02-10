@@ -1,5 +1,11 @@
 # Change log
 
+## Unreleased
+
+- 📱 Plot navigator: Landscape layout
+- ✨ Plot navigator: Header and location/product selectors
+- 🧹 Plot navigator: Removed extensions already integrated in koalaplot 0.11.0
+
 ## 1.4.0 (2026-02-08)
 
 French gas stations and Compose/Material3 Settings rewrite

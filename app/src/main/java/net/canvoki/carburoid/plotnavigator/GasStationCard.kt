@@ -41,8 +41,6 @@ fun GasStationCard(
     modifier: Modifier = Modifier,
     onClick: (GasStation) -> Unit = {},
 ) {
-    val context = LocalContext.current
-
     Column(
         modifier =
             modifier

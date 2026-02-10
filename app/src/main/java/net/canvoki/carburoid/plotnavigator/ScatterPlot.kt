@@ -19,11 +19,12 @@ import io.github.koalaplot.core.line.LinePlot2
 import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.util.ExperimentalKoalaPlotApi
 import io.github.koalaplot.core.xygraph.AxisContent
-import io.github.koalaplot.core.xygraph.AxisStyle
 import io.github.koalaplot.core.xygraph.HorizontalLineAnnotation
 import io.github.koalaplot.core.xygraph.Point
+import io.github.koalaplot.core.xygraph.TickPosition
 import io.github.koalaplot.core.xygraph.VerticalLineAnnotation
 import io.github.koalaplot.core.xygraph.XYGraph
+import io.github.koalaplot.core.xygraph.rememberAxisStyle
 import io.github.koalaplot.core.xygraph.rememberFloatLinearAxisModel
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
@@ -152,13 +153,16 @@ fun ScatterPlot(
             AxisContent(
                 title = { null },
                 labels = { it.toInt() },
-                style = AxisStyle(),
+                style =
+                    rememberAxisStyle(
+                        tickPosition = TickPosition.Inside,
+                    ),
             ),
         yAxisContent =
             AxisContent(
                 title = { null },
                 labels = { "%.02f€".format(it) },
-                style = AxisStyle(),
+                style = rememberAxisStyle(),
             ),
         modifier =
             modifier.horizontalSwipe(onStep = { delta ->

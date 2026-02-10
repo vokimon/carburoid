@@ -23,8 +23,10 @@ import androidx.compose.ui.unit.dp
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
-import net.canvoki.carburoid.product.CategorizedProductSelector
 import net.canvoki.carburoid.product.ProductManager
+import net.canvoki.carburoid.ui.Flow
+import net.canvoki.carburoid.ui.Selectors
+import net.canvoki.carburoid.ui.isLandscape
 
 @Composable
 fun ButtonCloser(
@@ -86,34 +88,44 @@ fun GasStationScatterPlot(
         selectedIndex = index.coerceIn(0..currentItems.lastIndex)
     }
 
-    Column(modifier = Modifier.fillMaxWidth()) {
-        CategorizedProductSelector()
-        Material2KoalaTheme {
-            ScatterPlot(
-                items = currentItems,
-                allItems = currentAllItems,
-                getX = { station: GasStation -> station.distanceInMeters?.div(1000.0f) },
-                getY = { station: GasStation -> station.prices[product]?.toFloat() },
-                selectedIndex = selectedIndex,
-                onIndexSelected = ::selectIndex,
-                modifier = Modifier.weight(0.1f),
-            )
-        }
-        GasStationCard(selectedItem)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            ButtonCloser(
-                index = selectedIndex,
-                setIndex = ::selectIndex,
-                modifier = Modifier.weight(1f),
-            )
-            ButtonCheaper(
-                index = selectedIndex,
-                setIndex = ::selectIndex,
-                modifier = Modifier.weight(1f),
-            )
+    Material2KoalaTheme {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Selectors()
+            Flow(horizontal = isLandscape()) {
+                ScatterPlot(
+                    items = currentItems,
+                    allItems = currentAllItems,
+                    getX = { station: GasStation -> station.distanceInMeters?.div(1000.0f) },
+                    getY = { station: GasStation -> station.prices[product]?.toFloat() },
+                    selectedIndex = selectedIndex,
+                    onIndexSelected = ::selectIndex,
+                    modifier = if (isLandscape()) Modifier.fillMaxWidth(0.5f) else Modifier.weight(1f),
+                )
+                Column(
+                    modifier = if (isLandscape()) Modifier.fillMaxWidth() else Modifier,
+                ) {
+                    GasStationCard(
+                        selectedItem,
+                        modifier = if (isLandscape()) Modifier.weight(1f) else Modifier,
+                    )
+                    Flow(
+                        horizontal = true,
+                        gap = 4.dp,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        ButtonCloser(
+                            index = selectedIndex,
+                            setIndex = ::selectIndex,
+                            modifier = Modifier.weight(1f),
+                        )
+                        ButtonCheaper(
+                            index = selectedIndex,
+                            setIndex = ::selectIndex,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
+                }
+            }
         }
     }
 }

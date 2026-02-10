@@ -4,39 +4,56 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import net.canvoki.carburoid.R
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.ui.AppScaffold
 import net.canvoki.carburoid.ui.settings.ExperimentalFeatureNotice
-import net.canvoki.carburoid.ui.settings.ThemeSettings
 
 @Composable
 fun PlotNavigatorScreen(
     stations: List<GasStation>,
     allStations: List<GasStation>,
+    onPlotNavigatorClick: () -> Unit = {},
+    onSettingsClick: () -> Unit = {},
 ) {
-    MaterialTheme(
-        colorScheme = ThemeSettings.effectiveColorScheme(),
+    AppScaffold(
+        topBar = {
+            @OptIn(ExperimentalMaterial3Api::class)
+            TopAppBar(
+                title = { Text("Carburoid") },
+                actions = {
+                    IconButton(onClick = onPlotNavigatorClick) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_show_chart),
+                            contentDescription = stringResource(R.string.menu_chart),
+                        )
+                    }
+                    IconButton(onClick = onSettingsClick) {
+                        Icon(
+                            contentDescription = stringResource(R.string.menu_settings),
+                            painter = painterResource(R.drawable.ic_settings),
+                        )
+                    }
+                },
+            )
+        },
     ) {
-        Scaffold(
-            contentWindowInsets = WindowInsets.safeDrawing,
-        ) { padding ->
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(padding),
-            ) {
-                GasStationScatterPlot(
-                    items = stations,
-                    allItems = allStations,
-                    modifier = Modifier.fillMaxSize(),
-                )
-            }
-        }
+        GasStationScatterPlot(
+            items = stations,
+            allItems = allStations,
+            modifier = Modifier.fillMaxSize(),
+        )
         ExperimentalFeatureNotice(
             noticeId = "feature_plot_navigator_122",
             title = "Experimental screen",
