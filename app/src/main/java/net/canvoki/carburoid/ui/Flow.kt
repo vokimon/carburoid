@@ -52,10 +52,12 @@ fun Flow(
                     override fun Modifier.weight(
                         weight: Float,
                         fill: Boolean,
-                    ): Modifier =
-                        with(rowScope) {
-                            Modifier.weight(weight, fill)
+                    ): Modifier {
+                        val modifier = this
+                        return with(rowScope) {
+                            modifier.weight(weight, fill)
                         }
+                    }
                 }
             flowScope.content()
         }
@@ -70,10 +72,12 @@ fun Flow(
                     override fun Modifier.weight(
                         weight: Float,
                         fill: Boolean,
-                    ): Modifier =
-                        with(columnScope) {
-                            Modifier.weight(weight, fill)
+                    ): Modifier {
+                        val modifier = this
+                        return with(columnScope) {
+                            modifier.weight(weight, fill)
                         }
+                    }
                 }
             flowScope.content()
         }
