@@ -105,4 +105,6 @@
     <string name="settings_country_fr_warning_wip">Gasolinategi frantsesen datuak oraindik garapen-fasean daude. Ez dago oraindik izenik edo irekiera-ordurik eskuragarri.</string>
     <string name="settings_warning_dialog_wip">Garapen-fasean</string>
     <string name="warning_dialog_title">Abisua</string>
+    <string name="button_closer">Gertuago</string>
+    <string name="button_cheaper">Merkeago</string>
 </resources>

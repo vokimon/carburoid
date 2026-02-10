@@ -34,15 +34,16 @@ fun ButtonCloser(
     setIndex: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val label = stringResource(R.string.button_closer)
     Button(
         onClick = { setIndex(index - 1) },
         modifier = modifier,
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_keyboard_arrow_left),
-            contentDescription = "Closer",
+            contentDescription = label,
         )
-        Text("Closer")
+        Text(label)
     }
 }
 
@@ -52,15 +53,16 @@ fun ButtonCheaper(
     setIndex: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val label = stringResource(R.string.button_cheaper)
     Button(
         onClick = { setIndex(index + 1) },
         modifier = modifier,
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_keyboard_arrow_right),
-            contentDescription = "Cheaper",
+            contentDescription = label,
         )
-        Text("Cheaper")
+        Text(label)
     }
 }
 

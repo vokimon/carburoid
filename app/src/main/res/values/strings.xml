@@ -105,4 +105,6 @@
     <string name="settings_country_fr_warning_wip">French gas station data is still work in progress. Station names and operating hours are not yet available.</string>
     <string name="settings_warning_dialog_wip">Work in progress</string>
     <string name="warning_dialog_title">Warning</string>
+    <string name="button_closer">Closer</string>
+    <string name="button_cheaper">Cheaper</string>
 </resources>

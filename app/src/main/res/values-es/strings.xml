@@ -105,4 +105,6 @@
     <string name="settings_country_fr_warning_wip">Los datos de las gasolineras francesas aún están en desarrollo. No hay nombres de estaciones ni horarios disponibles todavía.</string>
     <string name="settings_warning_dialog_wip">En desarrollo</string>
     <string name="warning_dialog_title">Advertencia</string>
+    <string name="button_closer">Más cerca</string>
+    <string name="button_cheaper">Más barato</string>
 </resources>

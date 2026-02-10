@@ -103,4 +103,6 @@ settings_country_fr: France
 settings_country_fr_warning_wip: French gas station data is still work in progress. Station names and operating hours are not yet available.
 settings_warning_dialog_wip: Work in progress
 warning_dialog_title: Warning
+button_closer: Closer
+button_cheaper: Cheaper
 
