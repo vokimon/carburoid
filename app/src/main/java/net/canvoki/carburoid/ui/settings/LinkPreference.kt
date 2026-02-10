@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import net.canvoki.carburoid.R
 
 @Composable
@@ -44,7 +45,7 @@ fun LinkPreference(
                 context.startActivity(
                     android.content.Intent(
                         android.content.Intent.ACTION_VIEW,
-                        android.net.Uri.parse(url),
+                        url.toUri(),
                     ),
                     null,
                 )
