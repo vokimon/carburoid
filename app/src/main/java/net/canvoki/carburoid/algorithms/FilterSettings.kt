@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceManager
@@ -109,10 +110,9 @@ object FilterSettings {
         )
 
         val context = LocalContext.current
-        val resources = context.resources
 
-        val labels = remember(resources) { resources.getStringArray(R.array.settings_filter_closed_labels) }
-        val values = remember(resources) { resources.getStringArray(R.array.settings_filter_closed_values) }
+        val labels = stringArrayResource(R.array.settings_filter_closed_labels)
+        val values = stringArrayResource(R.array.settings_filter_closed_values)
         val options = remember(labels, values) { values.zip(labels) }
 
         val selectedLabel = options.find { it.first == hideClosedMargin }?.second ?: hideClosedMargin

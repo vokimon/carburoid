@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.preference.PreferenceManager
 import net.canvoki.carburoid.R
@@ -63,12 +64,11 @@ object ThemeSettings {
     @Composable
     fun Preference() {
         val context = LocalContext.current
-        val resources = context.resources
 
         var currentValue by rememberMutablePreference(KEY, VALUE_AUTO)
 
-        val values = remember(resources) { resources.getStringArray(R.array.theme_values) }
-        val entries = remember(resources) { resources.getStringArray(R.array.theme_entries) }
+        val values = stringArrayResource(R.array.theme_values)
+        val entries = stringArrayResource(R.array.theme_entries)
         val options = remember(values, entries) { values.zip(entries) } // (value, label)
 
         val title = stringResource(R.string.settings_theme)

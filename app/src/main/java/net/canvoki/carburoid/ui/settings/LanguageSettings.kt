@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.edit
 import androidx.core.os.LocaleListCompat
@@ -127,16 +128,11 @@ object LanguageSettings {
     @Composable
     fun Preference() {
         val context = LocalContext.current
-        val resources = context.resources
 
         var currentValue by rememberLanguage()
 
         val systemOption = "system" to stringResource(R.string.language_system_default)
-        val supportedCodes =
-            remember(resources) {
-                resources.getStringArray(R.array.supported_language_codes).toList()
-            }
-
+        val supportedCodes = stringArrayResource(R.array.supported_language_codes)
         val options =
             remember(supportedCodes) {
                 val languageOptions =
