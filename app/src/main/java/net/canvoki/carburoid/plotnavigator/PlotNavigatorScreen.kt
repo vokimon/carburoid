@@ -27,28 +27,7 @@ fun PlotNavigatorScreen(
     onPlotNavigatorClick: () -> Unit = {},
     onSettingsClick: () -> Unit = {},
 ) {
-    AppScaffold(
-        topBar = {
-            @OptIn(ExperimentalMaterial3Api::class)
-            TopAppBar(
-                title = { Text("Carburoid") },
-                actions = {
-                    IconButton(onClick = onPlotNavigatorClick) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_show_chart),
-                            contentDescription = stringResource(R.string.menu_chart),
-                        )
-                    }
-                    IconButton(onClick = onSettingsClick) {
-                        Icon(
-                            contentDescription = stringResource(R.string.menu_settings),
-                            painter = painterResource(R.drawable.ic_settings),
-                        )
-                    }
-                },
-            )
-        },
-    ) {
+    AppScaffold {
         GasStationScatterPlot(
             items = stations,
             allItems = allStations,
