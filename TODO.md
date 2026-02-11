@@ -2,24 +2,16 @@
 
 Do you want to help? This is my roadmap.
 
-- [ ] ListPreference dialog: visual cue to indicate options available on scroll
-- [x] Better style for PreferenceCategory
-- [ ] Products: Either international common names or translations to avoid transient status after changing country
 - [ ] Fix: Regression: on network failures should not auto-retry
-- [x] use cache file timestamp and ignore downloadDate
-- [ ] Upgrade koalaplot and clean heatmap dupped code
-- [x] Fix: In Landscape, empty List does not expands as cool as Loading list does.
 - [ ] Fix: If resolved location description is the same, the icon keeps loading
-- [ ] The Data loader pill and the snackbar compete vor the lower part of screeen
-    - Benchmark: ~28xx ms en el FP4
-- [ ] Data loading performance: Use kotlin serialization instead of gson
-    - [x] Split interface and gson implementation
-    - [x] Create a Kotlin Serialization version to GSon -> Works but slower
-    - [x] Optimize Kotlin Serialization version -> Now 20% faster than GSon
-- [ ] Support other countries
-    - [ ] Split GasStation, the interface, and SpanishGasStation the implementation with deserialization logic
-    - [ ] Support for different ProductCatalogs
-    - [ ] Support for different LandMass sets
+- [ ] PlotNavigator: Go to details on click on the station card
+- [ ] PlotNavigator: Pinch on the graph to zoom distance
+- [ ] PlotNavigator: Swipe down on plot to fetch data
+- [ ] PlotNavigator: Animation of the summary as feedback to the swipe left-right
+- [ ] PlotNavigator: Disable cheaper/nearer buttons when on extremes.
+- [ ] PlotNavigator: Rename "Cheaper" -> "Farther" when irrelevant filter is disabled.
+- [ ] The Data loader pill and the error snackbar compete for the lower part of screeen
+- [ ] MultiCountry: Support for different LandMass sets
 - [ ] DeepLinks: Notify the user when a sharing did'nt work (not able to parse)
 - [ ] DeepLinks: Google started to use opaque urls like https://maps.app.goo.gl/jweCgQbzCw9PretY6
     - [ ] We could fetch the url, and take the coords from the 304 redirect
@@ -28,7 +20,7 @@ Do you want to help? This is my roadmap.
 - [ ] Location Search: Prioritize near matches to the current position
 - [ ] Location Search: Feedback when doing a query
 - [ ] Refactor: Invert Paretto: Sort by price, filter by distance, to ease distance recomputation
-- [ ] Real road distance
+- [ ] Real road distance (instead of geodesic/helicopter distance)
 - [ ] Route deviation distance
     - [ ] How to set a route from LocationPicker
     - [ ] How to display the route
@@ -50,38 +42,31 @@ Do you want to help? This is my roadmap.
             </intent-filter>
             ```
     - [ ] material icon 'route'
-- [x] Products: further increase the contrast among categories and products in the dropmenu
 - [ ] Products: Update product list from: https://energia.serviciosmin.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/Listados/ProductosPetroliferos/
 - [ ] Products: Sort by popularity. How many gas station serve it. Now it is sorted by hand.
+- [ ] Products: Visually hint unavailable products by hiding, strike out and/or disable them in the picker
 - [ ] Products: Disable or remove unavailable products.
 - [ ] Products: Use short names (now that we are translating we could translate shorter)
 - [ ] Products: What to do with official short names: G95E85 GOA GOA+ BGNL... 
 - [ ] Language: Asturian
 - [ ] Language: Aranese (Occitan)
-- [ ] Favorites
-- [ ] Plot view: Add Location Selector widget
-- [ ] Plot view: Add AppBar and back button
-- [ ] Plot view: Go to details on view
-- [ ] Plot view: Animation of the summary as feedback to the swipe left-right
-- [ ] Plot view: Disable cheaper/nearer buttons when on extremes.
-- [ ] Plot view: Rename "Cheaper" -> "Farther" when irrelevant filter is disabled.
 - [ ] Station List: Add company icon
+    - [ ] Pre: Identify trade mark
+- [ ] Favorites gas stations (white list by station)
+- [ ] Favorites gas stations (white list by trade mark)
 - [ ] Discounts: https://geoportalgasolineras.es/geoportal-instalaciones/PlanesDescuento (portal, csv)
     - [ ] https://geoportalgasolineras.es/geoportal/rest/discountPlans
     - [ ] https://geoportalgasolineras.es/geoportal/rest/9999/planesDescuentoEstacion
     - [ ] https://sede.serviciosmin.gob.es/en-US/datosabiertos/catalogo/precios-carburantes
+    - [ ] Features: Enable specific ones to apply the discunted price in the filter.
+    - [ ] Problems: How to know which ones can apply to a given gas station. Need group identification.
 - [ ] Report price incoherences: https://geoportalgasolineras.es/geoportal-instalaciones/IncoherenciaPrecios (form)
+- [ ] Country Generalization: LandMasses
+- [ ] Datasource France: LandMasses
+- [ ] Datasource France: Names and Trademarks
+- [ ] Datasource France: Opening hours parser
 - [ ] Other Countries:
     - Listing (most outdated but gives clues): https://geoportalgasolineras.es/geoportal-instalaciones/GeoportalesEuropeos
-    - Generalization:
-        - [x] Country specificities in a factory
-        - [x] Split cache per country
-        - [x] Api
-        - [x] Parsing
-        - [x] ProductCatalog
-        - [x] Configuration
-        - [ ] Current product when changing
-        - [ ] LandMasses
     - France:
         - Info:
             - portal: https://www.prix-carburants.gouv.fr/ (portal)
@@ -90,17 +75,36 @@ Do you want to help? This is my roadmap.
             - url: https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/records?limit=-1&include_links=true&include_app_metas
             - brand: curl 'https://www.prix-carburants.gouv.fr/map/recuperer_infos_pdv/36100003'   --compressed   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:145.0) Gecko/20100101 Firefox/145.0'   -H 'Accept: */*'   -H 'Accept-Language: ca,en-US;q=0.7,en;q=0.3'   -H 'Accept-Encoding: gzip, deflate, br, zstd'   -H 'Referer: https://www.prix-carburants.gouv.fr/'   -H 'x-requested-with: XMLHttpRequest'   -H 'Connection: keep-alive'   -H 'Cookie: visid_incap_3031704=8zpXEhBVSVKze0FK8gtMwGEwQmkAAAAAQUIPAAAAAAAOkGXNP3/InPIUJGP7EzA+; incap_ses_507_3031704=D401VUe8bVyHuK1lUDoJB8fta2kAAAAAv3xpGGAHh275p+KP92tVMQ==; public=5gkldnq9vn8aek8gcsg97c18ft'   -H 'Sec-Fetch-Dest: empty'   -H 'Sec-Fetch-Mode: cors'   -H 'Sec-Fetch-Site: same-origin'   -H 'Priority: u=4'   -H 'TE: trailers'
             - station detail page: curl https://www.prix-carburants.gouv.fr/station/36150001
-        - [x] Api
-        - [x] Parser
-        - [x] Product catalog
-        - [ ] Paging
-        - [ ] Opening hours parser
-        - [ ] Station names and Trademarks
     - Portugal (portal, not api): https://precoscombustiveis.dgeg.gov.pt/
     - Germany: https://creativecommons.tankerkoenig.de/swagger/
 
 ## Done
 
+- [x] ListPreference dialog: visual cue to indicate options available on scroll
+- [x] Better style for PreferenceCategory
+- [x] Products: Either international common names or translations to avoid transient status after changing country
+- [x] use cache file timestamp and ignore downloadDate
+- [x] Upgrade koalaplot and clean heatmap dupped code
+- [x] Fix: In Landscape, empty List does not expands as cool as Loading list does.
+- [x] Data loading performance: Use kotlin serialization instead of gson
+    - Benchmark: gson ~28xx ms en el FP4
+    - [x] Split interface and gson implementation
+    - [x] Create a Kotlin Serialization version to GSon -> Works but slower
+    - [x] Optimize Kotlin Serialization version -> Now 20% faster than GSon
+- [x] Plot view: Add Location Selector widget
+- [x] Plot view: Add AppBar and back button
+- [x] Country Generalization: Country specificities in a factory
+- [x] Country Generalization: Split cache per country
+- [x] Country Generalization: Api
+- [x] Country Generalization: Parsing
+- [x] Country Generalization: ProductCatalog
+- [x] Country Generalization: Configuration
+- [x] Country Generalization: Current product when changing
+- [x] Split GasStation, the interface, and SpanishGasStation the implementation with deserialization logic
+- [x] France: Api
+- [x] France: Parser
+- [x] France: Product catalog
+- [x] Products: further increase the contrast among categories and products in the dropmenu
 - [x] Settings compose migration
     - [x] Create a Component inside the Preferences
     - [x] PreferenceCatategory

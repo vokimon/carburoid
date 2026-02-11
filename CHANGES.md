@@ -2,9 +2,12 @@
 
 ## Unreleased
 
-- 📱 Plot navigator: Landscape layout
-- ✨ Plot navigator: Header and location/product selectors
-- 🧹 Plot navigator: Removed extensions already integrated in koalaplot 0.11.0
+- ✨ France land masses: do not show corsica if in mainland and viceversa
+- ✨ Plot navigator: No more a experimental view
+- ✨ Plot navigator: Landscape layout
+- ✨ Plot navigator: Header, backbutton and location/product selectors
+- 🧹 Plot navigator: Removed koalaplot extensions already integrated in koalaplot 0.11.0
+- 🌐 Plot navigator: Texts translations
 
 ## 1.4.0 (2026-02-08)
 
