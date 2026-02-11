@@ -33,13 +33,5 @@ fun PlotNavigatorScreen(
             allItems = allStations,
             modifier = Modifier.fillMaxSize(),
         )
-        ExperimentalFeatureNotice(
-            noticeId = "feature_plot_navigator_122",
-            title = "Experimental screen",
-            message =
-                """This is an work-in-progress screen. """ +
-                    """Here be dragons but your feed back is very wellcome. """ +
-                    """How does it feel to you? How should it look like?""",
-        )
     }
 }
