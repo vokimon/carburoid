@@ -4,9 +4,11 @@ import android.app.Application
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import net.canvoki.carburoid.country.CountryRegistry
 import net.canvoki.carburoid.country.CountrySettings
 import net.canvoki.carburoid.location.LocationService
+import net.canvoki.carburoid.model.FranceExtraStationData
 import net.canvoki.carburoid.network.GasStationApi
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.ui.settings.LanguageSettings
@@ -33,6 +35,10 @@ class CarburoidApplication : Application() {
         CountrySettings.initialize(this)
         setupDebugData()
         repository = setupRepository()
+        val context = this
+        appScope.launch(Dispatchers.IO) {
+            FranceExtraStationData.load(context)
+        }
     }
 
     fun setupDebugData() {

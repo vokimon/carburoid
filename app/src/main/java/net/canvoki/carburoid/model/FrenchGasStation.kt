@@ -1,5 +1,10 @@
 package net.canvoki.carburoid.model
 
+import android.content.Context
+import androidx.annotation.VisibleForTesting
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -18,6 +23,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.timeits
+import java.nio.charset.StandardCharsets
 import java.time.ZoneId
 
 val apiProducts =
@@ -39,6 +45,54 @@ private val json by lazy {
         explicitNulls = false
         encodeDefaults = true
         prettyPrint = true
+    }
+}
+
+/**
+ * Extra station metadata not available in French API
+ */
+data class FranceExtraStationData(
+    val brand: String,
+    val name: String,
+) {
+    typealias Db = Map<String, FranceExtraStationData>
+
+    companion object {
+        @Volatile
+        private var extraData: Db? = null
+
+        @VisibleForTesting
+        fun clear() {
+            extraData = null
+        }
+
+        fun db(): Db? = extraData
+
+        suspend fun load(context: Context) {
+            if (extraData != null) return
+            try {
+                val tsvContent =
+                    context.assets
+                        .open("fr-stations-brands-names.tsv")
+                        .bufferedReader(StandardCharsets.UTF_8)
+                        .use { it.readText() }
+                val parsed =
+                    tsvContent
+                        .lines()
+                        .associate { line ->
+                            val parts = line.split('\t')
+                            val id = parts[0]
+                            val brand = parts.getOrNull(1) ?: ""
+                            val name = parts.getOrNull(2) ?: ""
+                            id to FranceExtraStationData(brand, name)
+                        }
+                extraData = parsed
+                log("Loaded ${parsed.size} French station metadata entries")
+            } catch (e: Exception) {
+                log("Failed to load French station extra data: ${e.message}")
+                extraData = emptyMap()
+            }
+        }
     }
 }
 
@@ -93,7 +147,6 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
 
         // Parse ID (integer from string content)
         val id = obj["id"]?.jsonPrimitive?.content?.toInt() ?: error("Missing id")
-        val name = id.toString() // TODO: Obtain name
         val address = obj["adresse"]?.jsonPrimitive?.content
         val city = obj["ville"]?.jsonPrimitive?.content
         val state = obj["departement"]?.jsonPrimitive?.content
@@ -114,7 +167,15 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
 
         // TODO: Parse french format for opening hours
         val openingHours = OpeningHours.parse("L-D: 24H")
+        val extraDb: FranceExtraStationData.Db? = FranceExtraStationData.db()
+        val extraData: FranceExtraStationData? = extraDb?.let { it.get(id.toString()) }
+        val name: String =
+            when {
+                extraData != null -> "${extraData.brand} - ${extraData.name}"
+                else -> id.toString() // fallback
+            }
 
+        log("FR NAME $name")
         // Extract prices: any field ending with "_prix"
         val prices = mutableMapOf<String, Double?>()
         for ((key, value) in obj) {
