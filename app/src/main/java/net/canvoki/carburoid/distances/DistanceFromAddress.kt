@@ -1,6 +1,7 @@
 package net.canvoki.carburoid.distances
 
 import android.location.Location
+import net.canvoki.carburoid.country.CountryRegistry
 import net.canvoki.carburoid.model.GasStation
 
 /**
@@ -25,12 +26,12 @@ class DistanceFromAddress(
 
     override fun isBeyondSea(station: GasStation): Boolean {
         val gasStationLandMass =
-            LandMass.of(
+            CountryRegistry.current.landMass(
                 station.latitude!!,
                 station.longitude!!,
             )
         val thisLandMass =
-            LandMass.of(
+            CountryRegistry.current.landMass(
                 referenceLocation.latitude,
                 referenceLocation.longitude,
             )

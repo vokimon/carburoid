@@ -1,6 +1,7 @@
 package net.canvoki.carburoid.country
 
 import androidx.annotation.StringRes
+import net.canvoki.carburoid.distances.LandMass
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
 import net.canvoki.carburoid.product.ProductCatalogProvider
@@ -14,5 +15,8 @@ interface CountryImplementation {
 
     fun parse(json: String): GasStationResponse
 
-    // TODO: product catalog, land masses...
+    fun landMass(
+        longitude: Double,
+        latitude: Double,
+    ): LandMass
 }
