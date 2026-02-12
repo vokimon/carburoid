@@ -199,9 +199,9 @@ fun toInstant(
     return targetLocal.atZone(zoneId).toInstant()
 }
 
-class OpeningHours {
-    private var currentDay: DayOfWeek = DayOfWeek.MONDAY
-    private val dayIntervals = mutableMapOf<DayOfWeek, MutableList<Pair<LocalTime, LocalTime>>>()
+open class OpeningHours {
+    protected var currentDay: DayOfWeek = DayOfWeek.MONDAY
+    protected val dayIntervals = mutableMapOf<DayOfWeek, MutableList<Pair<LocalTime, LocalTime>>>()
 
     fun add(
         day: DayOfWeek,
@@ -295,13 +295,13 @@ class OpeningHours {
         return openUntil(nextClosing)
     }
 
-    private fun getDayIntervals(day: DayOfWeek): List<Pair<LocalTime, LocalTime>> =
+    protected fun getDayIntervals(day: DayOfWeek): List<Pair<LocalTime, LocalTime>> =
         dayIntervals.getOrDefault(
             day,
             emptyList(),
         )
 
-    private fun searchNextOpening(day: DayOfWeek): Pair<DayOfWeek, LocalTime>? {
+    protected fun searchNextOpening(day: DayOfWeek): Pair<DayOfWeek, LocalTime>? {
         for (i in 1L..7L) {
             val nextDay = day + i
             for ((start, end) in getDayIntervals(nextDay)) {
@@ -311,7 +311,7 @@ class OpeningHours {
         return null
     }
 
-    private fun searchNextOpeningGap(
+    protected fun searchNextOpeningGap(
         day: DayOfWeek,
         time: LocalTime,
     ): Pair<DayOfWeek, LocalTime>? {
@@ -366,13 +366,13 @@ class OpeningHours {
             .joinToString("; ")
     }
 
-    private fun formatIntervals(intervals: List<Pair<LocalTime, LocalTime>>): String =
+    protected fun formatIntervals(intervals: List<Pair<LocalTime, LocalTime>>): String =
         intervals
             .map {
                 formatInterval(it)
             }.joinToString(" y ")
 
-    private fun formatInterval(interval: Pair<LocalTime, LocalTime>): String {
+    protected fun formatInterval(interval: Pair<LocalTime, LocalTime>): String {
         val (start, end) = interval
         if (start == LocalTime.MIDNIGHT && end == END_OF_DAY) {
             return "24H"
@@ -380,9 +380,9 @@ class OpeningHours {
         return "${formatTime(start)}-${formatTime(end)}"
     }
 
-    private fun formatTime(time: LocalTime): String = String.format(Locale.ROOT, "%02d:%02d", time.hour, time.minute)
+    protected fun formatTime(time: LocalTime): String = String.format(Locale.ROOT, "%02d:%02d", time.hour, time.minute)
 
-    private fun spanishWeekDayShort(day: DayOfWeek): String =
+    protected fun spanishWeekDayShort(day: DayOfWeek): String =
         when (day) {
             DayOfWeek.MONDAY -> "L"
             DayOfWeek.TUESDAY -> "M"
@@ -394,6 +394,53 @@ class OpeningHours {
         }
 
     companion object {
+        // Delegate to SpainOpeningHours
+        fun parse(spec: String): OpeningHours? = SpainOpeningHours.parse(spec)
+
+        // Keep all parsing helpers for backward compatibility
+        fun parseTime(intervalStr: String): TimeSpec? = SpainOpeningHours.parseTime(intervalStr)
+
+        fun parseInterval(intervalStr: String): Interval? = SpainOpeningHours.parseInterval(intervalStr)
+
+        fun parseIntervals(spec: String): Intervals? = SpainOpeningHours.parseIntervals(spec)
+
+        fun parseDayShort(spec: String): DayOfWeek? = SpainOpeningHours.parseDayShort(spec)
+
+        fun parseDayRange(spec: String): DayRange? = SpainOpeningHours.parseDayRange(spec)
+
+        fun parseScheduleEntry(spec: String): ScheduleEntry? = SpainOpeningHours.parseScheduleEntry(spec)
+    }
+}
+
+class SpainOpeningHours private constructor() : OpeningHours() {
+    companion object {
+        fun parse(spec: String): SpainOpeningHours? {
+            val oh = SpainOpeningHours()
+            val entries = spec.split("; ")
+            for (entrySpec in entries) {
+                // println("Entry: '$entrySpec'")
+                val (days, times) = parseScheduleEntry(entrySpec) ?: return null
+                for (day in days) {
+                    for (time in times) {
+                        val (start, end) = time
+                        val (sh, sm) = start
+                        val (eh, em) = end
+                        if (sh < eh || (sh == eh && sm <= em)) {
+                            oh.add(day, sh, sm, eh, em)
+                            continue
+                        }
+                        oh.add(day, sh, sm, 23, 59)
+                        if ((eh to em) == (0 to 0)) {
+                            continue
+                        }
+                        val nextDay = day + 1
+                        oh.add(nextDay, 0, 0, eh, em)
+                    }
+                }
+            }
+            return oh
+        }
+
         fun parseTime(intervalStr: String): TimeSpec? {
             val parts = intervalStr.split(":")
             if (parts.size != 2) return null
@@ -462,33 +509,6 @@ class OpeningHours {
             val days = parseDayRange(daysStr) ?: return null
             val times = parseIntervals(timesStr) ?: return null
             return days to times
-        }
-
-        fun parse(spec: String): OpeningHours? {
-            val oh = OpeningHours()
-            val entries = spec.split("; ")
-            for (entrySpec in entries) {
-                // println("Entry: '$entrySpec'")
-                val (days, times) = parseScheduleEntry(entrySpec) ?: return null
-                for (day in days) {
-                    for (time in times) {
-                        val (start, end) = time
-                        val (sh, sm) = start
-                        val (eh, em) = end
-                        if (sh < eh || (sh == eh && sm <= em)) {
-                            oh.add(day, sh, sm, eh, em)
-                            continue
-                        }
-                        oh.add(day, sh, sm, 23, 59)
-                        if ((eh to em) == (0 to 0)) {
-                            continue
-                        }
-                        val nextDay = day + 1
-                        oh.add(nextDay, 0, 0, eh, em)
-                    }
-                }
-            }
-            return oh
         }
     }
 }
