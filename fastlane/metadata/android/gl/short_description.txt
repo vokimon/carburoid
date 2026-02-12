@@ -1,1 +1,1 @@
-Find Spanish gas stations by price and distance.
+Find gas stations by price and distance in Spain and France.

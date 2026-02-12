@@ -5,7 +5,7 @@ To choose a station, just scroll down to improve the price until the distance is
 
 Features:
 
-- 🏛️ Up-to-date gas station data provided by the Ministry of Industry of Spain
+- 🏛️ Official government data sources (Spain, France)
 - 🎯 Only relevant gas stations: either closer or cheaper than others
 - 🕒 Smart about opening and closing hours
 - 🗺️ Integrates with your preferred map application

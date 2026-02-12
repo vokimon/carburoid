@@ -1,6 +1,6 @@
 project_name: Carburoid
 splash_motto: Benzina al millor preu, més aprop
-short_description: Troba benzineres a Espanya per preu i distància
+short_description: Troba benzineres a Espanya i França per preu i distància
 full_description_md: |+
   Carburoid mostra només les benzineres que mereixen consideració.
   Ordenades per distància si una benzinera és més cara que les més properes, no es mostra.
@@ -9,7 +9,7 @@ full_description_md: |+
 
   Funcionalitats:
 
-  - 🏛️ Dades actualitzades del Ministeri d'Indústria
+  - 🏛️ Dades oficials dels governs: Espanya i França
   - 🎯 Només benzineres rellevants: o més properes o més barates que d'altres.
   - 🕒 Considera els horaris d'apertura
   - 🗺️ S'integra amb l'aplicació de mapes que prefereixis

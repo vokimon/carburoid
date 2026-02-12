@@ -4,6 +4,7 @@ Do you want to help? This is my roadmap.
 
 - [ ] Fix: Regression: on network failures should not auto-retry
 - [ ] Fix: If resolved location description is the same, the icon keeps loading
+- [ ] PlotNavigator: Fix: Setting the location on the PlotNavigator, does not update the one in the List navigator
 - [ ] PlotNavigator: Go to details on click on the station card
 - [ ] PlotNavigator: Pinch on the graph to zoom distance
 - [ ] PlotNavigator: Swipe down on plot to fetch data
@@ -61,10 +62,10 @@ Do you want to help? This is my roadmap.
     - [ ] Features: Enable specific ones to apply the discunted price in the filter.
     - [ ] Problems: How to know which ones can apply to a given gas station. Need group identification.
 - [ ] Report price incoherences: https://geoportalgasolineras.es/geoportal-instalaciones/IncoherenciaPrecios (form)
-- [ ] Country Generalization: LandMasses
-- [ ] Datasource France: LandMasses
-- [ ] Datasource France: Names and Trademarks
-- [ ] Datasource France: Opening hours parser
+- [x] Country Generalization: LandMasses
+- [x] Datasource France: LandMasses
+- [x] Datasource France: Names and Trademarks
+- [x] Datasource France: Opening hours parser
 - [ ] Other Countries:
     - Listing (most outdated but gives clues): https://geoportalgasolineras.es/geoportal-instalaciones/GeoportalesEuropeos
     - France:

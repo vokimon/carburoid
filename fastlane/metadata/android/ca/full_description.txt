@@ -5,7 +5,7 @@ I de cara a escollir, pots baixar a la lista per millorar el preu fins que, per 
 
 Funcionalitats:
 
-- 🏛️ Dades actualitzades del Ministeri d'Indústria
+- 🏛️ Dades oficials dels governs: Espanya i França
 - 🎯 Només benzineres rellevants: o més properes o més barates que d'altres.
 - 🕒 Considera els horaris d'apertura
 - 🗺️ S'integra amb l'aplicació de mapes que prefereixis

@@ -3,7 +3,7 @@
 # Edit other language translations, not this one.
 project_name: Carburoid
 splash_motto: Fill up cheaper, closer
-short_description: Find Spanish gas stations by price and distance.
+short_description: Find gas stations by price and distance in Spain and France.
 full_description_md: |-
   Carburoid shows only gas stations worth considering.
   Sorted by distance, whenever a station is more expensive than the closer ones, it is hidden.
@@ -12,18 +12,30 @@ full_description_md: |-
 
   Features:
 
-  - 🏛️ Up-to-date gas station data provided by the Ministry of Industry of Spain
+  - 🏛️ Official government data sources (Spain, France)
   - 🎯 Only relevant gas stations: either closer or cheaper than others
   - 🕒 Smart about opening and closing hours
   - 🗺️ Integrates with your preferred map application
   - 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese...
   - ☀️ Dark and Light themes
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_4_1_md: |-
+  Production ready France support and Plot navigator
+
+  - ✨ France land masses: do not show corsica if in mainland and viceversa
+  - ✨ France names and brands: use a static database as workarround
+  - ✨ France opening hours
+  - ✨ Plot navigator: No more a experimental view
+  - ✨ Plot navigator: Landscape layout
+  - ✨ Plot navigator: Header, backbutton and location/product selectors
+  - 🧹 Plot navigator: Removed koalaplot extensions already integrated in koalaplot 0.11.0
+  - 🌐 Plot navigator: Texts translations
 changes_1_4_0_md: |-
   French gas stations and Compose/Material3 Settings rewrite
 
   - ✨ Data source option: Enables support for countries other than Spain
   - ✨ French gas stations (with limitations)
+  - 🚸 One time warning when disabling expensive filter
   - 💄 Settings page rewritten on Compose/Material 3
   - ⚡️ Using a faster data loading library (Gson -> Kotlin Serialization) 20% speed up
   - ♻️  API format abstraction. A step towards supporting for other countries

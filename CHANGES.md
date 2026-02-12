@@ -1,8 +1,12 @@
 # Change log
 
-## Unreleased
+## 1.4.1 (2026-02-12)
+
+Production ready France support and Plot navigator
 
 - ✨ France land masses: do not show corsica if in mainland and viceversa
+- ✨ France names and brands: use a static database as workarround
+- ✨ France opening hours
 - ✨ Plot navigator: No more a experimental view
 - ✨ Plot navigator: Landscape layout
 - ✨ Plot navigator: Header, backbutton and location/product selectors

@@ -5,7 +5,7 @@ Para escoger una, solo baja en la lista para mejorar el precio hasta que la dist
 
 Funcionalidades:
 
-- 🏛️ Datos actualizados del Ministerio de Industria
+- 🏛️ Datos oficiales de los gobiernos: España y Francia
 - 🎯 Solo gasolineras relevantes: o más cercanas o más baratas que otras
 - 🕒 Considera los horarios de apertura
 - 🗺️ Se integra con la aplicación de mapas que uses

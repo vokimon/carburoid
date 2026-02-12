@@ -7,7 +7,7 @@
 
 # Carburoid
 
-Find Spanish gas stations by price and distance.
+Find gas stations by price and distance in Spain and France.
 
 Carburoid shows only gas stations worth considering.
 Sorted by distance, whenever a station is more expensive than the closer ones, it is hidden.
@@ -16,7 +16,7 @@ To choose a station, just scroll down to improve the price until the distance is
 
 Features:
 
-- 🏛️ Up-to-date gas station data provided by the Ministry of Industry of Spain
+- 🏛️ Official government data sources (Spain, France)
 - 🎯 Only relevant gas stations: either closer or cheaper than others
 - 🕒 Smart about opening and closing hours
 - 🗺️ Integrates with your preferred map application
