@@ -33,5 +33,18 @@ class FranceOpeningHours : OpeningHours() {
 
             return hours to minutes
         }
+
+        @VisibleForTesting
+        fun parseFrenchInterval(spec: String): Interval? {
+            if (spec.isEmpty()) return null
+
+            val parts = spec.split('-')
+            if (parts.size != 2) return null
+
+            val start = parseFrenchTime(parts[0]) ?: return null
+            val end = parseFrenchTime(parts[1]) ?: return null
+
+            return start to end
+        }
     }
 }

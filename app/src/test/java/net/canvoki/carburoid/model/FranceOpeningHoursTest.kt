@@ -163,4 +163,62 @@ class FranceOpeningHoursTest {
     fun `parseFrenchTime parses single digit both`() {
         parseFrenchTimeTestCase(8 to 3, "8.3")
     }
+
+    private fun parseFrenchIntervalTestCase(
+        expected: Interval?,
+        spec: String,
+    ) {
+        val result = FranceOpeningHours.parseFrenchInterval(spec)
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `parseFrenchInterval returns null for empty string`() {
+        parseFrenchIntervalTestCase(null, "")
+    }
+
+    @Test
+    fun `parseFrenchInterval returns null for missing dash`() {
+        parseFrenchIntervalTestCase(null, "08.10")
+    }
+
+    @Test
+    fun `parseFrenchInterval returns null for bad start time`() {
+        parseFrenchIntervalTestCase(null, "bad-20.00")
+    }
+
+    @Test
+    fun `parseFrenchInterval returns null for bad end time`() {
+        parseFrenchIntervalTestCase(null, "08.10-bad")
+    }
+
+    @Test
+    fun `parseFrenchInterval parses single interval 08_10-20_00`() {
+        parseFrenchIntervalTestCase((8 to 10) to (20 to 0), "08.10-20.00")
+    }
+
+    @Test
+    fun `parseFrenchInterval parses single interval 13_30-20_20`() {
+        parseFrenchIntervalTestCase((13 to 30) to (20 to 20), "13.30-20.20")
+    }
+
+    @Test
+    fun `parseFrenchInterval handles midnight end as 00_00`() {
+        parseFrenchIntervalTestCase((8 to 0) to (0 to 0), "08.00-00.00")
+    }
+
+    @Test
+    fun `parseFrenchInterval handles explicit 23_59 end`() {
+        parseFrenchIntervalTestCase((8 to 0) to (23 to 59), "08.00-23.59")
+    }
+
+    @Test
+    fun `parseFrenchInterval handles next day crossing 01_00`() {
+        parseFrenchIntervalTestCase((1 to 0) to (1 to 0), "01.00-01.00")
+    }
+
+    @Test
+    fun `parseFrenchInterval handles crossing midnight`() {
+        parseFrenchIntervalTestCase((22 to 0) to (6 to 0), "22.00-06.00")
+    }
 }
