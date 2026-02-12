@@ -5,8 +5,8 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import net.canvoki.carburoid.model.OpeningHours
+import net.canvoki.carburoid.test.assertEquals
 import net.canvoki.carburoid.test.assertJsonEqual
-import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class FrenchGasStationTest {
@@ -60,6 +60,7 @@ class FrenchGasStationTest {
                 for ((product, price) in prices) {
                     put(product + "_prix", price)
                 }
+                put("horaires_jour", "Automate-24-24")
             },
         )
 

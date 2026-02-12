@@ -165,8 +165,7 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
                 ?.toDoubleOrNull()
                 ?.let { it / 100000.0 }
 
-        // TODO: Parse french format for opening hours
-        val openingHours = OpeningHours.parse("L-D: 24H")
+        val openingHours = obj["horaires_jour"]?.jsonPrimitive?.content?.let { FranceOpeningHours.parse(it) }
         val extraDb: FranceExtraStationData.Db? = FranceExtraStationData.db()
         val extraData: FranceExtraStationData? = extraDb?.let { it.get(id.toString()) }
         val name: String =
@@ -226,6 +225,8 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
                     if (apiProduct == null) continue
                     put("${apiProduct}_prix", JsonPrimitive(price))
                 }
+                // TODO: Proper dump of FranceOpeningHours
+                value.openingHours?.let { put("horaires_jour", JsonPrimitive("Automate-24-24")) }
             }
         jsonEncoder.encodeJsonElement(obj)
     }

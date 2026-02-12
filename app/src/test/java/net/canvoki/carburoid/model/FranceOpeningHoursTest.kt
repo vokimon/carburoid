@@ -355,10 +355,4 @@ class FranceOpeningHoursTest {
     fun `parse French ending at 00_00 maps to 23_59`() {
         parseFrenchOpeningHoursTestCase("L: 08:00-23:59", "Lundi08.00-00.00")
     }
-/*
-    @Test
-    fun `parse French returns null for three intervals`() {
-        parseFrenchOpeningHoursTestCase(null, "Dimanche 08.00-10.00 et 11.00-13.00 et 14.00-16.00")
-    }
-*/
 }
