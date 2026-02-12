@@ -322,6 +322,11 @@ class FranceOpeningHoursTest {
     }
 
     @Test
+    fun `parse French bad string returns null`() {
+        parseFrenchOpeningHoursTestCase(null, "BAD")
+    }
+
+    @Test
     fun `parse French single day single interval`() {
         parseFrenchOpeningHoursTestCase("D: 08:10-20:00", "Dimanche08.10-20.00")
     }
@@ -331,13 +336,12 @@ class FranceOpeningHoursTest {
         parseFrenchOpeningHoursTestCase("D: 08:10-12:00 y 13:10-20:00", "Dimanche 08.10-12.00 et 13.10-20.00")
     }
 
-/*
-
     @Test
-    fun `parse French Automate 24-7`() {
+    fun `parse French multiple days Automate 24-7`() {
         parseFrenchOpeningHoursTestCase("L-D: 24H", "Automate-24-24")
     }
 
+/*
     @Test
     fun `parse French two days comma separated`() {
         parseFrenchOpeningHoursTestCase("D: 08:10-20:00; L: 09:00-19:00", "Dimanche08.10-20.00, Lundi09.00-19.00")
