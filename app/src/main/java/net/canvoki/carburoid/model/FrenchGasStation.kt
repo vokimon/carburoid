@@ -171,10 +171,12 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
         val name: String =
             when {
                 extraData != null -> "${extraData.brand} - ${extraData.name}"
-                else -> id.toString() // fallback
+                else -> {
+                    log("FR: NO NAME FOR STATION $id")
+                    id.toString() // fallback
+                }
             }
 
-        log("FR NAME $name")
         // Extract prices: any field ending with "_prix"
         val prices = mutableMapOf<String, Double?>()
         for ((key, value) in obj) {
@@ -183,7 +185,7 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
                 val product = fromApiProduct[apiProduct]
                 if (product == null) {
                     // TODO: Collect missing products
-                    log("MISSING PRODUCT: FR $apiProduct")
+                    log("FR: MISSING PRODUCT $apiProduct")
                     continue
                 }
                 val priceStr = value.jsonPrimitive.content
