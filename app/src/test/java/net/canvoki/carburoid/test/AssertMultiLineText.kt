@@ -89,11 +89,14 @@ private fun contextAfter(
 ): List<String> = lines.subList(end, minOf(lines.size, end + context))
 
 fun assertEquals(
-    expected: String,
-    actual: String,
+    expected: String?,
+    actual: String?,
     message: String? = null,
     contextLines: Int = 3,
 ) {
+    if (actual == null) return standardAssertEquals(expected, actual, message)
+    if (expected == null) return standardAssertEquals(expected, actual, message)
+
     val expectedLines = expected.lines()
     val actualLines = actual.lines()
 
