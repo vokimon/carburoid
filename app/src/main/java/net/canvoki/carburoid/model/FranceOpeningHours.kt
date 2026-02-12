@@ -46,5 +46,51 @@ class FranceOpeningHours : OpeningHours() {
 
             return start to end
         }
+
+        @VisibleForTesting
+        fun parseFrenchDayElement(spec: String): ScheduleEntry? {
+            if (spec.isEmpty()) return null
+
+            // Handle special Automate case
+            if (spec == "Automate-24-24") {
+                return DayOfWeek.values().toList() to listOf((0 to 0) to (23 to 59))
+            }
+
+            var alphaEnd = 0
+            while (alphaEnd < spec.length && spec[alphaEnd].isLetter()) {
+                alphaEnd++
+            }
+
+            if (alphaEnd == 0) return null // No alphabetic prefix
+
+            val weekdayPart = spec.substring(0, alphaEnd)
+            val timePart = spec.substring(alphaEnd).trim()
+
+            val day = parseFrenchWeekday(weekdayPart) ?: return null
+
+            if (timePart.isEmpty()) {
+                return listOf(day) to emptyList()
+            }
+
+            val intervalParts = timePart.split(" et ")
+            if (intervalParts.size > 2) return null
+            val intervals = intervalParts.map { parseFrenchInterval(it) ?: return null }
+            return listOf(day) to intervals
+        }
+
+        fun parse(spec: String): OpeningHours? {
+            if (spec == "") return null
+            val oh = FranceOpeningHours()
+            val (days, intervals) = parseFrenchDayElement(spec)!!
+            val interval = intervals.first()
+            oh.add(
+                days.first(),
+                interval.first.first,
+                interval.first.second,
+                interval.second.first,
+                interval.second.second,
+            )
+            return oh
+        }
     }
 }

@@ -221,4 +221,151 @@ class FranceOpeningHoursTest {
     fun `parseFrenchInterval handles crossing midnight`() {
         parseFrenchIntervalTestCase((22 to 0) to (6 to 0), "22.00-06.00")
     }
+
+    private fun parseFrenchDayElementTestCase(
+        expected: ScheduleEntry?,
+        spec: String,
+    ) {
+        val result = FranceOpeningHours.parseFrenchDayElement(spec)
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `parseFrenchDayElement returns null for empty string`() {
+        parseFrenchDayElementTestCase(null, "")
+    }
+
+    @Test
+    fun `parseFrenchDayElement returns null for unknown weekday`() {
+        parseFrenchDayElementTestCase(null, "Unknown08.10-20.00")
+    }
+
+    @Test
+    fun `parseFrenchDayElement handles Automate 24-7`() {
+        parseFrenchDayElementTestCase(
+            DayOfWeek.values().toList() to listOf((0 to 0) to (23 to 59)),
+            "Automate-24-24",
+        )
+    }
+
+    @Test
+    fun `parseFrenchDayElement parses single interval no space Dimanche08_10-20_00`() {
+        parseFrenchDayElementTestCase(
+            listOf(DayOfWeek.SUNDAY) to listOf((8 to 10) to (20 to 0)),
+            "Dimanche08.10-20.00",
+        )
+    }
+
+    @Test
+    fun `parseFrenchDayElement parses single interval with space Dimanche 08_10-20_00`() {
+        parseFrenchDayElementTestCase(
+            listOf(DayOfWeek.SUNDAY) to listOf((8 to 10) to (20 to 0)),
+            "Dimanche 08.10-20.00",
+        )
+    }
+
+    @Test
+    fun `parseFrenchDayElement handles closed day Dimanche`() {
+        parseFrenchDayElementTestCase(
+            listOf(DayOfWeek.SUNDAY) to emptyList(),
+            "Dimanche",
+        )
+    }
+
+    @Test
+    fun `parseFrenchDayElement parses two intervals Dimanche 08_10-12_00 et 13_30-20_20`() {
+        parseFrenchDayElementTestCase(
+            listOf(DayOfWeek.SUNDAY) to
+                listOf(
+                    (8 to 10) to (12 to 0),
+                    (13 to 30) to (20 to 20),
+                ),
+            "Dimanche 08.10-12.00 et 13.30-20.20",
+        )
+    }
+
+    @Test
+    fun `parseFrenchDayElement returns null for three intervals`() {
+        parseFrenchDayElementTestCase(
+            null,
+            "Dimanche 08.00-10.00 et 11.00-13.00 et 14.00-16.00",
+        )
+    }
+
+    @Test
+    fun `parseFrenchDayElement error if first intervals is bad`() {
+        parseFrenchDayElementTestCase(
+            null,
+            "Dimanche bad et 13.30-20.20",
+        )
+    }
+
+    @Test
+    fun `parseFrenchDayElement error if second intervals is bad`() {
+        parseFrenchDayElementTestCase(
+            null,
+            "Dimanche 08.10-12.00 et bad",
+        )
+    }
+
+    private fun parseFrenchOpeningHoursTestCase(
+        expected: String?,
+        spec: String,
+    ) {
+        val result = FranceOpeningHours.parse(spec)?.toString()
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `parse French empty string returns null`() {
+        parseFrenchOpeningHoursTestCase(null, "")
+    }
+
+    @Test
+    fun `parse French single day single interval`() {
+        parseFrenchOpeningHoursTestCase("D: 08:10-20:00", "Dimanche08.10-20.00")
+    }
+
+    /*
+    @Test
+    fun `parse French single day two intervals`() {
+        parseFrenchOpeningHoursTestCase("D: 08:10-12:00 y 13:10-20:00", "Dimanche 08.10-12.00 et 13.10-20.00")
+    }
+
+
+    @Test
+    fun `parse French Automate 24-7`() {
+        parseFrenchOpeningHoursTestCase("L-D: 24H", "Automate-24-24")
+    }
+
+    @Test
+    fun `parse French two days comma separated`() {
+        parseFrenchOpeningHoursTestCase("D: 08:10-20:00; L: 09:00-19:00", "Dimanche08.10-20.00, Lundi09.00-19.00")
+    }
+
+    @Test
+    fun `parse French day with two intervals`() {
+        parseFrenchOpeningHoursTestCase("D: 08:10-12:00 y 13:30-20:20", "Dimanche 08.10-12.00 et 13.30-20.20")
+    }
+
+    @Test
+    fun `parse French crossing midnight Lundi13_30-02_20 maps to Monday and Tuesday`() {
+        parseFrenchOpeningHoursTestCase("L: 13:30-23:59; M: 00:00-02:20", "Lundi13.30-02.20")
+    }
+
+    @Test
+    fun `parse French ending at 00_00 maps to 23_59`() {
+        parseFrenchOpeningHoursTestCase("L: 08:00-23:59", "Lundi08.00-00.00")
+    }
+
+    @Test
+    fun `parse French returns null for bad day element`() {
+        parseFrenchOpeningHoursTestCase(null, "Dimanche08.10-20.00, BadDay09.00-19.00")
+    }
+
+    @Test
+    fun `parse French returns null for three intervals`() {
+        parseFrenchOpeningHoursTestCase(null, "Dimanche 08.00-10.00 et 11.00-13.00 et 14.00-16.00")
+    }
+     */
 }
