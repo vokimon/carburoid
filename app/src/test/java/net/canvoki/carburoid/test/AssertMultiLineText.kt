@@ -94,8 +94,10 @@ fun assertEquals(
     message: String? = null,
     contextLines: Int = 3,
 ) {
-    if (actual == null) return standardAssertEquals(expected, actual, message)
-    if (expected == null) return standardAssertEquals(expected, actual, message)
+    if (actual == null || expected == null) {
+        standardAssertEquals(message, expected, actual)
+        return
+    }
 
     val expectedLines = expected.lines()
     val actualLines = actual.lines()
