@@ -326,12 +326,12 @@ class FranceOpeningHoursTest {
         parseFrenchOpeningHoursTestCase("D: 08:10-20:00", "Dimanche08.10-20.00")
     }
 
-    /*
     @Test
     fun `parse French single day two intervals`() {
         parseFrenchOpeningHoursTestCase("D: 08:10-12:00 y 13:10-20:00", "Dimanche 08.10-12.00 et 13.10-20.00")
     }
 
+/*
 
     @Test
     fun `parse French Automate 24-7`() {
@@ -367,5 +367,5 @@ class FranceOpeningHoursTest {
     fun `parse French returns null for three intervals`() {
         parseFrenchOpeningHoursTestCase(null, "Dimanche 08.00-10.00 et 11.00-13.00 et 14.00-16.00")
     }
-     */
+ */
 }

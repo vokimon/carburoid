@@ -82,14 +82,15 @@ class FranceOpeningHours : OpeningHours() {
             if (spec == "") return null
             val oh = FranceOpeningHours()
             val (days, intervals) = parseFrenchDayElement(spec)!!
-            val interval = intervals.first()
-            oh.add(
-                days.first(),
-                interval.first.first,
-                interval.first.second,
-                interval.second.first,
-                interval.second.second,
-            )
+            for (interval in intervals) {
+                oh.add(
+                    days.first(),
+                    interval.first.first,
+                    interval.first.second,
+                    interval.second.first,
+                    interval.second.second,
+                )
+            }
             return oh
         }
     }
