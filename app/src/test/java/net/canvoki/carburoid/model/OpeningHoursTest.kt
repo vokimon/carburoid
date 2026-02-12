@@ -277,337 +277,6 @@ class OpeningHoursTest {
         assertEquals("L-X: 08:00-13:30", result)
     }
 
-    fun parseTimeTestCase(
-        expected: TimeSpec?,
-        spec: String,
-    ) {
-        val time = OpeningHours.parseTime(spec)
-        assertEquals(expected, time)
-    }
-
-    @Test
-    fun `parseTime without colon`() {
-        parseTimeTestCase(null, "nocolon")
-    }
-
-    @Test
-    fun `parseTime non numerical hours`() {
-        parseTimeTestCase(null, "hh:12")
-    }
-
-    @Test
-    fun `parseTime non numerical minutes`() {
-        parseTimeTestCase(null, "12:mm")
-    }
-
-    @Test
-    fun `parseTime beyond range hours`() {
-        parseTimeTestCase(null, "24:12")
-    }
-
-    @Test
-    fun `parseTime below range hours`() {
-        parseTimeTestCase(null, "-1:12")
-    }
-
-    @Test
-    fun `parseTime beyond range minutes`() {
-        parseTimeTestCase(null, "12:-1")
-    }
-
-    @Test
-    fun `parseTime below range minutes`() {
-        parseTimeTestCase(null, "12:60")
-    }
-
-    @Test
-    fun `parseTime upper bound`() {
-        parseTimeTestCase(23 to 59, "23:59")
-    }
-
-    @Test
-    fun `parseTime lower bound`() {
-        parseTimeTestCase(0 to 0, "00:00")
-    }
-
-    @Test
-    fun `parseTime upadded`() {
-        parseTimeTestCase(1 to 2, "1:2")
-    }
-
-    @Test
-    fun `parseTime zero padded`() {
-        parseTimeTestCase(1 to 2, "01:02")
-    }
-
-    // parseInterval (single)
-
-    fun parseIntervalTestCase(
-        expected: Interval?,
-        spec: String,
-    ) {
-        val result = OpeningHours.parseInterval(spec)
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `parseInterval no dash`() {
-        parseIntervalTestCase(null, "nodash")
-    }
-
-    @Test
-    fun `parseInterval 24H`() {
-        parseIntervalTestCase((0 to 0) to (23 to 59), "24H")
-    }
-
-    @Test
-    fun `parseInterval bad begin`() {
-        parseIntervalTestCase(null, "bad-12:34")
-    }
-
-    @Test
-    fun `parseInterval bad end`() {
-        parseIntervalTestCase(null, "12:34-bad")
-    }
-
-    @Test
-    fun `parseInterval crossed interval hours`() {
-        parseIntervalTestCase((12 to 34) to (2 to 30), "12:34-02:30")
-    }
-
-    @Test
-    fun `parseInterval crossed interval minutes, considered valid`() {
-        parseIntervalTestCase((12 to 34) to (12 to 30), "12:34-12:30")
-    }
-
-    @Test
-    fun `parseInterval proper interval, considered valid`() {
-        parseIntervalTestCase((12 to 34) to (22 to 30), "12:34-22:30")
-    }
-
-    // parseIntervals (multiple)
-
-    fun parseIntervalsTestCase(
-        expected: Intervals?,
-        spec: String,
-    ) {
-        val result = OpeningHours.parseIntervals(spec)
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `parseIntervals single interval`() {
-        parseIntervalsTestCase(
-            listOf(
-                (12 to 34) to (22 to 30),
-            ),
-            "12:34-22:30",
-        )
-    }
-
-    @Test
-    fun `parseIntervals multiple interval`() {
-        parseIntervalsTestCase(
-            listOf(
-                (0 to 0) to (10 to 0),
-                (12 to 34) to (22 to 30),
-            ),
-            "00:00-10:00 y 12:34-22:30",
-        )
-    }
-
-    @Test
-    fun `parseIntervals bad interval`() {
-        parseIntervalsTestCase(null, "BAD")
-    }
-
-    // parseDayShort
-
-    fun parseDayShort_testCase(
-        expected: DayOfWeek?,
-        spec: String,
-    ) {
-        assertEquals(expected, OpeningHours.parseDayShort(spec))
-    }
-
-    @Test
-    fun `parseDayShort L returns MONDAY`() {
-        parseDayShort_testCase(DayOfWeek.MONDAY, "L")
-    }
-
-    @Test
-    fun `parseDayShort BAD returns null`() {
-        parseDayShort_testCase(null, "BAD")
-    }
-
-    @Test
-    fun `parseDayShort M returns TUESDAY`() {
-        parseDayShort_testCase(DayOfWeek.TUESDAY, "M")
-    }
-
-    @Test
-    fun `parseDayShort X returns WEDNESDAY`() {
-        parseDayShort_testCase(DayOfWeek.WEDNESDAY, "X")
-    }
-
-    @Test
-    fun `parseDayShort J returns THURSDAY`() {
-        parseDayShort_testCase(DayOfWeek.THURSDAY, "J")
-    }
-
-    @Test
-    fun `parseDayShort V returns FRIDAY`() {
-        parseDayShort_testCase(DayOfWeek.FRIDAY, "V")
-    }
-
-    @Test
-    fun `parseDayShort S returns SATURDAY`() {
-        parseDayShort_testCase(DayOfWeek.SATURDAY, "S")
-    }
-
-    @Test
-    fun `parseDayShort D returns SUNDAY`() {
-        parseDayShort_testCase(DayOfWeek.SUNDAY, "D")
-    }
-
-    fun parseDayRange_testCase(
-        expected: DayRange?,
-        spec: String,
-    ) {
-        val result = OpeningHours.parseDayRange(spec)
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun `parseDayRange single day wraps in list`() {
-        parseDayRange_testCase(
-            listOf(
-                DayOfWeek.TUESDAY,
-            ),
-            "M",
-        )
-    }
-
-    @Test
-    fun `parseDayRange bad day returns null`() {
-        parseDayRange_testCase(null, "BAD")
-    }
-
-    @Test
-    fun `parseDayRange consecutiive bounds`() {
-        parseDayRange_testCase(
-            listOf(
-                DayOfWeek.TUESDAY,
-                DayOfWeek.WEDNESDAY,
-            ),
-            "M-X",
-        )
-    }
-
-    @Test
-    fun `parseDayRange non-consecutive bounds`() {
-        parseDayRange_testCase(
-            listOf(
-                DayOfWeek.TUESDAY,
-                DayOfWeek.WEDNESDAY,
-                DayOfWeek.THURSDAY,
-            ),
-            "M-J",
-        )
-    }
-
-    @Test
-    fun `parseDayRange inverted order cycles`() {
-        parseDayRange_testCase(
-            listOf(
-                DayOfWeek.THURSDAY,
-                DayOfWeek.FRIDAY,
-                DayOfWeek.SATURDAY,
-                DayOfWeek.SUNDAY,
-                DayOfWeek.MONDAY,
-                DayOfWeek.TUESDAY,
-            ),
-            "J-M",
-        )
-    }
-
-    // parseScheduleEntry
-
-    fun parseScheduleEntry_TestCase(
-        expected: ScheduleEntry?,
-        spec: String,
-    ) {
-        assertEquals(expected, OpeningHours.parseScheduleEntry(spec))
-    }
-
-    @Test
-    fun `parseScheduleEntry no colon`() {
-        parseScheduleEntry_TestCase(null, "no colon")
-    }
-
-    @Test
-    fun `parseScheduleEntry bad days`() {
-        parseScheduleEntry_TestCase(null, "BAD: 14:00-22:00")
-    }
-
-    @Test
-    fun `parseScheduleEntry bad times`() {
-        parseScheduleEntry_TestCase(null, "M-J: BAD")
-    }
-
-    @Test
-    fun `parseScheduleEntry proper`() {
-        parseScheduleEntry_TestCase(
-            listOf(
-                DayOfWeek.FRIDAY,
-                DayOfWeek.SATURDAY,
-            ) to
-                listOf(
-                    (3 to 0) to (12 to 0),
-                    (14 to 0) to (22 to 0),
-                ),
-            "V-S: 3:00-12:00 y 14:00-22:00",
-        )
-    }
-
-    // parse
-    fun parse_TestCase(
-        expected: String?,
-        spec: String,
-    ) {
-        assertEquals(expected, OpeningHours.parse(spec)?.toString())
-    }
-
-    @Test
-    fun `parse single entry`() {
-        parse_TestCase("L-M: 08:00-13:30", "L-M: 08:00-13:30")
-    }
-
-    @Test
-    fun `parse multiple entries`() {
-        parse_TestCase("L-M: 08:00-13:30; V: 24H", "L-M: 08:00-13:30; V: 24H")
-    }
-
-    @Test
-    fun `parse bad entry`() {
-        parse_TestCase(null, "L-M: 08:00-13:30; V: BAD")
-    }
-
-    @Test
-    fun `parse crossing hours expands on two days`() {
-        parse_TestCase("L: 22:00-23:59; M: 00:00-02:00", "L: 22:00-02:00")
-    }
-
-    @Test
-    fun `parse crossing hours expansion on Sunday cycles to Monday`() {
-        parse_TestCase("L: 00:00-02:00; D: 22:00-23:59", "D: 22:00-02:00")
-    }
-
-    @Test
-    fun `parse ending in 0h moved to 23_59`() {
-        parse_TestCase("L: 22:00-23:59", "L: 22:00-00:00")
-    }
-
     // getStatus
 
     fun getStatus_testCase(
@@ -916,7 +585,7 @@ class OpeningHoursTest {
             if (line.isBlank()) continue
 
             try {
-                val oh = OpeningHours.parse(line)
+                val oh = SpainOpeningHours.parse(line)
                 val serialized = oh.toString()
 
                 if (serialized != line) {
@@ -932,5 +601,351 @@ class OpeningHoursTest {
             failures.forEach { println("  $it") }
             fail("Round-trip failed for ${failures.size} specs")
         }
+    }
+}
+
+class SpainOpeningHoursTest {
+    private lateinit var originalLocale: Locale
+
+    @Before
+    fun saveLocale() {
+        originalLocale = Locale.getDefault()
+        Locale.setDefault(Locale.ROOT)
+    }
+
+    @After
+    fun restoreLocale() {
+        Locale.setDefault(originalLocale)
+    }
+
+    fun parseTimeTestCase(
+        expected: TimeSpec?,
+        spec: String,
+    ) {
+        val time = SpainOpeningHours.parseTime(spec)
+        assertEquals(expected, time)
+    }
+
+    @Test
+    fun `parseTime without colon`() {
+        parseTimeTestCase(null, "nocolon")
+    }
+
+    @Test
+    fun `parseTime non numerical hours`() {
+        parseTimeTestCase(null, "hh:12")
+    }
+
+    @Test
+    fun `parseTime non numerical minutes`() {
+        parseTimeTestCase(null, "12:mm")
+    }
+
+    @Test
+    fun `parseTime beyond range hours`() {
+        parseTimeTestCase(null, "24:12")
+    }
+
+    @Test
+    fun `parseTime below range hours`() {
+        parseTimeTestCase(null, "-1:12")
+    }
+
+    @Test
+    fun `parseTime beyond range minutes`() {
+        parseTimeTestCase(null, "12:-1")
+    }
+
+    @Test
+    fun `parseTime below range minutes`() {
+        parseTimeTestCase(null, "12:60")
+    }
+
+    @Test
+    fun `parseTime upper bound`() {
+        parseTimeTestCase(23 to 59, "23:59")
+    }
+
+    @Test
+    fun `parseTime lower bound`() {
+        parseTimeTestCase(0 to 0, "00:00")
+    }
+
+    @Test
+    fun `parseTime upadded`() {
+        parseTimeTestCase(1 to 2, "1:2")
+    }
+
+    @Test
+    fun `parseTime zero padded`() {
+        parseTimeTestCase(1 to 2, "01:02")
+    }
+
+    // parseInterval (single)
+
+    fun parseIntervalTestCase(
+        expected: Interval?,
+        spec: String,
+    ) {
+        val result = SpainOpeningHours.parseInterval(spec)
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `parseInterval no dash`() {
+        parseIntervalTestCase(null, "nodash")
+    }
+
+    @Test
+    fun `parseInterval 24H`() {
+        parseIntervalTestCase((0 to 0) to (23 to 59), "24H")
+    }
+
+    @Test
+    fun `parseInterval bad begin`() {
+        parseIntervalTestCase(null, "bad-12:34")
+    }
+
+    @Test
+    fun `parseInterval bad end`() {
+        parseIntervalTestCase(null, "12:34-bad")
+    }
+
+    @Test
+    fun `parseInterval crossed interval hours`() {
+        parseIntervalTestCase((12 to 34) to (2 to 30), "12:34-02:30")
+    }
+
+    @Test
+    fun `parseInterval crossed interval minutes, considered valid`() {
+        parseIntervalTestCase((12 to 34) to (12 to 30), "12:34-12:30")
+    }
+
+    @Test
+    fun `parseInterval proper interval, considered valid`() {
+        parseIntervalTestCase((12 to 34) to (22 to 30), "12:34-22:30")
+    }
+
+    // parseIntervals (multiple)
+
+    fun parseIntervalsTestCase(
+        expected: Intervals?,
+        spec: String,
+    ) {
+        val result = SpainOpeningHours.parseIntervals(spec)
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `parseIntervals single interval`() {
+        parseIntervalsTestCase(
+            listOf(
+                (12 to 34) to (22 to 30),
+            ),
+            "12:34-22:30",
+        )
+    }
+
+    @Test
+    fun `parseIntervals multiple interval`() {
+        parseIntervalsTestCase(
+            listOf(
+                (0 to 0) to (10 to 0),
+                (12 to 34) to (22 to 30),
+            ),
+            "00:00-10:00 y 12:34-22:30",
+        )
+    }
+
+    @Test
+    fun `parseIntervals bad interval`() {
+        parseIntervalsTestCase(null, "BAD")
+    }
+
+    // parseDayShort
+
+    fun parseDayShort_testCase(
+        expected: DayOfWeek?,
+        spec: String,
+    ) {
+        assertEquals(expected, SpainOpeningHours.parseDayShort(spec))
+    }
+
+    @Test
+    fun `parseDayShort L returns MONDAY`() {
+        parseDayShort_testCase(DayOfWeek.MONDAY, "L")
+    }
+
+    @Test
+    fun `parseDayShort BAD returns null`() {
+        parseDayShort_testCase(null, "BAD")
+    }
+
+    @Test
+    fun `parseDayShort M returns TUESDAY`() {
+        parseDayShort_testCase(DayOfWeek.TUESDAY, "M")
+    }
+
+    @Test
+    fun `parseDayShort X returns WEDNESDAY`() {
+        parseDayShort_testCase(DayOfWeek.WEDNESDAY, "X")
+    }
+
+    @Test
+    fun `parseDayShort J returns THURSDAY`() {
+        parseDayShort_testCase(DayOfWeek.THURSDAY, "J")
+    }
+
+    @Test
+    fun `parseDayShort V returns FRIDAY`() {
+        parseDayShort_testCase(DayOfWeek.FRIDAY, "V")
+    }
+
+    @Test
+    fun `parseDayShort S returns SATURDAY`() {
+        parseDayShort_testCase(DayOfWeek.SATURDAY, "S")
+    }
+
+    @Test
+    fun `parseDayShort D returns SUNDAY`() {
+        parseDayShort_testCase(DayOfWeek.SUNDAY, "D")
+    }
+
+    fun parseDayRange_testCase(
+        expected: DayRange?,
+        spec: String,
+    ) {
+        val result = SpainOpeningHours.parseDayRange(spec)
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `parseDayRange single day wraps in list`() {
+        parseDayRange_testCase(
+            listOf(
+                DayOfWeek.TUESDAY,
+            ),
+            "M",
+        )
+    }
+
+    @Test
+    fun `parseDayRange bad day returns null`() {
+        parseDayRange_testCase(null, "BAD")
+    }
+
+    @Test
+    fun `parseDayRange consecutiive bounds`() {
+        parseDayRange_testCase(
+            listOf(
+                DayOfWeek.TUESDAY,
+                DayOfWeek.WEDNESDAY,
+            ),
+            "M-X",
+        )
+    }
+
+    @Test
+    fun `parseDayRange non-consecutive bounds`() {
+        parseDayRange_testCase(
+            listOf(
+                DayOfWeek.TUESDAY,
+                DayOfWeek.WEDNESDAY,
+                DayOfWeek.THURSDAY,
+            ),
+            "M-J",
+        )
+    }
+
+    @Test
+    fun `parseDayRange inverted order cycles`() {
+        parseDayRange_testCase(
+            listOf(
+                DayOfWeek.THURSDAY,
+                DayOfWeek.FRIDAY,
+                DayOfWeek.SATURDAY,
+                DayOfWeek.SUNDAY,
+                DayOfWeek.MONDAY,
+                DayOfWeek.TUESDAY,
+            ),
+            "J-M",
+        )
+    }
+
+    // parseScheduleEntry
+
+    fun parseScheduleEntry_TestCase(
+        expected: ScheduleEntry?,
+        spec: String,
+    ) {
+        assertEquals(expected, SpainOpeningHours.parseScheduleEntry(spec))
+    }
+
+    @Test
+    fun `parseScheduleEntry no colon`() {
+        parseScheduleEntry_TestCase(null, "no colon")
+    }
+
+    @Test
+    fun `parseScheduleEntry bad days`() {
+        parseScheduleEntry_TestCase(null, "BAD: 14:00-22:00")
+    }
+
+    @Test
+    fun `parseScheduleEntry bad times`() {
+        parseScheduleEntry_TestCase(null, "M-J: BAD")
+    }
+
+    @Test
+    fun `parseScheduleEntry proper`() {
+        parseScheduleEntry_TestCase(
+            listOf(
+                DayOfWeek.FRIDAY,
+                DayOfWeek.SATURDAY,
+            ) to
+                listOf(
+                    (3 to 0) to (12 to 0),
+                    (14 to 0) to (22 to 0),
+                ),
+            "V-S: 3:00-12:00 y 14:00-22:00",
+        )
+    }
+
+    // parse
+    fun parse_TestCase(
+        expected: String?,
+        spec: String,
+    ) {
+        assertEquals(expected, SpainOpeningHours.parse(spec)?.toString())
+    }
+
+    @Test
+    fun `parse single entry`() {
+        parse_TestCase("L-M: 08:00-13:30", "L-M: 08:00-13:30")
+    }
+
+    @Test
+    fun `parse multiple entries`() {
+        parse_TestCase("L-M: 08:00-13:30; V: 24H", "L-M: 08:00-13:30; V: 24H")
+    }
+
+    @Test
+    fun `parse bad entry`() {
+        parse_TestCase(null, "L-M: 08:00-13:30; V: BAD")
+    }
+
+    @Test
+    fun `parse crossing hours expands on two days`() {
+        parse_TestCase("L: 22:00-23:59; M: 00:00-02:00", "L: 22:00-02:00")
+    }
+
+    @Test
+    fun `parse crossing hours expansion on Sunday cycles to Monday`() {
+        parse_TestCase("L: 00:00-02:00; D: 22:00-23:59", "D: 22:00-02:00")
+    }
+
+    @Test
+    fun `parse ending in 0h moved to 23_59`() {
+        parse_TestCase("L: 22:00-23:59", "L: 22:00-00:00")
     }
 }

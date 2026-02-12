@@ -396,19 +396,6 @@ open class OpeningHours {
     companion object {
         // Delegate to SpainOpeningHours
         fun parse(spec: String): OpeningHours? = SpainOpeningHours.parse(spec)
-
-        // Keep all parsing helpers for backward compatibility
-        fun parseTime(intervalStr: String): TimeSpec? = SpainOpeningHours.parseTime(intervalStr)
-
-        fun parseInterval(intervalStr: String): Interval? = SpainOpeningHours.parseInterval(intervalStr)
-
-        fun parseIntervals(spec: String): Intervals? = SpainOpeningHours.parseIntervals(spec)
-
-        fun parseDayShort(spec: String): DayOfWeek? = SpainOpeningHours.parseDayShort(spec)
-
-        fun parseDayRange(spec: String): DayRange? = SpainOpeningHours.parseDayRange(spec)
-
-        fun parseScheduleEntry(spec: String): ScheduleEntry? = SpainOpeningHours.parseScheduleEntry(spec)
     }
 }
 
