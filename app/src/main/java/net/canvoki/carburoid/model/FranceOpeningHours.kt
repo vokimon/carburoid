@@ -84,13 +84,34 @@ class FranceOpeningHours : OpeningHours() {
                 val (days, intervals) = parseFrenchDayElement(element.trim()) ?: return null
                 for (day in days) {
                     for (interval in intervals) {
+                        val (firstHour, firstMinutes) = interval.first
+                        val (secondHour, secondMinutes) = interval.second
+                        if (firstHour < secondHour || (firstHour == secondHour && firstMinutes < secondMinutes)) {
+                            oh.add(
+                                day,
+                                firstHour,
+                                firstMinutes,
+                                secondHour,
+                                secondMinutes,
+                            )
+                            continue
+                        }
                         oh.add(
                             day,
-                            interval.first.first,
-                            interval.first.second,
-                            interval.second.first,
-                            interval.second.second,
+                            firstHour,
+                            firstMinutes,
+                            23,
+                            59,
                         )
+                        if (secondHour != 0 && secondMinutes != 0) {
+                            oh.add(
+                                day + 1,
+                                0,
+                                0,
+                                secondHour,
+                                secondMinutes,
+                            )
+                        }
                     }
                 }
             }

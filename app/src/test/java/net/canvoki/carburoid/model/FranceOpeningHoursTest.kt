@@ -345,9 +345,9 @@ class FranceOpeningHoursTest {
     fun `parse French two days comma separated`() {
         parseFrenchOpeningHoursTestCase("L: 09:00-19:00; D: 08:10-20:00", "Dimanche08.10-20.00, Lundi09.00-19.00")
     }
-/*
+
     @Test
-    fun `parse French crossing midnight Lundi13_30-02_20 maps to Monday and Tuesday`() {
+    fun `parse French crossing midnight splits`() {
         parseFrenchOpeningHoursTestCase("L: 13:30-23:59; M: 00:00-02:20", "Lundi13.30-02.20")
     }
 
@@ -355,15 +355,10 @@ class FranceOpeningHoursTest {
     fun `parse French ending at 00_00 maps to 23_59`() {
         parseFrenchOpeningHoursTestCase("L: 08:00-23:59", "Lundi08.00-00.00")
     }
-
-    @Test
-    fun `parse French returns null for bad day element`() {
-        parseFrenchOpeningHoursTestCase(null, "Dimanche08.10-20.00, BadDay09.00-19.00")
-    }
-
+/*
     @Test
     fun `parse French returns null for three intervals`() {
         parseFrenchOpeningHoursTestCase(null, "Dimanche 08.00-10.00 et 11.00-13.00 et 14.00-16.00")
     }
- */
+*/
 }
