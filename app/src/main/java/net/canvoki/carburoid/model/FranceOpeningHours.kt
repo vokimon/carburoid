@@ -1,6 +1,7 @@
 package net.canvoki.carburoid.model
 
 import androidx.annotation.VisibleForTesting
+import net.canvoki.carburoid.log
 import java.time.DayOfWeek
 
 class FranceOpeningHours : OpeningHours() {
@@ -81,7 +82,13 @@ class FranceOpeningHours : OpeningHours() {
         fun parse(spec: String): OpeningHours? {
             val oh = FranceOpeningHours()
             for (element in spec.split(",")) {
-                val (days, intervals) = parseFrenchDayElement(element.trim()) ?: return null
+                val (days, intervals) =
+                    parseFrenchDayElement(element.trim()) ?: run {
+                        if (element.trim() != "null") {
+                            log("UNSUPPORTED FORMAT FranceOpeningHours: \"$spec\"")
+                        }
+                        return null
+                    }
                 for (day in days) {
                     for (interval in intervals) {
                         val (firstHour, firstMinutes) = interval.first
