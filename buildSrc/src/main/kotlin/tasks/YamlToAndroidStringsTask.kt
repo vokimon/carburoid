@@ -6,7 +6,10 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.util.Locale
@@ -114,7 +117,26 @@ open class YamlToAndroidStringsTask : DefaultTask() {
     @Input
     var defaultLanguage: String = "en"
 
+    @get:InputFiles
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    protected val yamlInputFiles: Set<File>
+        get() =
+            yamlDir
+                .listFiles { file ->
+                    file.extension.lowercase(Locale.ROOT) in listOf("yml", "yaml")
+                }?.toSet() ?: emptySet()
+
     private val errors = mutableListOf<String>()
+
+    private fun validateResourceName(name: String): String {
+        if (!name.matches(Regex("^[a-z][a-z0-9_]*$"))) {
+            throw GradleException(
+                "Invalid resource name '$name'. Android resource names must start with a lowercase letter " +
+                    "and contain only lowercase letters, digits, and underscores.",
+            )
+        }
+        return name
+    }
 
     private fun writeArraysFile(
         resDir: File,
@@ -141,18 +163,18 @@ open class YamlToAndroidStringsTask : DefaultTask() {
     }
 
     fun getLanguageCodes(yamlDir: File): SortedSet<String> =
-        yamlDir
-            .listFiles { it -> it.extension in listOf("yml", "yaml") }
-            ?.map { it.nameWithoutExtension.lowercase(Locale.ROOT) }
-            ?.toSortedSet()
-            ?: emptySet<String>().toSortedSet()
+        yamlInputFiles
+            .map { it.nameWithoutExtension.lowercase(Locale.ROOT) }
+            .toSortedSet()
 
     private fun yamlForLanguage(
-        yamlDir: File,
-        langCode: String,
-    ): File =
-        yamlDir.resolve("$langCode.yaml").takeIf { it.exists() }
-            ?: yamlDir.resolve("$langCode.yml")
+        langCode: String, // Remove yamlDir parameter
+    ): File {
+        // Use the actual files we discovered, not guess filenames
+        return yamlInputFiles.firstOrNull {
+            it.nameWithoutExtension.lowercase(Locale.ROOT) == langCode
+        } ?: throw GradleException("Language file for '$langCode' not found in input files")
+    }
 
     @TaskAction
     fun run() {
@@ -161,12 +183,17 @@ open class YamlToAndroidStringsTask : DefaultTask() {
             return
         }
 
-        val paramCatalog = parameterOrderFromYaml(yamlForLanguage(yamlDir, defaultLanguage))
+        val paramCatalog = parameterOrderFromYaml(yamlForLanguage(defaultLanguage))
         val languageCodes = getLanguageCodes(yamlDir)
+        if (defaultLanguage !in languageCodes) {
+            throw GradleException(
+                "Default language '$defaultLanguage' not found in translation files. " +
+                    "Available: ${languageCodes.joinToString(", ")}",
+            )
+        }
         writeArraysFile(resDir, languageCodes)
-
         languageCodes.forEach { langCode ->
-            val file = yamlForLanguage(yamlDir, langCode)
+            val file = yamlForLanguage(langCode)
 
             if (!file.exists()) return@forEach
 
@@ -201,7 +228,9 @@ open class YamlToAndroidStringsTask : DefaultTask() {
                     is Map<*, *> -> processYamlMap(value as Map<*, *>, "${fullKey}__", resources, paramCatalog)
                     is String -> {
                         val stringElem = doc.createElement("string")
-                        stringElem.setAttribute("name", fullKey.lowercase(Locale.ROOT))
+                        val resourceName = fullKey.lowercase(Locale.ROOT)
+                        validateResourceName(resourceName)
+                        stringElem.setAttribute("name", resourceName)
                         val paramList = paramCatalog[fullKey] ?: emptyList()
                         val valueWithPositionalParameters =
                             try {
