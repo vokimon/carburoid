@@ -30,7 +30,7 @@ import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.carburoid.ui.AppScaffold
 import net.canvoki.carburoid.ui.Selectors
 import net.canvoki.carburoid.ui.StationList
-import net.canvoki.carburoid.ui.usermessage.UserMessage
+import net.canvoki.shared.usermessage.UserMessage
 
 @Composable
 fun StationListScreen(

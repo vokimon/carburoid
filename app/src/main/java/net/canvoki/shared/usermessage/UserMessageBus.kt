@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.ui.usermessage
+package net.canvoki.shared.usermessage
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow

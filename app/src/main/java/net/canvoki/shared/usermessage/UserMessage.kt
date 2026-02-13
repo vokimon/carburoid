@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.ui.usermessage
+package net.canvoki.shared.usermessage
 
 sealed interface UserMessage {
     val message: String

@@ -31,7 +31,7 @@ import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.distances.DistanceFromAddress
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.timeit
-import net.canvoki.carburoid.ui.usermessage.UserMessage
+import net.canvoki.shared.usermessage.UserMessage
 import java.util.Locale
 
 class LocationService(

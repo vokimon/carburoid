@@ -11,7 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import net.canvoki.carburoid.ui.settings.ThemeSettings
-import net.canvoki.carburoid.ui.usermessage.UserMessageSnackbarHost
+import net.canvoki.shared.usermessage.UserMessageSnackbarHost
 
 @Composable
 fun AppScaffold(

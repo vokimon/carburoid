@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.ui.usermessage
+package net.canvoki.shared.usermessage
 
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
