@@ -1,6 +1,6 @@
 package net.canvoki.carburoid.country
 
-import net.canvoki.carburoid.test.assertEquals
+import net.canvoki.shared.test.assertEquals
 import org.junit.Test
 
 class CountryRegistryTest {

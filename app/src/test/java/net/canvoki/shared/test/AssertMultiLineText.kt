@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.test
+package net.canvoki.shared.test
 
 import com.github.difflib.DiffUtils
 import com.github.difflib.patch.AbstractDelta

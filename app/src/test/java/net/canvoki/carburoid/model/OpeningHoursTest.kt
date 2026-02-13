@@ -1,6 +1,7 @@
 package net.canvoki.carburoid.model
 
 import net.canvoki.carburoid.test.madridInstant
+import net.canvoki.shared.test.assertEquals
 import org.junit.After
 import org.junit.Before
 import org.junit.Ignore
@@ -11,7 +12,6 @@ import java.time.Instant
 import java.time.LocalTime
 import java.time.ZoneId
 import java.util.Locale
-import kotlin.test.assertEquals
 import kotlin.test.fail
 
 class OpeningHoursTest {

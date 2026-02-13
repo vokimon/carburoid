@@ -1,8 +1,6 @@
 package net.canvoki.carburoid.json
 
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonWriter
-import net.canvoki.carburoid.test.assertEquals
+import net.canvoki.shared.test.assertEquals
 import org.junit.Ignore
 import org.junit.Test
 

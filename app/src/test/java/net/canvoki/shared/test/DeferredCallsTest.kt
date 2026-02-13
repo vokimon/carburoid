@@ -1,9 +1,9 @@
-package net.canvoki.carburoid.test
+package net.canvoki.shared.test
 
 import io.mockk.mockk
 import kotlinx.coroutines.async
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
+import net.canvoki.shared.test.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 import kotlin.test.assertFailsWith

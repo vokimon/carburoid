@@ -1,9 +1,9 @@
 package net.canvoki.carburoid.model
 
 import net.canvoki.carburoid.product.ProductManager
-import net.canvoki.carburoid.test.assertJsonEqual
+import net.canvoki.shared.test.assertEquals
+import net.canvoki.shared.test.assertJsonEqual
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.util.Locale

@@ -21,9 +21,9 @@ import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.model.SpanishGasStation
 import net.canvoki.carburoid.model.SpanishGasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
-import net.canvoki.carburoid.test.assertEquals
-import net.canvoki.carburoid.test.deferredCalls
-import net.canvoki.carburoid.test.yieldUntilIdle
+import net.canvoki.shared.test.assertEquals
+import net.canvoki.shared.test.deferredCalls
+import net.canvoki.shared.test.yieldUntilIdle
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue

@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.test
+package net.canvoki.shared.test
 
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle

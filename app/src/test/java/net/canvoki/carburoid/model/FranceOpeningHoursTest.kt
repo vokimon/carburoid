@@ -1,7 +1,7 @@
 package net.canvoki.carburoid.model
 
-import net.canvoki.carburoid.test.assertEquals
 import net.canvoki.carburoid.test.madridInstant
+import net.canvoki.shared.test.assertEquals
 import org.junit.After
 import org.junit.Before
 import org.junit.Ignore

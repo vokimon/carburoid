@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.test
+package net.canvoki.shared.test
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray

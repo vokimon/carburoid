@@ -1,6 +1,6 @@
 package net.canvoki.carburoid.location
 
-import org.junit.Assert.assertEquals
+import net.canvoki.shared.test.assertEquals
 import org.junit.Test
 import java.util.Locale
 

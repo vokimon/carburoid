@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import net.canvoki.carburoid.product.ProductManager
-import net.canvoki.carburoid.test.yieldUntilIdle
+import net.canvoki.shared.test.yieldUntilIdle
 import org.junit.Test
 import kotlin.test.assertTrue
 

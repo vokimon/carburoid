@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.test
+package net.canvoki.shared.test
 
 import io.mockk.coEvery
 import kotlinx.coroutines.CompletableDeferred

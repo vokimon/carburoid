@@ -5,8 +5,8 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import net.canvoki.carburoid.model.OpeningHours
-import net.canvoki.carburoid.test.assertEquals
-import net.canvoki.carburoid.test.assertJsonEqual
+import net.canvoki.shared.test.assertEquals
+import net.canvoki.shared.test.assertJsonEqual
 import org.junit.Test
 
 class FrenchGasStationTest {
