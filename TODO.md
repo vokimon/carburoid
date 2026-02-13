@@ -2,6 +2,7 @@
 
 Do you want to help? This is my roadmap.
 
+- [x] Extract yaml-to-string plugin in other repo
 - [ ] Fix: Regression: on network failures should not auto-retry
 - [ ] Fix: If resolved location description is the same, the icon keeps loading
 - [ ] PlotNavigator: Fix: Setting the location on the PlotNavigator, does not update the one in the List navigator
@@ -62,10 +63,6 @@ Do you want to help? This is my roadmap.
     - [ ] Features: Enable specific ones to apply the discunted price in the filter.
     - [ ] Problems: How to know which ones can apply to a given gas station. Need group identification.
 - [ ] Report price incoherences: https://geoportalgasolineras.es/geoportal-instalaciones/IncoherenciaPrecios (form)
-- [x] Country Generalization: LandMasses
-- [x] Datasource France: LandMasses
-- [x] Datasource France: Names and Trademarks
-- [x] Datasource France: Opening hours parser
 - [ ] Other Countries:
     - Listing (most outdated but gives clues): https://geoportalgasolineras.es/geoportal-instalaciones/GeoportalesEuropeos
     - France:
@@ -81,6 +78,10 @@ Do you want to help? This is my roadmap.
 
 ## Done
 
+- [x] Country Generalization: LandMasses
+- [x] Datasource France: LandMasses
+- [x] Datasource France: Names and Trademarks
+- [x] Datasource France: Opening hours parser
 - [x] ListPreference dialog: visual cue to indicate options available on scroll
 - [x] Better style for PreferenceCategory
 - [x] Products: Either international common names or translations to avoid transient status after changing country

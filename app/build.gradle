@@ -1,6 +1,6 @@
-import tasks.YamlToAndroidStringsTask
 
 plugins {
+    id 'net.canvoki.gradle.android-yaml-strings' version '1.0.0'
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.plugin.compose' version '2.2.20'
@@ -128,9 +128,6 @@ tasks.withType(Test) {
         showStackTraces = true
     }
 }
-
-task yamlToAndroidStrings(type: YamlToAndroidStringsTask)
-preBuild.dependsOn yamlToAndroidStrings
 
 dependencies {
     implementation platform("androidx.compose:compose-bom:2025.01.00")

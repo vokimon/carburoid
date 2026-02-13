@@ -43,6 +43,14 @@ jobs:
         RELEASE_KEY_PASSWORD=$RELEASE_KEY_PASSWORD
         EOF
 
+    # This step is temporary until plugin publication is approved
+    - name: Build plugin locally
+      shell: bash
+      run: |
+        git clone https://github.com/vokimon/android-yaml-strings.git plugin-temp
+        cd plugin-temp
+        ./gradlew publishToMavenLocal
+
     - name: Build with Gradle
       run: ./gradlew build
       

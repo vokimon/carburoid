@@ -1,5 +1,9 @@
 # Change log
 
+## Unreleased
+
+- 🏗️ Extracted https://github.com/vokimon/android-yaml-strings (yaml translation plugin for Gradle)
+
 ## 1.4.1 (2026-02-12)
 
 Production ready France support and Plot navigator
