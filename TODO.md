@@ -2,6 +2,25 @@
 
 Do you want to help? This is my roadmap.
 
+- [ ] Brands: Define optional brand field in base Gas Station
+- [ ] Brands: Station card: consider optional brand
+- [ ] Brands: Station detal: consider optional brand
+- [ ] Brands: France remove brand from name
+- [ ] Brands: Spain use heuristics to deduce brand
+- [ ] Brands: Brands API/Web to get info (history, ethics, relations...)
+- [ ] Brands: Obtain/Show brand icon
+- [ ] Products: Update product list from: https://energia.serviciosmin.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/Listados/ProductosPetroliferos/
+- [ ] Products: Sort by popularity. How many gas station serve it. Now it is sorted by hand.
+- [ ] Products: Visually hint unavailable products by hiding, strike out and/or disable them in the picker
+- [ ] Products: Disable or remove unavailable products.
+- [ ] Products: Use short names (now that we are translating we could translate shorter)
+- [ ] Products: What to do with official short names: G95E85 GOA GOA+ BGNL... 
+- [ ] Language: Asturian
+- [ ] Language: Aranese (Occitan)
+- [ ] Language: Occitan
+- [ ] Language: French
+- [ ] Language: Breton
+- [ ] Language: Alsacian
 - [x] Extract yaml-to-string plugin in other repo
 - [ ] Fix: Regression: on network failures should not auto-retry
 - [ ] Fix: If resolved location description is the same, the icon keeps loading
@@ -13,7 +32,6 @@ Do you want to help? This is my roadmap.
 - [ ] PlotNavigator: Disable cheaper/nearer buttons when on extremes.
 - [ ] PlotNavigator: Rename "Cheaper" -> "Farther" when irrelevant filter is disabled.
 - [ ] The Data loader pill and the error snackbar compete for the lower part of screeen
-- [ ] MultiCountry: Support for different LandMass sets
 - [ ] DeepLinks: Notify the user when a sharing did'nt work (not able to parse)
 - [ ] DeepLinks: Google started to use opaque urls like https://maps.app.goo.gl/jweCgQbzCw9PretY6
     - [ ] We could fetch the url, and take the coords from the 304 redirect
@@ -21,12 +39,12 @@ Do you want to help? This is my roadmap.
 - [ ] Location Search: When empty, autocomplete show later searches
 - [ ] Location Search: Prioritize near matches to the current position
 - [ ] Location Search: Feedback when doing a query
-- [ ] Refactor: Invert Paretto: Sort by price, filter by distance, to ease distance recomputation
-- [ ] Real road distance (instead of geodesic/helicopter distance)
-- [ ] Route deviation distance
-    - [ ] How to set a route from LocationPicker
-    - [ ] How to display the route
-    - [ ] Accept routes as deep links
+- [ ] Distance: Real road distance (instead of geodesic/helicopter distance)
+- [ ] Distance: Refactor: Invert Paretto: Sort by price, filter by distance, to ease distance recomputation
+- [ ] Routes: How to set a route from LocationPicker
+- [ ] Routes: How to display the route
+- [ ] Routes: material icon 'route'
+- [ ] Routes: Accept routes as deep links
         - https://www.google.com/maps/dir/Start/Waypoint1/Waypoint2/.../Destination
         - xml+gpx
             ```
@@ -43,17 +61,6 @@ Do you want to help? This is my roadmap.
                 <data android:scheme="content" android:host="*" android:pathPattern=".*\\.gpx" />
             </intent-filter>
             ```
-    - [ ] material icon 'route'
-- [ ] Products: Update product list from: https://energia.serviciosmin.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/Listados/ProductosPetroliferos/
-- [ ] Products: Sort by popularity. How many gas station serve it. Now it is sorted by hand.
-- [ ] Products: Visually hint unavailable products by hiding, strike out and/or disable them in the picker
-- [ ] Products: Disable or remove unavailable products.
-- [ ] Products: Use short names (now that we are translating we could translate shorter)
-- [ ] Products: What to do with official short names: G95E85 GOA GOA+ BGNL... 
-- [ ] Language: Asturian
-- [ ] Language: Aranese (Occitan)
-- [ ] Station List: Add company icon
-    - [ ] Pre: Identify trade mark
 - [ ] Favorites gas stations (white list by station)
 - [ ] Favorites gas stations (white list by trade mark)
 - [ ] Discounts: https://geoportalgasolineras.es/geoportal-instalaciones/PlanesDescuento (portal, csv)
