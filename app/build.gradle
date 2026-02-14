@@ -130,6 +130,7 @@ tasks.withType(Test) {
 }
 
 dependencies {
+    implementation(project(":shared"))
     implementation platform("androidx.compose:compose-bom:2025.01.00")
     implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'androidx.appcompat:appcompat:1.7.1'

@@ -6,6 +6,13 @@ pluginManagement {
         mavenCentral()
     }
 }
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
 rootProject.name = 'Carburoid'
+include ':shared'
 include ':app'
 
