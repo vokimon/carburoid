@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import net.canvoki.carburoid.plotnavigator.PlotNavigatorActivity
 import net.canvoki.carburoid.product.ProductSelection
 import net.canvoki.carburoid.repository.GasStationRepository
+import net.canvoki.carburoid.ui.SettingsActivity
 import net.canvoki.carburoid.ui.StationDetailActivity
 import net.canvoki.carburoid.ui.openActivity
 

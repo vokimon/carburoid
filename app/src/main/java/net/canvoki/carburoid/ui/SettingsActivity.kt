@@ -1,4 +1,4 @@
-package net.canvoki.carburoid
+package net.canvoki.carburoid.ui
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import net.canvoki.shared.component.preferences.SettingsScreen
+import net.canvoki.carburoid.ui.SettingsScreen
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

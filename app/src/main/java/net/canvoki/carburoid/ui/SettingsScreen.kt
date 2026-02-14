@@ -1,4 +1,4 @@
-package net.canvoki.shared.component.preferences
+package net.canvoki.carburoid.ui
 
 import android.content.res.Resources
 import androidx.annotation.DrawableRes
@@ -22,6 +22,7 @@ import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.country.CountrySettings
 import net.canvoki.carburoid.ui.AppScaffold
 import net.canvoki.shared.component.preferences.LinkPreference
+import net.canvoki.shared.component.preferences.PreferenceCategory
 import net.canvoki.shared.settings.LanguageSettings
 import net.canvoki.shared.settings.ThemeSettings
 
