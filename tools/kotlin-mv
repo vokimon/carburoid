@@ -1,0 +1,174 @@
+#!/bin/bash
+set -e
+if [ $# -lt 2 ]; then
+    echo "Usage:"
+    echo "  File move: $0 <source_file> <target_dir> [symbols...]"
+    echo "  Symbol only: $0 <old_fully_qualified_name> <new_fully_qualified_name>"
+    echo ""
+    echo "Examples:"
+    echo "  $0 app/src/main/java/net/canvoki/carburoid/ui/settings/LinkPreference.kt app/src/main/java/net/canvoki/shared/component/preferences"
+    echo "  $0 net.canvoki.carburoid.ui.settings.LinkPreference net.canvoki.shared.component.preferences.LinkPreference"
+    exit 1
+fi
+
+SOURCE="$1"
+TARGET="$2"
+shift 2
+SYMBOLS=("$@")
+
+# Check if source is a file path or FQN
+if [[ "$SOURCE" == *".kt" ]] || [[ "$SOURCE" == *".java" ]] || [[ "$SOURCE" == */* ]]; then
+    # File move mode
+    SOURCE_FILE="$SOURCE"
+    TARGET_DIR="$TARGET"
+
+    if [ ! -f "$SOURCE_FILE" ]; then
+        echo "❌ Source file not found: $SOURCE_FILE"
+        exit 1
+    fi
+
+    # Extract current package from file
+    CURRENT_PKG=$(grep "^package " "$SOURCE_FILE" | head -1 | sed 's/^package //; s/;$//')
+    if [ -z "$CURRENT_PKG" ]; then
+        echo "❌ No package declaration found in: $SOURCE_FILE"
+        exit 1
+    fi
+
+    # Get filename without extension
+    FILE_BASENAME=$(basename "$SOURCE_FILE")
+    FILE_BASENAME="${FILE_BASENAME%.*}"
+
+    # Determine target package from directory path
+    # Extract the java/kotlin part of the path
+    if [[ "$TARGET_DIR" == *"java/"* ]]; then
+        TARGET_PKG_PATH="${TARGET_DIR#*java/}"
+        TARGET_PKG=$(echo "$TARGET_PKG_PATH" | tr '/' '.')
+    elif [[ "$TARGET_DIR" == *"kotlin/"* ]]; then
+        TARGET_PKG_PATH="${TARGET_DIR#*kotlin/}"
+        TARGET_PKG=$(echo "$TARGET_PKG_PATH" | tr '/' '.')
+    else
+        echo "❌ Target directory should contain 'java/' or 'kotlin/' path"
+        exit 1
+    fi
+
+    echo "📁 Moving file:"
+    echo "  From: $SOURCE_FILE"
+    echo "  To:   $TARGET_DIR/"
+    echo "  Current package: $CURRENT_PKG"
+    echo "  Target package:  $TARGET_PKG"
+    echo ""
+
+    # Create target directory
+    mkdir -p "$TARGET_DIR"
+
+    # Move the file
+    mv "$SOURCE_FILE" "$TARGET_DIR/"
+    NEW_FILE="$TARGET_DIR/$(basename "$SOURCE_FILE")"
+
+    # Update package declaration
+    ESCAPED_CURRENT=$(echo "$CURRENT_PKG" | sed 's/\./\\./g')
+    sed -i "s/^package $ESCAPED_CURRENT/package $TARGET_PKG/g" "$NEW_FILE"
+
+    # Clean up empty source directories
+    SOURCE_DIR=$(dirname "$SOURCE_FILE")
+    if [ -d "$SOURCE_DIR" ] && [ -z "$(ls -A "$SOURCE_DIR" 2>/dev/null)" ]; then
+        echo "🧹 Removing empty directory: $SOURCE_DIR"
+        rmdir -p "$SOURCE_DIR" 2>/dev/null || true
+    fi
+
+    echo "✅ File moved successfully!"
+
+    # Determine symbols to update
+    SYMBOLS_TO_UPDATE=()
+
+    if [ ${#SYMBOLS[@]} -gt 0 ]; then
+        # Use provided symbols
+        SYMBOLS_TO_UPDATE=("${SYMBOLS[@]}")
+    else
+        # Implicitly use symbol named after file
+        SYMBOLS_TO_UPDATE=("$FILE_BASENAME")
+        echo "🔍 Implicitly using symbol: $FILE_BASENAME"
+    fi
+
+    # Update symbol references for each specific symbol ONLY
+    for SYMBOL in "${SYMBOLS_TO_UPDATE[@]}"; do
+        OLD_FQN="$CURRENT_PKG.$SYMBOL"
+        NEW_FQN="$TARGET_PKG.$SYMBOL"
+
+        echo ""
+        echo "🔄 Updating symbol references for: $SYMBOL"
+        echo "   Old: $OLD_FQN"
+        echo "   New: $NEW_FQN"
+
+        # Escape dots for regex
+        ESCAPED_OLD_FQN=$(echo "$OLD_FQN" | sed 's/\./\\./g')
+        ESCAPED_NEW_FQN=$(echo "$NEW_FQN" | sed 's/\./\\./g')
+
+        # Update explicit FQN references (like SomeClass.method())
+        find app/src -name "*.kt" -o -name "*.java" | while read -r file; do
+            if grep -q "$ESCAPED_OLD_FQN" "$file" 2>/dev/null; then
+                sed -i "s/$ESCAPED_OLD_FQN/$NEW_FQN/g" "$file"
+            fi
+        done
+
+        # Update specific import statements (only the exact symbol)
+        find app/src -name "*.kt" -o -name "*.java" | while read -r file; do
+            if grep -q "import $ESCAPED_OLD_FQN" "$file" 2>/dev/null; then
+                sed -i "s/import $ESCAPED_OLD_FQN/import $NEW_FQN/g" "$file"
+            fi
+        done
+    done
+
+else
+    # Symbol-only mode (FQN to FQN)
+    OLD_FQN="$SOURCE"
+    NEW_FQN="$TARGET"
+
+    # Validate FQN format
+    if [[ ! "$OLD_FQN" == *"."* ]] || [[ ! "$NEW_FQN" == *"."* ]]; then
+        echo "❌ Invalid FQN format. Both arguments must contain dots."
+        exit 1
+    fi
+
+    echo "🔄 Symbol-only update:"
+    echo "  Old: $OLD_FQN"
+    echo "  New: $NEW_FQN"
+    echo ""
+
+    # Escape dots for regex
+    ESCAPED_OLD_FQN=$(echo "$OLD_FQN" | sed 's/\./\\./g')
+    ESCAPED_NEW_FQN=$(echo "$NEW_FQN" | sed 's/\./\\./g')
+
+    # Update explicit FQN references
+    find app/src -name "*.kt" -o -name "*.java" | while read -r file; do
+        if grep -q "$ESCAPED_OLD_FQN" "$file" 2>/dev/null; then
+            sed -i "s/$ESCAPED_OLD_FQN/$NEW_FQN/g" "$file"
+        fi
+    done
+
+    # Update specific import statements
+    find app/src -name "*.kt" -o -name "*.java" | while read -r file; do
+        if grep -q "import $ESCAPED_OLD_FQN" "$file" 2>/dev/null; then
+            sed -i "s/import $ESCAPED_OLD_FQN/import $NEW_FQN/g" "$file"
+        fi
+    done
+
+    echo "✅ Symbol references updated!"
+fi
+
+echo ""
+echo "🔍 Verification:"
+if [[ "$SOURCE" == *".kt" ]] || [[ "$SOURCE" == *".java" ]] || [[ "$SOURCE" == */* ]]; then
+    # File move mode - check for old FQN references of moved symbols
+    for SYMBOL in "${SYMBOLS_TO_UPDATE[@]}"; do
+        OLD_FQN="$CURRENT_PKG.$SYMBOL"
+        grep -r "$OLD_FQN" app/src --include="*.kt" --include="*.java" --exclude-dir=".git" --exclude-dir="build" && break
+    done
+    echo "✅ No remaining references found for moved symbols!"
+else
+    # Symbol mode - check for old FQN
+    grep -r "$OLD_FQN" app/src --include="*.kt" --include="*.java" --exclude-dir=".git" --exclude-dir="build" || echo "✅ No remaining references found!"
+fi
+
+echo ""
+echo "💡 Done! Review changes with: git diff"
