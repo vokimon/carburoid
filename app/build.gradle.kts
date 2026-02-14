@@ -101,6 +101,7 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+            freeCompilerArgs.add("-Xnested-type-aliases")
         }
     }
 
@@ -144,12 +145,11 @@ tasks.withType<Test> {
 dependencies {
     implementation(project(":shared"))
 
-    // Compose BOM
+    // Platform BOM imports
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation(platform(libs.kotlinx.coroutines.bom))
+    implementation(platform(libs.kotlinx.serialization.bom))
+    implementation(platform(libs.ktor.bom))
 
     // AndroidX
     implementation(libs.androidx.core.ktx)
@@ -160,31 +160,38 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.preference.ktx)
+    implementation(libs.kotlinx.serialization.json)
+
+    // Compose
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
 
     // Other libraries
     implementation(libs.osmdroid.android)
     implementation(libs.osmdroid.wms)
     implementation(libs.okhttp)
     implementation(libs.koalaplot.core.android)
-    implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.content.negotiation)
 
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
     // Non-free flavor
     "nonfreeImplementation"(libs.play.services.location)
 
-    // Testing
+    // Tes
     testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.kotlin.test)
-    //testImplementation(libs.robolectric)
     testImplementation(libs.java.diff.utils)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)      // Version from coroutines BOM
+    //testImplementation(libs.kotlinx.serialization.json) // Version from serialization BOM
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.robolectric)
 
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(libs.coroutines.test)
-    androidTestImplementation(libs.kotlin.test)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
 }
