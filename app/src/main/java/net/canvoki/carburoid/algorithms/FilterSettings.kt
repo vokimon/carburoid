@@ -18,8 +18,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
+import net.canvoki.shared.component.OneTimeNotice
 import net.canvoki.shared.component.preferences.ListPreference
-import net.canvoki.shared.component.preferences.OneTimeNotice
 import net.canvoki.shared.component.preferences.SwitchPreference
 import net.canvoki.shared.component.preferences.rememberMutablePreference
 

@@ -1,4 +1,4 @@
-package net.canvoki.shared.component.preferences
+package net.canvoki.shared.component
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
