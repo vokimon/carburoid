@@ -6,10 +6,10 @@ import com.android.build.gradle.internal.api.ApkVariantOutputImpl
 
 plugins {
     id("net.canvoki.gradle.android-yaml-strings") version "1.0.0"
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose") version "2.2.20"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.0"
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 val versionPropsFile = rootProject.file("version.properties")
@@ -143,44 +143,49 @@ tasks.withType<Test> {
 
 dependencies {
     implementation(project(":shared"))
-    implementation(platform("androidx.compose:compose-bom:2025.01.00"))
-    implementation("androidx.core:core-ktx:1.17.0")
-    implementation("androidx.appcompat:appcompat:1.7.1")
-    implementation("com.google.android.material:material:1.13.0")
-    implementation("androidx.activity:activity-compose")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
-    implementation("androidx.datastore:datastore-preferences:1.2.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.4")
-    implementation("androidx.preference:preference-ktx:1.2.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:latest")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:latest")
-    implementation("org.osmdroid:osmdroid-android:6.1.20")
-    implementation("org.osmdroid:osmdroid-wms:6.1.20")
-    implementation("com.squareup.okhttp3:okhttp:5.3.2")
-    implementation("io.github.koalaplot:koalaplot-core-android:0.11.0")
-    implementation("io.ktor:ktor-client-core:3.4.0")
-    implementation("io.ktor:ktor-client-cio:3.4.0")
-    implementation("io.ktor:ktor-client-content-negotiation:3.4.0")
 
-    debugImplementation("androidx.compose.ui:ui-tooling")
+    // Compose BOM
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 
-    "nonfreeImplementation"("com.google.android.gms:play-services-location:21.3.0")
+    // AndroidX
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.preference.ktx)
 
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("com.google.code.gson:gson:2.13.2")
-    testImplementation("io.github.java-diff-utils:java-diff-utils:4.12")
-    testImplementation("io.mockk:mockk:1.14.6")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:latest")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-serialization-json:latest")
-    testImplementation("org.jetbrains.kotlin:kotlin-test:latest")
-    testImplementation("org.robolectric:robolectric:4.16")
+    // Other libraries
+    implementation(libs.osmdroid.android)
+    implementation(libs.osmdroid.wms)
+    implementation(libs.okhttp)
+    implementation(libs.koalaplot.core.android)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.content.negotiation)
 
-    androidTestImplementation("androidx.test:core:1.7.0")
-    androidTestImplementation("androidx.test.ext:junit:1.3.0")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:latest")
-    androidTestImplementation("org.jetbrains.kotlin:kotlin-test:1.9.24")
+    // Non-free flavor
+    "nonfreeImplementation"(libs.play.services.location)
+
+    // Testing
+    testImplementation(libs.junit)
+    testImplementation(libs.gson)
+    testImplementation(libs.java.diff.utils)
+    testImplementation(libs.mockk)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.robolectric)
+
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.coroutines.test)
+    androidTestImplementation(libs.kotlin.test)
 }
