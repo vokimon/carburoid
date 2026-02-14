@@ -1,12 +1,15 @@
 #!/bin/bash
 set -e
+
 if [ $# -lt 2 ]; then
     echo "Usage:"
     echo "  File move: $0 <source_file> <target_dir> [symbols...]"
+    echo "  File rename: $0 <source_file> <target_file.kt> [symbols...]"
     echo "  Symbol only: $0 <old_fully_qualified_name> <new_fully_qualified_name>"
     echo ""
     echo "Examples:"
-    echo "  $0 app/src/main/java/net/canvoki/carburoid/ui/settings/LinkPreference.kt app/src/main/java/net/canvoki/shared/component/preferences"
+    echo "  $0 app/src/main/java/net/canvoki/carburoid/ui/settings/LinkPreference.kt app/src/main/java/net/canvoki/shared/component/preferences/"  OtherSymbol ExtraSymbol
+    echo "  $0 app/src/main/java/net/canvoki/carburoid/ui/settings/OldName.kt app/src/main/java/net/canvoki/shared/component/preferences/NewName.kt"
     echo "  $0 net.canvoki.carburoid.ui.settings.LinkPreference net.canvoki.shared.component.preferences.LinkPreference"
     exit 1
 fi
@@ -18,9 +21,9 @@ SYMBOLS=("$@")
 
 # Check if source is a file path or FQN
 if [[ "$SOURCE" == *".kt" ]] || [[ "$SOURCE" == *".java" ]] || [[ "$SOURCE" == */* ]]; then
-    # File move mode
+    # File move/rename mode
     SOURCE_FILE="$SOURCE"
-    TARGET_DIR="$TARGET"
+    TARGET_PATH="$TARGET"
 
     if [ ! -f "$SOURCE_FILE" ]; then
         echo "❌ Source file not found: $SOURCE_FILE"
@@ -34,29 +37,65 @@ if [[ "$SOURCE" == *".kt" ]] || [[ "$SOURCE" == *".java" ]] || [[ "$SOURCE" == *
         exit 1
     fi
 
-    # Get filename without extension
-    FILE_BASENAME=$(basename "$SOURCE_FILE")
-    FILE_BASENAME="${FILE_BASENAME%.*}"
+    # Get original filename without extension
+    SOURCE_BASENAME=$(basename "$SOURCE_FILE")
+    SOURCE_BASENAME="${SOURCE_BASENAME%.*}"
 
-    # Remove trailing slash from target directory
-    TARGET_DIR="${TARGET_DIR%/}"
+    # Check if target is a directory or file
+    if [[ "$TARGET_PATH" == *".kt" ]] || [[ "$TARGET_PATH" == *".java" ]]; then
+        # Target is a file (rename mode)
+        TARGET_IS_FILE=true
+        TARGET_DIR=$(dirname "$TARGET_PATH")
+        TARGET_FILENAME=$(basename "$TARGET_PATH")
+        TARGET_BASENAME="${TARGET_FILENAME%.*}"
 
-    # Determine target package from directory path
-    # Extract the java/kotlin part of the path
-    if [[ "$TARGET_DIR" == *"java/"* ]]; then
-        TARGET_PKG_PATH="${TARGET_DIR#*java/}"
-        TARGET_PKG=$(echo "$TARGET_PKG_PATH" | tr '/' '.')
-    elif [[ "$TARGET_DIR" == *"kotlin/"* ]]; then
-        TARGET_PKG_PATH="${TARGET_DIR#*kotlin/}"
-        TARGET_PKG=$(echo "$TARGET_PKG_PATH" | tr '/' '.')
+        # Determine target package from directory path
+        if [[ "$TARGET_DIR" == *"java/"* ]]; then
+            TARGET_PKG_PATH="${TARGET_DIR#*java/}"
+            TARGET_PKG=$(echo "$TARGET_PKG_PATH" | tr '/' '.')
+        elif [[ "$TARGET_DIR" == *"kotlin/"* ]]; then
+            TARGET_PKG_PATH="${TARGET_DIR#*kotlin/}"
+            TARGET_PKG=$(echo "$TARGET_PKG_PATH" | tr '/' '.')
+        else
+            echo "❌ Target directory should contain 'java/' or 'kotlin/' path"
+            exit 1
+        fi
+
+        NEW_FILE="$TARGET_PATH"
+
     else
-        echo "❌ Target directory should contain 'java/' or 'kotlin/' path"
-        exit 1
+        # Target is a directory (move mode)
+        TARGET_IS_FILE=false
+        # Remove trailing slash from target directory
+        TARGET_DIR="${TARGET_PATH%/}"
+        TARGET_BASENAME="$SOURCE_BASENAME"
+        TARGET_FILENAME="$SOURCE_BASENAME.${SOURCE_FILE##*.}"
+
+        # Determine target package from directory path
+        if [[ "$TARGET_DIR" == *"java/"* ]]; then
+            TARGET_PKG_PATH="${TARGET_DIR#*java/}"
+            TARGET_PKG=$(echo "$TARGET_PKG_PATH" | tr '/' '.')
+        elif [[ "$TARGET_DIR" == *"kotlin/"* ]]; then
+            TARGET_PKG_PATH="${TARGET_DIR#*kotlin/}"
+            TARGET_PKG=$(echo "$TARGET_PKG_PATH" | tr '/' '.')
+        else
+            echo "❌ Target directory should contain 'java/' or 'kotlin/' path"
+            exit 1
+        fi
+
+        NEW_FILE="$TARGET_DIR/$TARGET_FILENAME"
     fi
 
-    echo "📁 Moving file:"
-    echo "  From: $SOURCE_FILE"
-    echo "  To:   $TARGET_DIR/"
+    echo "📁 Moving/Renaming file:"
+    if [ "$TARGET_IS_FILE" = true ]; then
+        echo "  From: $SOURCE_FILE"
+        echo "  To:   $NEW_FILE (rename)"
+        echo "  Old symbol: $SOURCE_BASENAME"
+        echo "  New symbol: $TARGET_BASENAME"
+    else
+        echo "  From: $SOURCE_FILE"
+        echo "  To:   $NEW_FILE"
+    fi
     echo "  Current package: $CURRENT_PKG"
     echo "  Target package:  $TARGET_PKG"
     echo ""
@@ -64,9 +103,8 @@ if [[ "$SOURCE" == *".kt" ]] || [[ "$SOURCE" == *".java" ]] || [[ "$SOURCE" == *
     # Create target directory
     mkdir -p "$TARGET_DIR"
 
-    # Move the file
-    mv "$SOURCE_FILE" "$TARGET_DIR/"
-    NEW_FILE="$TARGET_DIR/$(basename "$SOURCE_FILE")"
+    # Move/Rename the file
+    mv "$SOURCE_FILE" "$NEW_FILE"
 
     # Update package declaration
     ESCAPED_CURRENT=$(echo "$CURRENT_PKG" | sed 's/\./\\./g')
@@ -79,19 +117,29 @@ if [[ "$SOURCE" == *".kt" ]] || [[ "$SOURCE" == *".java" ]] || [[ "$SOURCE" == *
         rmdir -p "$SOURCE_DIR" 2>/dev/null || true
     fi
 
-    echo "✅ File moved successfully!"
+    echo "✅ File moved/renamed successfully!"
 
-    # Determine symbols to update
+    # Determine symbols to update - COMBINE all sources
     SYMBOLS_TO_UPDATE=()
 
-    if [ ${#SYMBOLS[@]} -gt 0 ]; then
-        # Use provided symbols
-        SYMBOLS_TO_UPDATE=("${SYMBOLS[@]}")
-    else
-        # Implicitly use symbol named after file
-        SYMBOLS_TO_UPDATE=("$FILE_BASENAME")
-        echo "🔍 Implicitly using symbol: $FILE_BASENAME"
+    # Always include the original symbol (in case it's used elsewhere)
+    SYMBOLS_TO_UPDATE+=("$SOURCE_BASENAME")
+    echo "🔍 Including original symbol: $SOURCE_BASENAME"
+
+    # Include the new symbol if it's different (for rename cases)
+    if [ "$TARGET_BASENAME" != "$SOURCE_BASENAME" ]; then
+        SYMBOLS_TO_UPDATE+=("$TARGET_BASENAME")
+        echo "🔍 Including new symbol (rename): $TARGET_BASENAME"
     fi
+
+    # Add any explicitly provided symbols (avoid duplicates)
+    for SYMBOL in "${SYMBOLS[@]}"; do
+        # Check if symbol is already in the list
+        if [[ ! " ${SYMBOLS_TO_UPDATE[*]} " == *" $SYMBOL "* ]]; then
+            SYMBOLS_TO_UPDATE+=("$SYMBOL")
+            echo "🔍 Including explicit symbol: $SYMBOL"
+        fi
+    done
 
     # Update symbol references for each specific symbol ONLY
     for SYMBOL in "${SYMBOLS_TO_UPDATE[@]}"; do
@@ -163,11 +211,17 @@ echo ""
 echo "🔍 Verification:"
 if [[ "$SOURCE" == *".kt" ]] || [[ "$SOURCE" == *".java" ]] || [[ "$SOURCE" == */* ]]; then
     # File move mode - check for old FQN references of moved symbols
+    FOUND_REFS=false
     for SYMBOL in "${SYMBOLS_TO_UPDATE[@]}"; do
         OLD_FQN="$CURRENT_PKG.$SYMBOL"
-        grep -r "$OLD_FQN" app/src --include="*.kt" --include="*.java" --exclude-dir=".git" --exclude-dir="build" && break
+        if grep -r "$OLD_FQN" app/src --include="*.kt" --include="*.java" --exclude-dir=".git" --exclude-dir="build" > /dev/null 2>&1; then
+            FOUND_REFS=true
+            grep -r "$OLD_FQN" app/src --include="*.kt" --include="*.java" --exclude-dir=".git" --exclude-dir="build"
+        fi
     done
-    echo "✅ No remaining references found for moved symbols!"
+    if [ "$FOUND_REFS" = false ]; then
+        echo "✅ No remaining references found for moved symbols!"
+    fi
 else
     # Symbol mode - check for old FQN
     grep -r "$OLD_FQN" app/src --include="*.kt" --include="*.java" --exclude-dir=".git" --exclude-dir="build" || echo "✅ No remaining references found!"
