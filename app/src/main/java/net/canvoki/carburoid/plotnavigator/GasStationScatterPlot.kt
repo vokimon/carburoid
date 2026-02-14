@@ -25,9 +25,9 @@ import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.product.ProductManager
-import net.canvoki.carburoid.ui.Flow
 import net.canvoki.carburoid.ui.Selectors
-import net.canvoki.carburoid.ui.isLandscape
+import net.canvoki.shared.component.Flow
+import net.canvoki.shared.component.isLandscape
 
 @Composable
 fun ButtonCloser(

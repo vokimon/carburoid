@@ -7,6 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import net.canvoki.carburoid.location.LocationSelector
 import net.canvoki.carburoid.product.CategorizedProductSelector
+import net.canvoki.shared.component.Flow
+import net.canvoki.shared.component.isLandscape
 
 @Composable
 fun Selectors() {
