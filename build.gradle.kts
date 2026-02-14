@@ -1,0 +1,36 @@
+// Project level build file
+buildscript {
+    val kotlin_version = "2.2.20"
+    val agp_version = "8.13.1"
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle:$agp_version")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+    }
+}
+
+plugins {
+    id("com.diffplug.spotless") version "8.1.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.0"
+}
+
+spotless {
+    kotlin {
+        target(
+            "app/src/**/*.kt",
+            "buildSrc/src/**/*.kt"
+        )
+        ktlint("1.7.1")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
