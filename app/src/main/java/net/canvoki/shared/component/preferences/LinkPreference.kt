@@ -13,6 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import net.canvoki.carburoid.R
+import net.canvoki.carburoid.ui.openUri
 
 @Composable
 fun LinkPreference(
@@ -42,13 +43,7 @@ fun LinkPreference(
         },
         modifier =
             Modifier.clickable {
-                context.startActivity(
-                    android.content.Intent(
-                        android.content.Intent.ACTION_VIEW,
-                        url.toUri(),
-                    ),
-                    null,
-                )
+                context.openUri(url)
             },
     )
 }

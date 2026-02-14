@@ -2,6 +2,7 @@ package net.canvoki.carburoid.ui
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.activity.ComponentActivity
 
 inline fun <reified T : ComponentActivity> Context.openActivity(noinline configure: Intent.() -> Unit = {}): Boolean {
@@ -9,4 +10,13 @@ inline fun <reified T : ComponentActivity> Context.openActivity(noinline configu
     intent.configure()
     startActivity(intent)
     return true
+}
+
+fun Context.openUri(uri: Uri) {
+    val intent = Intent(Intent.ACTION_VIEW, uri)
+    startActivity(intent)
+}
+
+fun Context.openUri(uri: String) {
+    openUri(uri.toUri())
 }

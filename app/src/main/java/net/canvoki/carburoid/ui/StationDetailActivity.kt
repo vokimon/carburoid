@@ -14,6 +14,7 @@ import net.canvoki.carburoid.databinding.ActivityStationDetailBinding
 import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.product.translateProductName
 import net.canvoki.carburoid.repository.GasStationRepository
+import net.canvoki.carburoid.ui.openUri
 import java.time.Instant
 import com.google.android.material.R as MaterialR
 
@@ -76,8 +77,7 @@ class StationDetailActivity : AppCompatActivity() {
         binding.textCityState.text = "${station.city}, ${station.state}"
 
         binding.layoutAddressMap.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, "geo:${station.latitude},${station.longitude}".toUri())
-            startActivity(intent)
+            openUri("geo:${station.latitude},${station.longitude}")
         }
 
         binding.textOpeningHours.text = station.openingHours?.toString()
