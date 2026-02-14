@@ -49,7 +49,7 @@ import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.GasStationCard
 import net.canvoki.carburoid.ui.DownloadingPill
-import net.canvoki.carburoid.ui.VerticalScrollbar
+import net.canvoki.shared.component.VerticalScrollbar
 import net.canvoki.shared.settings.ThemeSettings
 
 @Composable

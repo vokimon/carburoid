@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.ui
+package net.canvoki.shared.component
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
