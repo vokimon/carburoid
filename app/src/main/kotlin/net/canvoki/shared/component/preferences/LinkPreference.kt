@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.ui.openUri
 
