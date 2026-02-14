@@ -176,12 +176,11 @@ dependencies {
 
     // Testing
     testImplementation(libs.junit)
-    testImplementation(libs.gson)
-    testImplementation(libs.java.diff.utils)
     testImplementation(libs.mockk)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.kotlin.test)
-    testImplementation(libs.robolectric)
+    //testImplementation(libs.robolectric)
+    testImplementation(libs.java.diff.utils)
 
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
