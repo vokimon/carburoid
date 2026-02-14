@@ -1,0 +1,9 @@
+language_code: en
+language_name: English
+settings_language_title: Language
+settings_language_summary: Change the app language
+language_system_default: System default
+settings_theme: Theme
+theme_light: Light
+theme_dark: Dark
+theme_system: Auto (System Default)

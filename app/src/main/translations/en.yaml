@@ -1,19 +1,10 @@
-language_code: en
-language_name: English
 app_name: Carburoid
 menu_back: Back
 menu_settings: Settings
 menu_chart: Chart
 settings_category_language_appearance: Language and appearance
-settings_language_title: Language
-settings_language_summary: Change the app language
-language_system_default: System default
 settings_translate_title: Help translate your language
 settings_translate_summary: Go to Weblate
-settings_theme: Theme
-theme_light: Light
-theme_dark: Dark
-theme_system: Auto (System Default)
 settings_category_station_filters: Station filters
 settings_filter_expensive: Hide irrelevant stations
 settings_filter_expensive_summary: A station is considered irrelevant if any other exists that is nearer and cheaper. (Recommended)
@@ -95,7 +86,6 @@ location_picker_search_location_hint: Search city or address
 location_picker_searching: Searching…
 location_picker_no_results: No locations found
 loading_new_data: Downloading new data…
-dialog_accept: Accept
 settings_country_title: Data provider
 settings_country_summary: Select the provider of fuel price data
 settings_country_es: Spain

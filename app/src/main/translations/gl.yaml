@@ -1,19 +1,10 @@
-language_code: gl
-language_name: Galego
 app_name: Carburoid
 menu_back: Atrás
 menu_settings: Axustes
 menu_chart: Gráfico
 settings_category_language_appearance: Linguaxe e aparencia
-settings_language_title: Linguaxe
-settings_language_summary: Cambia o idioma da aplicación
-language_system_default: Sistema
 settings_translate_title: Axuda a traducir o teu idioma
 settings_translate_summary: Vai a Weblate
-settings_theme: Tema
-theme_light: Claro
-theme_dark: Escuro
-theme_system: Automático (Sistema)
 settings_category_station_filters: Filtrado de gasolineiras
 settings_filter_expensive: Agochar non relevantes
 settings_filter_expensive_summary: Considérase non relevante unha estación de servizo se hai outra máis preto e máis barata. (Recomendado)
@@ -95,7 +86,6 @@ location_picker_search_location_hint: Busca unha cidade ou enderezo
 location_picker_searching: Buscando…
 location_picker_no_results: Non se atoparon ubicacións
 loading_new_data: Descargando datos novos…
-dialog_accept: Aceptar
 settings_country_title: Provedor de datos
 settings_country_summary: Selecciona o provedor de datos de prezos dos carburantes
 settings_country_es: España

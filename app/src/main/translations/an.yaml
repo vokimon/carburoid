@@ -1,19 +1,10 @@
-language_code: an
-language_name: Aragonés
 app_name: Carburoid
 menu_back: Atrás
 menu_settings: Configuración
 menu_chart: Gráfico
 settings_category_language_appearance: Luenga y apariencia
-settings_language_title: Idioma
-settings_language_summary: Cambia l'idioma de l'aplicación
-language_system_default: Sistema
 settings_translate_title: Ayuda a traducir tu idioma
 settings_translate_summary: Ir a Weblate
-settings_theme: Tema
-theme_light: Claro
-theme_dark: Fosco
-theme_system: Automatico (O d'o sistema)
 settings_category_station_filters: Filtro de gasolineras
 settings_filter_expensive: Amagar irrelevantes
 settings_filter_expensive_summary: Una gasolinera se considera irrelevante si n'i hai bella atro que sía más preta y más barata. (Recomendau)
@@ -95,7 +86,6 @@ location_picker_search_location_hint: Busca una ciudat u adreza
 location_picker_searching: Cercando…
 location_picker_no_results: No se trobó garra ubicación
 loading_new_data: Descargando datos nuevos…
-dialog_accept: Acceptar
 settings_country_title: Proveedor de datos
 settings_country_summary: Tría o proveedor de datos de precios de carburants
 settings_country_es: España

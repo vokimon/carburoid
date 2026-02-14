@@ -1,19 +1,10 @@
-language_code: eu
-language_name: Euskara
 app_name: Carburoid
 menu_back: Atzera
 menu_settings: Doikuntzak
 menu_chart: Grafikoa
 settings_category_language_appearance: Hizkuntza eta itxura
-settings_language_title: Hizkuntza
-settings_language_summary: Aplikazioaren hizkuntza aldatzeko
-language_system_default: Sistema lehenetsia
 settings_translate_title: Lagundu zure hizkuntza itzultzen
 settings_translate_summary: Joan Weblate-ra
-settings_theme: Gaia
-theme_light: Argia
-theme_dark: Iluna
-theme_system: Auto (Sistema lehenetsia)
 settings_category_station_filters: Estazioko iragazkiak
 settings_filter_expensive: Ezkutatu garrantzigabeak
 settings_filter_expensive_summary: Gune bat garrantzigabetzat hartzen da beste bat badago hurbilagoa eta merkeagoa. (Gomendatua)
@@ -95,7 +86,6 @@ location_picker_search_location_hint: Bilatu hiri edo helbide bat
 location_picker_searching: Bilatzen…
 location_picker_no_results: Ez da kokapenik aurkitu
 loading_new_data: Datu berriak deskargatzen…
-dialog_accept: Onartu
 settings_country_title: Datu hornitzailea
 settings_country_summary: Aukeratu erregaien prezioen datuen hornitzailea
 settings_country_es: Espainia

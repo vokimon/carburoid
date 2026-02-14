@@ -1,19 +1,10 @@
-language_code: ca
-language_name: Català
 app_name: Carburoid
 menu_back: Enrere
 menu_settings: Configuració
 menu_chart: Gràfic
 settings_category_language_appearance: Llengua i aparença
-settings_language_title: Llengua
-settings_language_summary: Canvia la llengua de l'aplicació
-language_system_default: Sistema
 settings_translate_title: Ajuda a traduir la teva llengua
 settings_translate_summary: Ves a Weblate
-settings_theme: Tema
-theme_light: Clar
-theme_dark: Fosc
-theme_system: Automàtic (El del sistema)
 settings_category_station_filters: Filtrat de benzineres
 settings_filter_expensive: Amaga les irrelevants
 settings_filter_expensive_summary: Una benzinera es considera irrelevant si n'hi ha cap altra de més propera i barata. (Recomanat)
@@ -95,7 +86,6 @@ location_picker_search_location_hint: Cerca una ciutat o adreça
 location_picker_searching: Cercant…
 location_picker_no_results: No s'han trobat ubicacions
 loading_new_data: S’estan baixant dades noves…
-dialog_accept: Accepta
 settings_country_title: Proveïdor de dades
 settings_country_summary: Selecciona el proveïdor de dades de preus del carburant
 settings_country_es: Espanya

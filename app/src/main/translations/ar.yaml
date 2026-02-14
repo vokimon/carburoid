@@ -1,19 +1,10 @@
-language_code: ar
-language_name: العربية
 app_name: Carburoid
 menu_back: رجوع
 menu_settings: الإعدادات
 menu_chart: الرسم البياني
 settings_category_language_appearance: اللغة والمظهر
-settings_language_title: اللغة
-settings_language_summary: غيّر لغة التطبيق
-language_system_default: النظام
 settings_translate_title: ساعد في ترجمة لغتك
 settings_translate_summary: اذهب إلى Weblate
-settings_theme: الثيم
-theme_light: فاتح
-theme_dark: غامق
-theme_system: تلقائي (النظام)
 settings_category_station_filters: تصفية محطات الوقود
 settings_filter_expensive: اخفي مش ذات صلة
 settings_filter_expensive_summary: تعتبر المحطة مش ذات صلة إذا كانت كاين غيرها أقرب وبأسعار أرخص. (موصى به)
@@ -95,7 +86,6 @@ location_picker_search_location_hint: ابحث عن مدينة أو عنوان
 location_picker_searching: جار البحث…
 location_picker_no_results: لم يتم العثور على مواقع
 loading_new_data: جارٍ تنزيل بيانات جديدة…
-dialog_accept: قبول
 settings_country_title: مزود البيانات
 settings_country_summary: اختار الجهة اللي كتوفّر معطيات أسعار الوقود
 settings_country_es: إسبانيا

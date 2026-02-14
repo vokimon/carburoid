@@ -1,0 +1,9 @@
+language_code: es
+language_name: Español
+settings_language_title: Idioma
+settings_language_summary: Cambia el idioma de la aplicación
+language_system_default: Sistema
+settings_theme: Tema
+theme_light: Claro
+theme_dark: Oscuro
+theme_system: Automático (Sistema)

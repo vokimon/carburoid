@@ -1,0 +1,9 @@
+language_code: ca
+language_name: Català
+settings_language_title: Llengua
+settings_language_summary: Canvia la llengua de l'aplicació
+language_system_default: Sistema
+settings_theme: Tema
+theme_light: Clar
+theme_dark: Fosc
+theme_system: Automàtic (El del sistema)
