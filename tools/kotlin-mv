@@ -38,6 +38,9 @@ if [[ "$SOURCE" == *".kt" ]] || [[ "$SOURCE" == *".java" ]] || [[ "$SOURCE" == *
     FILE_BASENAME=$(basename "$SOURCE_FILE")
     FILE_BASENAME="${FILE_BASENAME%.*}"
 
+    # Remove trailing slash from target directory
+    TARGET_DIR="${TARGET_DIR%/}"
+
     # Determine target package from directory path
     # Extract the java/kotlin part of the path
     if [[ "$TARGET_DIR" == *"java/"* ]]; then

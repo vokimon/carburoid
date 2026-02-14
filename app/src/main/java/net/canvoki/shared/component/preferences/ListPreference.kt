@@ -40,7 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import net.canvoki.carburoid.ui.components.LazyColumn
+import net.canvoki.shared.component.LazyColumn
 
 @Composable
 fun ListPreference(

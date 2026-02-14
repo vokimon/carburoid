@@ -1,5 +1,5 @@
 // ui/components/LazyColumn.kt
-package net.canvoki.carburoid.ui.components
+package net.canvoki.shared.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
