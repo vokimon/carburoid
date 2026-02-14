@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.ui.settings
+package net.canvoki.shared.component.preferences
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme

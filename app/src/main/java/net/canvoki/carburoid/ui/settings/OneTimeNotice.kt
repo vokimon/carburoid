@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.ui.settings
+package net.canvoki.shared.component.preferences
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column

@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.ui.settings
+package net.canvoki.shared.component.preferences
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background

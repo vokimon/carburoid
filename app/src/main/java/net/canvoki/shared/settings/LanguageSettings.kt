@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.ui.settings
+package net.canvoki.shared.settings
 
 import android.app.LocaleManager
 import android.content.Context
@@ -23,8 +23,8 @@ import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.log
-import net.canvoki.carburoid.ui.settings.ListPreference
-import net.canvoki.carburoid.ui.settings.rememberMutablePreference
+import net.canvoki.shared.component.preferences.ListPreference
+import net.canvoki.shared.component.preferences.rememberMutablePreference
 import java.util.Locale
 
 object LanguageSettings {

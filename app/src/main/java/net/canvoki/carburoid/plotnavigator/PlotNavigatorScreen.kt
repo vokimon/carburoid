@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.ui.AppScaffold
-import net.canvoki.carburoid.ui.settings.ExperimentalFeatureNotice
+import net.canvoki.shared.component.preferences.ExperimentalFeatureNotice
 
 @Composable
 fun PlotNavigatorScreen(

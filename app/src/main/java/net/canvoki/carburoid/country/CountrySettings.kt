@@ -20,8 +20,8 @@ import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.country.CountryRegistry
 import net.canvoki.carburoid.log
-import net.canvoki.carburoid.ui.settings.ListPreference
-import net.canvoki.carburoid.ui.settings.rememberMutablePreference
+import net.canvoki.shared.component.preferences.ListPreference
+import net.canvoki.shared.component.preferences.rememberMutablePreference
 
 object CountrySettings {
     private const val KEY = "app_country"

@@ -11,8 +11,8 @@ import net.canvoki.carburoid.location.LocationService
 import net.canvoki.carburoid.model.FranceExtraStationData
 import net.canvoki.carburoid.network.GasStationApi
 import net.canvoki.carburoid.repository.GasStationRepository
-import net.canvoki.carburoid.ui.settings.LanguageSettings
-import net.canvoki.carburoid.ui.settings.ThemeSettings
+import net.canvoki.shared.settings.LanguageSettings
+import net.canvoki.shared.settings.ThemeSettings
 import java.io.File
 import java.io.FileNotFoundException
 

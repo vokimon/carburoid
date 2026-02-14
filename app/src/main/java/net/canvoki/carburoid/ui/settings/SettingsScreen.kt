@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.ui.settings
+package net.canvoki.shared.component.preferences
 
 import android.content.res.Resources
 import androidx.annotation.DrawableRes
@@ -21,8 +21,9 @@ import net.canvoki.carburoid.R
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.country.CountrySettings
 import net.canvoki.carburoid.ui.AppScaffold
-import net.canvoki.carburoid.ui.settings.LinkPreference
-import net.canvoki.carburoid.ui.settings.PreferenceCategory
+import net.canvoki.shared.component.preferences.LinkPreference
+import net.canvoki.shared.settings.LanguageSettings
+import net.canvoki.shared.settings.ThemeSettings
 
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier) {

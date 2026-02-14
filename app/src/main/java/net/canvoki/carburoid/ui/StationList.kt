@@ -50,7 +50,7 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.GasStationCard
 import net.canvoki.carburoid.ui.DownloadingPill
 import net.canvoki.carburoid.ui.VerticalScrollbar
-import net.canvoki.carburoid.ui.settings.ThemeSettings
+import net.canvoki.shared.settings.ThemeSettings
 
 @Composable
 fun PullOnRefresh(

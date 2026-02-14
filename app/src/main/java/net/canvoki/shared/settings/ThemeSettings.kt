@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.ui.settings
+package net.canvoki.shared.settings
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -16,6 +16,9 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.preference.PreferenceManager
 import net.canvoki.carburoid.R
+import net.canvoki.shared.component.preferences.ListPreference
+import net.canvoki.shared.component.preferences.rememberMutablePreference
+import net.canvoki.shared.component.preferences.rememberPreferenceValue
 
 object ThemeSettings {
     private const val KEY = "dark_mode"
