@@ -31,6 +31,7 @@ import net.canvoki.carburoid.ui.AppScaffold
 import net.canvoki.carburoid.ui.Selectors
 import net.canvoki.carburoid.ui.StationList
 import net.canvoki.shared.usermessage.UserMessage
+import net.canvoki.shared.nolog as log
 
 @Composable
 fun StationListScreen(
@@ -50,13 +51,13 @@ fun StationListScreen(
             isDownloading = repository.isFetchInProgress()
             when (event) {
                 is RepositoryEvent.UpdateStarted -> {
-                    nolog("REPO EVENT UpdateStarted")
+                    log("REPO EVENT UpdateStarted")
                 }
                 is RepositoryEvent.UpdateReady -> {
-                    nolog("REPO EVENT UpdateReady")
+                    log("REPO EVENT UpdateReady")
                 }
                 is RepositoryEvent.UpdateFailed -> {
-                    nolog("REPO EVENT UpdateFailed")
+                    log("REPO EVENT UpdateFailed")
                     UserMessage.Info(failedDownloadFormat.format(event.error)).post()
                 }
             }

@@ -1,7 +1,7 @@
 package net.canvoki.carburoid.distances
 
+import net.canvoki.shared.test.assertEquals
 import org.junit.Test
-import kotlin.test.assertEquals
 
 class FranceLandMassTest {
     // MAINLAND (Core + boundary extremes)

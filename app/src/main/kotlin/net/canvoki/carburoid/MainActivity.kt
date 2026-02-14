@@ -15,7 +15,8 @@ import net.canvoki.carburoid.product.ProductSelection
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.ui.SettingsActivity
 import net.canvoki.carburoid.ui.StationDetailActivity
-import net.canvoki.carburoid.ui.openActivity
+import net.canvoki.shared.component.openActivity
+import net.canvoki.shared.log
 
 class MainActivity : ComponentActivity() {
     companion object {

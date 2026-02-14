@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.ui
+package net.canvoki.shared.component
 
 import android.content.Context
 import android.content.Intent

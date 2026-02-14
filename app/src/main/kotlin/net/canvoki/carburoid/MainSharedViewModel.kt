@@ -17,11 +17,11 @@ import net.canvoki.carburoid.BuildConfig
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
-import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.repository.RepositoryEvent
-import net.canvoki.carburoid.timeits
+import net.canvoki.shared.log
+import net.canvoki.shared.timeits
 
 class MainSharedViewModel(
     application: Application,

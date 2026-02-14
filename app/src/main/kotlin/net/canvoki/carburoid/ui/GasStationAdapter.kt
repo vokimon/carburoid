@@ -11,8 +11,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
-import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.shared.log
 import java.time.Instant
 
 class GasStationAdapter(

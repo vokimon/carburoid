@@ -45,11 +45,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import net.canvoki.carburoid.R
-import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.GasStationCard
 import net.canvoki.carburoid.ui.DownloadingPill
 import net.canvoki.shared.component.VerticalScrollbar
+import net.canvoki.shared.log
 import net.canvoki.shared.settings.ThemeSettings
 
 @Composable

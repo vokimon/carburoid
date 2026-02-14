@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.preference.PreferenceManager
-import net.canvoki.carburoid.R
+import net.canvoki.shared.R
 import net.canvoki.shared.component.preferences.ListPreference
 import net.canvoki.shared.component.preferences.rememberMutablePreference
 import net.canvoki.shared.component.preferences.rememberPreferenceValue

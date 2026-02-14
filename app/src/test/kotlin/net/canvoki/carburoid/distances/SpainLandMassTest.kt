@@ -1,7 +1,7 @@
 package net.canvoki.carburoid.distances
 
+import net.canvoki.shared.test.assertEquals
 import org.junit.Test
-import kotlin.test.assertEquals
 
 class SpainLandMassTest {
     // MAINLAND (Core + boundary extremes + Balearic-overlaps)

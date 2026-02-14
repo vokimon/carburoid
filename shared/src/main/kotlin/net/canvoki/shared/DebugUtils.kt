@@ -1,4 +1,4 @@
-package net.canvoki.carburoid
+package net.canvoki.shared
 import android.util.Log
 
 val isTestEnvironmentsds: Boolean by lazy {

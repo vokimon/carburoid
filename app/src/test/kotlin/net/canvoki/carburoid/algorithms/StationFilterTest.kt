@@ -6,8 +6,8 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.OpeningHours
 import net.canvoki.carburoid.model.SpanishGasStation
 import net.canvoki.carburoid.test.atMadridInstant
+import net.canvoki.shared.test.assertEquals
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.time.DayOfWeek

@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.core.content.ContextCompat
-import net.canvoki.carburoid.R
-import net.canvoki.carburoid.ui.openUri
+import net.canvoki.shared.R
+import net.canvoki.shared.component.openUri
 
 @Composable
 fun LinkPreference(

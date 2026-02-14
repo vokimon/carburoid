@@ -22,12 +22,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import net.canvoki.carburoid.R
-import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.ui.Selectors
 import net.canvoki.shared.component.Flow
 import net.canvoki.shared.component.isLandscape
+import net.canvoki.shared.log
 
 @Composable
 fun ButtonCloser(

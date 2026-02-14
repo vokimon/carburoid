@@ -1,7 +1,7 @@
 package net.canvoki.carburoid.model
 
 import androidx.annotation.VisibleForTesting
-import net.canvoki.carburoid.log
+import net.canvoki.shared.log
 import java.time.DayOfWeek
 
 class FranceOpeningHours : OpeningHours() {

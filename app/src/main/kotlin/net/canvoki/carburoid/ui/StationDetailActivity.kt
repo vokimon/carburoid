@@ -13,7 +13,7 @@ import net.canvoki.carburoid.databinding.ActivityStationDetailBinding
 import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.product.translateProductName
 import net.canvoki.carburoid.repository.GasStationRepository
-import net.canvoki.carburoid.ui.openUri
+import net.canvoki.shared.component.openUri
 import java.time.Instant
 import com.google.android.material.R as MaterialR
 

@@ -21,8 +21,8 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
-import net.canvoki.carburoid.R
-import net.canvoki.carburoid.log
+import net.canvoki.shared.R
+import net.canvoki.shared.log
 import net.canvoki.shared.component.preferences.ListPreference
 import net.canvoki.shared.component.preferences.rememberMutablePreference
 import java.util.Locale

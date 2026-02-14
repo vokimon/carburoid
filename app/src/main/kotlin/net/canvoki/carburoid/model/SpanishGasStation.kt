@@ -28,7 +28,7 @@ import net.canvoki.carburoid.json.fromSpanishDate
 import net.canvoki.carburoid.json.postprocessSpanishNumbers
 import net.canvoki.carburoid.json.preprocessSpanishNumbers
 import net.canvoki.carburoid.json.toSpanishDate
-import net.canvoki.carburoid.timeits
+import net.canvoki.shared.timeits
 import java.time.Instant
 import java.time.ZoneId
 

@@ -21,8 +21,8 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import net.canvoki.carburoid.log
-import net.canvoki.carburoid.timeits
+import net.canvoki.shared.log
+import net.canvoki.shared.timeits
 import java.nio.charset.StandardCharsets
 import java.time.ZoneId
 

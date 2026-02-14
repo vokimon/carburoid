@@ -14,12 +14,12 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.model.GasStationResponse
 import net.canvoki.carburoid.model.SpanishGasStationResponse
 import net.canvoki.carburoid.network.GasStationApi
-import net.canvoki.carburoid.timeit
+import net.canvoki.shared.timeit
 import java.io.File
 import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicBoolean
-import net.canvoki.carburoid.nolog as log
+import net.canvoki.shared.nolog as log
 
 typealias Parser = suspend (String) -> GasStationResponse
 

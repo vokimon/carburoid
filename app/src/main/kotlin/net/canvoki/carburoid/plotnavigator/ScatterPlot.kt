@@ -26,8 +26,8 @@ import io.github.koalaplot.core.xygraph.VerticalLineAnnotation
 import io.github.koalaplot.core.xygraph.XYGraph
 import io.github.koalaplot.core.xygraph.rememberAxisStyle
 import io.github.koalaplot.core.xygraph.rememberFloatLinearAxisModel
-import net.canvoki.carburoid.log
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.shared.log
 
 typealias RangeF = Pair<Float, Float>
 
