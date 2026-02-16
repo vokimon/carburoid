@@ -1,0 +1,11 @@
+## 1.2.0 (2025-10-28)
+
+Edit your current position
+
+- ✨ By clicking the edit icon, enter a edit position screen
+- ✨ Edit position with interactive map
+- ✨ Edit position with utocompletion location search
+- ✨ GPS reposition by clicking on concentric target icon
+- 💥 Swipe does not update current positon, just reload gas stations.
+- 💄 Avoid flicker when updating the description
+

@@ -1,0 +1,13 @@
+Carburoid shows only gas stations worth considering.
+Sorted by distance, whenever a station is more expensive than the closer ones, it is hidden.
+This reduces the list from thousands to a few dozens.
+To choose a station, just scroll down to improve the price until the distance is not worth for you the saving.
+
+Features:
+
+- 🏛️ Official government data sources (Spain, France)
+- 🎯 Only relevant gas stations: either closer or cheaper than others
+- 🕒 Smart about opening and closing hours
+- 🗺️ Integrates with your preferred map application
+- 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese...
+- ☀️ Dark and Light themes

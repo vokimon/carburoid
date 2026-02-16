@@ -1,10 +1,12 @@
 # Change log
 
-## Unreleased
+## 1.4.2 (2026-02-16)
 
 - 🏗️ Upgraded dependencies to current BOM versions
 - 🏗️ Extracted general code as shared library, internal by now
 - 🏗️ Extracted yaml translation plugin as https://github.com/vokimon/android-yaml-strings
+- 🔧 Do not fail on WIP translations
+- 🚸 Warn about WIP translations
 
 ## 1.4.1 (2026-02-12)
 

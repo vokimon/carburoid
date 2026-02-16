@@ -20,9 +20,9 @@ Repo: https://github.com/vokimon/carburoid.git
 Binaries: https://github.com/vokimon/carburoid/releases/download/carburoid-%v/net.canvoki.carburoid-floss-%v-release.apk
 
 Builds:
--   versionName: 1.4.1
-    versionCode: 1040100
-    commit: carburoid-1.4.1
+  - versionName: 1.4.2
+    versionCode: 1040200
+    commit: carburoid-1.4.2
     subdir: app
     gradle:
       - floss
@@ -32,5 +32,5 @@ AllowedAPKSigningKeys: 8cdfd389b1a7979943201321188a416ed54dbdf1c432ed07e2bb44b5b
 AutoUpdateMode: Version
 UpdateCheckMode: Tags carburoid-([\d.]+)
 UpdateCheckData: version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)
-CurrentVersion: 1.4.1
-CurrentVersionCode: 1040100
+CurrentVersion: 1.4.2
+CurrentVersionCode: 1040200

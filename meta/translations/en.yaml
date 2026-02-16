@@ -19,6 +19,12 @@ full_description_md: |-
   - 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese...
   - ☀️ Dark and Light themes
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_4_2_md: |-
+  - 🏗️ Upgraded dependencies to current BOM versions
+  - 🏗️ Extracted general code as shared library, internal by now
+  - 🏗️ Extracted yaml translation plugin as https://github.com/vokimon/android-yaml-strings
+  - 🔧 Do not fail on WIP translations
+  - 🚸 Warn about WIP translations
 changes_1_4_1_md: |-
   Production ready France support and Plot navigator
 
