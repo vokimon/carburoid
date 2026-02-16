@@ -1,2 +1,3 @@
 language_code: ru
 language_name: Русский
+settings_language_label_incomplete: "{language_native_name} (незавершённый)"

@@ -2,6 +2,7 @@ language_code: eu
 language_name: Euskara
 settings_language_title: Hizkuntza
 settings_language_summary: Aplikazioaren hizkuntza aldatzeko
+settings_language_label_incomplete: "{language_native_name} (osoa ez dago)"
 language_system_default: Sistema lehenetsia
 settings_theme: Gaia
 theme_light: Argia

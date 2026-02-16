@@ -2,6 +2,7 @@ language_code: ca
 language_name: Català
 settings_language_title: Llengua
 settings_language_summary: Canvia la llengua de l'aplicació
+settings_language_label_incomplete: "{language_native_name} (incomplet)"
 language_system_default: Sistema
 settings_theme: Tema
 theme_light: Clar

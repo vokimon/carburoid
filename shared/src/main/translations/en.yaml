@@ -2,6 +2,7 @@ language_code: en
 language_name: English
 settings_language_title: Language
 settings_language_summary: Change the app language
+settings_language_label_incomplete: "{language_native_name} (incomplete)"
 language_system_default: System default
 settings_theme: Theme
 theme_light: Light

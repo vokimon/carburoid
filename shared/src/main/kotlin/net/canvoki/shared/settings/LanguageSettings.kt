@@ -44,26 +44,29 @@ object LanguageSettings {
     }
 
     private fun getAvailableLanguages(context: Context): List<LanguageOption> {
+        log("LANGUAGE OPTIONS")
+        if (availableLanguagesCache == null) {
+            // Compute native language name only once
+            val supportedCodes = context.resources.getStringArray(R.array.supported_language_codes).toList()
+            availableLanguagesCache = supportedCodes.map { code ->
+                LanguageOption(code, languageName(context, code))
+            }
+        }
         val systemLanguageOption =
             LanguageOption(
                 SYSTEM_LANGUAGE,
                 context.getString(R.string.language_system_default),
             )
-        val availableLanguages = availableLanguagesCache
-        if (availableLanguages != null) {
-            return listOf(systemLanguageOption) + availableLanguages
+        val incompleteCodes = context.resources.getStringArray(R.array.incomplete_language_codes).toSet()
+        val result = listOf(systemLanguageOption) + availableLanguagesCache!!.map { option ->
+            if (option.code in incompleteCodes) {
+                LanguageOption(option.code, context.getString(R.string.settings_language_label_incomplete, option.name))
+            } else {
+                option
+            }
         }
-
-        val supportedCodes = context.resources.getStringArray(R.array.supported_language_codes).toList()
-
-        val languages = mutableListOf<LanguageOption>()
-
-        for (code in supportedCodes) {
-            languages.add(LanguageOption(code, languageName(context, code)))
-        }
-
-        availableLanguagesCache = languages
-        return listOf(systemLanguageOption) + languages
+        log("LANGUAGE OPTIONS $result")
+        return result
     }
 
     private fun languageName(
@@ -125,23 +128,37 @@ object LanguageSettings {
     @Composable
     fun rememberLanguage() = rememberMutablePreference(KEY, SYSTEM_LANGUAGE)
 
+    private fun getNativeNames(context: Context): List<LanguageOption> {
+        // Compute native language name only once since they are context independent
+        val oldCache = availableLanguagesCache
+        if (oldCache != null) return oldCache
+        val supportedCodes = context.resources.getStringArray(R.array.supported_language_codes).toSet()
+        val newCache = supportedCodes.map { code ->
+            LanguageOption(code, languageName(context, code))
+        }
+        availableLanguagesCache = newCache
+        return newCache
+    }
+
     @Composable
     fun Preference() {
         val context = LocalContext.current
-
         var currentValue by rememberLanguage()
-
+        val nativeNames = getNativeNames(context)
         val systemOption = "system" to stringResource(R.string.language_system_default)
-        val supportedCodes = stringArrayResource(R.array.supported_language_codes)
-        val options =
-            remember(supportedCodes) {
-                val languageOptions =
-                    supportedCodes.map { code ->
-                        code to languageName(context, code)
-                    }
-                listOf(systemOption) + languageOptions
+        val incompleteCodes = stringArrayResource(R.array.incomplete_language_codes).toSet()
+        log("LANGUAGES INCOMPLETE: $incompleteCodes")
+        val options = buildList {
+            add(systemOption)
+            nativeNames.forEach { option ->
+                val label = if (option.code in incompleteCodes) {
+                    stringResource(R.string.settings_language_label_incomplete, option.name)
+                } else  {
+                    option.name
+                }
+                add (option.code to label)
             }
-
+        }
         val title = stringResource(R.string.settings_language_title)
         val summary =
             options.find { it.first == currentValue }?.second

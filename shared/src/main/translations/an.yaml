@@ -2,6 +2,7 @@ language_code: an
 language_name: Aragonés
 settings_language_title: Idioma
 settings_language_summary: Cambia l'idioma de l'aplicación
+settings_language_label_incomplete: "{language_native_name} (incompleto)"
 language_system_default: Sistema
 settings_theme: Tema
 theme_light: Claro

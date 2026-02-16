@@ -2,6 +2,7 @@ language_code: es
 language_name: Español
 settings_language_title: Idioma
 settings_language_summary: Cambia el idioma de la aplicación
+settings_language_label_incomplete: "{language_native_name} (incompleto)"
 language_system_default: Sistema
 settings_theme: Tema
 theme_light: Claro
