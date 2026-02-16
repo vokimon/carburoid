@@ -1,18 +1,18 @@
 [versions]
 # Plugins
 agp = "8.13.1"
-kotlin = "2.2.20"
+kotlin = "2.3.10"
 compose-compiler = "1.5.15"
 spotless = "8.1.0"
 
 # Libraries
-androidx-activity-compose = "1.9.3"
+androidx-activity-compose = "1.12.4"
 androidx-appcompat = "1.7.1"
-androidx-compose-bom = "2026.01.01"
+androidx-compose-bom = "2026.02.00"
 androidx-constraintlayout = "2.2.1"
 androidx-core-ktx = "1.17.0"
 androidx-datastore-preferences = "1.2.0"
-androidx-lifecycle-runtime-ktx = "2.9.4"
+androidx-lifecycle-runtime-ktx = "2.10.0"
 androidx-material = "1.13.0"
 androidx-preference-ktx = "1.2.1"
 androidx-test-core = "1.7.0"

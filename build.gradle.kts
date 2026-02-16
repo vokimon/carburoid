@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.spotless)
+    id("com.github.ben-manes.versions") version "0.52.0"
 }
 
 spotless {

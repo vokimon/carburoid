@@ -3,7 +3,8 @@
 ## Unreleased
 
 - 🏗️ Upgraded dependencies to current BOM versions
-- 🏗️ Extracted https://github.com/vokimon/android-yaml-strings (yaml translation plugin for Gradle)
+- 🏗️ Extracted general code as shared library, internal by now
+- 🏗️ Extracted yaml translation plugin as https://github.com/vokimon/android-yaml-strings
 
 ## 1.4.1 (2026-02-12)
 

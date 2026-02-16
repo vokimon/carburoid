@@ -54,6 +54,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // Rename apks adding appid and version
     applicationVariants.all {
         outputs.all {
             if (this is ApkVariantOutputImpl) {
