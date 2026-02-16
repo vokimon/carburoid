@@ -5,11 +5,11 @@ import com.android.build.api.variant.ApkOutput
 import com.android.build.gradle.internal.api.ApkVariantOutputImpl
 
 plugins {
-    id("net.canvoki.gradle.android-yaml-strings") version "1.0.0"
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    id("net.canvoki.android-yaml-strings") version "1.0.0"
 }
 
 val versionPropsFile = rootProject.file("version.properties")

@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("net.canvoki.gradle.android-yaml-strings") version "1.0.0"
+    id("net.canvoki.android-yaml-strings") version "1.0.0"
 }
 
 android {
