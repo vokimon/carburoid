@@ -5,6 +5,7 @@ pluginManagement {
         google()
         mavenCentral()
     }
+    includeBuild("build-logic/plugins/android-yaml-strings")
 }
 dependencyResolutionManagement {
     repositories {
