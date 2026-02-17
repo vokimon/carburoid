@@ -23,6 +23,7 @@ Builds:
   - versionName: 1.4.2
     versionCode: 1040200
     commit: carburoid-1.4.2
+    submodules: true
     subdir: app
     gradle:
       - floss

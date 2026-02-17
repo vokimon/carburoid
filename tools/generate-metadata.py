@@ -280,6 +280,7 @@ def generate_fdroid_metadata_file(metadata_path):
         versionName = config.last_version,
         versionCode = int(version_to_code(config.last_version)),
         commit = config.version_tag_prefix + config.last_version,
+        submodules = config.submodules,
         subdir = "app", # TODO: app dir, needed?
         gradle = ['floss'], # TODO: flavors, if none, 'true'
     )]
@@ -347,6 +348,7 @@ class Config():
     project_name: str = ""
     short_description: str = ""
     full_description: str = ""
+    submodules: bool = False
 
     splash_svg: str = 'media/promo/splash.svg'
     motto: str = None

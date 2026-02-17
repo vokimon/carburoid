@@ -9,6 +9,7 @@ keywords:
 - diesel
 fdroid_categories:
 - Navigation
+submodules: true
 fdroid_fields:
   AuthorEmail: fdroid@canvoki.net
   AuthorName: David García Gazón
