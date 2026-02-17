@@ -16,8 +16,8 @@ fdroid_fields:
   AuthorWebSite: https://canvoki.net/coder
   UpdateCheckMode: Tags carburoid-([\d.]+)
   Binaries: https://github.com/vokimon/carburoid/releases/download/carburoid-%v/net.canvoki.carburoid-floss-%v-release.apk
-  UpdateCheckData: 'version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)'
+  UpdateCheckData: 'version.properties|versionCode=(\d+)|.|versionName=([\d.]+)'
   AntiFeatures:
     NonFreeNet:
-      en-US: Rely on sedeaplicaciones.minetur.gob.es
+      en-US: Rely on sedeaplicaciones.minetur.gob.es and data.economie.gouv.fr
 

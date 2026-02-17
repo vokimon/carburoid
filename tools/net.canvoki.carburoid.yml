@@ -1,6 +1,6 @@
 AntiFeatures:
   NonFreeNet:
-    en-US: Rely on sedeaplicaciones.minetur.gob.es
+    en-US: Rely on sedeaplicaciones.minetur.gob.es and data.economie.gouv.fr
 Categories:
   - Navigation
 License: AGPL-3.0-or-later
@@ -32,6 +32,6 @@ AllowedAPKSigningKeys: 8cdfd389b1a7979943201321188a416ed54dbdf1c432ed07e2bb44b5b
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags carburoid-([\d.]+)
-UpdateCheckData: version.properties|versionCode=(\d+)|version.properties|versionName=([\d.]+)
+UpdateCheckData: version.properties|versionCode=(\d+)|.|versionName=([\d.]+)
 CurrentVersion: 1.4.2
 CurrentVersionCode: 1040200
