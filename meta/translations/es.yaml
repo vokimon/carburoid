@@ -1,6 +1,6 @@
 project_name: Carburoid
 splash_motto: Llena al mejor precio, más cerca
-short_description: Encuentra gasolineras en España y Francia por precio y distancia
+short_description: Encuentra gasolineras en España y Francia por precio y distancia.
 full_description_md: |+
   Carburoid muestra solo las gasolineras que merecen consideración.
   Ordenadas por distancia, si una gasolinera es más cara que las más cercanas, no se muestra.
