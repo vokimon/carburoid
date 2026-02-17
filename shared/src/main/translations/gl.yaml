@@ -4,6 +4,8 @@ settings_language_title: Linguaxe
 settings_language_summary: Cambia o idioma da aplicación
 settings_language_label_incomplete: "{language_native_name} (incompleto)"
 language_system_default: Sistema
+settings_translate_title: Vai a Weblate
+settings_translate_summary: Axuda a traducir o teu idioma
 settings_theme: Tema
 theme_light: Claro
 theme_dark: Escuro

@@ -21,8 +21,8 @@ import net.canvoki.carburoid.R
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.country.CountrySettings
 import net.canvoki.carburoid.ui.AppScaffold
-import net.canvoki.shared.component.preferences.LinkPreference
 import net.canvoki.shared.component.preferences.PreferenceCategory
+import net.canvoki.shared.component.preferences.WeblateLink
 import net.canvoki.shared.settings.LanguageSettings
 import net.canvoki.shared.settings.ThemeSettings
 
@@ -40,12 +40,7 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
             ) {
                 ThemeSettings.Preference()
                 LanguageSettings.Preference()
-                LinkPreference(
-                    url = "https://hosted.weblate.org/projects/carburoid/carburoid-ui/",
-                    title = stringResource(R.string.settings_translate_summary),
-                    summary = stringResource(R.string.settings_translate_title),
-                    iconResId = R.drawable.ic_weblate,
-                )
+                WeblateLink(project = "carburoid", component = "carburoid-ui")
             }
             PreferenceCategory(
                 title = stringResource(R.string.settings_category_station_filters),

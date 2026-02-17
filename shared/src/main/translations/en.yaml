@@ -4,6 +4,8 @@ settings_language_title: Language
 settings_language_summary: Change the app language
 settings_language_label_incomplete: "{language_native_name} (incomplete)"
 language_system_default: System default
+settings_translate_title: Go to Weblate
+settings_translate_summary: Help translate your language
 settings_theme: Theme
 theme_light: Light
 theme_dark: Dark

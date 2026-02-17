@@ -3,8 +3,6 @@ menu_back: Atzera
 menu_settings: Doikuntzak
 menu_chart: Grafikoa
 settings_category_language_appearance: Hizkuntza eta itxura
-settings_translate_title: Lagundu zure hizkuntza itzultzen
-settings_translate_summary: Joan Weblate-ra
 settings_category_station_filters: Estazioko iragazkiak
 settings_filter_expensive: Ezkutatu garrantzigabeak
 settings_filter_expensive_summary: Gune bat garrantzigabetzat hartzen da beste bat badago hurbilagoa eta merkeagoa. (Gomendatua)

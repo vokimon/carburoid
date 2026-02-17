@@ -3,8 +3,6 @@ menu_back: رجوع
 menu_settings: الإعدادات
 menu_chart: الرسم البياني
 settings_category_language_appearance: اللغة والمظهر
-settings_translate_title: ساعد في ترجمة لغتك
-settings_translate_summary: اذهب إلى Weblate
 settings_category_station_filters: تصفية محطات الوقود
 settings_filter_expensive: اخفي مش ذات صلة
 settings_filter_expensive_summary: تعتبر المحطة مش ذات صلة إذا كانت كاين غيرها أقرب وبأسعار أرخص. (موصى به)

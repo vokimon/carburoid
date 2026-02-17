@@ -4,6 +4,8 @@ settings_language_title: Llengua
 settings_language_summary: Canvia la llengua de l'aplicació
 settings_language_label_incomplete: "{language_native_name} (incomplet)"
 language_system_default: Sistema
+settings_translate_title: Ves a Weblate
+settings_translate_summary: Ajuda a traduir la teva llengua
 settings_theme: Tema
 theme_light: Clar
 theme_dark: Fosc

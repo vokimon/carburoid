@@ -3,8 +3,6 @@ menu_back: Back
 menu_settings: Settings
 menu_chart: Chart
 settings_category_language_appearance: Language and appearance
-settings_translate_title: Help translate your language
-settings_translate_summary: Go to Weblate
 settings_category_station_filters: Station filters
 settings_filter_expensive: Hide irrelevant stations
 settings_filter_expensive_summary: A station is considered irrelevant if any other exists that is nearer and cheaper. (Recommended)

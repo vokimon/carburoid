@@ -4,6 +4,8 @@ settings_language_title: اللغة
 settings_language_summary: غيّر لغة التطبيق
 settings_language_label_incomplete: "{language_native_name} (غير مكتمل)"
 language_system_default: النظام
+settings_translate_title: اذهب إلى Weblate
+settings_translate_summary: ساعد في ترجمة لغتك
 settings_theme: الثيم
 theme_light: فاتح
 theme_dark: غامق

@@ -3,8 +3,6 @@ menu_back: Atrás
 menu_settings: Configuración
 menu_chart: Gráfico
 settings_category_language_appearance: Luenga y apariencia
-settings_translate_title: Ayuda a traducir tu idioma
-settings_translate_summary: Ir a Weblate
 settings_category_station_filters: Filtro de gasolineras
 settings_filter_expensive: Amagar irrelevantes
 settings_filter_expensive_summary: Una gasolinera se considera irrelevante si n'i hai bella atro que sía más preta y más barata. (Recomendau)
