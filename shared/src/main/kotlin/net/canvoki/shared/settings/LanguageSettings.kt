@@ -22,9 +22,9 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceScreen
 import net.canvoki.shared.R
-import net.canvoki.shared.log
 import net.canvoki.shared.component.preferences.ListPreference
 import net.canvoki.shared.component.preferences.rememberMutablePreference
+import net.canvoki.shared.nolog as log
 import java.util.Locale
 
 object LanguageSettings {
@@ -43,30 +43,16 @@ object LanguageSettings {
         apply(context)
     }
 
-    private fun getAvailableLanguages(context: Context): List<LanguageOption> {
-        log("LANGUAGE OPTIONS")
-        if (availableLanguagesCache == null) {
-            // Compute native language name only once
-            val supportedCodes = context.resources.getStringArray(R.array.supported_language_codes).toList()
-            availableLanguagesCache = supportedCodes.map { code ->
-                LanguageOption(code, languageName(context, code))
-            }
+    private fun getNativeNames(context: Context): List<LanguageOption> {
+        // Compute native language name only once since they are context independent
+        val oldCache = availableLanguagesCache
+        if (oldCache != null) return oldCache
+        val supportedCodes = context.resources.getStringArray(R.array.supported_language_codes).toSet()
+        val newCache = supportedCodes.map { code ->
+            LanguageOption(code, languageName(context, code))
         }
-        val systemLanguageOption =
-            LanguageOption(
-                SYSTEM_LANGUAGE,
-                context.getString(R.string.language_system_default),
-            )
-        val incompleteCodes = context.resources.getStringArray(R.array.incomplete_language_codes).toSet()
-        val result = listOf(systemLanguageOption) + availableLanguagesCache!!.map { option ->
-            if (option.code in incompleteCodes) {
-                LanguageOption(option.code, context.getString(R.string.settings_language_label_incomplete, option.name))
-            } else {
-                option
-            }
-        }
-        log("LANGUAGE OPTIONS $result")
-        return result
+        availableLanguagesCache = newCache
+        return newCache
     }
 
     private fun languageName(
@@ -128,18 +114,6 @@ object LanguageSettings {
     @Composable
     fun rememberLanguage() = rememberMutablePreference(KEY, SYSTEM_LANGUAGE)
 
-    private fun getNativeNames(context: Context): List<LanguageOption> {
-        // Compute native language name only once since they are context independent
-        val oldCache = availableLanguagesCache
-        if (oldCache != null) return oldCache
-        val supportedCodes = context.resources.getStringArray(R.array.supported_language_codes).toSet()
-        val newCache = supportedCodes.map { code ->
-            LanguageOption(code, languageName(context, code))
-        }
-        availableLanguagesCache = newCache
-        return newCache
-    }
-
     @Composable
     fun Preference() {
         val context = LocalContext.current
@@ -147,7 +121,6 @@ object LanguageSettings {
         val nativeNames = getNativeNames(context)
         val systemOption = "system" to stringResource(R.string.language_system_default)
         val incompleteCodes = stringArrayResource(R.array.incomplete_language_codes).toSet()
-        log("LANGUAGES INCOMPLETE: $incompleteCodes")
         val options = buildList {
             add(systemOption)
             nativeNames.forEach { option ->
@@ -161,8 +134,7 @@ object LanguageSettings {
         }
         val title = stringResource(R.string.settings_language_title)
         val summary =
-            options.find { it.first == currentValue }?.second
-                ?: stringResource(R.string.language_system_default)
+            (options.find { it.first == currentValue }?: systemOption).second
 
         ListPreference(
             title = title,
