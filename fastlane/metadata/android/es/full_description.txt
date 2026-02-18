@@ -11,4 +11,3 @@ Funcionalidades:
 - 🗺️ Se integra con la aplicación de mapas que uses
 - 🌐 Traducciones al Español, Catalán, Vasco, Gallego, Aragonés...
 - ☀️ Temas oscuro y claro
-

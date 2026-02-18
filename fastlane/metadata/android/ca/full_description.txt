@@ -11,4 +11,3 @@ Funcionalitats:
 - 🗺️ S'integra amb l'aplicació de mapes que prefereixis
 - 🌐 Traduccions a l'Espanyol, Català, Basc, Gallec, Aragonés...
 - ☀️ Temes fosc i clar
-

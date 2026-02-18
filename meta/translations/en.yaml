@@ -19,7 +19,15 @@ full_description_md: |-
   - 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese...
   - ☀️ Dark and Light themes
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_4_3_md: |-
+  F-Droid build fixes
+
+  - 🏗️ Build android-yaml-string as submodule to reenable f-droid
+  - 🏗️ Acknoledge to FDroid non-free data source data.economie.gouv.fr
+  - ♻️ Extracted WeblateLink to shared
 changes_1_4_2_md: |-
+  Internal reorganization and supporting incomplete translations
+
   - 🏗️ Upgraded dependencies to current BOM versions
   - 🏗️ Extracted general code as shared library, internal by now
   - 🏗️ Extracted yaml translation plugin as https://github.com/vokimon/android-yaml-strings

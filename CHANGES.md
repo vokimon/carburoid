@@ -1,6 +1,16 @@
 # Change log
 
+## 1.4.3 (2026-02-16)
+
+F-Droid build fixes
+
+- 🏗️ Build android-yaml-string as submodule to reenable f-droid
+- 🏗️ Acknoledge to FDroid non-free data source data.economie.gouv.fr
+- ♻️ Extracted WeblateLink to shared
+
 ## 1.4.2 (2026-02-16)
+
+Internal reorganization and supporting incomplete translations
 
 - 🏗️ Upgraded dependencies to current BOM versions
 - 🏗️ Extracted general code as shared library, internal by now

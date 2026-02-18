@@ -32,6 +32,8 @@ then
     popd
     # hard link since soft link is not visible on 
 fi
+
+rm -f "$FDROID_DATA_PATH"/fdroid-build.sh "$FDROID_DATA_PATH"/metadata/${APP_ID}.yml
 run ln -f $SCRIPTPATH/fdroid-build.sh "$FDROID_DATA_PATH"/fdroid-build.sh
 run ln -f $SCRIPTPATH/${APP_ID}.yml "$FDROID_DATA_PATH"/metadata/
 
