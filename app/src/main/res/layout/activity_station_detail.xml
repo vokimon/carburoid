@@ -184,45 +184,6 @@
 
         </LinearLayout>
 
-        <!-- Hours Section -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/TextAppearance.Material3.TitleMedium"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"
-            android:text="@string/detail_opening_hours" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="?attr/selectableItemBackground"
-            android:padding="8dp"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            android:focusable="true" >
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_schedule"
-                android:contentDescription="@string/open_in_maps"
-                android:layout_marginEnd="8dp"
-                app:tint="?attr/colorPrimary" />
-
-            <TextView
-                android:id="@+id/text_opening_hours"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                style="@style/TextAppearance.Material3.BodyMedium"
-                android:textColor="?attr/colorOnBackground"
-                tools:ignore="HardcodedText"
-                android:text="L-V: 08:00-13:30 y 15:30-20:00; S: 08:00-13:30"/>
-
-        </LinearLayout>
-
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/migrated_components"
             android:layout_width="match_parent"

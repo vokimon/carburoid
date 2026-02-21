@@ -7,15 +7,24 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -93,17 +102,17 @@ class StationDetailActivity : AppCompatActivity() {
             openUri("geo:${station.latitude},${station.longitude}")
         }
 
-        binding.textOpeningHours.text = station.openingHours?.toString()
-            ?: getString(R.string.station_status_permanently_closed)
-
         binding.textExclusivePriceWarning.visibility =
             if (station.isPublicPrice) View.GONE else View.VISIBLE
 
         binding.migratedComponents.setContent {
-            MaterialTheme(
-                colorScheme = ThemeSettings.effectiveColorScheme(),
-            ) {
-                OtherProductList(station)
+            MaterialTheme(colorScheme = ThemeSettings.effectiveColorScheme()) {
+                Surface {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        OpeningHoursDetails(station)
+                        OtherProductList(station)
+                    }
+                }
             }
         }
     }
@@ -121,27 +130,65 @@ class StationDetailActivity : AppCompatActivity() {
 @Composable fun OtherProductList(station: GasStation) {
     val currentProduct = ProductManager.getCurrent()
     val otherProducts = station.prices.filter { it.key != currentProduct }
-    Surface {
-        if (otherProducts.isNotEmpty()) {
-            Column(modifier = Modifier.fillMaxWidth()) {
+    if (otherProducts.isEmpty()) return
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = stringResource(R.string.detail_other_products),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 8.dp),
+        )
+        Column(modifier = Modifier.padding(8.dp)) {
+            for ((product, price) in otherProducts) {
+                if (price == null) continue
+                val translatedName = translateProductName(product)
                 Text(
-                    text = stringResource(R.string.detail_other_products),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 8.dp),
+                    text = "%.3f € - %s".format(price, translatedName),
+                    style = MaterialTheme.typography.bodyMedium,
                 )
-                Column(modifier = Modifier.padding(8.dp)) {
-                    val otherProducts = station.prices.filter { it.key != currentProduct }
-                    for ((product, price) in otherProducts) {
-                        if (price == null) continue
-                        val translatedName = translateProductName(product)
-                        Text(
-                            text = "%.3f € - %s".format(price, translatedName),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    }
-                }
             }
         }
+    }
+}
+
+@Composable fun OpeningHoursDetails(station: GasStation) {
+    if (station.openingHours == null) return
+    Text(
+        text = stringResource(R.string.detail_opening_hours),
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.padding(bottom = 8.dp),
+    )
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication =
+                        ripple(
+                            color =
+                                MaterialTheme
+                                    .colorScheme.onSurface
+                                    .copy(alpha = 0.12f),
+                        ),
+                    onClick = {},
+                ).padding(8.dp),
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_schedule),
+            contentDescription = stringResource(R.string.open_in_maps),
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(24.dp),
+        )
+        Text(
+            text = station.openingHours.toString(),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp),
+        )
     }
 }
