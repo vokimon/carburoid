@@ -13,13 +13,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.databinding.ActivityStationDetailBinding
+import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.product.translateProductName
 import net.canvoki.carburoid.repository.GasStationRepository
@@ -100,31 +103,7 @@ class StationDetailActivity : AppCompatActivity() {
             MaterialTheme(
                 colorScheme = ThemeSettings.effectiveColorScheme(),
             ) {
-                Surface {
-                    val currentProduct = ProductManager.getCurrent()
-                    val otherProducts = station.prices.filter { it.key != currentProduct }
-                    if (otherProducts.isNotEmpty()) {
-                        Column(modifier = Modifier.fillMaxWidth()) {
-                            Text(
-                                text = getString(R.string.detail_other_products),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(bottom = 8.dp),
-                            )
-                            Column(modifier = Modifier.padding(8.dp)) {
-                                val otherProducts = station.prices.filter { it.key != currentProduct }
-                                for ((product, price) in otherProducts) {
-                                    if (price == null) continue
-                                    val translatedName = translateProductName(product)
-                                    Text(
-                                        text = "%.3f € - %s".format(price, translatedName),
-                                        style = MaterialTheme.typography.bodyMedium,
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
+                OtherProductList(station)
             }
         }
     }
@@ -137,4 +116,32 @@ class StationDetailActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+}
+
+@Composable fun OtherProductList(station: GasStation) {
+    val currentProduct = ProductManager.getCurrent()
+    val otherProducts = station.prices.filter { it.key != currentProduct }
+    Surface {
+        if (otherProducts.isNotEmpty()) {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = stringResource(R.string.detail_other_products),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 8.dp),
+                )
+                Column(modifier = Modifier.padding(8.dp)) {
+                    val otherProducts = station.prices.filter { it.key != currentProduct }
+                    for ((product, price) in otherProducts) {
+                        if (price == null) continue
+                        val translatedName = translateProductName(product)
+                        Text(
+                            text = "%.3f € - %s".format(price, translatedName),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
