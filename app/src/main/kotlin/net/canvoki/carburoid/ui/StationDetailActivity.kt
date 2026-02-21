@@ -96,28 +96,13 @@ class StationDetailActivity : AppCompatActivity() {
         binding.textExclusivePriceWarning.visibility =
             if (station.isPublicPrice) View.GONE else View.VISIBLE
 
-        val otherProducts = station.prices.filter { it.key != currentProduct }
-        if (otherProducts.isNotEmpty()) {
-            binding.labelOtherProducts.visibility = View.VISIBLE
-            binding.containerOtherProducts.visibility = View.VISIBLE
-
-            for ((product, price) in otherProducts) {
-                if (price == null) continue
-
-                val translatedName = translateProductName(product, this)
-
-                val textView = TextView(this)
-                textView.text = "%.3f €".format(price) + " - " + translatedName
-                textView.setTextAppearance(MaterialR.style.TextAppearance_Material3_BodyMedium)
-                binding.containerOtherProducts.addView(textView)
-            }
-        }
         binding.migratedComponents.setContent {
             MaterialTheme(
                 colorScheme = ThemeSettings.effectiveColorScheme(),
             ) {
                 Surface {
-                    val otherProducts = station.prices.filter { it.key != ProductManager.getCurrent() }
+                    val currentProduct = ProductManager.getCurrent()
+                    val otherProducts = station.prices.filter { it.key != currentProduct }
                     if (otherProducts.isNotEmpty()) {
                         Column(modifier = Modifier.fillMaxWidth()) {
                             Text(
@@ -130,7 +115,7 @@ class StationDetailActivity : AppCompatActivity() {
                                 val otherProducts = station.prices.filter { it.key != currentProduct }
                                 for ((product, price) in otherProducts) {
                                     if (price == null) continue
-                                    val translatedName = translateProductName(product, this@StationDetailActivity)
+                                    val translatedName = translateProductName(product)
                                     Text(
                                         text = "%.3f € - %s".format(price, translatedName),
                                         style = MaterialTheme.typography.bodyMedium,

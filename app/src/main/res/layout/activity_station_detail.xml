@@ -223,28 +223,6 @@
 
         </LinearLayout>
 
-        <!-- Other Products Section -->
-        <TextView
-            android:id="@+id/label_other_products"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/TextAppearance.Material3.TitleMedium"
-            android:text="@string/detail_other_products"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/container_other_products"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:visibility="gone">
-
-            <!-- Here the dynamically added TextViews for other products -->
-        </LinearLayout>
-
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/migrated_components"
             android:layout_width="match_parent"
