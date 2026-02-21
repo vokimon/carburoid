@@ -7,6 +7,16 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.databinding.ActivityStationDetailBinding
@@ -14,6 +24,7 @@ import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.product.translateProductName
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.shared.component.openUri
+import net.canvoki.shared.settings.ThemeSettings
 import java.time.Instant
 import com.google.android.material.R as MaterialR
 
@@ -99,6 +110,33 @@ class StationDetailActivity : AppCompatActivity() {
                 textView.text = "%.3f €".format(price) + " - " + translatedName
                 textView.setTextAppearance(MaterialR.style.TextAppearance_Material3_BodyMedium)
                 binding.containerOtherProducts.addView(textView)
+            }
+        }
+        binding.migratedComponents.setContent {
+            MaterialTheme(
+                colorScheme = ThemeSettings.effectiveColorScheme(),
+            ) {
+                Surface {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            text = getString(R.string.detail_other_products),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(bottom = 8.dp),
+                        )
+                        Column(modifier = Modifier.padding(8.dp)) {
+                            val otherProducts = station.prices.filter { it.key != currentProduct }
+                            for ((product, price) in otherProducts) {
+                                if (price == null) continue
+                                val translatedName = translateProductName(product, this@StationDetailActivity)
+                                Text(
+                                    text = "%.3f € - %s".format(price, translatedName),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
