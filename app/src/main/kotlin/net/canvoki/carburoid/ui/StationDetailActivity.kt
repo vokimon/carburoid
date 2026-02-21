@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +23,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -43,12 +46,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.R
-import net.canvoki.carburoid.databinding.ActivityStationDetailBinding
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.OpeningStatusPill
 import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.product.translateProductName
 import net.canvoki.carburoid.repository.GasStationRepository
+import net.canvoki.carburoid.ui.AppScaffold
 import net.canvoki.shared.component.openUri
 import net.canvoki.shared.settings.ThemeSettings
 import java.time.Instant
@@ -74,12 +77,8 @@ class StationDetailActivity : AppCompatActivity() {
     private val repository: GasStationRepository
         get() = app.repository
 
-    private lateinit var binding: ActivityStationDetailBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = setContentViewWithInsets(ActivityStationDetailBinding::inflate)
 
         val stationId = intent.getIntExtra("station_id", 0)
         val station = repository.getStationById(stationId) ?: return
@@ -89,17 +88,8 @@ class StationDetailActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        binding.migratedComponents.setContent {
-            MaterialTheme(colorScheme = ThemeSettings.effectiveColorScheme()) {
-                Surface {
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        HeroDetails(station)
-                        LocationDetails(station)
-                        OpeningHoursDetails(station)
-                        OtherProductList(station)
-                    }
-                }
-            }
+        setContent {
+            DetailsScreen(station)
         }
     }
 
@@ -111,6 +101,26 @@ class StationDetailActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+}
+
+@Composable
+fun DetailsScreen(station: GasStation) {
+    AppScaffold {
+        Surface {
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
+                        .padding(bottom = 8.dp),
+            ) {
+                HeroDetails(station)
+                LocationDetails(station)
+                OpeningHoursDetails(station)
+                OtherProductList(station)
+            }
+        }
+    }
 }
 
 @Composable
