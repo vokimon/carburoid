@@ -2,8 +2,8 @@
 
 Do you want to help? This is my roadmap.
 
-- [ ] Upgrade dependencies to 2026 (see linter)
-- [ ] Remove `activity_main.xml`
+- [x] Upgrade dependencies to 2026 (see linter)
+- [x] Remove `activity_main.xml`
 - [ ] Brands: Define optional brand field in base Gas Station
 - [ ] Brands: Station card: consider optional brand
 - [ ] Brands: Station detal: consider optional brand
