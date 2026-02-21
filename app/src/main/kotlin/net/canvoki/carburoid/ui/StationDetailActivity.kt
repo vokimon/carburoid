@@ -7,13 +7,21 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -21,18 +29,23 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.databinding.ActivityStationDetailBinding
 import net.canvoki.carburoid.model.GasStation
+import net.canvoki.carburoid.plotnavigator.OpeningStatusPill
 import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.product.translateProductName
 import net.canvoki.carburoid.repository.GasStationRepository
@@ -76,33 +89,11 @@ class StationDetailActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        val currentProduct = ProductManager.getCurrent()
-        binding.textCurrentProduct.text = translateProductName(currentProduct, this)
-
-        binding.textPrice.text =
-            station.price?.let { "%.3f €".format(it) }
-                ?: getString(R.string.station_no_price)
-
-        binding.textDistance.text = station.distanceInMeters?.let {
-            "%.1f km".format(it / 1000f)
-        } ?: getString(R.string.station_no_distance)
-
-        val status = station.openStatus(Instant.now())
-        val statusText = status.forHumans(this)
-        val statusColor = status.color(this)
-        binding.textOpenStatus.text = statusText
-        binding.textOpenStatus.setTextColor(statusColor)
-        binding.iconOpenStatus.setImageResource(status.icon())
-        binding.iconOpenStatus.imageTintList = ColorStateList.valueOf(statusColor)
-        binding.textOpenStatus.visibility = View.VISIBLE
-
-        binding.textExclusivePriceWarning.visibility =
-            if (station.isPublicPrice) View.GONE else View.VISIBLE
-
         binding.migratedComponents.setContent {
             MaterialTheme(colorScheme = ThemeSettings.effectiveColorScheme()) {
                 Surface {
                     Column(modifier = Modifier.fillMaxWidth()) {
+                        HeroDetails(station)
                         LocationDetails(station)
                         OpeningHoursDetails(station)
                         OtherProductList(station)
@@ -239,5 +230,81 @@ fun LocationDetails(station: GasStation) {
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(24.dp),
         )
+    }
+}
+
+@Composable
+fun HeroDetails(station: GasStation) {
+    val currentProduct = ProductManager.getCurrent()
+    val hasPrice = station.price != null
+    val priceText =
+        if (hasPrice) {
+            "%.3f €".format(station.price!!)
+        } else {
+            stringResource(R.string.station_no_price)
+        }
+    val productName = translateProductName(currentProduct)
+    val distanceText =
+        station.distanceInMeters?.let {
+            "%.1f km".format(it / 1000f)
+        } ?: stringResource(R.string.station_no_distance)
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        // Price and product name section
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.Bottom,
+        ) {
+            // Product name (left of price)
+            Text(
+                text = productName,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.padding(end = 12.dp, bottom = 8.dp),
+            )
+
+            // Price (right-aligned)
+            Text(
+                text = priceText,
+                style = MaterialTheme.typography.displayLarge,
+                color = if (hasPrice) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.Bold,
+            )
+        }
+
+        // Warning for non-public prices
+        if (!station.isPublicPrice) {
+            Text(
+                text = stringResource(R.string.price_not_public),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.error,
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 0.dp, end = 12.dp),
+                textAlign = TextAlign.End,
+            )
+        }
+
+        // Distance and Open Status row
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.Bottom,
+        ) {
+            OpeningStatusPill(station = station, big = true)
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = distanceText,
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
     }
 }

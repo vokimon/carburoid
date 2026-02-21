@@ -136,7 +136,11 @@ fun GasStationCard(
 }
 
 @Composable
-private fun OpeningStatusPill(station: GasStation) {
+fun OpeningStatusPill(
+    station: GasStation,
+    modifier: Modifier = Modifier,
+    big: Boolean = false,
+) {
     val context = LocalContext.current
     val openStatus = station.openStatus(Instant.now())
     val statusColor = openStatus.color(MaterialTheme.colorScheme)
@@ -144,22 +148,22 @@ private fun OpeningStatusPill(station: GasStation) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier =
-            Modifier
+            modifier
                 .clip(RoundedCornerShape(50.dp))
                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(horizontal = 12.dp, vertical = 2.dp),
+                .padding(horizontal = 12.dp, vertical = if (big) 4.dp else 2.dp),
     ) {
         Icon(
             painter = painterResource(id = openStatus.icon()),
             contentDescription = null,
             tint = statusColor,
-            modifier = Modifier.size(14.dp),
+            modifier = Modifier.size(if (big) 22.dp else 14.dp),
         )
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(if (big) 8.dp else 4.dp))
         Text(
             text = openStatus.forHumans(context),
             color = statusColor,
-            style = MaterialTheme.typography.labelSmall,
+            style = if (big) MaterialTheme.typography.labelLarge else MaterialTheme.typography.labelSmall,
             maxLines = 1,
             softWrap = false,
             overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
