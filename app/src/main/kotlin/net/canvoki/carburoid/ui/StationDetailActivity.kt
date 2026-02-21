@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -95,13 +96,6 @@ class StationDetailActivity : AppCompatActivity() {
         binding.iconOpenStatus.imageTintList = ColorStateList.valueOf(statusColor)
         binding.textOpenStatus.visibility = View.VISIBLE
 
-        binding.textAddress.text = station.address
-        binding.textCityState.text = "${station.city}, ${station.state}"
-
-        binding.layoutAddressMap.setOnClickListener {
-            openUri("geo:${station.latitude},${station.longitude}")
-        }
-
         binding.textExclusivePriceWarning.visibility =
             if (station.isPublicPrice) View.GONE else View.VISIBLE
 
@@ -109,6 +103,7 @@ class StationDetailActivity : AppCompatActivity() {
             MaterialTheme(colorScheme = ThemeSettings.effectiveColorScheme()) {
                 Surface {
                     Column(modifier = Modifier.fillMaxWidth()) {
+                        LocationDetails(station)
                         OpeningHoursDetails(station)
                         OtherProductList(station)
                     }
@@ -127,7 +122,8 @@ class StationDetailActivity : AppCompatActivity() {
         }
 }
 
-@Composable fun OtherProductList(station: GasStation) {
+@Composable
+fun OtherProductList(station: GasStation) {
     val currentProduct = ProductManager.getCurrent()
     val otherProducts = station.prices.filter { it.key != currentProduct }
     if (otherProducts.isEmpty()) return
@@ -151,7 +147,8 @@ class StationDetailActivity : AppCompatActivity() {
     }
 }
 
-@Composable fun OpeningHoursDetails(station: GasStation) {
+@Composable
+fun OpeningHoursDetails(station: GasStation) {
     if (station.openingHours == null) return
     Text(
         text = stringResource(R.string.detail_opening_hours),
@@ -189,6 +186,58 @@ class StationDetailActivity : AppCompatActivity() {
                 Modifier
                     .weight(1f)
                     .padding(start = 8.dp),
+        )
+    }
+}
+
+@Composable
+fun LocationDetails(station: GasStation) {
+    val context = LocalContext.current
+    Text(
+        text = stringResource(R.string.detail_location),
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.padding(bottom = 8.dp),
+    )
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = ripple(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)),
+                ) {
+                    context.openUri("geo:${station.latitude},${station.longitude}")
+                }.padding(8.dp),
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_location_on),
+            contentDescription = stringResource(R.string.open_in_maps),
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(24.dp),
+        )
+        Column(
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp),
+        ) {
+            Text(
+                text = "${station.address}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+            Text(
+                text = "${station.city}, ${station.state}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.secondary,
+            )
+        }
+        Icon(
+            imageVector = ImageVector.vectorResource(id = net.canvoki.shared.R.drawable.ic_arrow_outward),
+            contentDescription = stringResource(R.string.open_in_maps),
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(24.dp),
         )
     }
 }
