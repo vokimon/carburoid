@@ -88,15 +88,15 @@ Builds:
     commit: carburoid-1.4.3
     subdir: app
     submodules: true
-    scandelete:
-      - build-logic
     gradle:
       - floss
+    scandelete:
+      - build-logic
 
 AllowedAPKSigningKeys: 8cdfd389b1a7979943201321188a416ed54dbdf1c432ed07e2bb44b5b3cea722
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags carburoid-([\d.]+)
 UpdateCheckData: version.properties|versionCode=(\d+)|.|versionName=([\d.]+)
-CurrentVersion: 1.4.2
-CurrentVersionCode: 1040200
+CurrentVersion: 1.4.3
+CurrentVersionCode: 1040300
