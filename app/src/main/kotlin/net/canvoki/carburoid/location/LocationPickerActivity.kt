@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
@@ -31,6 +32,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import net.canvoki.carburoid.FeatureFlags
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.ui.setContentViewWithInsets
 import net.canvoki.shared.log
@@ -39,13 +41,14 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONObject
-import org.maplibre.compose.expressions.value.SymbolAnchor
-import org.maplibre.compose.expressions.value.SymbolOverlap
 import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.camera.CameraState
 import org.maplibre.compose.camera.rememberCameraState
 import org.maplibre.compose.expressions.dsl.const
 import org.maplibre.compose.expressions.dsl.image
+import org.maplibre.compose.expressions.dsl.offset
+import org.maplibre.compose.expressions.value.SymbolAnchor
+import org.maplibre.compose.expressions.value.SymbolOverlap
 import org.maplibre.compose.layers.SymbolLayer
 import org.maplibre.compose.map.GestureOptions
 import org.maplibre.compose.map.MapOptions
@@ -83,6 +86,7 @@ class LocationPickerActivity : AppCompatActivity() {
     private var searchBlocked = false
     private var suggestions: List<Suggestion> = emptyList()
     private var currentPosition by mutableStateOf<Position>(Position(latitude = 40.0, longitude = -1.0))
+    private var targetPosition by mutableStateOf<Position?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,6 +155,10 @@ class LocationPickerActivity : AppCompatActivity() {
                     reverseGeocode(GeoPoint(pos.latitude, pos.longitude))
                     ClickResult.Consume
                 },
+                onMapLongClick = { pos, offset ->
+                    targetPosition = Position(latitude = pos.latitude, longitude = pos.longitude)
+                    ClickResult.Consume
+                },
             ) {
                 val points by remember {
                     derivedStateOf {
@@ -174,6 +182,38 @@ class LocationPickerActivity : AppCompatActivity() {
                     iconOverlap = const(SymbolOverlap.Always),
                     iconAllowOverlap = const(true),
                 )
+                if (FeatureFlags.routeDeviation && targetPosition != null) {
+                    val pos: Position = targetPosition!!
+
+                    val targetPoints =
+                        FeatureCollection(
+                            Feature(
+                                geometry =
+                                    Point(
+                                        latitude = pos.latitude,
+                                        longitude = pos.longitude,
+                                    ),
+                                properties = kotlinx.serialization.json.JsonObject(emptyMap()),
+                            ),
+                        )
+                    SymbolLayer(
+                        id = "target_position",
+                        source = rememberGeoJsonSource(data = GeoJsonData.Features(targetPoints)),
+                        //iconImage = image(painterResource(R.drawable.ic_location_on)),
+                        iconImage = image(painterResource(R.drawable.ic_sports_score)),
+                        iconSize = const(2f),
+                        iconAnchor = const(org.maplibre.compose.expressions.value.SymbolAnchor.BottomLeft),
+                        iconOverlap = const(org.maplibre.compose.expressions.value.SymbolOverlap.Always),
+                        iconAllowOverlap = const(true),
+                        iconPadding = const(PaddingValues.Absolute(10.dp)),
+                        iconOffset = offset(-5.dp, 4.dp),
+                        onClick = {
+                            log("TARGET CLICKED")
+                            targetPosition = null
+                            ClickResult.Consume
+                        },
+                    )
+                }
             }
         }
     }
@@ -368,6 +408,7 @@ class LocationPickerActivity : AppCompatActivity() {
         lon: Double,
     ) {
         currentPosition = Position(latitude = lat, longitude = lon)
+        targetPosition = null
         //log("Updating target $currentPosition - $lat, $lon")
     }
 
