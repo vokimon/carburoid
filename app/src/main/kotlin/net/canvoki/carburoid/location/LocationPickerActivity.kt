@@ -12,6 +12,18 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -20,10 +32,29 @@ import androidx.core.view.updatePadding
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.ui.setContentViewWithInsets
+import net.canvoki.shared.log
+import net.canvoki.shared.settings.ThemeSettings
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONObject
+import org.maplibre.compose.camera.CameraPosition
+import org.maplibre.compose.camera.CameraState
+import org.maplibre.compose.camera.rememberCameraState
+import org.maplibre.compose.expressions.dsl.const
+import org.maplibre.compose.expressions.dsl.image
+import org.maplibre.compose.layers.SymbolLayer
+import org.maplibre.compose.map.GestureOptions
+import org.maplibre.compose.map.MapOptions
+import org.maplibre.compose.map.MaplibreMap
+import org.maplibre.compose.sources.GeoJsonData
+import org.maplibre.compose.sources.rememberGeoJsonSource
+import org.maplibre.compose.style.BaseStyle
+import org.maplibre.compose.util.ClickResult
+import org.maplibre.spatialk.geojson.Feature
+import org.maplibre.spatialk.geojson.FeatureCollection
+import org.maplibre.spatialk.geojson.Point
+import org.maplibre.spatialk.geojson.Position
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
@@ -33,6 +64,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import java.net.URLEncoder
+import kotlin.time.Duration.Companion.milliseconds
 
 data class Suggestion(
     val display: String,
@@ -57,6 +89,7 @@ class LocationPickerActivity : AppCompatActivity() {
     private var searchRunnable: Runnable? = null
     private var searchBlocked = false
     private var suggestions: List<Suggestion> = emptyList()
+    private var targetPosition by mutableStateOf<Position>(Position(latitude = 40.0, longitude = -1.0))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +109,70 @@ class LocationPickerActivity : AppCompatActivity() {
 
         setupMap()
         setupSearchBox()
+
+        findViewById<ComposeView>(R.id.migrated_components).setContent {
+            val cameraState =
+                rememberCameraState(
+                    CameraPosition(
+                        target = targetPosition,
+                        zoom = 15.0,
+                    ),
+                )
+
+            LaunchedEffect(targetPosition) {
+                log("Updating target $targetPosition")
+                cameraState.animateTo(
+                    finalPosition =
+                        cameraState.position.copy(
+                            target = targetPosition,
+                        ),
+                    duration = 500.milliseconds,
+                )
+            }
+
+            MaplibreMap(
+                modifier = Modifier.fillMaxSize(),
+                //baseStyle = BaseStyle.Uri("https://tiles.openfreemap.org/styles/positron"),
+                baseStyle =
+                    BaseStyle.Uri("https://tiles.openfreemap.org/styles/liberty"),
+                cameraState = cameraState,
+                options =
+                    MapOptions(
+                        gestureOptions =
+                            GestureOptions(
+                                isTiltEnabled = true,
+                                isZoomEnabled = true,
+                                isRotateEnabled = false,
+                                isScrollEnabled = true,
+                            ),
+                    ),
+                onMapClick = { pos, offset ->
+                    moveToLocation(pos.latitude, pos.longitude)
+                    reverseGeocode(org.osmdroid.util.GeoPoint(pos.latitude, pos.longitude))
+                    ClickResult.Consume
+                },
+            ) {
+                val points by derivedStateOf {
+                    FeatureCollection(
+                        listOf(
+                            Feature(
+                                geometry = Point(targetPosition),
+                                properties = kotlinx.serialization.json.JsonObject(emptyMap()),
+                            ),
+                        ),
+                    )
+                }
+                val source = rememberGeoJsonSource(data = GeoJsonData.Features(points))
+                SymbolLayer(
+                    id = "click-markers",
+                    source = source,
+                    //iconImage = image("marker"), // TODO: Change it
+                    iconImage = image(painterResource(R.drawable.ic_emoji_people)), // TODO: Change it
+                    iconSize = const(2f),
+                    iconAnchor = const(org.maplibre.compose.expressions.value.SymbolAnchor.Bottom),
+                )
+            }
+        }
 
         if (savedInstanceState != null) {
             setStateFromSavedInstance(savedInstanceState)
@@ -111,7 +208,7 @@ class LocationPickerActivity : AppCompatActivity() {
 
                         override fun onMarkerDragEnd(marker: Marker?) {
                             marker?.position?.let {
-                                map.controller.animateTo(it)
+                                moveToLocation(it.latitude, it.longitude)
                                 reverseGeocode(it)
                             }
                         }
@@ -125,8 +222,7 @@ class LocationPickerActivity : AppCompatActivity() {
             object : MapEventsReceiver {
                 override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
                     p?.let {
-                        marker?.position = it
-                        map.controller.animateTo(it)
+                        moveToLocation(it.latitude, it.longitude)
                         reverseGeocode(it)
                     }
                     return true
@@ -134,7 +230,6 @@ class LocationPickerActivity : AppCompatActivity() {
 
                 override fun longPressHelper(p: GeoPoint?): Boolean = false
             }
-
         map.overlays.add(MapEventsOverlay(mapEventsReceiver))
     }
 
@@ -327,6 +422,8 @@ class LocationPickerActivity : AppCompatActivity() {
         val point = GeoPoint(lat, lon)
         marker?.position = point
         map.controller.animateTo(point)
+        targetPosition = Position(latitude = lat, longitude = lon)
+        log("Updating target $targetPosition")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =

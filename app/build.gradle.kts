@@ -169,6 +169,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
 
     // Other libraries
+    implementation(libs.maplibre.compose)
     implementation(libs.osmdroid.android)
     implementation(libs.osmdroid.wms)
     implementation(libs.okhttp)

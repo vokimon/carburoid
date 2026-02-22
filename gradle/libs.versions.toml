@@ -87,6 +87,7 @@ osmdroid-wms = { group = "org.osmdroid", name = "osmdroid-wms", version.ref = "o
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 koalaplot-core-android = { group = "io.github.koalaplot", name = "koalaplot-core-android", version.ref = "koalaplot" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
+maplibre-compose = { module = "org.maplibre.compose:maplibre-compose", version = "0.12.1" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
