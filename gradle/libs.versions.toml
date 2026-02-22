@@ -29,7 +29,6 @@ robolectric = "4.16"
 java-diff-utils = "4.12"
 
 # Other libraries
-osmdroid = "6.1.20"
 okhttp = "5.3.2"
 koalaplot = "0.11.0"
 ktor = "3.4.0"
@@ -82,8 +81,6 @@ kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.re
 java-diff-utils = { group = "io.github.java-diff-utils", name = "java-diff-utils", version.ref = "java-diff-utils" }
 
 # ===== OTHER LIBRARIES =====
-osmdroid-android = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "osmdroid" }
-osmdroid-wms = { group = "org.osmdroid", name = "osmdroid-wms", version.ref = "osmdroid" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 koalaplot-core-android = { group = "io.github.koalaplot", name = "koalaplot-core-android", version.ref = "koalaplot" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }

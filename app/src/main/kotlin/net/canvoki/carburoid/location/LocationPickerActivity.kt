@@ -55,14 +55,6 @@ import org.maplibre.spatialk.geojson.Feature
 import org.maplibre.spatialk.geojson.FeatureCollection
 import org.maplibre.spatialk.geojson.Point
 import org.maplibre.spatialk.geojson.Position
-import org.osmdroid.api.IMapController
-import org.osmdroid.config.Configuration
-import org.osmdroid.events.MapEventsReceiver
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.MapEventsOverlay
-import org.osmdroid.views.overlay.Marker
 import java.net.URLEncoder
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -81,9 +73,7 @@ class LocationPickerActivity : AppCompatActivity() {
         const val EXTRA_SELECTED_LON = "selected_lon"
     }
 
-    private lateinit var map: MapView
     private lateinit var searchBox: MaterialAutoCompleteTextView
-    private var marker: Marker? = null
     private var ongoingCall: okhttp3.Call? = null
     private val searchHandler = Handler(Looper.getMainLooper())
     private var searchRunnable: Runnable? = null
@@ -93,7 +83,6 @@ class LocationPickerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Configuration.getInstance().userAgentValue = packageName
 
         setContentViewWithInsets(R.layout.activity_location_picker)
 
@@ -156,7 +145,7 @@ class LocationPickerActivity : AppCompatActivity() {
                     ),
                 onMapClick = { pos, offset ->
                     moveToLocation(pos.latitude, pos.longitude)
-                    reverseGeocode(org.osmdroid.util.GeoPoint(pos.latitude, pos.longitude))
+                    reverseGeocode(GeoPoint(pos.latitude, pos.longitude))
                     ClickResult.Consume
                 },
             ) {
