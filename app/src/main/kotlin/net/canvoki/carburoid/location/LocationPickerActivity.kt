@@ -39,6 +39,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONObject
+import org.maplibre.compose.expressions.value.SymbolAnchor
+import org.maplibre.compose.expressions.value.SymbolOverlap
 import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.camera.CameraState
 import org.maplibre.compose.camera.rememberCameraState
@@ -164,11 +166,13 @@ class LocationPickerActivity : AppCompatActivity() {
                 }
                 val source = rememberGeoJsonSource(data = GeoJsonData.Features(points))
                 SymbolLayer(
-                    id = "click-markers",
+                    id = "current_position",
                     source = source,
                     iconImage = image(painterResource(R.drawable.ic_emoji_people)),
                     iconSize = const(2f),
-                    iconAnchor = const(org.maplibre.compose.expressions.value.SymbolAnchor.Bottom),
+                    iconAnchor = const(SymbolAnchor.Bottom),
+                    iconOverlap = const(SymbolOverlap.Always),
+                    iconAllowOverlap = const(true),
                 )
             }
         }
