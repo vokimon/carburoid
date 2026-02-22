@@ -89,7 +89,7 @@ class LocationPickerActivity : AppCompatActivity() {
     private var searchRunnable: Runnable? = null
     private var searchBlocked = false
     private var suggestions: List<Suggestion> = emptyList()
-    private var targetPosition by mutableStateOf<Position>(Position(latitude = 40.0, longitude = -1.0))
+    private var currentPosition by mutableStateOf<Position>(Position(latitude = 40.0, longitude = -1.0))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,17 +123,17 @@ class LocationPickerActivity : AppCompatActivity() {
             val cameraState =
                 rememberCameraState(
                     CameraPosition(
-                        target = targetPosition,
+                        target = currentPosition,
                         zoom = 15.0,
                     ),
                 )
 
-            LaunchedEffect(targetPosition) {
-                log("Updating target $targetPosition")
+            LaunchedEffect(currentPosition) {
+                log("Updating target $currentPosition")
                 cameraState.animateTo(
                     finalPosition =
                         cameraState.position.copy(
-                            target = targetPosition,
+                            target = currentPosition,
                         ),
                     duration = 500.milliseconds,
                 )
@@ -165,7 +165,7 @@ class LocationPickerActivity : AppCompatActivity() {
                     FeatureCollection(
                         listOf(
                             Feature(
-                                geometry = Point(targetPosition),
+                                geometry = Point(currentPosition),
                                 properties = kotlinx.serialization.json.JsonObject(emptyMap()),
                             ),
                         ),
@@ -425,8 +425,8 @@ class LocationPickerActivity : AppCompatActivity() {
         val point = GeoPoint(lat, lon)
         marker?.position = point
         map.controller.animateTo(point)
-        targetPosition = Position(latitude = lat, longitude = lon)
-        log("Updating target $targetPosition")
+        currentPosition = Position(latitude = lat, longitude = lon)
+        log("Updating target $currentPosition")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
