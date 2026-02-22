@@ -107,9 +107,18 @@ class LocationPickerActivity : AppCompatActivity() {
             finish()
         }
 
-        setupMap()
+        setupOldMap()
         setupSearchBox()
+        setupMap()
 
+        if (savedInstanceState != null) {
+            setStateFromSavedInstance(savedInstanceState)
+        } else {
+            setStateFromIntent(intent)
+        }
+    }
+
+    private fun setupMap() {
         findViewById<ComposeView>(R.id.migrated_components).setContent {
             val cameraState =
                 rememberCameraState(
@@ -173,15 +182,9 @@ class LocationPickerActivity : AppCompatActivity() {
                 )
             }
         }
-
-        if (savedInstanceState != null) {
-            setStateFromSavedInstance(savedInstanceState)
-        } else {
-            setStateFromIntent(intent)
-        }
     }
 
-    private fun setupMap() {
+    private fun setupOldMap() {
         map = findViewById(R.id.map)
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setMultiTouchControls(true)
