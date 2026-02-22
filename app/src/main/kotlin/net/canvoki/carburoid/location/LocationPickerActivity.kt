@@ -107,7 +107,6 @@ class LocationPickerActivity : AppCompatActivity() {
             finish()
         }
 
-        setupOldMap()
         setupSearchBox()
         setupMap()
 
@@ -175,65 +174,12 @@ class LocationPickerActivity : AppCompatActivity() {
                 SymbolLayer(
                     id = "click-markers",
                     source = source,
-                    //iconImage = image("marker"), // TODO: Change it
-                    iconImage = image(painterResource(R.drawable.ic_emoji_people)), // TODO: Change it
+                    iconImage = image(painterResource(R.drawable.ic_emoji_people)),
                     iconSize = const(2f),
                     iconAnchor = const(org.maplibre.compose.expressions.value.SymbolAnchor.Bottom),
                 )
             }
         }
-    }
-
-    private fun setupOldMap() {
-        map = findViewById(R.id.map)
-        map.setTileSource(TileSourceFactory.MAPNIK)
-        map.setMultiTouchControls(true)
-
-        val controller: IMapController = map.controller
-        controller.setZoom(15.0)
-
-        val personIcon =
-            ResourcesCompat.getDrawable(
-                resources,
-                org.osmdroid.library.R.drawable.person,
-                theme,
-            )
-
-        marker =
-            Marker(map).apply {
-                icon = personIcon
-                isDraggable = true
-                setOnMarkerDragListener(
-                    object : Marker.OnMarkerDragListener {
-                        override fun onMarkerDrag(marker: Marker?) {}
-
-                        override fun onMarkerDragStart(marker: Marker?) {}
-
-                        override fun onMarkerDragEnd(marker: Marker?) {
-                            marker?.position?.let {
-                                moveToLocation(it.latitude, it.longitude)
-                                reverseGeocode(it)
-                            }
-                        }
-                    },
-                )
-            }
-        map.overlays.add(marker)
-        map.invalidate()
-
-        val mapEventsReceiver =
-            object : MapEventsReceiver {
-                override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                    p?.let {
-                        moveToLocation(it.latitude, it.longitude)
-                        reverseGeocode(it)
-                    }
-                    return true
-                }
-
-                override fun longPressHelper(p: GeoPoint?): Boolean = false
-            }
-        map.overlays.add(MapEventsOverlay(mapEventsReceiver))
     }
 
     private fun setupSearchBox() {
@@ -278,40 +224,42 @@ class LocationPickerActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        marker?.position?.let { pos ->
-            outState.putDouble(EXTRA_CURRENT_LAT, pos.latitude)
-            outState.putDouble(EXTRA_CURRENT_LON, pos.longitude)
-        }
-    }
-
-    private fun setStateFromSavedInstance(inState: Bundle) {
-        moveToLocation(
-            inState.getDouble(EXTRA_CURRENT_LAT, 40.0),
-            inState.getDouble(EXTRA_CURRENT_LON, -1.0),
-        )
-        val initDescription = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
-        updateSearchText(initDescription)
-    }
-
-    private fun setStateFromIntent(intent: Intent) {
-        moveToLocation(
-            intent.getDoubleExtra(EXTRA_CURRENT_LAT, 40.0),
-            intent.getDoubleExtra(EXTRA_CURRENT_LON, -1.0),
-        )
-        val initDescription = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
-        updateSearchText(initDescription)
+        val lat = currentPosition.latitude
+        val lon = currentPosition.longitude
+        log("MAP STATE TO SAVED INSTANCE  $lat $lon")
+        outState.putDouble(EXTRA_CURRENT_LAT, lat)
+        outState.putDouble(EXTRA_CURRENT_LON, lon)
     }
 
     private fun returnResult() {
-        marker?.position?.let { pos ->
-            val intent =
-                Intent().apply {
-                    putExtra(EXTRA_SELECTED_LAT, pos.latitude)
-                    putExtra(EXTRA_SELECTED_LON, pos.longitude)
-                }
-            setResult(RESULT_OK, intent)
-        }
+        val lat = currentPosition.latitude
+        val lon = currentPosition.longitude
+        log("MAP STATE TO INTENT  $lat $lon")
+        val intent =
+            Intent().apply {
+                putExtra(EXTRA_SELECTED_LAT, lat)
+                putExtra(EXTRA_SELECTED_LON, lon)
+            }
+        setResult(RESULT_OK, intent)
         finish()
+    }
+
+    private fun setStateFromSavedInstance(inState: Bundle) {
+        val lat = inState.getDouble(EXTRA_CURRENT_LAT, 40.0)
+        val lon = inState.getDouble(EXTRA_CURRENT_LON, -1.0)
+        val desc = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: "" // This comes from intent not saved!!
+        log("MAP STATE FROM SAVED INSTANCE  $lat $lon $desc")
+        updateSearchText(desc)
+        moveToLocation(lat, lon)
+    }
+
+    private fun setStateFromIntent(intent: Intent) {
+        val lat = intent.getDoubleExtra(EXTRA_CURRENT_LAT, 40.0)
+        val lon = intent.getDoubleExtra(EXTRA_CURRENT_LON, 0.0)
+        val desc = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
+        log("MAP STATE FROM INTENT  $lat $lon $desc")
+        updateSearchText(desc)
+        moveToLocation(lat, lon)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -331,6 +279,7 @@ class LocationPickerActivity : AppCompatActivity() {
             searchBox.setAdapter(searchingAdapter)
             searchBox.showDropDown()
         }
+        // TODO: change the country
         val url =
             "https://nominatim.openstreetmap.org/search?" +
                 "format=json&q=${URLEncoder.encode(query, "UTF-8")}&limit=5&countrycodes=es"
@@ -422,11 +371,8 @@ class LocationPickerActivity : AppCompatActivity() {
         lat: Double,
         lon: Double,
     ) {
-        val point = GeoPoint(lat, lon)
-        marker?.position = point
-        map.controller.animateTo(point)
         currentPosition = Position(latitude = lat, longitude = lon)
-        log("Updating target $currentPosition")
+        //log("Updating target $currentPosition - $lat, $lon")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
@@ -437,16 +383,4 @@ class LocationPickerActivity : AppCompatActivity() {
         } else {
             super.onOptionsItemSelected(item)
         }
-
-    override fun onResume() {
-        super.onResume()
-        // avoids map leaks
-        map.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // avoids map leaks
-        map.onPause()
-    }
 }
