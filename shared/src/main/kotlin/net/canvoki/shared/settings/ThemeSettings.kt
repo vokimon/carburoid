@@ -51,16 +51,19 @@ object ThemeSettings {
 
     @Composable
     fun effectiveColorScheme(): ColorScheme {
+        return if (isDarkTheme()) darkColorScheme() else lightColorScheme()
+    }
+
+    @Composable
+    fun isDarkTheme(): Boolean {
         val currentValue = rememberPreferenceValue(KEY, VALUE_AUTO)
         val isSystemDark = isSystemInDarkTheme()
         return remember(currentValue, isSystemDark) {
-            val isDark =
-                when (currentValue) {
-                    VALUE_LIGHT -> false
-                    VALUE_DARK -> true
-                    else -> isSystemDark
-                }
-            if (isDark) darkColorScheme() else lightColorScheme()
+            when (currentValue) {
+                VALUE_LIGHT -> false
+                VALUE_DARK -> true
+                else -> isSystemDark
+            }
         }
     }
 
