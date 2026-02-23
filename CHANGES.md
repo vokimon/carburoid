@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-- ✨ Location picker: long press set a route (disabled)
+- ✨ Location picker: Dark theme map in dark mode
+- ✨ Location picker: Long press set a route (disabled)
 - ♻️ Location picker: using maplibre-compose
 - 🌐 FR translation 53%
 - ♻️ Station details migrated to compose

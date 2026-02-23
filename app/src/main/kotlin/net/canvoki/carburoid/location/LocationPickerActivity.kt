@@ -122,6 +122,17 @@ class LocationPickerActivity : AppCompatActivity() {
 
     private fun setupMap() {
         findViewById<ComposeView>(R.id.migrated_components).setContent {
+            //"https://tiles.openfreemap.org/styles/positron"
+            //"https://tiles.openfreemap.org/styles/liberty"
+            //"https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+            //"https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json"
+            val styleUrl =
+                if (ThemeSettings.isDarkTheme()) {
+                    "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+                } else {
+                    "https://tiles.openfreemap.org/styles/liberty"
+                }
+
             val cameraState =
                 rememberCameraState(
                     CameraPosition(
@@ -144,8 +155,7 @@ class LocationPickerActivity : AppCompatActivity() {
 
             MaplibreMap(
                 modifier = Modifier.fillMaxSize(),
-                //baseStyle = BaseStyle.Uri("https://tiles.openfreemap.org/styles/positron"),
-                baseStyle = BaseStyle.Uri("https://tiles.openfreemap.org/styles/liberty"),
+                baseStyle = BaseStyle.Uri(styleUrl),
                 cameraState = cameraState,
                 styleState = styleState,
                 options =
