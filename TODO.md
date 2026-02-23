@@ -2,8 +2,19 @@
 
 Do you want to help? This is my roadmap.
 
-- [x] Upgrade dependencies to 2026 (see linter)
 - [x] Remove `activity_main.xml`
+- [x] Compose migration: Details
+- [x] Compose migration: Location picker
+- [x] Location Picker: Use a compose based map
+- [x] Location Picker: Long press to select target position (route)
+- [ ] Location Picker: Sent target position to the main app
+- [ ] Location Picker: Use maplibre material3 module
+- [ ] Location Picker: button to set the current location to gps
+- [ ] Location Picker: button to clear the target location
+- [ ] Location Picker: Migrate the location Search
+- [ ] Location Search: When empty, autocomplete show later searches
+- [ ] Location Search: Prioritize near matches to the current position
+- [ ] Location Search: Feedback when doing a query
 - [ ] Brands: Define optional brand field in base Gas Station
 - [ ] Brands: Station card: consider optional brand
 - [ ] Brands: Station detal: consider optional brand
@@ -23,7 +34,6 @@ Do you want to help? This is my roadmap.
 - [ ] Language: French
 - [ ] Language: Breton
 - [ ] Language: Alsacian
-- [x] Extract yaml-to-string plugin in other repo
 - [ ] Fix: Regression: on network failures should not auto-retry
 - [ ] Fix: If resolved location description is the same, the icon keeps loading
 - [ ] PlotNavigator: Fix: Setting the location on the PlotNavigator, does not update the one in the List navigator
@@ -38,9 +48,6 @@ Do you want to help? This is my roadmap.
 - [ ] DeepLinks: Google started to use opaque urls like https://maps.app.goo.gl/jweCgQbzCw9PretY6
     - [ ] We could fetch the url, and take the coords from the 304 redirect
     - [ ] We could explain the user how to do it (share with a browser, from browser share the url to Carburoid)
-- [ ] Location Search: When empty, autocomplete show later searches
-- [ ] Location Search: Prioritize near matches to the current position
-- [ ] Location Search: Feedback when doing a query
 - [ ] Distance: Real road distance (instead of geodesic/helicopter distance)
 - [ ] Distance: Refactor: Invert Paretto: Sort by price, filter by distance, to ease distance recomputation
 - [ ] Routes: How to set a route from LocationPicker
@@ -87,6 +94,8 @@ Do you want to help? This is my roadmap.
 
 ## Done
 
+- [x] Upgrade dependencies to 2026 (see linter)
+- [x] Extract yaml-to-string plugin in other repo
 - [x] Country Generalization: LandMasses
 - [x] Datasource France: LandMasses
 - [x] Datasource France: Names and Trademarks

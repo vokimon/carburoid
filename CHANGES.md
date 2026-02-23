@@ -1,5 +1,12 @@
 # Change log
 
+## Unreleased
+
+- ✨ Location picker: long press set a route (disabled)
+- ♻️ Location picker: using maplibre-compose
+- 🌐 FR translation 53%
+- ♻️ Station details migrated to compose
+
 ## 1.4.3 (2026-02-16)
 
 F-Droid build fixes
