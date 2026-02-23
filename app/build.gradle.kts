@@ -170,6 +170,7 @@ dependencies {
 
     // Other libraries
     implementation(libs.maplibre.compose)
+    implementation(libs.maplibre.composeMaterial3)
     implementation(libs.okhttp)
     implementation(libs.koalaplot.core.android)
     implementation(libs.ktor.client.core)

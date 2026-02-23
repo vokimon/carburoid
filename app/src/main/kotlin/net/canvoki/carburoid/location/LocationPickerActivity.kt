@@ -12,8 +12,10 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -21,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
@@ -53,9 +56,13 @@ import org.maplibre.compose.layers.SymbolLayer
 import org.maplibre.compose.map.GestureOptions
 import org.maplibre.compose.map.MapOptions
 import org.maplibre.compose.map.MaplibreMap
+import org.maplibre.compose.map.OrnamentOptions
+import org.maplibre.compose.material3.ExpandingAttributionButton
+import org.maplibre.compose.material3.ScaleBar
 import org.maplibre.compose.sources.GeoJsonData
 import org.maplibre.compose.sources.rememberGeoJsonSource
 import org.maplibre.compose.style.BaseStyle
+import org.maplibre.compose.style.rememberStyleState
 import org.maplibre.compose.util.ClickResult
 import org.maplibre.spatialk.geojson.Feature
 import org.maplibre.spatialk.geojson.FeatureCollection
@@ -122,6 +129,7 @@ class LocationPickerActivity : AppCompatActivity() {
                         zoom = 15.0,
                     ),
                 )
+            val styleState = rememberStyleState()
 
             LaunchedEffect(currentPosition) {
                 log("Animating target $currentPosition")
@@ -137,9 +145,9 @@ class LocationPickerActivity : AppCompatActivity() {
             MaplibreMap(
                 modifier = Modifier.fillMaxSize(),
                 //baseStyle = BaseStyle.Uri("https://tiles.openfreemap.org/styles/positron"),
-                baseStyle =
-                    BaseStyle.Uri("https://tiles.openfreemap.org/styles/liberty"),
+                baseStyle = BaseStyle.Uri("https://tiles.openfreemap.org/styles/liberty"),
                 cameraState = cameraState,
+                styleState = styleState,
                 options =
                     MapOptions(
                         gestureOptions =
@@ -149,6 +157,7 @@ class LocationPickerActivity : AppCompatActivity() {
                                 isRotateEnabled = false,
                                 isScrollEnabled = true,
                             ),
+                        ornamentOptions = OrnamentOptions.OnlyLogo,
                     ),
                 onMapClick = { pos, offset ->
                     moveToLocation(pos.latitude, pos.longitude)
@@ -214,6 +223,15 @@ class LocationPickerActivity : AppCompatActivity() {
                         },
                     )
                 }
+            }
+            Box(modifier = Modifier.fillMaxSize().padding(8.dp)) {
+                ScaleBar(cameraState.metersPerDpAtTarget, modifier = Modifier.align(Alignment.TopStart))
+                ExpandingAttributionButton(
+                    cameraState = cameraState,
+                    styleState = styleState,
+                    modifier = Modifier.align(Alignment.BottomEnd),
+                    contentAlignment = Alignment.BottomEnd,
+                )
             }
         }
     }
