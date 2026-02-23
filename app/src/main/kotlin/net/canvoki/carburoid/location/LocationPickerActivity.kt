@@ -13,10 +13,23 @@ import android.widget.ArrayAdapter
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -28,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
@@ -91,7 +105,8 @@ class LocationPickerActivity : AppCompatActivity() {
     private val searchHandler = Handler(Looper.getMainLooper())
     private var searchRunnable: Runnable? = null
     private var searchBlocked = false
-    private var suggestions: List<Suggestion> = emptyList()
+    private var targetDescription by mutableStateOf<String>("")
+    private var suggestions by mutableStateOf<List<Suggestion>>(emptyList())
     private var currentPosition by mutableStateOf<Position>(Position(latitude = 40.0, longitude = -1.0))
     private var targetPosition by mutableStateOf<Position?>(null)
 
@@ -125,18 +140,38 @@ class LocationPickerActivity : AppCompatActivity() {
             MaterialTheme(
                 colorScheme = ThemeSettings.effectiveColorScheme(),
             ) {
-                LocationPickerMap(
-                    currentPosition = currentPosition,
-                    targetPosition = targetPosition,
-                    onCurrentPositionChanged = { pos ->
-                        currentPosition = pos
-                        targetPosition = null
-                        reverseGeocode(GeoPoint(pos.latitude, pos.longitude))
-                    },
-                    onTargetPositionChanged = { pos ->
-                        targetPosition = pos
-                    },
-                )
+                Column {
+                    LocationSearch(
+                        text = targetDescription,
+                        suggestions = suggestions,
+                        onTextChanged = { updateSearchText(it) },
+                        onPositionChanged = { lat, lon ->
+                            currentPosition = Position(latitude = lat, longitude = lon)
+                        },
+                        onSearchQuery = { query ->
+                            searchRunnable?.let { searchHandler.removeCallbacks(it) }
+                            searchRunnable = Runnable { searchSuggestions(query) }
+                            searchHandler.postDelayed(searchRunnable!!, 400)
+                        },
+                    )
+                    LocationPickerMap(
+                        currentPosition = currentPosition,
+                        targetPosition = targetPosition,
+                        onCurrentPositionChanged = { pos ->
+                            currentPosition = pos
+                            targetPosition = null
+                            reverseGeocode(
+                                GeoPoint(
+                                    latitude = pos.latitude,
+                                    longitude = pos.longitude,
+                                ),
+                            )
+                        },
+                        onTargetPositionChanged = { pos ->
+                            targetPosition = pos
+                        },
+                    )
+                }
             }
         }
     }
@@ -315,6 +350,7 @@ class LocationPickerActivity : AppCompatActivity() {
     }
 
     private fun updateSearchText(newText: String) {
+        targetDescription = newText
         searchBlocked = true
 
         searchRunnable?.let { searchHandler.removeCallbacks(it) }
@@ -322,7 +358,6 @@ class LocationPickerActivity : AppCompatActivity() {
 
         val doFilter = false
         searchBox.setText(newText, doFilter)
-
         searchBlocked = false
     }
 
@@ -343,4 +378,77 @@ class LocationPickerActivity : AppCompatActivity() {
         } else {
             super.onOptionsItemSelected(item)
         }
+}
+
+@Composable
+fun LocationSearch(
+    text: String,
+    onTextChanged: (String) -> Unit,
+    onPositionChanged: (Double, Double) -> Unit,
+    suggestions: List<Suggestion>,
+    onSearchQuery: (String) -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var editingText by remember { mutableStateOf(text) }
+    LaunchedEffect(text) {
+        editingText = text
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded },
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        TextField(
+            value = editingText,
+            onValueChange = {
+                editingText = it.trim()
+                expanded = true
+                if (editingText.length < 3) {
+                    onSearchQuery(editingText)
+                }
+            },
+            label = { Text(stringResource(R.string.location_picker_search_location_hint)) },
+            modifier =
+                Modifier
+                    .menuAnchor()
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 8.dp),
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(R.drawable.ic_search),
+                    contentDescription = stringResource(R.string.location_picker_search_icon_description),
+                )
+            },
+            trailingIcon = {
+                if (text.isNotEmpty()) {
+                    IconButton(onClick = { editingText = "" }) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_backspace),
+                            contentDescription = "Clear text",
+                        )
+                    }
+                }
+            },
+            singleLine = true,
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+        ) {
+            suggestions.forEach {
+                DropdownMenuItem(
+                    text = { Text(it.display) },
+                    onClick = {
+                        editingText = it.display
+                        onTextChanged(it.display)
+                        onPositionChanged(it.lat, it.lon)
+                        expanded = false
+                    },
+                )
+            }
+        }
+    }
 }
