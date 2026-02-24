@@ -195,6 +195,7 @@ class LocationPickerActivity : AppCompatActivity() {
                         onCurrentPositionChanged = { pos ->
                             currentPosition = pos
                             targetPosition = null
+                            targetDescription = "(${ "%.3f".format(pos.latitude) }, ${ "%.3f".format(pos.longitude) })"
                             reverseGeocode(
                                 GeoPoint(
                                     latitude = pos.latitude,
