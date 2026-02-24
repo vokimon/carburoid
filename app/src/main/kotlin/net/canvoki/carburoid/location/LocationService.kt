@@ -63,7 +63,7 @@ class LocationService(
 
     fun setFixedLocation(location: Location) {
         fixedLocation = location
-        saveLastRealLocation(location)
+        saveLastLocation(location)
         setLocation(location)
     }
 
@@ -129,7 +129,7 @@ class LocationService(
             UserMessage.Info(tr(R.string.location_not_available)).post()
             return
         }
-        saveLastRealLocation(location)
+        saveLastLocation(location)
         setLocation(location)
     }
 
@@ -217,7 +217,7 @@ class LocationService(
         }
     }
 
-    private fun saveLastRealLocation(location: Location) {
+    private fun saveLastLocation(location: Location) {
         prefs.edit {
             putLong(PREF_LAST_LOCATION_LAT, java.lang.Double.doubleToRawLongBits(location.latitude))
             putLong(PREF_LAST_LOCATION_LNG, java.lang.Double.doubleToRawLongBits(location.longitude))
