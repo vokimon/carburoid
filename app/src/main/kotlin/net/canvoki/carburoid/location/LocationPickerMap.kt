@@ -131,7 +131,7 @@ fun LocationPickerMap(
             iconAllowOverlap = const(true),
         )
         if (FeatureFlags.routeDeviation && targetPosition != null) {
-            val pos: Position = targetPosition!!
+            val pos: Position = targetPosition
 
             val targetPoints =
                 FeatureCollection(

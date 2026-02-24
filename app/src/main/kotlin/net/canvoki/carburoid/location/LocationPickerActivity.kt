@@ -162,8 +162,8 @@ class LocationPickerActivity : AppCompatActivity() {
         const val EXTRA_CURRENT_DESCRIPTION = "current_description"
         const val EXTRA_CURRENT_LAT = "current_lat"
         const val EXTRA_CURRENT_LON = "current_lon"
-        const val EXTRA_SELECTED_LAT = "selected_lat"
-        const val EXTRA_SELECTED_LON = "selected_lon"
+        const val EXTRA_TARGET_LAT = "target_lat"
+        const val EXTRA_TARGET_LON = "target_lon"
     }
 
     private var ongoingCall: okhttp3.Call? = null
@@ -236,19 +236,35 @@ class LocationPickerActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         val lat = currentPosition.latitude
         val lon = currentPosition.longitude
-        log("MAP STATE TO SAVED INSTANCE  $lat $lon")
-        outState.putDouble(EXTRA_CURRENT_LAT, lat)
-        outState.putDouble(EXTRA_CURRENT_LON, lon)
+        val targetLat = targetPosition?.latitude
+        val targetLon = targetPosition?.longitude
+        log("MAP STATE TO SAVED INSTANCE  $lat $lon -> $targetLat $targetLon")
+        outState.apply {
+            putDouble(EXTRA_CURRENT_LAT, lat)
+            putDouble(EXTRA_CURRENT_LON, lon)
+            val pos = targetPosition
+            if (pos != null) {
+                putDouble(EXTRA_TARGET_LAT, pos.latitude)
+                putDouble(EXTRA_TARGET_LON, pos.longitude)
+            }
+        }
     }
 
     private fun returnResult() {
         val lat = currentPosition.latitude
         val lon = currentPosition.longitude
-        log("MAP STATE TO INTENT  $lat $lon")
+        val targetLat = targetPosition?.latitude
+        val targetLon = targetPosition?.longitude
+        log("MAP STATE TO INTENT  $lat $lon -> $targetLat $targetLon")
         val intent =
             Intent().apply {
-                putExtra(EXTRA_SELECTED_LAT, lat)
-                putExtra(EXTRA_SELECTED_LON, lon)
+                putExtra(EXTRA_CURRENT_LAT, lat)
+                putExtra(EXTRA_CURRENT_LON, lon)
+                val pos = targetPosition
+                if (pos != null) {
+                    putExtra(EXTRA_TARGET_LAT, pos.latitude)
+                    putExtra(EXTRA_TARGET_LON, pos.longitude)
+                }
             }
         setResult(RESULT_OK, intent)
         finish()
@@ -257,19 +273,35 @@ class LocationPickerActivity : AppCompatActivity() {
     private fun setStateFromSavedInstance(inState: Bundle) {
         val lat = inState.getDouble(EXTRA_CURRENT_LAT, 40.0)
         val lon = inState.getDouble(EXTRA_CURRENT_LON, -1.0)
-        val desc = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: "" // This comes from intent not saved!!
+        val desc = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
+        val targetLat = if (inState.containsKey(EXTRA_TARGET_LAT)) inState.getDouble(EXTRA_TARGET_LAT) else null
+        val targetLon = if (inState.containsKey(EXTRA_TARGET_LON)) inState.getDouble(EXTRA_TARGET_LON) else null
         log("MAP STATE FROM SAVED INSTANCE  $lat $lon $desc")
         updateSearchText(desc)
         moveToLocation(lat, lon)
+        targetPosition =
+            targetLat?.let { tglat ->
+                targetLon?.let { tglon ->
+                    Position(latitude = tglat, longitude = tglon)
+                }
+            }
     }
 
     private fun setStateFromIntent(intent: Intent) {
         val lat = intent.getDoubleExtra(EXTRA_CURRENT_LAT, 40.0)
         val lon = intent.getDoubleExtra(EXTRA_CURRENT_LON, 0.0)
         val desc = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
+        val targetLat = if (intent.hasExtra(EXTRA_TARGET_LAT)) intent.getDoubleExtra(EXTRA_TARGET_LAT, 40.0) else null
+        val targetLon = if (intent.hasExtra(EXTRA_TARGET_LON)) intent.getDoubleExtra(EXTRA_TARGET_LON, -1.0) else null
         log("MAP STATE FROM INTENT  $lat $lon $desc")
         updateSearchText(desc)
         moveToLocation(lat, lon)
+        targetPosition =
+            targetLat?.let { tglat ->
+                targetLon?.let { tglon ->
+                    Position(latitude = tglat, longitude = tglon)
+                }
+            }
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {

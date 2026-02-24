@@ -71,8 +71,8 @@ fun LocationSelector(modifier: Modifier = Modifier) {
         ) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
-                val lat = data?.getDoubleExtra(LocationPickerActivity.EXTRA_SELECTED_LAT, 0.0)
-                val lon = data?.getDoubleExtra(LocationPickerActivity.EXTRA_SELECTED_LON, 0.0)
+                val lat = data?.getDoubleExtra(LocationPickerActivity.EXTRA_CURRENT_LAT, 0.0)
+                val lon = data?.getDoubleExtra(LocationPickerActivity.EXTRA_CURRENT_LON, 0.0)
                 if (lat != null && lon != null) {
                     val newLocation =
                         Location("user_picked").apply {
