@@ -37,6 +37,10 @@ import java.util.Locale
 class LocationService(
     private val context: Context,
 ) : CoroutineScope by MainScope() {
+    companion object {
+        const val PREF_LAST_LOCATION_LAT = "last_lat"
+        const val PREF_LAST_LOCATION_LNG = "last_lng"
+    }
     private val _locationChanged = MutableSharedFlow<Location>(replay = 0)
     val locationChanged = _locationChanged.asSharedFlow()
 
@@ -215,14 +219,14 @@ class LocationService(
 
     private fun saveLastRealLocation(location: Location) {
         prefs.edit {
-            putLong("last_lat", java.lang.Double.doubleToRawLongBits(location.latitude))
-            putLong("last_lng", java.lang.Double.doubleToRawLongBits(location.longitude))
+            putLong(PREF_LAST_LOCATION_LAT, java.lang.Double.doubleToRawLongBits(location.latitude))
+            putLong(PREF_LAST_LOCATION_LNG, java.lang.Double.doubleToRawLongBits(location.longitude))
         }
     }
 
     fun getSavedLocation(): Location? {
-        val latBits = prefs.getLong("last_lat", Long.MIN_VALUE)
-        val lngBits = prefs.getLong("last_lng", Long.MIN_VALUE)
+        val latBits = prefs.getLong(PREF_LAST_LOCATION_LAT, Long.MIN_VALUE)
+        val lngBits = prefs.getLong(PREF_LAST_LOCATION_LNG, Long.MIN_VALUE)
 
         if (latBits == Long.MIN_VALUE || lngBits == Long.MIN_VALUE) {
             return null
