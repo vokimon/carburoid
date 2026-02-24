@@ -108,6 +108,34 @@ data class Suggestion(
     val lon: Double,
 )
 
+suspend fun searchLocation(query: String): List<Suggestion> {
+    try {
+        val response: String =
+            Http.client
+                .get("https://nominatim.openstreetmap.org/search") {
+                    url {
+                        parameters.append("limit", "10")
+                        parameters.append("format", "json")
+                        parameters.append("q", query)
+                        parameters.append("countrycodes", "es") // TODO: Use current country
+                    }
+                }.body()
+        val array = JSONArray(response)
+        val newSuggestions = mutableListOf<Suggestion>()
+        for (i in 0 until array.length()) {
+            val obj = array.getJSONObject(i)
+            val display = obj.getString("display_name")
+            val lat = obj.getDouble("lat")
+            val lon = obj.getDouble("lon")
+            newSuggestions.add(Suggestion(display, lat, lon))
+        }
+        return newSuggestions
+    } catch (e: Exception) {
+        log("ERROR while searching location by name '$query': $e")
+        return emptyList()
+    }
+}
+
 class LocationPickerActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_CURRENT_DESCRIPTION = "current_description"
@@ -161,32 +189,6 @@ class LocationPickerActivity : AppCompatActivity() {
                         onSuggestionSelected = { suggestion ->
                             updateSearchText(suggestion.display)
                             currentPosition = Position(latitude = suggestion.lat, longitude = suggestion.lon)
-                        },
-                        search = { query ->
-                            try {
-                                val response: String =
-                                    Http.client
-                                        .get("https://nominatim.openstreetmap.org/search") {
-                                            url {
-                                                parameters.append("limit", "10")
-                                                parameters.append("format", "json")
-                                                parameters.append("q", query)
-                                                parameters.append("countrycodes", "es") // TODO: Use current country
-                                            }
-                                        }.body()
-                                val array = JSONArray(response)
-                                val newSuggestions = mutableListOf<Suggestion>()
-                                for (i in 0 until array.length()) {
-                                    val obj = array.getJSONObject(i)
-                                    val display = obj.getString("display_name")
-                                    val lat = obj.getDouble("lat")
-                                    val lon = obj.getDouble("lon")
-                                    newSuggestions.add(Suggestion(display, lat, lon))
-                                }
-                                newSuggestions
-                            } catch (e: Exception) {
-                                emptyList()
-                            }
                         },
                     )
                     LocationPickerMap(
@@ -320,7 +322,6 @@ class LocationPickerActivity : AppCompatActivity() {
 fun LocationSearch(
     locationDescription: String,
     onSuggestionSelected: (Suggestion) -> Unit,
-    search: suspend (String) -> List<Suggestion>,
 ) {
     var expanded by remember { mutableStateOf(false) }
     var editingText by remember { mutableStateOf(locationDescription) }
@@ -351,7 +352,7 @@ fun LocationSearch(
                 try {
                     searching = true
                     expanded = true
-                    suggestions = search(query)
+                    suggestions = searchLocation(query)
                 } finally {
                     searching = false
                 }
@@ -431,7 +432,7 @@ fun LocationSearch(
                     text = { Text(it.display, maxLines = 1) },
                     onClick = {
                         expanded = false
-                        //editingText = it.display
+                        editingText = it.display
                         suggestions = emptyList()
                         userQuery = ""
                         focusManager.moveFocus(FocusDirection.Next)
