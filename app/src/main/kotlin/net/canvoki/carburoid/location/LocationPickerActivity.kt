@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -36,12 +38,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
@@ -49,8 +58,16 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import net.canvoki.carburoid.FeatureFlags
 import net.canvoki.carburoid.R
+import net.canvoki.carburoid.network.Http
 import net.canvoki.carburoid.ui.setContentViewWithInsets
 import net.canvoki.shared.log
 import net.canvoki.shared.settings.ThemeSettings
@@ -100,7 +117,6 @@ class LocationPickerActivity : AppCompatActivity() {
         const val EXTRA_SELECTED_LON = "selected_lon"
     }
 
-    private lateinit var searchBox: MaterialAutoCompleteTextView
     private var ongoingCall: okhttp3.Call? = null
     private val searchHandler = Handler(Looper.getMainLooper())
     private var searchRunnable: Runnable? = null
@@ -125,7 +141,6 @@ class LocationPickerActivity : AppCompatActivity() {
             finish()
         }
 
-        setupSearchBox()
         setupMap()
 
         if (savedInstanceState != null) {
@@ -142,16 +157,36 @@ class LocationPickerActivity : AppCompatActivity() {
             ) {
                 Column {
                     LocationSearch(
-                        text = targetDescription,
-                        suggestions = suggestions,
-                        onTextChanged = { updateSearchText(it) },
-                        onPositionChanged = { lat, lon ->
-                            currentPosition = Position(latitude = lat, longitude = lon)
+                        locationDescription = targetDescription,
+                        onSuggestionSelected = { suggestion ->
+                            updateSearchText(suggestion.display)
+                            currentPosition = Position(latitude = suggestion.lat, longitude = suggestion.lon)
                         },
-                        onSearchQuery = { query ->
-                            searchRunnable?.let { searchHandler.removeCallbacks(it) }
-                            searchRunnable = Runnable { searchSuggestions(query) }
-                            searchHandler.postDelayed(searchRunnable!!, 400)
+                        search = { query ->
+                            try {
+                                val response: String =
+                                    Http.client
+                                        .get("https://nominatim.openstreetmap.org/search") {
+                                            url {
+                                                parameters.append("limit", "10")
+                                                parameters.append("format", "json")
+                                                parameters.append("q", query)
+                                                parameters.append("countrycodes", "es") // TODO: Use current country
+                                            }
+                                        }.body()
+                                val array = JSONArray(response)
+                                val newSuggestions = mutableListOf<Suggestion>()
+                                for (i in 0 until array.length()) {
+                                    val obj = array.getJSONObject(i)
+                                    val display = obj.getString("display_name")
+                                    val lat = obj.getDouble("lat")
+                                    val lon = obj.getDouble("lon")
+                                    newSuggestions.add(Suggestion(display, lat, lon))
+                                }
+                                newSuggestions
+                            } catch (e: Exception) {
+                                emptyList()
+                            }
                         },
                     )
                     LocationPickerMap(
@@ -173,46 +208,6 @@ class LocationPickerActivity : AppCompatActivity() {
                     )
                 }
             }
-        }
-    }
-
-    private fun setupSearchBox() {
-        searchBox = findViewById(R.id.searchBox)
-
-        searchBox.addTextChangedListener(
-            object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int,
-                ) {}
-
-                override fun onTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    before: Int,
-                    count: Int,
-                ) {
-                    if (searchBlocked) return
-                    searchRunnable?.let { searchHandler.removeCallbacks(it) }
-                    val query = s?.toString()?.trim() ?: ""
-                    if (query.length < 3) return // avoid searching for tiny inputs
-
-                    // Debounce: wait 400ms after last keystroke
-                    searchRunnable = Runnable { searchSuggestions(query) }
-                    searchHandler.postDelayed(searchRunnable!!, 400)
-                }
-
-                override fun afterTextChanged(s: Editable?) {}
-            },
-        )
-
-        // Choosing a suggestion
-        searchBox.setOnItemClickListener { _, _, position, _ ->
-            val suggestion = suggestions[position]
-            updateSearchText(suggestion.display)
-            moveToLocation(suggestion.lat, suggestion.lon)
         }
     }
 
@@ -262,65 +257,6 @@ class LocationPickerActivity : AppCompatActivity() {
         searchBlocked = false
     }
 
-    private fun searchSuggestions(query: String) {
-        runOnUiThread {
-            val searchingAdapter =
-                ArrayAdapter(
-                    this,
-                    android.R.layout.simple_dropdown_item_1line,
-                    listOf(getString(R.string.location_picker_searching)),
-                )
-            searchBox.setAdapter(searchingAdapter)
-            searchBox.showDropDown()
-        }
-        // TODO: change the country
-        val url =
-            "https://nominatim.openstreetmap.org/search?" +
-                "format=json&q=${URLEncoder.encode(query, "UTF-8")}&limit=5&countrycodes=es"
-
-        val client = OkHttpClient()
-        val request =
-            Request
-                .Builder()
-                .url(url)
-                .header("User-Agent", packageName)
-                .build()
-        val call = client.newCall(request)
-        ongoingCall = call
-
-        Thread {
-            try {
-                val response = call.execute()
-                val body = response.body.string()
-                val array = JSONArray(body)
-
-                val newSuggestions = mutableListOf<Suggestion>()
-                for (i in 0 until array.length()) {
-                    val obj = array.getJSONObject(i)
-                    val display = obj.getString("display_name")
-                    val lat = obj.getDouble("lat")
-                    val lon = obj.getDouble("lon")
-                    newSuggestions.add(Suggestion(display, lat, lon))
-                }
-
-                runOnUiThread {
-                    suggestions = newSuggestions
-                    val titles = newSuggestions.map { it.display }
-                    val adapter =
-                        ArrayAdapter(
-                            this,
-                            android.R.layout.simple_dropdown_item_1line,
-                            titles,
-                        )
-                    searchBox.setAdapter(adapter)
-                    searchBox.showDropDown()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }.start()
-    }
-
     private fun reverseGeocode(point: GeoPoint) {
         val url =
             "https://nominatim.openstreetmap.org/reverse?" +
@@ -350,14 +286,12 @@ class LocationPickerActivity : AppCompatActivity() {
     }
 
     private fun updateSearchText(newText: String) {
-        targetDescription = newText
         searchBlocked = true
-
+        targetDescription = newText
         searchRunnable?.let { searchHandler.removeCallbacks(it) }
         ongoingCall?.cancel()
 
         val doFilter = false
-        searchBox.setText(newText, doFilter)
         searchBlocked = false
     }
 
@@ -371,8 +305,8 @@ class LocationPickerActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        // ← back arrow in ActionBar
         if (item.itemId == android.R.id.home) {
+            // ← back arrow in ActionBar
             returnResult()
             true
         } else {
@@ -380,41 +314,74 @@ class LocationPickerActivity : AppCompatActivity() {
         }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocationSearch(
-    text: String,
-    onTextChanged: (String) -> Unit,
-    onPositionChanged: (Double, Double) -> Unit,
-    suggestions: List<Suggestion>,
-    onSearchQuery: (String) -> Unit,
+    locationDescription: String,
+    onSuggestionSelected: (Suggestion) -> Unit,
+    search: suspend (String) -> List<Suggestion>,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var editingText by remember { mutableStateOf(text) }
-    LaunchedEffect(text) {
-        editingText = text
+    var editingText by remember { mutableStateOf(locationDescription) }
+    var userQuery by remember { mutableStateOf("") }
+    var suggestions by remember { mutableStateOf<List<Suggestion>>(emptyList()) }
+    var searching by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+
+    // Sync external updates (map click, suggestion selection)
+    LaunchedEffect(locationDescription) {
+        if (locationDescription != editingText) {
+            editingText = locationDescription
+            expanded = false
+            suggestions = emptyList()
+            userQuery = "" // prevent triggering search
+        }
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    LaunchedEffect(Unit) {
+        @OptIn(kotlinx.coroutines.FlowPreview::class)
+        snapshotFlow { userQuery }
+            .debounce(300)
+            .map { it.trim() }
+            .filter { it.length > 2 }
+            .distinctUntilChanged()
+            .collectLatest { query ->
+                try {
+                    searching = true
+                    expanded = true
+                    suggestions = search(query)
+                } finally {
+                    searching = false
+                }
+            }
+    }
+
     ExposedDropdownMenuBox(
-        expanded = expanded,
+        expanded = expanded && (suggestions.isNotEmpty() || searching),
         onExpandedChange = { expanded = !expanded },
         modifier = Modifier.fillMaxWidth(),
     ) {
         TextField(
             value = editingText,
             onValueChange = {
-                editingText = it.trim()
+                editingText = it
+                userQuery = it
                 expanded = true
-                if (editingText.length < 3) {
-                    onSearchQuery(editingText)
-                }
             },
             label = { Text(stringResource(R.string.location_picker_search_location_hint)) },
             modifier =
                 Modifier
+                    .focusRequester(focusRequester)
                     .menuAnchor()
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp, vertical = 8.dp),
+            singleLine = true,
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Search,
+                ),
             leadingIcon = {
                 Icon(
                     painter = painterResource(R.drawable.ic_search),
@@ -422,30 +389,52 @@ fun LocationSearch(
                 )
             },
             trailingIcon = {
-                if (text.isNotEmpty()) {
-                    IconButton(onClick = { editingText = "" }) {
+                if (editingText.isNotEmpty()) {
+                    IconButton(onClick = {
+                        editingText = ""
+                        focusRequester.requestFocus()
+                    }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_backspace),
-                            contentDescription = "Clear text",
+                            contentDescription = "Clear text", // TODO: Translatable
                         )
                     }
                 }
             },
-            singleLine = true,
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-        ) {
+        ) dropdown@{
+            if (searching || suggestions.isEmpty()) {
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            stringResource(
+                                if (searching) {
+                                    R.string.location_picker_searching
+                                } else {
+                                    R.string.location_picker_no_results
+                                },
+                            ),
+                        )
+                    },
+                    enabled = false,
+                    onClick = {},
+                )
+                return@dropdown
+            }
             suggestions.forEach {
                 DropdownMenuItem(
-                    text = { Text(it.display) },
+                    text = { Text(it.display, maxLines = 1) },
                     onClick = {
-                        editingText = it.display
-                        onTextChanged(it.display)
-                        onPositionChanged(it.lat, it.lon)
                         expanded = false
+                        //editingText = it.display
+                        suggestions = emptyList()
+                        userQuery = ""
+                        focusManager.moveFocus(FocusDirection.Next)
+                        onSuggestionSelected(it)
                     },
                 )
             }
