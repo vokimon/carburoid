@@ -57,6 +57,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -65,6 +66,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import net.canvoki.carburoid.FeatureFlags
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.network.Http
@@ -136,6 +138,25 @@ suspend fun searchLocation(query: String): List<Suggestion> {
     }
 }
 
+suspend fun nameLocation(position: Position): String? =
+    try {
+        val response: String =
+            Http.client
+                .get("https://nominatim.openstreetmap.org/reverse") {
+                    url {
+                        parameters.append("format", "json")
+                        parameters.append("lat", position.latitude.toString())
+                        parameters.append("lon", position.longitude.toString())
+                    }
+                }.body()
+
+        val json = JSONObject(response)
+        json.optString("display_name", "").takeIf { it.isNotBlank() }
+    } catch (e: Exception) {
+        log("nameLocation failed for $position: $e")
+        null
+    }
+
 class LocationPickerActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_CURRENT_DESCRIPTION = "current_description"
@@ -198,12 +219,9 @@ class LocationPickerActivity : AppCompatActivity() {
                             currentPosition = pos
                             targetPosition = null
                             targetDescription = "(${ "%.3f".format(pos.latitude) }, ${ "%.3f".format(pos.longitude) })"
-                            reverseGeocode(
-                                GeoPoint(
-                                    latitude = pos.latitude,
-                                    longitude = pos.longitude,
-                                ),
-                            )
+                            lifecycleScope.launch {
+                                nameLocation(pos)?.let { updateSearchText(it) }
+                            }
                         },
                         onTargetPositionChanged = { pos ->
                             targetPosition = pos
@@ -258,34 +276,6 @@ class LocationPickerActivity : AppCompatActivity() {
         searchBlocked = true
         super.onRestoreInstanceState(savedInstanceState)
         searchBlocked = false
-    }
-
-    private fun reverseGeocode(point: GeoPoint) {
-        val url =
-            "https://nominatim.openstreetmap.org/reverse?" +
-                "format=json&lat=${point.latitude}&lon=${point.longitude}"
-
-        Thread {
-            try {
-                val client = OkHttpClient()
-                val request =
-                    Request
-                        .Builder()
-                        .url(url)
-                        .header("User-Agent", packageName)
-                        .build()
-                val response = client.newCall(request).execute()
-                val body = response.body.string()
-                val json = JSONObject(body)
-                val displayName = json.optString("display_name", "")
-
-                runOnUiThread {
-                    updateSearchText(displayName)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }.start()
     }
 
     private fun updateSearchText(newText: String) {
