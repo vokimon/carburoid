@@ -158,7 +158,6 @@ fun LocationPickerMap(
                     iconPadding = const(PaddingValues.Absolute(10.dp)),
                     iconOffset = offset(-5.dp, 4.dp),
                     onClick = {
-                        log("TARGET CLICKED")
                         onTargetPositionChanged(null)
                         ClickResult.Consume
                     },

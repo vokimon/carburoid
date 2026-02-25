@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,7 +62,6 @@ fun LocationSearch(
     LaunchedEffect(locationDescription) {
         if (locationDescription != editingText) {
             editingText = locationDescription
-            expanded = false
             suggestions = emptyList()
             userQuery = "" // prevent triggering search
         }
@@ -77,7 +77,6 @@ fun LocationSearch(
             .collectLatest { query ->
                 try {
                     searching = true
-                    expanded = true
                     suggestions = searchLocation(query)
                 } finally {
                     searching = false
@@ -86,8 +85,10 @@ fun LocationSearch(
     }
 
     ExposedDropdownMenuBox(
-        expanded = expanded && (suggestions.isNotEmpty() || searching),
-        onExpandedChange = { expanded = !expanded },
+        expanded = expanded,
+        onExpandedChange = {
+            // Do nothing, focus controls it
+        },
         modifier = Modifier.fillMaxWidth(),
     ) {
         TextField(
@@ -95,13 +96,14 @@ fun LocationSearch(
             onValueChange = {
                 editingText = it
                 userQuery = it
-                expanded = true
             },
             label = { Text(stringResource(R.string.location_picker_search_location_hint)) },
             modifier =
                 Modifier
                     .focusRequester(focusRequester)
-                    .menuAnchor()
+                    .onFocusChanged {
+                        expanded = it.isFocused
+                    }.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp, vertical = 8.dp),
             singleLine = true,
@@ -133,7 +135,9 @@ fun LocationSearch(
 
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false },
+            onDismissRequest = {
+                // Do nothing, focus controls it
+            },
         ) dropdown@{
             if (searching || suggestions.isEmpty()) {
                 DropdownMenuItem(
@@ -157,7 +161,6 @@ fun LocationSearch(
                 DropdownMenuItem(
                     text = { Text(it.display, maxLines = 1) },
                     onClick = {
-                        expanded = false
                         editingText = it.display
                         suggestions = emptyList()
                         userQuery = ""
