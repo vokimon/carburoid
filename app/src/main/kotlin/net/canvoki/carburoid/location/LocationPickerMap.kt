@@ -82,94 +82,102 @@ fun LocationPickerMap(
             duration = 500.milliseconds,
         )
     }
-
-    MaplibreMap(
+    Box(
         modifier = Modifier.fillMaxSize(),
-        baseStyle = BaseStyle.Uri(styleUrl),
-        cameraState = cameraState,
-        styleState = styleState,
-        options =
-            MapOptions(
-                gestureOptions =
-                    GestureOptions(
-                        isTiltEnabled = true,
-                        isZoomEnabled = true,
-                        isRotateEnabled = false,
-                        isScrollEnabled = true,
-                    ),
-                ornamentOptions = OrnamentOptions.OnlyLogo,
-            ),
-        onMapClick = { pos, offset ->
-            onCurrentPositionChanged(pos)
-            ClickResult.Consume
-        },
-        onMapLongClick = { pos, offset ->
-            onTargetPositionChanged(pos)
-            ClickResult.Consume
-        },
     ) {
-        val points by remember(currentPosition) {
-            derivedStateOf {
-                FeatureCollection(
-                    listOf(
+        MaplibreMap(
+            modifier = Modifier.fillMaxSize(),
+            baseStyle = BaseStyle.Uri(styleUrl),
+            cameraState = cameraState,
+            styleState = styleState,
+            options =
+                MapOptions(
+                    gestureOptions =
+                        GestureOptions(
+                            isTiltEnabled = true,
+                            isZoomEnabled = true,
+                            isRotateEnabled = false,
+                            isScrollEnabled = true,
+                        ),
+                    ornamentOptions = OrnamentOptions.OnlyLogo,
+                ),
+            onMapClick = { pos, offset ->
+                onCurrentPositionChanged(pos)
+                ClickResult.Consume
+            },
+            onMapLongClick = { pos, offset ->
+                onTargetPositionChanged(pos)
+                ClickResult.Consume
+            },
+        ) {
+            val points by remember(currentPosition) {
+                derivedStateOf {
+                    FeatureCollection(
+                        listOf(
+                            Feature(
+                                geometry = Point(currentPosition),
+                                properties = kotlinx.serialization.json.JsonObject(emptyMap()),
+                            ),
+                        ),
+                    )
+                }
+            }
+            val source = rememberGeoJsonSource(data = GeoJsonData.Features(points))
+            SymbolLayer(
+                id = "current_position",
+                source = source,
+                iconImage = image(painterResource(R.drawable.ic_emoji_people)),
+                iconSize = const(2f),
+                iconAnchor = const(SymbolAnchor.Bottom),
+                iconOverlap = const(SymbolOverlap.Always),
+                iconAllowOverlap = const(true),
+            )
+            if (FeatureFlags.routeDeviation && targetPosition != null) {
+                val pos: Position = targetPosition
+
+                val targetPoints =
+                    FeatureCollection(
                         Feature(
-                            geometry = Point(currentPosition),
+                            geometry =
+                                Point(
+                                    latitude = pos.latitude,
+                                    longitude = pos.longitude,
+                                ),
                             properties = kotlinx.serialization.json.JsonObject(emptyMap()),
                         ),
-                    ),
+                    )
+                SymbolLayer(
+                    id = "target_position",
+                    source = rememberGeoJsonSource(data = GeoJsonData.Features(targetPoints)),
+                    //iconImage = image(painterResource(R.drawable.ic_location_on)),
+                    iconImage = image(painterResource(R.drawable.ic_sports_score)),
+                    iconSize = const(2f),
+                    iconAnchor = const(org.maplibre.compose.expressions.value.SymbolAnchor.BottomLeft),
+                    iconOverlap = const(org.maplibre.compose.expressions.value.SymbolOverlap.Always),
+                    iconAllowOverlap = const(true),
+                    iconPadding = const(PaddingValues.Absolute(10.dp)),
+                    iconOffset = offset(-5.dp, 4.dp),
+                    onClick = {
+                        log("TARGET CLICKED")
+                        onTargetPositionChanged(null)
+                        ClickResult.Consume
+                    },
                 )
             }
         }
-        val source = rememberGeoJsonSource(data = GeoJsonData.Features(points))
-        SymbolLayer(
-            id = "current_position",
-            source = source,
-            iconImage = image(painterResource(R.drawable.ic_emoji_people)),
-            iconSize = const(2f),
-            iconAnchor = const(SymbolAnchor.Bottom),
-            iconOverlap = const(SymbolOverlap.Always),
-            iconAllowOverlap = const(true),
-        )
-        if (FeatureFlags.routeDeviation && targetPosition != null) {
-            val pos: Position = targetPosition
-
-            val targetPoints =
-                FeatureCollection(
-                    Feature(
-                        geometry =
-                            Point(
-                                latitude = pos.latitude,
-                                longitude = pos.longitude,
-                            ),
-                        properties = kotlinx.serialization.json.JsonObject(emptyMap()),
-                    ),
-                )
-            SymbolLayer(
-                id = "target_position",
-                source = rememberGeoJsonSource(data = GeoJsonData.Features(targetPoints)),
-                //iconImage = image(painterResource(R.drawable.ic_location_on)),
-                iconImage = image(painterResource(R.drawable.ic_sports_score)),
-                iconSize = const(2f),
-                iconAnchor = const(org.maplibre.compose.expressions.value.SymbolAnchor.BottomLeft),
-                iconOverlap = const(org.maplibre.compose.expressions.value.SymbolOverlap.Always),
-                iconAllowOverlap = const(true),
-                iconPadding = const(PaddingValues.Absolute(10.dp)),
-                iconOffset = offset(-5.dp, 4.dp),
-                onClick = {
-                    log("TARGET CLICKED")
-                    onTargetPositionChanged(null)
-                    ClickResult.Consume
-                },
+        Box(modifier = Modifier.fillMaxSize().padding(8.dp)) {
+            ScaleBar(
+                cameraState.metersPerDpAtTarget,
+                modifier = Modifier.align(Alignment.TopStart),
+                alignment = Alignment.Start,
+                haloWidth = 2.dp,
+            )
+            ExpandingAttributionButton(
+                cameraState = cameraState,
+                styleState = styleState,
+                modifier = Modifier.align(Alignment.BottomEnd),
+                contentAlignment = Alignment.BottomEnd,
             )
         }
-    }
-    Box(modifier = Modifier.fillMaxSize().padding(8.dp)) {
-        ScaleBar(cameraState.metersPerDpAtTarget, modifier = Modifier.align(Alignment.TopStart))
-        ExpandingAttributionButton(
-            cameraState = cameraState,
-            styleState = styleState,
-            modifier = Modifier.align(Alignment.BottomEnd),
-            contentAlignment = Alignment.BottomEnd,
-        )
     }
 }
