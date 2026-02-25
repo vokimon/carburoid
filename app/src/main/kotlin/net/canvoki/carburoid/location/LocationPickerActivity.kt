@@ -3,18 +3,12 @@ package net.canvoki.carburoid.location
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.ArrayAdapter
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -59,8 +53,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
-import io.ktor.client.call.body
-import io.ktor.client.request.get
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -69,93 +61,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import net.canvoki.carburoid.FeatureFlags
 import net.canvoki.carburoid.R
-import net.canvoki.carburoid.network.Http
+import net.canvoki.carburoid.network.Suggestion
+import net.canvoki.carburoid.network.nameLocation
+import net.canvoki.carburoid.network.searchLocation
 import net.canvoki.carburoid.ui.setContentViewWithInsets
 import net.canvoki.shared.log
 import net.canvoki.shared.settings.ThemeSettings
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.json.JSONArray
-import org.json.JSONObject
-import org.maplibre.compose.camera.CameraPosition
-import org.maplibre.compose.camera.CameraState
-import org.maplibre.compose.camera.rememberCameraState
-import org.maplibre.compose.expressions.dsl.const
-import org.maplibre.compose.expressions.dsl.image
-import org.maplibre.compose.expressions.dsl.offset
-import org.maplibre.compose.expressions.value.SymbolAnchor
-import org.maplibre.compose.expressions.value.SymbolOverlap
-import org.maplibre.compose.layers.SymbolLayer
-import org.maplibre.compose.map.GestureOptions
-import org.maplibre.compose.map.MapOptions
-import org.maplibre.compose.map.MaplibreMap
-import org.maplibre.compose.map.OrnamentOptions
-import org.maplibre.compose.material3.ExpandingAttributionButton
-import org.maplibre.compose.material3.ScaleBar
-import org.maplibre.compose.sources.GeoJsonData
-import org.maplibre.compose.sources.rememberGeoJsonSource
-import org.maplibre.compose.style.BaseStyle
-import org.maplibre.compose.style.rememberStyleState
-import org.maplibre.compose.util.ClickResult
-import org.maplibre.spatialk.geojson.Feature
-import org.maplibre.spatialk.geojson.FeatureCollection
-import org.maplibre.spatialk.geojson.Point
 import org.maplibre.spatialk.geojson.Position
-import java.net.URLEncoder
-import kotlin.time.Duration.Companion.milliseconds
-
-data class Suggestion(
-    val display: String,
-    val lat: Double,
-    val lon: Double,
-)
-
-suspend fun searchLocation(query: String): List<Suggestion> {
-    try {
-        val response: String =
-            Http.client
-                .get("https://nominatim.openstreetmap.org/search") {
-                    url {
-                        parameters.append("limit", "10")
-                        parameters.append("format", "json")
-                        parameters.append("q", query)
-                        parameters.append("countrycodes", "es") // TODO: Use current country
-                    }
-                }.body()
-        val array = JSONArray(response)
-        val newSuggestions = mutableListOf<Suggestion>()
-        for (i in 0 until array.length()) {
-            val obj = array.getJSONObject(i)
-            val display = obj.getString("display_name")
-            val lat = obj.getDouble("lat")
-            val lon = obj.getDouble("lon")
-            newSuggestions.add(Suggestion(display, lat, lon))
-        }
-        return newSuggestions
-    } catch (e: Exception) {
-        log("ERROR while searching location by name '$query': $e")
-        return emptyList()
-    }
-}
-
-suspend fun nameLocation(position: Position): String? =
-    try {
-        val response: String =
-            Http.client
-                .get("https://nominatim.openstreetmap.org/reverse") {
-                    url {
-                        parameters.append("format", "json")
-                        parameters.append("lat", position.latitude.toString())
-                        parameters.append("lon", position.longitude.toString())
-                    }
-                }.body()
-
-        val json = JSONObject(response)
-        json.optString("display_name", "").takeIf { it.isNotBlank() }
-    } catch (e: Exception) {
-        log("nameLocation failed for $position: $e")
-        null
-    }
 
 fun Position.pretty(): String = "(${ "%.3f".format(latitude) }, ${ "%.3f".format(longitude) })"
 
