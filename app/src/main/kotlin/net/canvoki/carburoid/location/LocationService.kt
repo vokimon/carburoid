@@ -41,6 +41,7 @@ class LocationService(
         const val PREF_LAST_LOCATION_LAT = "last_lat"
         const val PREF_LAST_LOCATION_LNG = "last_lng"
     }
+
     private val _locationChanged = MutableSharedFlow<Location>(replay = 0)
     val locationChanged = _locationChanged.asSharedFlow()
 
