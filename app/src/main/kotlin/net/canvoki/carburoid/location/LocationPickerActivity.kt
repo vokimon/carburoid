@@ -2,33 +2,22 @@ package net.canvoki.carburoid.location
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.MenuItem
 import androidx.activity.addCallback
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.network.Suggestion
 import net.canvoki.carburoid.network.nameLocation
-import net.canvoki.carburoid.ui.setContentViewWithInsets
+import net.canvoki.carburoid.ui.AppScaffold
 import net.canvoki.shared.log
-import net.canvoki.shared.settings.ThemeSettings
 import org.maplibre.spatialk.geojson.Position
 
 fun Position.pretty(): String = "(${ "%.3f".format(latitude) }, ${ "%.3f".format(longitude) })"
@@ -43,14 +32,11 @@ class LocationPickerActivity : AppCompatActivity() {
     }
 
     private var currentDescription by mutableStateOf<String>("")
-    private var suggestions by mutableStateOf<List<Suggestion>>(emptyList())
     private var currentPosition by mutableStateOf<Position>(Position(latitude = 40.0, longitude = -1.0))
     private var targetPosition by mutableStateOf<Position?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentViewWithInsets(R.layout.activity_location_picker)
 
         supportActionBar?.apply {
             title = getString(R.string.location_picker_title)
@@ -72,10 +58,8 @@ class LocationPickerActivity : AppCompatActivity() {
     }
 
     private fun setupMap() {
-        findViewById<ComposeView>(R.id.migrated_components).setContent {
-            MaterialTheme(
-                colorScheme = ThemeSettings.effectiveColorScheme(),
-            ) {
+        setContent {
+            AppScaffold {
                 Column {
                     LocationSearch(
                         locationDescription = currentDescription,
