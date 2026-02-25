@@ -90,7 +90,9 @@ class MainActivity : ComponentActivity() {
      */
     private fun locationFromSavedInstance(savedInstanceState: Bundle?): Location? {
         if (savedInstanceState == null) return null
-        return app.locationService.getSavedLocation() ?: return null
+        // Not really from the state but from the preferences
+        // Using the saved instance just to know we must recover it
+        return app.locationService.loadLastLocation()
     }
 
     /**

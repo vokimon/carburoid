@@ -157,6 +157,8 @@ suspend fun nameLocation(position: Position): String? =
         null
     }
 
+fun Position.pretty(): String = "(${ "%.3f".format(latitude) }, ${ "%.3f".format(longitude) })"
+
 class LocationPickerActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_CURRENT_DESCRIPTION = "current_description"
@@ -166,11 +168,7 @@ class LocationPickerActivity : AppCompatActivity() {
         const val EXTRA_TARGET_LON = "target_lon"
     }
 
-    private var ongoingCall: okhttp3.Call? = null
-    private val searchHandler = Handler(Looper.getMainLooper())
-    private var searchRunnable: Runnable? = null
-    private var searchBlocked = false
-    private var targetDescription by mutableStateOf<String>("")
+    private var currentDescription by mutableStateOf<String>("")
     private var suggestions by mutableStateOf<List<Suggestion>>(emptyList())
     private var currentPosition by mutableStateOf<Position>(Position(latitude = 40.0, longitude = -1.0))
     private var targetPosition by mutableStateOf<Position?>(null)
@@ -206,7 +204,7 @@ class LocationPickerActivity : AppCompatActivity() {
             ) {
                 Column {
                     LocationSearch(
-                        locationDescription = targetDescription,
+                        locationDescription = currentDescription,
                         onSuggestionSelected = { suggestion ->
                             updateSearchText(suggestion.display)
                             currentPosition = Position(latitude = suggestion.lat, longitude = suggestion.lon)
@@ -218,7 +216,7 @@ class LocationPickerActivity : AppCompatActivity() {
                         onCurrentPositionChanged = { pos ->
                             currentPosition = pos
                             targetPosition = null
-                            targetDescription = "(${ "%.3f".format(pos.latitude) }, ${ "%.3f".format(pos.longitude) })"
+                            currentDescription = "${pos.pretty()}"
                             lifecycleScope.launch {
                                 nameLocation(pos)?.let { updateSearchText(it) }
                             }
@@ -234,36 +232,30 @@ class LocationPickerActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val lat = currentPosition.latitude
-        val lon = currentPosition.longitude
-        val targetLat = targetPosition?.latitude
-        val targetLon = targetPosition?.longitude
-        log("MAP STATE TO SAVED INSTANCE  $lat $lon -> $targetLat $targetLon")
+        log("MAP STATE TO SAVED INSTANCE  ${currentPosition.pretty()} -> ${targetPosition?.pretty()}")
         outState.apply {
-            putDouble(EXTRA_CURRENT_LAT, lat)
-            putDouble(EXTRA_CURRENT_LON, lon)
-            val pos = targetPosition
-            if (pos != null) {
-                putDouble(EXTRA_TARGET_LAT, pos.latitude)
-                putDouble(EXTRA_TARGET_LON, pos.longitude)
+            currentPosition.let {
+                putDouble(EXTRA_CURRENT_LAT, it.latitude)
+                putDouble(EXTRA_CURRENT_LON, it.longitude)
+            }
+            targetPosition?.let {
+                putDouble(EXTRA_TARGET_LAT, it.latitude)
+                putDouble(EXTRA_TARGET_LON, it.longitude)
             }
         }
     }
 
     private fun returnResult() {
-        val lat = currentPosition.latitude
-        val lon = currentPosition.longitude
-        val targetLat = targetPosition?.latitude
-        val targetLon = targetPosition?.longitude
-        log("MAP STATE TO INTENT  $lat $lon -> $targetLat $targetLon")
+        log("MAP STATE TO INTENT  ${currentPosition.pretty()} -> ${targetPosition?.pretty()}")
         val intent =
             Intent().apply {
-                putExtra(EXTRA_CURRENT_LAT, lat)
-                putExtra(EXTRA_CURRENT_LON, lon)
-                val pos = targetPosition
-                if (pos != null) {
-                    putExtra(EXTRA_TARGET_LAT, pos.latitude)
-                    putExtra(EXTRA_TARGET_LON, pos.longitude)
+                currentPosition.let {
+                    putExtra(EXTRA_CURRENT_LAT, it.latitude)
+                    putExtra(EXTRA_CURRENT_LON, it.longitude)
+                }
+                targetPosition?.let {
+                    putExtra(EXTRA_TARGET_LAT, it.latitude)
+                    putExtra(EXTRA_TARGET_LON, it.longitude)
                 }
             }
         setResult(RESULT_OK, intent)
@@ -305,19 +297,12 @@ class LocationPickerActivity : AppCompatActivity() {
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        searchBlocked = true
         super.onRestoreInstanceState(savedInstanceState)
-        searchBlocked = false
     }
 
     private fun updateSearchText(newText: String) {
-        searchBlocked = true
-        targetDescription = newText
-        searchRunnable?.let { searchHandler.removeCallbacks(it) }
-        ongoingCall?.cancel()
-
-        val doFilter = false
-        searchBlocked = false
+        log("Updating text updateSearchText: $newText")
+        currentDescription = newText
     }
 
     private fun moveToLocation(

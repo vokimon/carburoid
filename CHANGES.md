@@ -2,9 +2,12 @@
 
 ## Unreleased
 
+New location picker and ongoing French translation
+
 - ✨ Location picker: Dark theme map in dark mode
 - ✨ Location picker: Long press set a route (disabled)
 - ♻️ Location picker: using maplibre-compose
+- 🐛 Location picker: Takes properly location when comming from GPS
 - 🌐 FR translation 53%
 - ♻️ Station details migrated to compose
 

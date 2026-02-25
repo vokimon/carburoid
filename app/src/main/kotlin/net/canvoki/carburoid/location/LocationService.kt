@@ -91,7 +91,7 @@ class LocationService(
     }
 
     private fun setFallback() {
-        val location: Location = getSavedLocation() ?: getLastResortLocation()
+        val location: Location = loadLastLocation() ?: getLastResortLocation()
         setLocation(location)
     }
 
@@ -130,8 +130,8 @@ class LocationService(
             UserMessage.Info(tr(R.string.location_not_available)).post()
             return
         }
-        saveLastLocation(location)
-        setLocation(location)
+        log("HANDLE_DEVICE_LOCATION_SUCCESS $location")
+        setFixedLocation(location)
     }
 
     private fun handlePermissionDenied() {
@@ -225,7 +225,7 @@ class LocationService(
         }
     }
 
-    fun getSavedLocation(): Location? {
+    fun loadLastLocation(): Location? {
         val latBits = prefs.getLong(PREF_LAST_LOCATION_LAT, Long.MIN_VALUE)
         val lngBits = prefs.getLong(PREF_LAST_LOCATION_LNG, Long.MIN_VALUE)
 

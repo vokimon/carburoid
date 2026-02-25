@@ -26,7 +26,7 @@ object FranceGasStationApi : GasStationApi {
             "datasets/prix-des-carburants-en-france-flux-instantane-v2/" +
             // full dataset
             "exports/json?limit=-1" +
-            // Remove redundant fields to save size
+            // Remove redundant fields to reduce size
             "&select=exclude(services),exclude(prix),exclude(rupture),exclude(horaires)"
 
     override suspend fun getGasStations(): String =
