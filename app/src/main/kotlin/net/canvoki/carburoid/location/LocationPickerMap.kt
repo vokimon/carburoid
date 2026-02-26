@@ -41,10 +41,13 @@ import org.maplibre.compose.sources.rememberGeoJsonSource
 import org.maplibre.compose.style.BaseStyle
 import org.maplibre.compose.style.rememberStyleState
 import org.maplibre.compose.util.ClickResult
+import org.maplibre.spatialk.geojson.BoundingBox
 import org.maplibre.spatialk.geojson.Feature
 import org.maplibre.spatialk.geojson.FeatureCollection
 import org.maplibre.spatialk.geojson.Point
 import org.maplibre.spatialk.geojson.Position
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
@@ -96,14 +99,28 @@ fun LocationPickerMap(
         return true
     }
 
-    LaunchedEffect(currentPosition) {
-        cameraState.animateTo(
-            finalPosition =
-                cameraState.position.copy(
-                    target = currentPosition,
-                ),
-            duration = 500.milliseconds,
-        )
+    LaunchedEffect(currentPosition, targetPosition) {
+        if (targetPosition == null) {
+            cameraState.animateTo(
+                finalPosition =
+                    cameraState.position.copy(
+                        target = currentPosition,
+                    ),
+                duration = 500.milliseconds,
+            )
+        } else {
+            cameraState.animateTo(
+                boundingBox =
+                    BoundingBox(
+                        west = min(currentPosition.longitude, targetPosition.longitude),
+                        south = min(currentPosition.latitude, targetPosition.latitude),
+                        east = max(currentPosition.longitude, targetPosition.longitude),
+                        north = max(currentPosition.latitude, targetPosition.latitude),
+                    ),
+                padding = PaddingValues(48.dp),
+                duration = 800.milliseconds,
+            )
+        }
     }
     Box(
         modifier = modifier.fillMaxSize(),
