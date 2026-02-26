@@ -19,6 +19,16 @@ full_description_md: |-
   - 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese...
   - ☀️ Dark and Light themes
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_4_4_md: |-
+  New location picker and ongoing French translation
+
+  - ✨ Location picker: Dark theme map in dark mode
+  - ✨ Location picker: Long press set a route (disabled for this release)
+  - ✨ Location picker: Map auto frame routes (disabled for this release)
+  - ♻️ Location picker: using maplibre-compose
+  - 🐛 Location picker: Takes properly location when comming from GPS
+  - 🌐 FR translation 43%
+  - ♻️ Station details migrated to compose
 changes_1_4_3_md: |-
   F-Droid build fixes
 

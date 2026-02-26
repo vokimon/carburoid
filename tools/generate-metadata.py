@@ -257,7 +257,7 @@ def generate_fdroid_metadata_file(metadata_path):
     meta.AuthorName = config.fdroid_fields["AuthorName"]
     meta.AuthorEmail = config.fdroid_fields["AuthorEmail"]
     meta.AuthorWebSite = config.fdroid_fields["AuthorWebSite"]
-    meta.WebSite = config.repo_url  # TODO: get it from config so we can override it
+    #meta.WebSite = config.repo_url  # TODO: get it from config so we can override it
     if config.donate_url:
         meta.Donate = config.donate_url
     if config.liberapay_id:

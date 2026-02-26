@@ -1,14 +1,15 @@
 # Change log
 
-## Unreleased
+## 1.4.4 (2026-02-26)
 
 New location picker and ongoing French translation
 
+- 🌐 FR translation 43%
 - ✨ Location picker: Dark theme map in dark mode
-- ✨ Location picker: Long press set a route (disabled)
+- ✨ Location picker: Long press set a route (disabled for this release)
+- ✨ Location picker: Map auto frame routes (disabled for this release)
 - ♻️ Location picker: using maplibre-compose
 - 🐛 Location picker: Takes properly location when comming from GPS
-- 🌐 FR translation 53%
 - ♻️ Station details migrated to compose
 
 ## 1.4.3 (2026-02-16)
