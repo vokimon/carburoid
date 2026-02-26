@@ -8,11 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import kotlinx.serialization.json.JsonObject
 import net.canvoki.carburoid.FeatureFlags
@@ -73,8 +76,27 @@ fun LocationPickerMap(
         )
     val styleState = rememberStyleState()
 
+    val targetPositionRef = remember { mutableStateOf(targetPosition) }
+    LaunchedEffect(targetPosition) {
+        targetPositionRef.value = targetPosition
+    }
+
+    fun offsetInMarker(
+        offset: DpOffset,
+        position: Position?,
+    ): Boolean {
+        if (position == null) return false
+        val markerOffset = cameraState.projection?.screenLocationFromPosition(position) ?: return false
+        val left = -6.dp * markerScaling + markerOffset.x
+        val right = 18.dp * markerScaling + markerOffset.x
+        val top = -24.dp * markerScaling + markerOffset.y
+        val bottom = 0.dp * markerScaling + markerOffset.y
+        if (offset.x !in left..right) return false
+        if (offset.y !in top..bottom) return false
+        return true
+    }
+
     LaunchedEffect(currentPosition) {
-        log("Animating target $currentPosition")
         cameraState.animateTo(
             finalPosition =
                 cameraState.position.copy(
@@ -84,7 +106,7 @@ fun LocationPickerMap(
         )
     }
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         MaplibreMap(
             modifier = Modifier.fillMaxSize(),
@@ -103,7 +125,11 @@ fun LocationPickerMap(
                     ornamentOptions = OrnamentOptions.OnlyLogo,
                 ),
             onMapClick = { pos, offset ->
-                onCurrentPositionChanged(pos)
+                if (offsetInMarker(offset, targetPositionRef.value)) {
+                    onTargetPositionChanged(null)
+                } else {
+                    onCurrentPositionChanged(pos)
+                }
                 ClickResult.Consume
             },
             onMapLongClick = { pos, offset ->
@@ -150,7 +176,6 @@ fun LocationPickerMap(
                 SymbolLayer(
                     id = "target_position",
                     source = rememberGeoJsonSource(data = GeoJsonData.Features(targetPoints)),
-                    //iconImage = image(painterResource(R.drawable.ic_location_on)),
                     iconImage = image(painterResource(R.drawable.ic_sports_score)),
                     iconSize = const(markerScaling),
                     iconAnchor = const(org.maplibre.compose.expressions.value.SymbolAnchor.BottomLeft),
@@ -158,10 +183,6 @@ fun LocationPickerMap(
                     iconAllowOverlap = const(true),
                     iconPadding = const(PaddingValues.Absolute(10.dp)),
                     iconOffset = offset(-5.dp, 4.dp),
-                    onClick = {
-                        onTargetPositionChanged(null)
-                        ClickResult.Consume
-                    },
                 )
             }
         }

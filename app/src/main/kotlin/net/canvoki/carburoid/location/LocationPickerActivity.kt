@@ -75,7 +75,6 @@ class LocationPickerActivity : AppCompatActivity() {
                         targetPosition = targetPosition,
                         onCurrentPositionChanged = { pos ->
                             currentPosition = pos
-                            targetPosition = null
                             currentDescription = "${pos.pretty()}"
                             lifecycleScope.launch {
                                 nameLocation(pos)?.let { currentDescription = it }
