@@ -52,6 +52,7 @@ fun LocationPickerMap(
     onTargetPositionChanged: (Position?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val markerScaling = 2f
     //"https://tiles.openfreemap.org/styles/positron"
     //"https://tiles.openfreemap.org/styles/liberty"
     //"https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
@@ -127,7 +128,7 @@ fun LocationPickerMap(
                 id = "current_position",
                 source = source,
                 iconImage = image(painterResource(R.drawable.ic_emoji_people)),
-                iconSize = const(2f),
+                iconSize = const(markerScaling),
                 iconAnchor = const(SymbolAnchor.Bottom),
                 iconOverlap = const(SymbolOverlap.Always),
                 iconAllowOverlap = const(true),
@@ -151,7 +152,7 @@ fun LocationPickerMap(
                     source = rememberGeoJsonSource(data = GeoJsonData.Features(targetPoints)),
                     //iconImage = image(painterResource(R.drawable.ic_location_on)),
                     iconImage = image(painterResource(R.drawable.ic_sports_score)),
-                    iconSize = const(2f),
+                    iconSize = const(markerScaling),
                     iconAnchor = const(org.maplibre.compose.expressions.value.SymbolAnchor.BottomLeft),
                     iconOverlap = const(org.maplibre.compose.expressions.value.SymbolOverlap.Always),
                     iconAllowOverlap = const(true),
