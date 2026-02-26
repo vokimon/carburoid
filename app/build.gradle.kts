@@ -157,8 +157,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.material)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.kotlinx.serialization.json)
@@ -166,12 +164,10 @@ dependencies {
     // Compose
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.tooling.preview)
 
     // Other libraries
     implementation(libs.maplibre.compose)
     implementation(libs.maplibre.composeMaterial3)
-    implementation(libs.okhttp)
     implementation(libs.koalaplot.core.android)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
