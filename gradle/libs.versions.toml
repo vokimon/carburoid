@@ -1,4 +1,9 @@
 [versions]
+# Android sdk
+compileSdk  = "36"
+targetSdk = "36"
+minSdk = "26"
+
 # Plugins
 agp = "8.13.1"
 kotlin = "2.3.10"

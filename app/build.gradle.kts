@@ -42,12 +42,12 @@ android {
     }
 
     namespace = "net.canvoki.carburoid"
-    compileSdk = 36
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "net.canvoki.carburoid"
-        minSdk = 26
-        targetSdk = 36
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = versionProps.getProperty("versionCode").toInt()
         versionName = versionProps.getProperty("versionName")
 
