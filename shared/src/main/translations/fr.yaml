@@ -1,3 +1,12 @@
 language_code: fr
 language_name: Français
 settings_language_label_incomplete: "{language_native_name} (incomplet)"
+settings_language_title: Langue
+settings_language_summary: Changez la langue de l'application
+language_system_default: Système
+settings_translate_title: Allez sur Weblate
+settings_translate_summary: Aidez à traduire l'application dans votre langue
+settings_theme: Thème
+theme_light: Clair
+theme_dark: Sombre
+theme_system: Automatique (Système)
