@@ -73,8 +73,8 @@ station_no_name: Sans nom
 station_no_address: Pas d'adresse
 station_no_city: Pas de ville
 station_no_price: Indisponible
-station_no_distance: '? km'
-station_status_unknown: Fermé ?
+station_no_distance: ?? km
+station_status_unknown: Fermé ??
 station_status_permanently_closed: Fermé défintivement
 station_status_opens_at: Ouvre {when}
 station_status_closes_at: Ferme {when}
