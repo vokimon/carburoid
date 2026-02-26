@@ -112,7 +112,7 @@ fun DetailsScreen(station: GasStation) {
                     Modifier
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
-                        .padding(bottom = 8.dp),
+                        .padding(16.dp),
             ) {
                 HeroDetails(station)
                 LocationDetails(station)
@@ -260,8 +260,12 @@ fun HeroDetails(station: GasStation) {
         } ?: stringResource(R.string.station_no_distance)
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
     ) {
+        Text(
+            text = station.name?.titlecase() ?: stringResource(R.string.station_no_name),
+            style = MaterialTheme.typography.displayMedium,
+        )
         // Price and product name section
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -314,6 +318,7 @@ fun HeroDetails(station: GasStation) {
                 text = distanceText,
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(bottom = 4.dp),
             )
         }
     }
