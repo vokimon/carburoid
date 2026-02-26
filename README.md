@@ -20,7 +20,7 @@ Features:
 - 🎯 Only relevant gas stations: either closer or cheaper than others
 - 🕒 Smart about opening and closing hours
 - 🗺️ Integrates with your preferred map application
-- 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese...
+- 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese…
 - ☀️ Dark and Light themes
 
 <!-- end-of-description -->
