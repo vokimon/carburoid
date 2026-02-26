@@ -39,13 +39,50 @@ button_cheaper: Moins chère
 detail_location: Emplacement
 button_closer: Plus proche
 detail_other_products: Autres Produits
-failed_download: 'Échec du téléchargement: {error}'
+failed_download: 'Échec du téléchargement : {error}'
 loading_new_data: Téléchargement de nouvelles données…
 location_activate: Activer
-location_deactivated: L'emplacement est désactivé
+location_deactivated: La position est désactivée
 location_selector_locate_device: Emplacement de l'appareil
 product_name_biodiesel: Biodiesel
 product_name_bioetanol: Ethanol
 station_status_247: 24/7
 station_status_closed: Fermé
 station_status_open: Ouvert
+location_error: Erreur de détection de la position
+location_forbidden: Accès à la position refusé
+location_not_available: Position non détectée
+location_permisions_concede: Autoriser
+refreshing_data: Mise à jour des données…
+location_picker_no_results: Position non déterminée
+product_name_gasoleo_a: Gazole B7
+product_name_gasoleo_premium: Gazole Premium B7
+product_name_gasoleo_b: GNR
+product_name_gasolina_95_e10: Essence SP95-E10
+product_name_gasolina_95_e5: Essence SP95-E5
+product_name_gasolina_95_e85: Superéthanol E85
+product_name_gasolina_98_e10: ''
+product_name_gasolina_98_e5: Essence SP98-E5
+product_name_gas_natural_comprimido: GNC
+product_name_gas_natural_licuado: GNL
+product_name_biogas_natural_comprimido: ''
+product_name_gases_licuados_del_petroleo: GPL-c
+product_name_hidrogeno: Hydrogène
+price_not_public: ✱ Prix conditionnel
+station_no_name: Sans nom
+station_no_address: Pas d'adresse
+station_no_city: Pas de ville
+station_no_price: Indisponible
+station_no_distance: '? km'
+station_status_unknown: Fermé ?
+station_status_permanently_closed: Fermé défintivement
+station_status_opens_at: Ouvre {when}
+station_status_closes_at: Ferme {when}
+open_in_maps: Ouvrir sur une carte
+settings_country_title: Source des données
+settings_country_summary: Choisissez la source des données des prix des carburants
+settings_country_es: Espagne
+settings_country_fr: France
+settings_country_fr_warning_wip: Les données française sont toujours en cours d'intégration. Les noms des stations services et les horaires d'ouverture ne sont pas encore disponibles.
+settings_warning_dialog_wip: En cours de développement
+warning_dialog_title: Attention
