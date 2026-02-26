@@ -1,2 +1,18 @@
 splash_motto: Faites le plein moins cher, plus proche
 short_description: Trouvez les stations services par prix et par distance en Espagne et en France.
+keywords: station service, essence, diesel, gazole, carburant
+project_name: Carburoid
+full_description_md: |-
+  Carburoid ne montre que les stations services intéressantes.
+  Elles sont triées par distance et ne sont affichées que si le carburant est moins cher dans les stations plus lointaines.
+  Cela permet de n'afficher qu'une dizaine de stations services au lieu de quelques milliers.
+  Pour choisir une station service, descendez dans la liste pour trouvez des stations moins chères jusqu'à ce que la distance ne deviennne trop grande pour espérer faire des économies.
+
+  Fonctionnalités:
+
+  - 🏛️ Données issues des sources gouvernementales (Espagne, France)
+  - 🎯 Stations services intéressantes uniquement : soit elle sont plus proches, soit elles sont moins chères
+  - 🕒 Filtrage en fonction des horaires d'ouverture et de fermeture
+  - 🗺️ S'intègre parfaitement à votre application de navigation préférée
+  - 🌐 Traductions disponibles en espagnol, catalan, basque, anglais, etc.
+  - ☀️ Thème sombre et thème clair
