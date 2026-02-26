@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import net.canvoki.carburoid.R
@@ -33,6 +34,7 @@ class LocationPickerActivity : AppCompatActivity() {
 
     private var currentDescription by mutableStateOf<String>("")
     private var currentPosition by mutableStateOf<Position>(Position(latitude = 40.0, longitude = -1.0))
+    private var targetDescription by mutableStateOf<String>("")
     private var targetPosition by mutableStateOf<Position?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +66,7 @@ class LocationPickerActivity : AppCompatActivity() {
                     LocationSearch(
                         locationDescription = currentDescription,
                         onSuggestionSelected = { suggestion ->
-                            updateSearchText(suggestion.display)
+                            currentDescription = suggestion.display
                             currentPosition = Position(latitude = suggestion.lat, longitude = suggestion.lon)
                         },
                     )
@@ -76,12 +78,19 @@ class LocationPickerActivity : AppCompatActivity() {
                             targetPosition = null
                             currentDescription = "${pos.pretty()}"
                             lifecycleScope.launch {
-                                nameLocation(pos)?.let { updateSearchText(it) }
+                                nameLocation(pos)?.let { currentDescription = it }
                             }
                         },
                         onTargetPositionChanged = { pos ->
                             targetPosition = pos
+                            targetDescription = "${pos?.pretty() ?: ""}"
+                            pos?.let { pos ->
+                                lifecycleScope.launch {
+                                    nameLocation(pos)?.let { targetDescription = it }
+                                }
+                            }
                         },
+                        modifier = Modifier.weight(1f),
                     )
                 }
             }
@@ -127,8 +136,8 @@ class LocationPickerActivity : AppCompatActivity() {
         val targetLat = if (inState.containsKey(EXTRA_TARGET_LAT)) inState.getDouble(EXTRA_TARGET_LAT) else null
         val targetLon = if (inState.containsKey(EXTRA_TARGET_LON)) inState.getDouble(EXTRA_TARGET_LON) else null
         log("MAP STATE FROM SAVED INSTANCE  $lat $lon $desc")
-        updateSearchText(desc)
-        moveToLocation(lat, lon)
+        currentDescription = desc
+        currentPosition = Position(latitude = lat, longitude = lon)
         targetPosition =
             targetLat?.let { tglat ->
                 targetLon?.let { tglon ->
@@ -144,8 +153,8 @@ class LocationPickerActivity : AppCompatActivity() {
         val targetLat = if (intent.hasExtra(EXTRA_TARGET_LAT)) intent.getDoubleExtra(EXTRA_TARGET_LAT, 40.0) else null
         val targetLon = if (intent.hasExtra(EXTRA_TARGET_LON)) intent.getDoubleExtra(EXTRA_TARGET_LON, -1.0) else null
         log("MAP STATE FROM INTENT  $lat $lon $desc")
-        updateSearchText(desc)
-        moveToLocation(lat, lon)
+        currentDescription = desc
+        currentPosition = Position(latitude = lat, longitude = lon)
         targetPosition =
             targetLat?.let { tglat ->
                 targetLon?.let { tglon ->
@@ -156,20 +165,6 @@ class LocationPickerActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-    }
-
-    private fun updateSearchText(newText: String) {
-        log("Updating text updateSearchText: $newText")
-        currentDescription = newText
-    }
-
-    private fun moveToLocation(
-        lat: Double,
-        lon: Double,
-    ) {
-        currentPosition = Position(latitude = lat, longitude = lon)
-        targetPosition = null
-        //log("Updating target $currentPosition - $lat, $lon")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
