@@ -1,5 +1,10 @@
 # Change log
 
+## Unreleased
+
+- 🌐 full FR translation
+- 🏗 Removed unused dependencies
+
 ## 1.4.4 (2026-02-26)
 
 New location picker and ongoing French translation
