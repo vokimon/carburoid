@@ -9,15 +9,7 @@ settings_filter_closed_tolerance_one_hour: 1 heure
 settings_filter_closed_tolerance_two_hours: 2 heures
 settings_filter_closed_tolerance_twelve_hours: Une demi-journée
 settings_filter_closed_tolerance_one_day: Un jour
-product_category_gasoline: Essence
-product_category_diesel: Diesel
 settings_filter_closed_tolerance_never: Toujours afficher
-product_selector_hint: Produit
-product_category_recent: Récent
-product_selector_icon_description: Sélection des produits
-product_category_gaseous: Gaz
-product_category_additives: Additifs
-product_name_adblue: AdBlue
 settings_filter_expensive_summary: Une station est considérée comme non pertinente s'il en existe une autre plus proche ou moins chère. (Recommandé)
 settings_filter_expensive_warning: Carburoid est conçu pour fonctionner avec ce filtre activé. Le désactiver affiche beaucoup plus de stations-service, ce qui ralentit considérablement l'application. Pensez à le réactiver plus tard.
 settings_category_station_filters: Filtres des stations-service
@@ -44,8 +36,6 @@ loading_new_data: Téléchargement de nouvelles données…
 location_activate: Activer
 location_deactivated: La position est désactivée
 location_selector_locate_device: Emplacement de l'appareil
-product_name_biodiesel: Biodiesel
-product_name_bioetanol: Ethanol
 station_status_247: 24/7
 station_status_closed: Fermé
 station_status_open: Ouvert
@@ -55,19 +45,36 @@ location_not_available: Position non détectée
 location_permisions_concede: Autoriser
 refreshing_data: Mise à jour des données…
 location_picker_no_results: Position non déterminée
+product_selector_hint: Produit
+product_selector_icon_description: Sélection des produits
+product_category_recent: Récent
+product_category_diesel: Diesel
+product_category_gasoline: Essence
+product_category_gaseous: Gaz
+product_category_additives: Additifs
 product_name_gasoleo_a: Gazole B7
 product_name_gasoleo_premium: Gazole Premium B7
-product_name_gasoleo_b: GNR
+product_name_gasoleo_b: Gazole Non Routier (GNR)
+product_name_diesel_renovable: Gazole Renouvelable (HVO)
 product_name_gasolina_95_e10: Essence SP95-E10
+product_name_gasolina_95_e25: Essence SP95-E25
 product_name_gasolina_95_e5: Essence SP95-E5
+product_name_gasolina_95_e5_premium: Essence SP95-E5 Premium
 product_name_gasolina_95_e85: Superéthanol E85
-product_name_gasolina_98_e10: ''
+product_name_gasolina_98_e10: Essence SP98-E10
 product_name_gasolina_98_e5: Essence SP98-E5
-product_name_gas_natural_comprimido: GNC
-product_name_gas_natural_licuado: GNL
-product_name_biogas_natural_comprimido: ''
-product_name_gases_licuados_del_petroleo: GPL-c
+product_name_gasolina_renovable: Essence Renouvelable
+product_name_gas_natural_comprimido: Gaz naturel comprimé (GNC)
+product_name_gas_natural_licuado: Gaz naturel liquéfié (GNL)
+product_name_biogas_natural_comprimido: Bio-gaz naturel comprimé (Bio-GNC)
+product_name_biogas_natural_licuado: Bio-gaz naturel liquéfié (Bio-GNL)
+product_name_biodiesel: Biodiesel
+product_name_bioetanol: Bioéthanol
+product_name_gases_licuados_del_petroleo: Gaz de pétrole liquéfié (GPL)
 product_name_hidrogeno: Hydrogène
+product_name_amoniaco: Ammoniac
+product_name_metanol: Méthanol
+product_name_adblue: AdBlue
 price_not_public: ✱ Prix conditionnel
 station_no_name: Sans nom
 station_no_address: Pas d'adresse
