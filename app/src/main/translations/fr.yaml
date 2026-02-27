@@ -53,9 +53,9 @@ product_category_gasoline: Essence
 product_category_gaseous: Gaz
 product_category_additives: Additifs
 product_name_gasoleo_a: Gazole B7
-product_name_gasoleo_premium: Gazole Premium B7
-product_name_gasoleo_b: Gazole Non Routier (GNR)
-product_name_diesel_renovable: Gazole Renouvelable (HVO)
+product_name_gasoleo_premium: Gazole premium B7
+product_name_gasoleo_b: Gazole non routier (GNR)
+product_name_diesel_renovable: Gazole renouvelable (HVO)
 product_name_gasolina_95_e10: Essence SP95-E10
 product_name_gasolina_95_e25: Essence SP95-E25
 product_name_gasolina_95_e5: Essence SP95-E5
@@ -63,14 +63,14 @@ product_name_gasolina_95_e5_premium: Essence SP95-E5 Premium
 product_name_gasolina_95_e85: Superéthanol E85
 product_name_gasolina_98_e10: Essence SP98-E10
 product_name_gasolina_98_e5: Essence SP98-E5
-product_name_gasolina_renovable: Essence Renouvelable
-product_name_gas_natural_comprimido: Gaz Naturel Comprimé (GNC)
-product_name_gas_natural_licuado: Gaz Naturel Liquéfié (GNL)
-product_name_biogas_natural_comprimido: Bio-gaz Naturel Comprimé (Bio-GNC)
-product_name_biogas_natural_licuado: Bio-gaz Naturel Liquéfié (Bio-GNL)
+product_name_gasolina_renovable: Essence renouvelable
+product_name_gas_natural_comprimido: Gaz naturel comprimé (GNC)
+product_name_gas_natural_licuado: Gaz naturel liquéfié (GNL)
+product_name_biogas_natural_comprimido: Bio-gaz naturel comprimé (Bio-GNC)
+product_name_biogas_natural_licuado: Bio-gaz naturel liquéfié (Bio-GNL)
 product_name_biodiesel: Biodiesel
 product_name_bioetanol: Bioéthanol
-product_name_gases_licuados_del_petroleo: Gaz de Pétrole Liquéfié (GPL)
+product_name_gases_licuados_del_petroleo: Gaz de pétrole liquéfié (GPL)
 product_name_hidrogeno: Hydrogène
 product_name_amoniaco: Ammoniac
 product_name_metanol: Méthanol
