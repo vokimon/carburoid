@@ -30,10 +30,11 @@ class LocationPickerActivity : AppCompatActivity() {
         const val EXTRA_CURRENT_LON = "current_lon"
         const val EXTRA_TARGET_LAT = "target_lat"
         const val EXTRA_TARGET_LON = "target_lon"
+        val FALLBACK_POSITION = Position(latitude = 40.0, longitude = -1.0)
     }
 
     private var currentDescription by mutableStateOf<String>("")
-    private var currentPosition by mutableStateOf<Position>(Position(latitude = 40.0, longitude = -1.0))
+    private var currentPosition by mutableStateOf<Position>(FALLBACK_POSITION)
     private var targetDescription by mutableStateOf<String>("")
     private var targetPosition by mutableStateOf<Position?>(null)
 
@@ -99,67 +100,31 @@ class LocationPickerActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         log("MAP STATE TO SAVED INSTANCE  ${currentPosition.pretty()} -> ${targetPosition?.pretty()}")
-        outState.apply {
-            currentPosition.let {
-                putDouble(EXTRA_CURRENT_LAT, it.latitude)
-                putDouble(EXTRA_CURRENT_LON, it.longitude)
-            }
-            targetPosition?.let {
-                putDouble(EXTRA_TARGET_LAT, it.latitude)
-                putDouble(EXTRA_TARGET_LON, it.longitude)
-            }
-        }
+        positionToBundle(outState, LocationService.EXTRA_CURRENT_PREFIX, currentPosition)
+        positionToBundle(outState, LocationService.EXTRA_TARGET_PREFIX, targetPosition)
     }
 
     private fun returnResult() {
         log("MAP STATE TO INTENT  ${currentPosition.pretty()} -> ${targetPosition?.pretty()}")
-        val intent =
-            Intent().apply {
-                currentPosition.let {
-                    putExtra(EXTRA_CURRENT_LAT, it.latitude)
-                    putExtra(EXTRA_CURRENT_LON, it.longitude)
-                }
-                targetPosition?.let {
-                    putExtra(EXTRA_TARGET_LAT, it.latitude)
-                    putExtra(EXTRA_TARGET_LON, it.longitude)
-                }
-            }
+        val intent = Intent()
+        positionToIntent(intent, LocationService.EXTRA_CURRENT_PREFIX, currentPosition)
+        positionToIntent(intent, LocationService.EXTRA_TARGET_PREFIX, targetPosition)
         setResult(RESULT_OK, intent)
         finish()
     }
 
     private fun setStateFromSavedInstance(inState: Bundle) {
-        val lat = inState.getDouble(EXTRA_CURRENT_LAT, 40.0)
-        val lon = inState.getDouble(EXTRA_CURRENT_LON, -1.0)
-        val desc = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
-        val targetLat = if (inState.containsKey(EXTRA_TARGET_LAT)) inState.getDouble(EXTRA_TARGET_LAT) else null
-        val targetLon = if (inState.containsKey(EXTRA_TARGET_LON)) inState.getDouble(EXTRA_TARGET_LON) else null
-        log("MAP STATE FROM SAVED INSTANCE  $lat $lon $desc")
-        currentDescription = desc
-        currentPosition = Position(latitude = lat, longitude = lon)
-        targetPosition =
-            targetLat?.let { tglat ->
-                targetLon?.let { tglon ->
-                    Position(latitude = tglat, longitude = tglon)
-                }
-            }
+        currentPosition = positionFromBundle(inState, LocationService.EXTRA_CURRENT_PREFIX) ?: FALLBACK_POSITION
+        targetPosition = positionFromBundle(inState, LocationService.EXTRA_TARGET_PREFIX)
+        currentDescription = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
+        log("MAP STATE FROM SAVED INSTANCE  ${currentPosition.pretty()} -> ${targetPosition?.pretty()}")
     }
 
     private fun setStateFromIntent(intent: Intent) {
-        val lat = intent.getDoubleExtra(EXTRA_CURRENT_LAT, 40.0)
-        val lon = intent.getDoubleExtra(EXTRA_CURRENT_LON, 0.0)
-        val desc = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
-        val targetLat = if (intent.hasExtra(EXTRA_TARGET_LAT)) intent.getDoubleExtra(EXTRA_TARGET_LAT, 40.0) else null
-        val targetLon = if (intent.hasExtra(EXTRA_TARGET_LON)) intent.getDoubleExtra(EXTRA_TARGET_LON, -1.0) else null
-        log("MAP STATE FROM INTENT  $lat $lon $desc")
-        currentDescription = desc
-        currentPosition = Position(latitude = lat, longitude = lon)
-        targetPosition =
-            targetLat?.let { tglat ->
-                targetLon?.let { tglon ->
-                    Position(latitude = tglat, longitude = tglon)
-                }
-            }
+        currentPosition = positionFromIntent(intent, LocationService.EXTRA_CURRENT_PREFIX) ?: FALLBACK_POSITION
+        targetPosition = positionFromIntent(intent, LocationService.EXTRA_TARGET_PREFIX)
+        currentDescription = intent.getStringExtra(EXTRA_CURRENT_DESCRIPTION) ?: ""
+        log("MAP STATE FROM INTENT  ${currentPosition.pretty()} -> ${targetPosition?.pretty()}")
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {

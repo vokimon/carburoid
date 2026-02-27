@@ -8,6 +8,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
+import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,14 +33,117 @@ import net.canvoki.carburoid.distances.DistanceFromAddress
 import net.canvoki.shared.log
 import net.canvoki.shared.timeit
 import net.canvoki.shared.usermessage.UserMessage
+import org.maplibre.spatialk.geojson.Position
 import java.util.Locale
+
+fun Double.notNaNOrNull(): Double? = this.takeUnless { this.isNaN() }
+
+fun locationFromIntent(
+    intent: Intent,
+    prefix: String,
+): Location? {
+    val lat = intent.getDoubleExtra(prefix + "_lat", Double.NaN).notNaNOrNull() ?: return null
+    val lon = intent.getDoubleExtra(prefix + "_lon", Double.NaN).notNaNOrNull() ?: return null
+    return Location("user_picked").apply {
+        latitude = lat
+        longitude = lon
+    }
+}
+
+fun positionFromIntent(
+    intent: Intent,
+    prefix: String,
+): Position? {
+    val lat = intent.getDoubleExtra(prefix + "_lat", Double.NaN).notNaNOrNull() ?: return null
+    val lon = intent.getDoubleExtra(prefix + "_lon", Double.NaN).notNaNOrNull() ?: return null
+    return Position(
+        latitude = lat,
+        longitude = lon,
+    )
+}
+
+fun locationToIntent(
+    intent: Intent,
+    prefix: String,
+    location: Location?,
+) {
+    if (location == null) return
+    intent.apply {
+        putExtra(prefix + "_lat", location.latitude)
+        putExtra(prefix + "_lon", location.longitude)
+    }
+}
+
+fun positionToIntent(
+    intent: Intent,
+    prefix: String,
+    location: Position?,
+) {
+    if (location == null) return
+    intent.apply {
+        putExtra(prefix + "_lat", location.latitude)
+        putExtra(prefix + "_lon", location.longitude)
+    }
+}
+
+/*
+fun locationFromBundle(
+    bundle: Bundle,
+    prefix: String,
+): Location? {
+    val lat = bundle.getDouble(prefix + "_lat", Double.NaN).notNaNOrNull() ?: return null
+    val lon = bundle.getDouble(prefix + "_lon", Double.NaN).notNaNOrNull() ?: return null
+    return Location("user_picked").apply {
+        latitude = lat
+        longitude = lon
+    }
+}
+*/
+
+fun positionFromBundle(
+    bundle: Bundle,
+    prefix: String,
+): Position? {
+    val lat = bundle.getDouble(prefix + "_lat", Double.NaN).notNaNOrNull() ?: return null
+    val lon = bundle.getDouble(prefix + "_lon", Double.NaN).notNaNOrNull() ?: return null
+    return Position(
+        latitude = lat,
+        longitude = lon,
+    )
+}
+
+fun locationToBundle(
+    bundle: Bundle,
+    prefix: String,
+    location: Location?,
+) {
+    if (location == null) return
+    bundle.apply {
+        putDouble(prefix + "_lat", location.latitude)
+        putDouble(prefix + "_lon", location.longitude)
+    }
+}
+
+fun positionToBundle(
+    bundle: Bundle,
+    prefix: String,
+    location: Position?,
+) {
+    if (location == null) return
+    bundle.apply {
+        putDouble(prefix + "_lat", location.latitude)
+        putDouble(prefix + "_lon", location.longitude)
+    }
+}
 
 class LocationService(
     private val context: Context,
 ) : CoroutineScope by MainScope() {
     companion object {
-        const val PREF_LAST_LOCATION_LAT = "last_lat"
-        const val PREF_LAST_LOCATION_LNG = "last_lng"
+        const val PREF_CURRENT_LOCATION = "current_location"
+        const val PREF_TARGET_LOCATION = "target_location"
+        const val EXTRA_CURRENT_PREFIX = "current"
+        const val EXTRA_TARGET_PREFIX = "target"
     }
 
     private val _locationChanged = MutableSharedFlow<Location>(replay = 0)
@@ -56,16 +160,21 @@ class LocationService(
 
     private var fixedLocation: Location? = null
 
+    private var targetLocation: Location? = null
+
     private var description: String? = null
 
     private var geocodingJob: Job? = null
 
     private fun tr(stringId: Int): String = context.getString(stringId)
 
-    fun setFixedLocation(location: Location) {
-        fixedLocation = location
-        saveLastLocation(location)
-        setLocation(location)
+    fun setFixedLocation(
+        location: Location,
+        target: Location?,
+    ) {
+        saveLocation(PREF_CURRENT_LOCATION, location)
+        saveLocation(PREF_TARGET_LOCATION, target)
+        setLocation(location, target)
     }
 
     private fun refreshDeviceLocation() {
@@ -82,7 +191,7 @@ class LocationService(
             Manifest.permission.ACCESS_FINE_LOCATION,
         ) == PackageManager.PERMISSION_GRANTED
 
-    fun onPermissionResult(isGranted: Boolean) {
+    private fun onPermissionResult(isGranted: Boolean) {
         if (isGranted) {
             requestDeviceLocation()
         } else {
@@ -91,22 +200,26 @@ class LocationService(
     }
 
     private fun setFallback() {
-        val location: Location = loadLastLocation() ?: getLastResortLocation()
-        setLocation(location)
+        val (current, target) = loadLastLocation() ?: getLastResortLocation()
+        setLocation(current, target)
     }
 
-    private fun getLastResortLocation(): Location {
+    private fun getLastResortLocation(): Pair<Location, Location?> {
         val madrid =
             Location("").apply {
                 latitude = 40.4168
                 longitude = -3.7038
             }
-        return madrid
+        return madrid to null
     }
 
-    private fun setLocation(location: Location) {
+    private fun setLocation(
+        location: Location,
+        target: Location?,
+    ) {
         currentLocation = location
-        CurrentDistancePolicy.setMethod(DistanceFromAddress(location))
+        targetLocation = target
+        CurrentDistancePolicy.setMethod(DistanceFromAddress(location, targetLocation))
         updateDescription()
         CoroutineScope(Dispatchers.Main).launch {
             _locationChanged.emit(location)
@@ -131,7 +244,7 @@ class LocationService(
             return
         }
         log("HANDLE_DEVICE_LOCATION_SUCCESS $location")
-        setFixedLocation(location)
+        setFixedLocation(location, targetLocation)
     }
 
     private fun handlePermissionDenied() {
@@ -218,16 +331,24 @@ class LocationService(
         }
     }
 
-    private fun saveLastLocation(location: Location) {
+    private fun saveLocation(
+        prefix: String,
+        location: Location?,
+    ) {
         prefs.edit {
-            putLong(PREF_LAST_LOCATION_LAT, java.lang.Double.doubleToRawLongBits(location.latitude))
-            putLong(PREF_LAST_LOCATION_LNG, java.lang.Double.doubleToRawLongBits(location.longitude))
+            if (location?.latitude == null || location?.longitude == null) {
+                remove(prefix + "_lat")
+                remove(prefix + "_lon")
+            } else {
+                putLong(prefix + "_lat", java.lang.Double.doubleToRawLongBits(location.latitude))
+                putLong(prefix + "_lon", java.lang.Double.doubleToRawLongBits(location.longitude))
+            }
         }
     }
 
-    fun loadLastLocation(): Location? {
-        val latBits = prefs.getLong(PREF_LAST_LOCATION_LAT, Long.MIN_VALUE)
-        val lngBits = prefs.getLong(PREF_LAST_LOCATION_LNG, Long.MIN_VALUE)
+    fun loadLocation(prefix: String): Location? {
+        val latBits = prefs.getLong(prefix + "_lat", Long.MIN_VALUE)
+        val lngBits = prefs.getLong(prefix + "_lon", Long.MIN_VALUE)
 
         if (latBits == Long.MIN_VALUE || lngBits == Long.MIN_VALUE) {
             return null
@@ -238,6 +359,11 @@ class LocationService(
         location.longitude = java.lang.Double.longBitsToDouble(lngBits)
         return location
     }
+
+    fun loadLastLocation(): Pair<Location, Location?>? =
+        loadLocation(PREF_CURRENT_LOCATION)?.let {
+            it to loadLocation(PREF_TARGET_LOCATION)
+        }
 
     fun isLocationDeviceEnabled(): Boolean {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -268,6 +394,8 @@ class LocationService(
 
     fun getCurrentLocation(): Location? = fixedLocation ?: currentLocation
 
+    fun getTargetLocation(): Location? = targetLocation
+
     @Composable
     fun rememberLocationController(): () -> Unit {
         val permissionLauncher =
@@ -291,5 +419,26 @@ class LocationService(
             }
         }
         return remember(this) { refresh }
+    }
+
+    fun stateFromIntent(intent: Intent) {
+        val current = locationFromIntent(intent, EXTRA_CURRENT_PREFIX)
+        val target = locationFromIntent(intent, EXTRA_TARGET_PREFIX)
+        log("LOCATION SERVICE FROM INTENT $current $target")
+        current?.let {
+            setFixedLocation(current, target)
+        }
+    }
+
+    fun stateToIntent(intent: Intent) {
+        val current = getCurrentLocation()
+        val target = getTargetLocation()
+        log("LOCATION SERVICE TO INTENT $current $target")
+        locationToIntent(intent, EXTRA_CURRENT_PREFIX, current)
+        locationToIntent(intent, EXTRA_TARGET_PREFIX, target)
+        intent.putExtra(
+            LocationPickerActivity.EXTRA_CURRENT_DESCRIPTION,
+            getCurrentLocationDescription(),
+        )
     }
 }

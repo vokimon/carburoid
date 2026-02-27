@@ -48,7 +48,8 @@ class MainActivity : ComponentActivity() {
             locationFromSavedInstance(savedInstanceState)
                 ?: locationFromDeepLinkIntent(intent)
         startLocation?.let {
-            app.locationService.setFixedLocation(it)
+            log("Setting Initial position ${it.first} -> ${it.second}")
+            app.locationService.setFixedLocation(it.first, it.second)
         }
 
         handleExternalProductIntent(intent)
@@ -88,7 +89,7 @@ class MainActivity : ComponentActivity() {
      * Returns location retrieved from activity status after pause/stop
      * if available, else returns null.
      */
-    private fun locationFromSavedInstance(savedInstanceState: Bundle?): Location? {
+    private fun locationFromSavedInstance(savedInstanceState: Bundle?): Pair<Location, Location?>? {
         if (savedInstanceState == null) return null
         // Not really from the state but from the preferences
         // Using the saved instance just to know we must recover it
@@ -99,13 +100,14 @@ class MainActivity : ComponentActivity() {
      * Returns location retrieved from incoming Deep Link Intent,
      * if available, else returns null.
      */
-    private fun locationFromDeepLinkIntent(intent: Intent?): Location? {
+    private fun locationFromDeepLinkIntent(intent: Intent?): Pair<Location, Location?>? {
+        if (intent == null) return null
         val location =
-            intent?.let {
+            intent.let {
                 IntentCompat.getParcelableExtra(it, MainActivity.EXTRA_LOCATION, Location::class.java)
             } ?: return null
 
-        return location
+        return location to null
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -124,7 +126,8 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         if (handleExternalProductIntent(intent)) return
-        val location = locationFromDeepLinkIntent(intent)
-        location?.let { app.locationService.setFixedLocation(it) }
+        val received = locationFromDeepLinkIntent(intent)
+        if (received == null) return
+        app.locationService.setFixedLocation(received.first, received.second)
     }
 }

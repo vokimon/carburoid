@@ -69,17 +69,11 @@ fun LocationSelector(modifier: Modifier = Modifier) {
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.StartActivityForResult(),
         ) { result ->
+            log("RETURNING FROM LocationPickerActivity $result")
             if (result.resultCode == Activity.RESULT_OK) {
-                val data = result.data
-                val lat = data?.getDoubleExtra(LocationPickerActivity.EXTRA_CURRENT_LAT, 0.0)
-                val lon = data?.getDoubleExtra(LocationPickerActivity.EXTRA_CURRENT_LON, 0.0)
-                if (lat != null && lon != null) {
-                    val newLocation =
-                        Location("user_picked").apply {
-                            latitude = lat
-                            longitude = lon
-                        }
-                    service.setFixedLocation(newLocation)
+                val intent = result.data
+                intent?.let {
+                    service.stateFromIntent(it)
                 }
             }
         }
@@ -115,16 +109,9 @@ fun LocationSelector(modifier: Modifier = Modifier) {
         trailingIcon = {
             IconButton(
                 onClick = {
-                    val current = service.getCurrentLocation()
                     val intent =
-                        Intent(app, LocationPickerActivity::class.java).apply {
-                            putExtra(LocationPickerActivity.EXTRA_CURRENT_LAT, current?.latitude)
-                            putExtra(LocationPickerActivity.EXTRA_CURRENT_LON, current?.longitude)
-                            putExtra(
-                                LocationPickerActivity.EXTRA_CURRENT_DESCRIPTION,
-                                service.getCurrentLocationDescription(),
-                            )
-                        }
+                        Intent(app, LocationPickerActivity::class.java)
+                    service.stateToIntent(intent)
                     launcher.launch(intent)
                 },
             ) {

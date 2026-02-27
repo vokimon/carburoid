@@ -8,8 +8,15 @@ import net.canvoki.carburoid.model.GasStation
  * Computes distance from a fixed reference address (e.g., city center) to each gas station.
  */
 class DistanceFromAddress(
-    private val referenceLocation: Location,
+    private val origin: Location,
+    private val destination: Location? = null,
 ) : DistanceMethod {
+    val originLandMass =
+        CountryRegistry.current.landMass(
+            origin.latitude,
+            origin.longitude,
+        )
+
     override fun computeDistance(station: GasStation): Float? {
         val stationLoc =
             station.latitude?.let { lat ->
@@ -20,8 +27,10 @@ class DistanceFromAddress(
                     }
                 }
             } ?: return null
-
-        return referenceLocation.distanceTo(stationLoc)
+        if (destination == null) {
+            return origin.distanceTo(stationLoc)
+        }
+        return origin.distanceTo(stationLoc) + destination.distanceTo(stationLoc) - origin.distanceTo(destination)
     }
 
     override fun isBeyondSea(station: GasStation): Boolean {
@@ -30,11 +39,17 @@ class DistanceFromAddress(
                 station.latitude!!,
                 station.longitude!!,
             )
-        val thisLandMass =
-            CountryRegistry.current.landMass(
-                referenceLocation.latitude,
-                referenceLocation.longitude,
-            )
-        return gasStationLandMass != thisLandMass
+        val destinationLandMass =
+            destination?.let {
+                CountryRegistry.current.landMass(
+                    it.latitude,
+                    it.longitude,
+                )
+            }
+        if (destinationLandMass == null) {
+            return gasStationLandMass != originLandMass
+        }
+
+        return gasStationLandMass != originLandMass && gasStationLandMass != destinationLandMass
     }
 }
