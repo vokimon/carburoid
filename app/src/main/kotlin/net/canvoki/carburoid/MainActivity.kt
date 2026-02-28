@@ -44,13 +44,7 @@ class MainActivity : ComponentActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        val startLocation =
-            locationFromSavedInstance(savedInstanceState)
-                ?: locationFromDeepLinkIntent(intent)
-        startLocation?.let {
-            log("Setting Initial position ${it.first} -> ${it.second}")
-            app.locationService.setFixedLocation(it.first, it.second)
-        }
+        setInitialLocation(savedInstanceState)
 
         handleExternalProductIntent(intent)
 
@@ -85,12 +79,20 @@ class MainActivity : ComponentActivity() {
         return false
     }
 
+    private fun setInitialLocation(saved: Bundle?) {
+        val (current, target) =
+            locationFromSavedInstance(saved)
+                ?: locationFromDeepLinkIntent(intent) ?: return
+        log("Setting Initial position $current -> $target")
+        app.locationService.setFixedLocation(current, target)
+    }
+
     /**
      * Returns location retrieved from activity status after pause/stop
      * if available, else returns null.
      */
-    private fun locationFromSavedInstance(savedInstanceState: Bundle?): Pair<Location, Location?>? {
-        if (savedInstanceState == null) return null
+    private fun locationFromSavedInstance(saved: Bundle?): Pair<Location, Location?>? {
+        if (saved == null) return null
         // Not really from the state but from the preferences
         // Using the saved instance just to know we must recover it
         return app.locationService.loadLastLocation()
@@ -101,13 +103,12 @@ class MainActivity : ComponentActivity() {
      * if available, else returns null.
      */
     private fun locationFromDeepLinkIntent(intent: Intent?): Pair<Location, Location?>? {
-        if (intent == null) return null
-        val location =
-            intent.let {
-                IntentCompat.getParcelableExtra(it, MainActivity.EXTRA_LOCATION, Location::class.java)
-            } ?: return null
+        intent ?: return null
+        val current =
+            IntentCompat.getParcelableExtra(intent, MainActivity.EXTRA_LOCATION, Location::class.java) ?: return null
+        val target = IntentCompat.getParcelableExtra(intent, MainActivity.EXTRA_LOCATION, Location::class.java)
 
-        return location to null
+        return current to target
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -126,8 +127,7 @@ class MainActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         if (handleExternalProductIntent(intent)) return
-        val received = locationFromDeepLinkIntent(intent)
-        if (received == null) return
-        app.locationService.setFixedLocation(received.first, received.second)
+        val (current, target) = locationFromDeepLinkIntent(intent) ?: return
+        app.locationService.setFixedLocation(current, target)
     }
 }
