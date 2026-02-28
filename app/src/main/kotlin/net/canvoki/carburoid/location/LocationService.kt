@@ -397,7 +397,7 @@ class LocationService(
     fun getTargetLocation(): Location? = targetLocation
 
     @Composable
-    fun rememberLocationController(): () -> Unit {
+    fun rememberLocationRefresher(): () -> Unit {
         val permissionLauncher =
             rememberLauncherForActivityResult(
                 ActivityResultContracts.RequestPermission(),

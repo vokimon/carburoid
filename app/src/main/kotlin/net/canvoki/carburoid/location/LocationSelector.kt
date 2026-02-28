@@ -40,7 +40,7 @@ import net.canvoki.shared.log
 fun LocationSelector(modifier: Modifier = Modifier) {
     val app = LocalContext.current.applicationContext as CarburoidApplication
     val service = app.locationService
-    val refreshAction = service.rememberLocationController()
+    val refreshCurrentLocation = service.rememberLocationRefresher()
 
     val descriptionFlowValue by service.descriptionUpdated.collectAsStateWithLifecycle(
         initialValue = service.getCurrentLocationDescription(),
@@ -61,7 +61,7 @@ fun LocationSelector(modifier: Modifier = Modifier) {
         // Only use device location if no fixed location exists
         if (service.getCurrentLocation() == null) {
             refreshing = true
-            refreshAction.invoke()
+            refreshCurrentLocation()
         }
     }
 
@@ -94,7 +94,7 @@ fun LocationSelector(modifier: Modifier = Modifier) {
                 onClick = {
                     log("REFRESHING ON ICON PRESS")
                     refreshing = true
-                    refreshAction.invoke()
+                    refreshCurrentLocation()
                 },
             ) {
                 Icon(
