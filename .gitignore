@@ -24,4 +24,7 @@ local.properties
 __pycache__
 tools/fdroid-data
 tools/fdroid-server
+tools/graphhopper-data
+tools/graphhopper-cli.jar
 
+media/splash.png
