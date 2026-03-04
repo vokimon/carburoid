@@ -1,1 +1,95 @@
-{}
+app_name: Carburoid
+menu_back: Zurück
+menu_settings: Einstellungen
+menu_chart: Diagramm
+settings_category_language_appearance: Sprache und Aussehen
+settings_category_station_filters: Tankstellenfilter
+settings_filter_expensive: Verstecke irrevelante Tankstellen
+settings_filter_expensive_summary: Eine Tankstelle gilt als irrelevant, wenn es eine andere gibt, die näher und günstiger ist. (Empfohlen)
+settings_filter_expensive_warning: Carburoid ist für die Verwendung mit aktiviertem Filter ausgelegt. Wenn Sie ihn deaktivieren, werden viel mehr Tnkstellen angezeigt, was die Anwendung erheblich verlangsamt. Sie sollten ihn später wieder aktivieren.
+settings_filter_non_public: Zeige nur öffentliche Preise
+settings_filter_non_public_summary: Verbergen Preise, für die eine Mitgliedschaft oder sonstige Voraussetzungen erforderlich sind.
+settings_filter_beyond_sea: Tankstellen hinter dem Meer verstecken
+settings_filter_beyond_sea_summary: Nur diejenigen in Ihrer Region anzeigen (Halbinsel, Balearen, Kanarische Inseln oder Ceuta und Melilla)
+settings_filter_closed: Zeige geschlossene Tankstellen
+settings_filter_closed_summary: Lege einen Zeitpuffer für Tankstellen fest, die bald öffnen werden
+settings_filter_closed_tolerance_none: Keine Grenze, immer filtern
+settings_filter_closed_tolerance_half_hour: Eine halbe Stunde
+settings_filter_closed_tolerance_one_hour: Eine Stunde
+settings_filter_closed_tolerance_two_hours: Zwei Stunden
+settings_filter_closed_tolerance_twelve_hours: Halber Tag
+settings_filter_closed_tolerance_one_day: Ein Tag
+settings_filter_closed_tolerance_never: Zeige immer
+no_gas_stations: Keine passende Tankstelle
+product_selector_hint: Produkt
+product_selector_icon_description: Produktwahl
+product_category_recent: Letzte
+product_category_diesel: Diesel
+product_category_gasoline: Benzin
+product_category_gaseous: Gasförmig
+product_category_additives: Zusatzstoffe
+product_name_gasoleo_premium: Premium Diesel
+product_name_gasoleo_a: Road Diesel (A)
+product_name_gasoleo_b: Off-Road Diesel
+product_name_gasolina_95_e10: Benzin 95 E10
+product_name_gasolina_95_e25: Benzin 95 E25
+product_name_gasolina_95_e5: Benzin 95 E5
+product_name_gasolina_95_e5_premium: Benzin 95 E5 Premium
+product_name_gasolina_95_e85: Benzin 95 E85
+product_name_gasolina_98_e10: Benzin 98 E10
+product_name_gasolina_98_e5: Benzin 98 E5
+product_name_gasolina_renovable: Renewable Benzin
+product_name_gas_natural_comprimido: Komprimiertes Erdgas
+product_name_gas_natural_licuado: Flüssigerdgas
+product_name_biogas_natural_comprimido: Komprimiertes Biogas
+product_name_biogas_natural_licuado: Flüssigbiogas
+product_name_gases_licuados_del_petroleo: Autogas
+product_name_hidrogeno: Wasserstoff
+product_name_amoniaco: Ammoniak
+location_selector_hint: Standort
+location_selector_locate_device: Gerät lokalisieren
+price_not_public: ✱ Bedingter Preis
+detail_location: Standort
+detail_opening_hours: Stunden
+detail_other_products: Andere Produkte
+station_no_name: Unbenannt
+station_no_address: Keine Adresse
+station_no_city: Keine Stadt
+station_no_price: Nicht zutreffend
+station_status_unknown: Geschlossen?
+station_status_permanently_closed: Permanent geschlossen
+station_status_closed: Geschlossen
+station_status_opens_at: Öffnet {when}
+station_status_closes_at: Schließt {when}
+station_status_open: Offen
+location_not_available: Keine Standortdaten gefunden
+location_error: Fehler bei Standorterkennung
+location_forbidden: Standortzugriff verweigert
+location_deactivated: Standort ist deaktiviert
+location_activate: Aktivieren
+location_permisions_concede: Erlauben
+refreshing_data: Daten aktualisieren…
+failed_download: 'Herunterladen fehlgeschlagen: {error}'
+open_in_maps: In einer Karte öffnen
+location_picker_title: Wähle Standort
+location_picker_search_icon_description: Suchen
+location_picker_search_location_hint: Suche Ort oder Adresse
+location_picker_searching: Suchen…
+location_picker_no_results: Kein Standort gefunden
+loading_new_data: Herunterladen von neuen Daten…
+settings_country_title: Datenanbieter
+settings_country_summary: Wähle den Anbieter der Kraftstoffpreisdaten
+settings_country_es: Spanien
+settings_country_fr: Frankreich
+settings_country_fr_warning_wip: Die Daten zu französischen Tankstellen sind noch in Bearbeitung. Die Namen der Tankstellen und die Öffnungszeiten sind noch nicht verfügbar.
+settings_warning_dialog_wip: In Arbeit
+warning_dialog_title: Warnung
+button_closer: Näher
+button_cheaper: Günstiger
+product_name_diesel_renovable: Renewable Diesel
+product_name_biodiesel: Biodiesel
+product_name_bioetanol: Bioethanol
+product_name_metanol: Methanol
+product_name_adblue: AdBlue
+station_no_distance: ?? km
+station_status_247: 24/7
