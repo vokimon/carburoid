@@ -88,7 +88,6 @@ class Writer(osmium.SimpleHandler):
     def relation(self, r):
         pass  # skip
 
-
 def filter_osm_routes(input_file, output_file):
     output_file.unlink(missing_ok=True)
     collector = Collector()

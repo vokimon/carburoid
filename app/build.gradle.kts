@@ -117,6 +117,9 @@ android {
     }
 
     testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
         unitTests.all {
             it.jvmArgs(
                 "-XX:+EnableDynamicAgentLoading",
@@ -170,8 +173,8 @@ dependencies {
     implementation(libs.maplibre.composeMaterial3)
     implementation(libs.koalaplot.core.android)
     implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.okhttp)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
 

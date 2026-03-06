@@ -59,8 +59,8 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 # Ktor BOM
 ktor-bom = { group = "io.ktor", name = "ktor-bom", version.ref = "ktor" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core" }
-ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation" }
+ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp" }
 
 # AndroidX (no-BOM)
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
