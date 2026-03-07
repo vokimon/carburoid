@@ -2,7 +2,10 @@
 
 ## Unreleased
 
-- 🌐 full FR translation
+- ✨ Trip deviation
+- 🌐 full FR translation (thanks, Sudoman and Florent Ruquoy!)
+- 🌐 Partial DE translation (thanks, Zintor!)
+- 🌐 Metadata and shared lib translation to DE and RU (Thanks AI!)
 - 🏗 Removed unused dependencies
 
 ## 1.4.4 (2026-02-26)

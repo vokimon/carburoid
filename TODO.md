@@ -7,14 +7,16 @@ Do you want to help? This is my roadmap.
 - [x] Compose migration: Location picker
 - [x] Location Picker: Use a compose based map
 - [x] Location Picker: Long press to select target position (route)
-- [ ] Location Picker: Sent target position to the main app
-- [ ] Location Picker: Use maplibre material3 module
+- [x] Location Picker: Sent target position to the main app
+- [x] Location Picker: Use maplibre material3 module
+- [x] Location Picker: Migrate the location Search
+- [x] Location Search: Feedback when doing a name query after tapping (show coords meanwhile)
+- [x] Location Search: Feedback when doing a search query after typing (show searching)
 - [ ] Location Picker: button to set the current location to gps
 - [ ] Location Picker: button to clear the target location
-- [ ] Location Picker: Migrate the location Search
+- [ ] Location Picker: button to swap current and target
 - [ ] Location Search: When empty, autocomplete show later searches
 - [ ] Location Search: Prioritize near matches to the current position
-- [ ] Location Search: Feedback when doing a query
 - [ ] Brands: Define optional brand field in base Gas Station
 - [ ] Brands: Station card: consider optional brand
 - [ ] Brands: Station detal: consider optional brand
@@ -50,9 +52,10 @@ Do you want to help? This is my roadmap.
     - [ ] We could explain the user how to do it (share with a browser, from browser share the url to Carburoid)
 - [ ] Distance: Real road distance (instead of geodesic/helicopter distance)
 - [ ] Distance: Refactor: Invert Paretto: Sort by price, filter by distance, to ease distance recomputation
-- [ ] Routes: How to set a route from LocationPicker
-- [ ] Routes: How to display the route
-- [ ] Routes: material icon 'route'
+- [x] Routes: Set a route from LocationPicker -> Long press to set the destination
+- [x] Routes: Remove the target tapping on it
+- [x] Routes: Do not reset the target when origin is set
+- [x] Routes: Fix: Keep target on screen direction change
 - [ ] Routes: Accept routes as deep links
         - https://www.google.com/maps/dir/Start/Waypoint1/Waypoint2/.../Destination
         - xml+gpx
@@ -91,6 +94,11 @@ Do you want to help? This is my roadmap.
             - station detail page: curl https://www.prix-carburants.gouv.fr/station/36150001
     - Portugal (portal, not api): https://precoscombustiveis.dgeg.gov.pt/
     - Germany: https://creativecommons.tankerkoenig.de/swagger/
+- [ ] Electrical
+    - Existing Open APIs
+        - https://openchargemap.org
+        - https://www.chargemap.com
+
 
 ## Done
 

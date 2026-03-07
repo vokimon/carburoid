@@ -46,8 +46,52 @@ to compute them for each one of, for instance, the 9k stations in Spain
         we can consider that every station with a longer geodesical distance it will also have a longer road distance.
 - If the origin A change (because the device moves) we can keep the S -> B distance
 - Because every station share A and B, an algorithm could reuse path explored in other stations from A or from B
+- We can have the same result inverting attributes:
+    - **Sorting by price ascending**  (instead of distance)
+    - **Filtering by distance**: From cheapest to most expensive, if a previous station is further than previous ones remove it
+    - To get the same order, the order is inverted
+- If prices are stable, this attribution inversion enables keeping the sorting O(nlogn) and just apply the filtering O(n)
 
-## Requirements and constraints
+## Requirements
+
+- Hide any gas station so that any other exist that is better in both parameters
+- Gas Stations should appear ordered by distance (or deviation distance) and inversely ordered by price
+- User may set and change origin and target position, target is optional
+- User may change the product (and thus the prices)
+- User may update gas station list from the api, the result arrives asynchronously
+- Road distance is computed and updated asyncronously
+- Geodesical distance is used until road distance is available
+
+## Proposal
+
+Events
+
+- New api data loaded
+- Destiny B changed
+- Origin A changed
+- Prices get updated (product changes)
+- Road distance of some station is  async computed
+
+Info:
+
+- Price order
+- Station road distance to A
+- Station road distance to B
+- Station geodesical distance to A
+- Station geodesical distance to B
+- Distance A to B
+- Filtering by distance
+
+
+### When new api arrives
+
+- Reset stations road and geodesic distance cache (set to null)
+- Compute A-B geodesic
+- Launch A-B road computation
+- Sort by price
+- From cheapest:
+    - Compute geodesic distances to A
+    - If B geodesic defined compute distance
 
 
 
