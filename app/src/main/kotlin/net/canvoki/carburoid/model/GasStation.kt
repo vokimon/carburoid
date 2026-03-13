@@ -24,6 +24,10 @@ interface GasStation {
 
     fun computeDistance()
 
+    fun hasRoadDistance(): Boolean
+
+    fun setRoadDistance(roadDistance: Float)
+
     fun openStatus(instant: Instant) =
         openingHours?.getStatus(instant, timeZone())
             ?: OpeningStatus(isOpen = false, until = null)
@@ -44,11 +48,20 @@ interface GasStation {
 
 abstract class BaseGasStation : GasStation {
     private var _distanceInMeters: Float? = null
+    private var roadDistanceInMeters: Float? = null
+
     override val distanceInMeters: Float?
-        get() = _distanceInMeters
+        get() = roadDistanceInMeters ?: _distanceInMeters
+
+    override fun hasRoadDistance(): Boolean = roadDistanceInMeters != null
+
+    override fun setRoadDistance(roadDistance: Float) {
+        roadDistanceInMeters = roadDistance
+    }
 
     override fun computeDistance() {
         _distanceInMeters = CurrentDistancePolicy.getDistance(this)
+        roadDistanceInMeters = null
     }
 }
 
