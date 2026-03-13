@@ -40,6 +40,8 @@ class MainSharedViewModel(
     private var _stationsToDisplay: List<GasStation> = emptyList()
     private var reloadJob: Job? = null
 
+    private var filter = StationFilter()
+
     init {
 
         // Observe product changes
@@ -110,7 +112,7 @@ class MainSharedViewModel(
                             if (BuildConfig.DEBUG) {
                                 Thread.sleep(500)
                             }
-                            StationFilter(config).filter(stations)
+                            filter.filter(stations, config)
                         }
                     }
                 // Only update if the job has not been cancelled
