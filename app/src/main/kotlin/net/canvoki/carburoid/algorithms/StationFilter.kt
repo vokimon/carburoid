@@ -6,13 +6,20 @@ import java.time.Duration
 import java.time.Instant
 
 class StationFilter(
-    val config: FilterConfig = FilterConfig(),
+    var config: FilterConfig = FilterConfig(),
 ) {
     var stations = emptyList<GasStation>()
+        private set
     var sortedStations = emptyList<GasStation>()
+        private set
     var filteredStations = emptyList<GasStation>()
+        private set
 
-    fun filter(stations: List<GasStation>): List<GasStation> {
+    fun filter(
+        stations: List<GasStation>,
+        config: FilterConfig? = null,
+    ): List<GasStation> {
+        if (config != null) this.config = config
         this.stations = stations
         computeCrowDistances()
         sortByDistance()
