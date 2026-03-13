@@ -8,11 +8,14 @@ import java.time.Instant
 class StationFilter(
     var config: FilterConfig = FilterConfig(),
 ) {
-    fun filter(stations: List<GasStation>): List<GasStation> {
+    private fun computeCrowDistances(stations: List<GasStation>) {
         for (station in stations) {
             station.computeDistance()
         }
+    }
 
+    fun filter(stations: List<GasStation>): List<GasStation> {
+        computeCrowDistances(stations)
         val sortedStations =
             stations
                 .sortedBy { it.distanceInMeters }
