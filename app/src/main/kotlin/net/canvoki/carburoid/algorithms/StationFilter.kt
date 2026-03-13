@@ -6,19 +6,31 @@ import java.time.Duration
 import java.time.Instant
 
 class StationFilter(
-    var config: FilterConfig = FilterConfig(),
+    val config: FilterConfig = FilterConfig(),
 ) {
-    private fun computeCrowDistances(stations: List<GasStation>) {
+    var stations = emptyList<GasStation>()
+    var sortedStations = emptyList<GasStation>()
+    var filteredStations = emptyList<GasStation>()
+
+    fun filter(stations: List<GasStation>): List<GasStation> {
+        this.stations = stations
+        computeCrowDistances()
+        sortByDistance()
+        paretoFilter()
+        return filteredStations
+    }
+
+    private fun computeCrowDistances() {
         for (station in stations) {
             station.computeDistance()
         }
     }
 
-    fun filter(stations: List<GasStation>): List<GasStation> {
-        computeCrowDistances(stations)
-        val sortedStations =
-            stations
-                .sortedBy { it.distanceInMeters }
+    private fun sortByDistance() {
+        sortedStations = stations.sortedBy { it.distanceInMeters }
+    }
+
+    private fun paretoFilter() {
         var minPrice = 1000.0
         val result = mutableListOf<GasStation>()
         val deadLine = Instant.now().plus(Duration.ofMinutes(config.hideClosedMarginInMinutes.toLong()))
@@ -69,6 +81,6 @@ class StationFilter(
             }
             result.add(station)
         }
-        return result
+        filteredStations = result
     }
 }
