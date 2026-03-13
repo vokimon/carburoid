@@ -31,7 +31,10 @@ class OsrmRoutingTest {
         skipOn<java.net.SocketTimeoutException> {
             val roadDistance =
                 runBlocking {
-                    OsrmRouting.getDistances(fromLat to fromLon, listOf(toLat to toLon))[0]
+                    OsrmRouting.getDistances(
+                        listOf(fromLat to fromLon),
+                        listOf(toLat to toLon),
+                    )[0][0]
                 }
             val expectedBounds = barcelonaEixampleDistance(expectedBlocks)
             assertEquals(

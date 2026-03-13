@@ -22,12 +22,13 @@ private val OsrmJson =
 class OsrmRouting {
     companion object {
         suspend fun getDistances(
-            source: Pair<Double, Double>,
+            sources: List<Pair<Double, Double>>,
             destinations: List<Pair<Double, Double>>,
-        ): List<Double> {
+        ): List<List<Double>> {
             if (destinations.isEmpty()) return emptyList()
+            if (sources.isEmpty()) return emptyList()
 
-            val allCoords = listOf(source) + destinations
+            val allCoords = sources + destinations
             // incoming as lat-lon, api expects lon-lat
             val coordString = allCoords.joinToString(";") { "${it.second},${it.first}" }
 
@@ -37,15 +38,18 @@ class OsrmRouting {
                     .get(url) {
                         url {
                             appendPathSegments(coordString)
-                            parameters.append("sources", "0")
-                            parameters.append("destinations", (1..destinations.size).joinToString(";"))
+                            parameters.append("sources", (0..sources.size - 1).joinToString(";"))
+                            parameters.append(
+                                "destinations",
+                                (sources.size..sources.size + destinations.size - 1).joinToString(";"),
+                            )
                             parameters.append("annotations", "distance")
                             parameters.append("skip_waypoints", "true")
                             //log("${toString()}")
                         }
                     }.body<String>()
             //log(response)
-            return OsrmJson.decodeFromString<OsrmTableResponse>(response).distances[0]
+            return OsrmJson.decodeFromString<OsrmTableResponse>(response).distances
         }
     }
 }
