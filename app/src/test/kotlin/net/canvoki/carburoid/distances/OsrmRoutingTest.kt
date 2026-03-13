@@ -47,9 +47,9 @@ class OsrmRoutingTest {
     }
 
     @Test
-    fun `route Paris-Casanova to Valencia-Balmes should match 15-block grid distance`() {
+    fun `route Paris-Casanova to Valencia-Balmes should match 9-block grid distance`() {
         assertBarcelonaDistance(
-            // Paris con casanova
+            // Paris x Casanova
             fromLat = 41.391692,
             fromLon = 2.150713,
             // Balmes x Valencia
@@ -62,7 +62,7 @@ class OsrmRoutingTest {
     }
 
     @Test
-    fun `route Urgell-Paris to Valencia-Muntaner should match 15-block grid distance`() {
+    fun `route Urgell-Paris to Valencia-Muntaner should match 8-block grid distance`() {
         assertBarcelonaDistance(
             // From Urgell x Paris
             fromLat = 41.389879,
@@ -79,10 +79,10 @@ class OsrmRoutingTest {
     @Test
     fun `route Arago-Muntaner to Mallorca-Balmes should match 10-block grid distance`() {
         assertBarcelonaDistance(
-            // From: Carrer d’Aragó ∩ Carrer de Muntaner
+            // From: Aragó x Muntaner
             fromLat = 41.3925,
             fromLon = 2.1520,
-            // To: Carrer de Mallorca ∩ Carrer de Balmes
+            // To: Mallorca x Balmes
             toLat = 41.3970,
             toLon = 2.1580,
             // ~4 blocks N-S + ~6 blocks E-W
