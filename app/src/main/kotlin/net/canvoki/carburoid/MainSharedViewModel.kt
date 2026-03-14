@@ -21,7 +21,7 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.repository.RepositoryEvent
 import net.canvoki.shared.log
-import net.canvoki.shared.timeits
+import net.canvoki.shared.timeit
 
 class MainSharedViewModel(
     application: Application,
@@ -96,7 +96,10 @@ class MainSharedViewModel(
     val isProcessingStations: Boolean
         get() = reloadJob?.isActive == true
 
-    fun reloadStations(reason: String = "Unknonw") {
+    private fun runProcessingBlock(
+        reason: String,
+        block: suspend () -> List<GasStation>,
+    ) {
         // Cancel any existing job
         reloadJob?.cancel()
 
@@ -104,22 +107,28 @@ class MainSharedViewModel(
             viewModelScope.launch {
                 _stationsReloadStarted.emit(Unit)
 
-                val stations = getStations()
-                val config = FilterSettings.config(getApplication())
-                val newStations =
+                val result =
                     withContext(Dispatchers.Default) {
-                        timeits("PROCESSING STATIONS $reason") {
+                        timeit("PROCESSING STATIONS $reason") {
+                            // Emulate slower conditions in debug
                             if (BuildConfig.DEBUG) {
                                 Thread.sleep(500)
                             }
-                            filter.filter(stations, config)
+                            block()
                         }
                     }
                 // Only update if the job has not been cancelled
                 ensureActive()
-                _stationsToDisplay = newStations
-
+                _stationsToDisplay = result
                 _stationsUpdated.emit(_stationsToDisplay)
             }
+    }
+
+    fun reloadStations(reason: String = "Unknonw") {
+        runProcessingBlock(reason) {
+            val stations = getStations()
+            val config = FilterSettings.config(getApplication())
+            filter.filter(stations, config)
+        }
     }
 }
