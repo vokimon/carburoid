@@ -48,7 +48,7 @@ class MainSharedViewModel(
         viewModelScope.launch {
             ProductManager.productChanged.collect {
                 log("VM EVENT product updated")
-                reloadStations("Product change")
+                onProductChanged()
             }
         }
         // Observe changes on how to compute distance
@@ -129,6 +129,12 @@ class MainSharedViewModel(
             val stations = getStations()
             val config = FilterSettings.config(getApplication())
             filter.filter(stations, config)
+        }
+    }
+
+    fun onProductChanged() {
+        runProcessingBlock("Product Change") {
+            filter.onNewPrices()
         }
     }
 }
