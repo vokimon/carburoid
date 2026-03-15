@@ -19,11 +19,7 @@ class StationFilter(
         stations: List<GasStation>,
         config: FilterConfig? = null,
     ): List<GasStation> {
-        if (config != null) this.config = config
-        this.stations = stations
-        computeCrowDistances()
-        sortByDistance()
-        paretoFilter()
+        onNewStations(stations, config)
         return filteredStations
     }
 
@@ -46,7 +42,7 @@ class StationFilter(
         return filteredStations
     }
 
-    fun onNewPositions(): List<GasStation> {
+    fun onDistancesChange(): List<GasStation> {
         computeCrowDistances()
         sortByDistance()
         paretoFilter()

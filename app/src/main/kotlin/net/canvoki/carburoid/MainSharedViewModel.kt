@@ -55,14 +55,14 @@ class MainSharedViewModel(
         viewModelScope.launch {
             CurrentDistancePolicy.methodChanged.collect {
                 log("VM EVENT Distance policy updated")
-                reloadStations("Distance policy change")
+                onDistancesChange()
             }
         }
         // Observe filter changes
         viewModelScope.launch {
             FilterSettings.changes.collect {
                 log("VM EVENT Filter updated")
-                reloadStations("Filters change")
+                onFilterConfigChanges()
             }
         }
         // Observe repository updates
@@ -72,13 +72,13 @@ class MainSharedViewModel(
                     is RepositoryEvent.UpdateReady -> {
                         log("VM EVENT Repository.UpdateReady")
                         _rawStationsUpdated.emit(getStations())
-                        reloadStations("Data change")
+                        onNewStations("Data change")
                     }
                     else -> Unit
                 }
             }
         }
-        reloadStations("Initial view model setup")
+        onNewStations("Initial view model setup")
     }
 
     /**
@@ -124,7 +124,7 @@ class MainSharedViewModel(
             }
     }
 
-    fun reloadStations(reason: String = "Unknonw") {
+    fun onNewStations(reason: String = "Unknonw") {
         runProcessingBlock(reason) {
             val stations = getStations()
             val config = FilterSettings.config(getApplication())
@@ -135,6 +135,19 @@ class MainSharedViewModel(
     fun onProductChanged() {
         runProcessingBlock("Product Change") {
             filter.onNewPrices()
+        }
+    }
+
+    fun onDistancesChange() {
+        runProcessingBlock("Distances change") {
+            filter.onDistancesChange()
+        }
+    }
+
+    fun onFilterConfigChanges() {
+        runProcessingBlock("Filters change") {
+            val config = FilterSettings.config(getApplication())
+            filter.onReconfigure(config)
         }
     }
 }
