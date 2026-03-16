@@ -37,18 +37,6 @@ import java.util.Locale
 
 fun Double.notNaNOrNull(): Double? = this.takeUnless { this.isNaN() }
 
-fun locationFromIntent(
-    intent: Intent,
-    prefix: String,
-): GeoPoint? {
-    val lat = intent.getDoubleExtra(prefix + "_lat", Double.NaN).notNaNOrNull() ?: return null
-    val lon = intent.getDoubleExtra(prefix + "_lon", Double.NaN).notNaNOrNull() ?: return null
-    return GeoPoint(
-        latitude = lat,
-        longitude = lon,
-    )
-}
-
 fun positionFromIntent(
     intent: Intent,
     prefix: String,
@@ -59,18 +47,6 @@ fun positionFromIntent(
         latitude = lat,
         longitude = lon,
     )
-}
-
-fun locationToIntent(
-    intent: Intent,
-    prefix: String,
-    location: GeoPoint?,
-) {
-    if (location == null) return
-    intent.apply {
-        putExtra(prefix + "_lat", location.latitude)
-        putExtra(prefix + "_lon", location.longitude)
-    }
 }
 
 fun positionToIntent(
@@ -95,18 +71,6 @@ fun positionFromBundle(
         latitude = lat,
         longitude = lon,
     )
-}
-
-fun locationToBundle(
-    bundle: Bundle,
-    prefix: String,
-    location: GeoPoint?,
-) {
-    if (location == null) return
-    bundle.apply {
-        putDouble(prefix + "_lat", location.latitude)
-        putDouble(prefix + "_lon", location.longitude)
-    }
 }
 
 fun positionToBundle(
@@ -409,8 +373,8 @@ class LocationService(
     }
 
     fun stateFromIntent(intent: Intent) {
-        val current = locationFromIntent(intent, EXTRA_CURRENT_PREFIX)
-        val target = locationFromIntent(intent, EXTRA_TARGET_PREFIX)
+        val current = positionFromIntent(intent, EXTRA_CURRENT_PREFIX)
+        val target = positionFromIntent(intent, EXTRA_TARGET_PREFIX)
         log("LOCATION SERVICE FROM INTENT $current $target")
         current?.let {
             setFixedLocation(current, target)
@@ -421,8 +385,8 @@ class LocationService(
         val current = getCurrentLocation()
         val target = getTargetLocation()
         log("LOCATION SERVICE TO INTENT $current $target")
-        locationToIntent(intent, EXTRA_CURRENT_PREFIX, current)
-        locationToIntent(intent, EXTRA_TARGET_PREFIX, target)
+        positionToIntent(intent, EXTRA_CURRENT_PREFIX, current)
+        positionToIntent(intent, EXTRA_TARGET_PREFIX, target)
         intent.putExtra(
             LocationPickerActivity.EXTRA_CURRENT_DESCRIPTION,
             getCurrentLocationDescription(),
