@@ -2,6 +2,11 @@
 
 Do you want to help? This is my roadmap.
 
+- [ ] Refactor: Unify location representation
+    - android.location.Location: Non portable, non-testable (android dependency), verbose construction, required for location services
+    - org.maplibre.spatialk.geojson.Position: Portable, library dependant
+    - net.canvoki.carburoid.location.GeoPoint: Portable, featureless
+    - latitude, longitude pair: ambiguous position
 - [x] Remove `activity_main.xml`
 - [x] Compose migration: Details
 - [x] Compose migration: Location picker
@@ -50,8 +55,11 @@ Do you want to help? This is my roadmap.
 - [ ] DeepLinks: Google started to use opaque urls like https://maps.app.goo.gl/jweCgQbzCw9PretY6
     - [ ] We could fetch the url, and take the coords from the 304 redirect
     - [ ] We could explain the user how to do it (share with a browser, from browser share the url to Carburoid)
-- [ ] Distance: Real road distance (instead of geodesic/helicopter distance)
-- [ ] Distance: Refactor: Invert Paretto: Sort by price, filter by distance, to ease distance recomputation
+- [ ] Road distance: Real road distance (instead of geodesic/helicopter distance)
+    - [ ] Road Distance: Refactor: Invert Paretto: Sort by price, filter by distance, to ease distance recomputation
+    - [ ] Road Distance: Split the sorting and the filtering
+    - [ ] Road Distance: Dual distance and reseting
+    - [ ] Road Distance: Async road distance 
 - [x] Routes: Set a route from LocationPicker -> Long press to set the destination
 - [x] Routes: Remove the target tapping on it
 - [x] Routes: Do not reset the target when origin is set

@@ -18,7 +18,7 @@ No copyright assignment is required.
 
 ## 🐛 Reporting
 
-- Report in https://github.com/vokimon/carburoid
+- Report at https://github.com/vokimon/carburoid
 
 ## 🌿 Branching and Merging
 

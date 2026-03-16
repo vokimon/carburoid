@@ -2,10 +2,12 @@
 
 ## Unreleased
 
-- ✨ Trip deviation
-- 🌐 full FR translation (thanks, Sudoman and Florent Ruquoy!)
-- 🌐 Partial DE translation (thanks, Zintor!)
-- 🌐 Metadata and shared lib translation to DE and RU (Thanks AI!)
+- ✨ Routes from A-B using deviation to take the station as distance
+- ⚡️ Avoid recomputations on filter reconfig, repositions and product change
+- 🚧 WIP: Real road distances instead of straigh lines distances
+- 🌐 FR translation (thanks, Sudoman and Florent Ruquoy!)
+- 🌐 DE translation (thanks, Zintor!)
+- 🌐 Metadata and shared lib translation to DE and RU (Thanks AI! 😛)
 - 🏗 Removed unused dependencies
 
 ## 1.4.4 (2026-02-26)
