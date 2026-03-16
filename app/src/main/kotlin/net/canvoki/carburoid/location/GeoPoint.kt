@@ -1,7 +1,8 @@
 package net.canvoki.carburoid.location
 
-import android.location.Location
 import net.canvoki.carburoid.network.Uri
+import android.location.Location as AndroidLocation
+import org.maplibre.spatialk.geojson.Position as MapLibrePosition
 
 /**
  * Represents of a geographic point (WGS84).
@@ -10,15 +11,37 @@ data class GeoPoint(
     val latitude: Double,
     val longitude: Double,
 ) {
-    fun toAndroidLocation(): Location {
+    fun toAndroidLocation(): AndroidLocation {
         val gp = this
-        return Location("carburoid").apply {
+        return AndroidLocation("carburoid").apply {
             latitude = gp.latitude
             longitude = gp.longitude
         }
     }
 
+    fun toMapLibrePosition(): MapLibrePosition = MapLibrePosition(latitude = latitude, longitude = longitude)
+
+    fun toLatLonPair(): Pair<Double, Double> = latitude to longitude
+
+    fun toLonLatPair(): Pair<Double, Double> = longitude to latitude
+
     companion object {
+        /** Converts a libremap Postiion to a GeoPoint */
+        fun fromAndroidLocation(location: AndroidLocation): GeoPoint =
+            GeoPoint(latitude = location.latitude, longitude = location.longitude)
+
+        /** Converts a maplibre Postiion to a GeoPoint */
+        fun fromLibreMapPosition(position: MapLibrePosition): GeoPoint =
+            GeoPoint(latitude = position.latitude, longitude = position.longitude)
+
+        /** Converts a pair containing latitude and longitude as pair in that order into a GeoPoint */
+        fun fromLatLonPair(pair: Pair<Double, Double>): GeoPoint =
+            GeoPoint(latitude = pair.first, longitude = pair.second)
+
+        /** Converts a pair containing longitude and latitude as pair in that order into a GeoPoint */
+        fun fromLonLatPair(pair: Pair<Double, Double>): GeoPoint =
+            GeoPoint(latitude = pair.second, longitude = pair.first)
+
         /** Parse from free-form text (decimal, DMS, OSM links, etc.) */
         fun fromText(text: String?): GeoPoint? {
             if (text == null) return null
