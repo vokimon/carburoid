@@ -336,7 +336,7 @@ class LocationService(
         location: Location?,
     ) {
         prefs.edit {
-            if (location?.latitude == null || location?.longitude == null) {
+            if (location == null) {
                 remove(prefix + "_lat")
                 remove(prefix + "_lon")
             } else {
