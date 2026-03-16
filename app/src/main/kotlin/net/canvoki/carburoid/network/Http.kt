@@ -5,8 +5,10 @@ import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.UserAgent
+import net.canvoki.carburoid.BuildConfig
+import net.canvoki.shared.log
 
-//import io.ktor.client.engine.cio.CIO
 object Http {
     val client: HttpClient =
         HttpClient(OkHttp) {
@@ -16,6 +18,13 @@ object Http {
             install(HttpRequestRetry) {
                 retryOnServerErrors(maxRetries = 5)
                 exponentialDelay()
+            }
+            install(UserAgent) {
+                val appName = "Carburoid"
+                val appVersion = BuildConfig.VERSION_NAME
+                val projectUrl = "https://github.com/canvoki/carburoid"
+                agent = "$appName/$appVersion ($projectUrl)"
+                log(agent)
             }
         }
 }
