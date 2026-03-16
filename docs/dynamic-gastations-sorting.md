@@ -3,7 +3,7 @@
 ## Purpose
 
 This document compiles design criteria for acommodating current 2026-02 sorting algorithm
-to having road path versus having just the geodesical distance.
+to use road distances versus geodesical (haversine) distances.
 
 ## Current algorithm
 

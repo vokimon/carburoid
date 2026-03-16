@@ -14,13 +14,6 @@ class OsrmRoutingTest {
         const val BARCELONA_EIXAMPLE_ERROR_PERCENT = 0.15 // ±15% tolerance for one-way detours, etc.
     }
 
-    fun barcelonaEixampleDistance(blocks: Int): ClosedRange<Double> {
-        val expectedDistance = blocks.toDouble() * BARCELONA_EIXAMPLE_BLOCK_DISTANCE
-        val min = expectedDistance * (1 - BARCELONA_EIXAMPLE_ERROR_PERCENT)
-        val max = expectedDistance * (1 + BARCELONA_EIXAMPLE_ERROR_PERCENT)
-        return min..max
-    }
-
     fun assertBarcelonaDistance(
         fromLat: Double,
         fromLon: Double,
@@ -36,57 +29,51 @@ class OsrmRoutingTest {
                         listOf(toLat to toLon),
                     )[0][0]
                 }
-            val expectedBounds = barcelonaEixampleDistance(expectedBlocks)
+            val expectedDistance = expectedBlocks * BARCELONA_EIXAMPLE_BLOCK_DISTANCE
             assertEquals(
+                expectedDistance,
                 roadDistance,
-                expectedBlocks * BARCELONA_EIXAMPLE_BLOCK_DISTANCE,
-                delta = expectedBlocks * BARCELONA_EIXAMPLE_BLOCK_DISTANCE * BARCELONA_EIXAMPLE_ERROR_PERCENT,
-                "Expected $expectedBounds m for $expectedBlocks-block route, got $roadDistance m",
+                delta = expectedDistance * BARCELONA_EIXAMPLE_ERROR_PERCENT,
+                "Expected $expectedDistance m for $expectedBlocks-block route, " +
+                    "got $roadDistance m (~${roadDistance / BARCELONA_EIXAMPLE_BLOCK_DISTANCE} blocks)",
             )
         }
     }
 
-    @Test
-    fun `route Paris-Casanova to Valencia-Balmes should match 9-block grid distance`() {
+    fun assertBarcelonaDistance(
+        from: BarcelonaGridPoint,
+        to: BarcelonaGridPoint,
+    ) {
         assertBarcelonaDistance(
-            // Paris x Casanova
-            fromLat = 41.391692,
-            fromLon = 2.150713,
-            // Balmes x Valencia
-            toLat = 41.390767,
-            toLon = 2.160683,
-            // 4 Besós (Casanova -> Muntaner -> Aribau -> Granados -> Balmes)
-            // 5 Mar (Paris -> Corsega -> Rosselló -> Provença -> Mallorca -> València)
-            expectedBlocks = 4 + 5,
+            fromLat = from.latitude,
+            fromLon = from.longitude,
+            toLat = to.latitude,
+            toLon = to.longitude,
+            expectedBlocks = from.manhattanBlocksTo(to),
         )
     }
 
     @Test
-    fun `route Urgell-Paris to Valencia-Muntaner should match 8-block grid distance`() {
+    fun `route Casanova-Paris to Balmes-Valencia should match 9-block grid distance`() {
         assertBarcelonaDistance(
-            // From Urgell x Paris
-            fromLat = 41.389879,
-            fromLon = 2.148299,
-            // To Valencia x Muntaner
-            toLat = 41.388200,
-            toLon = 2.157320,
-            // 3 Besós (Urgel -> Vilarroel -> Casanova -> Muntaner)
-            // 5 Mar (Paris -> Corsega -> Rosselló -> Provença -> Mallorca -> València)
-            expectedBlocks = 3 + 5,
+            BarcelonaGrid.CASANOVA_PARIS,
+            BarcelonaGrid.BALMES_VALENCIA,
         )
     }
 
     @Test
-    fun `route Arago-Muntaner to Mallorca-Balmes should match 10-block grid distance`() {
+    fun `route Urgel-Paris to Muntaner-Valencia should match 8-block grid distance`() {
         assertBarcelonaDistance(
-            // From: Aragó x Muntaner
-            fromLat = 41.3925,
-            fromLon = 2.1520,
-            // To: Mallorca x Balmes
-            toLat = 41.3970,
-            toLon = 2.1580,
-            // ~4 blocks N-S + ~6 blocks E-W
-            expectedBlocks = 4 + 6,
+            BarcelonaGrid.URGELL_PARIS,
+            BarcelonaGrid.MUNTANER_VALENCIA,
+        )
+    }
+
+    @Test
+    fun `route Balmes-Mallorca to Muntaner-Arago should match 5-block grid distance`() {
+        assertBarcelonaDistance(
+            BarcelonaGrid.BALMES_MALLORCA,
+            BarcelonaGrid.MUNTANER_ARAGO,
         )
     }
 }
