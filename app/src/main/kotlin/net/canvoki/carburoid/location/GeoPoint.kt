@@ -2,6 +2,7 @@ package net.canvoki.carburoid.location
 
 import net.canvoki.carburoid.network.Uri
 import android.location.Location as AndroidLocation
+import org.maplibre.spatialk.geojson.Point as MapLibrePoint
 import org.maplibre.spatialk.geojson.Position as MapLibrePosition
 
 /**
@@ -21,9 +22,13 @@ data class GeoPoint(
 
     fun toMapLibrePosition(): MapLibrePosition = MapLibrePosition(latitude = latitude, longitude = longitude)
 
+    fun toMapLibrePoint(): MapLibrePoint = MapLibrePoint(latitude = latitude, longitude = longitude)
+
     fun toLatLonPair(): Pair<Double, Double> = latitude to longitude
 
     fun toLonLatPair(): Pair<Double, Double> = longitude to latitude
+
+    fun pretty(): String = "(${ "%.4f".format(latitude) }, ${ "%.4f".format(longitude) })"
 
     companion object {
         /** Converts a libremap Postiion to a GeoPoint */
@@ -31,7 +36,7 @@ data class GeoPoint(
             GeoPoint(latitude = location.latitude, longitude = location.longitude)
 
         /** Converts a maplibre Postiion to a GeoPoint */
-        fun fromLibreMapPosition(position: MapLibrePosition): GeoPoint =
+        fun fromMapLibrePosition(position: MapLibrePosition): GeoPoint =
             GeoPoint(latitude = position.latitude, longitude = position.longitude)
 
         /** Converts a pair containing latitude and longitude as pair in that order into a GeoPoint */

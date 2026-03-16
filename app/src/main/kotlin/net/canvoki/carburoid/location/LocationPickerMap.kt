@@ -44,18 +44,16 @@ import org.maplibre.compose.util.ClickResult
 import org.maplibre.spatialk.geojson.BoundingBox
 import org.maplibre.spatialk.geojson.Feature
 import org.maplibre.spatialk.geojson.FeatureCollection
-import org.maplibre.spatialk.geojson.Point
-import org.maplibre.spatialk.geojson.Position
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun LocationPickerMap(
-    currentPosition: Position,
-    targetPosition: Position?,
-    onCurrentPositionChanged: (Position) -> Unit,
-    onTargetPositionChanged: (Position?) -> Unit,
+    currentPosition: GeoPoint,
+    targetPosition: GeoPoint?,
+    onCurrentPositionChanged: (GeoPoint) -> Unit,
+    onTargetPositionChanged: (GeoPoint?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val markerScaling = 2f
@@ -73,7 +71,7 @@ fun LocationPickerMap(
     val cameraState =
         rememberCameraState(
             CameraPosition(
-                target = currentPosition,
+                target = currentPosition.toMapLibrePosition(),
                 zoom = 15.0,
             ),
         )
@@ -86,10 +84,11 @@ fun LocationPickerMap(
 
     fun offsetInMarker(
         offset: DpOffset,
-        position: Position?,
+        position: GeoPoint?,
     ): Boolean {
         if (position == null) return false
-        val markerOffset = cameraState.projection?.screenLocationFromPosition(position) ?: return false
+        val markerOffset =
+            cameraState.projection?.screenLocationFromPosition(position.toMapLibrePosition()) ?: return false
         val left = -6.dp * markerScaling + markerOffset.x
         val right = 18.dp * markerScaling + markerOffset.x
         val top = -24.dp * markerScaling + markerOffset.y
@@ -104,7 +103,7 @@ fun LocationPickerMap(
             cameraState.animateTo(
                 finalPosition =
                     cameraState.position.copy(
-                        target = currentPosition,
+                        target = currentPosition.toMapLibrePosition(),
                     ),
                 duration = 500.milliseconds,
             )
@@ -145,12 +144,12 @@ fun LocationPickerMap(
                 if (offsetInMarker(offset, targetPositionRef.value)) {
                     onTargetPositionChanged(null)
                 } else {
-                    onCurrentPositionChanged(pos)
+                    onCurrentPositionChanged(GeoPoint.fromMapLibrePosition(pos))
                 }
                 ClickResult.Consume
             },
             onMapLongClick = { pos, offset ->
-                onTargetPositionChanged(pos)
+                onTargetPositionChanged(GeoPoint.fromMapLibrePosition(pos))
                 ClickResult.Consume
             },
         ) {
@@ -159,7 +158,7 @@ fun LocationPickerMap(
                     FeatureCollection(
                         listOf(
                             Feature(
-                                geometry = Point(currentPosition),
+                                geometry = currentPosition.toMapLibrePoint(),
                                 properties = kotlinx.serialization.json.JsonObject(emptyMap()),
                             ),
                         ),
@@ -177,16 +176,12 @@ fun LocationPickerMap(
                 iconAllowOverlap = const(true),
             )
             if (FeatureFlags.routeDeviation && targetPosition != null) {
-                val pos: Position = targetPosition
+                val pos = targetPosition
 
                 val targetPoints =
                     FeatureCollection(
                         Feature(
-                            geometry =
-                                Point(
-                                    latitude = pos.latitude,
-                                    longitude = pos.longitude,
-                                ),
+                            geometry = pos.toMapLibrePoint(),
                             properties = kotlinx.serialization.json.JsonObject(emptyMap()),
                         ),
                     )

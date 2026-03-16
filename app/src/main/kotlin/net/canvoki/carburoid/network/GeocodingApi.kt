@@ -2,10 +2,10 @@ package net.canvoki.carburoid.network
 
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import net.canvoki.carburoid.location.GeoPoint
 import net.canvoki.shared.log
 import org.json.JSONArray
 import org.json.JSONObject
-import org.maplibre.spatialk.geojson.Position
 
 data class Suggestion(
     val display: String,
@@ -41,7 +41,7 @@ suspend fun searchLocation(query: String): List<Suggestion> {
     }
 }
 
-suspend fun nameLocation(position: Position): String? =
+suspend fun nameLocation(position: GeoPoint): String? =
     try {
         val response: String =
             Http.client

@@ -33,7 +33,6 @@ import net.canvoki.carburoid.distances.DistanceFromAddress
 import net.canvoki.shared.log
 import net.canvoki.shared.timeit
 import net.canvoki.shared.usermessage.UserMessage
-import org.maplibre.spatialk.geojson.Position
 import java.util.Locale
 
 fun Double.notNaNOrNull(): Double? = this.takeUnless { this.isNaN() }
@@ -53,10 +52,10 @@ fun locationFromIntent(
 fun positionFromIntent(
     intent: Intent,
     prefix: String,
-): Position? {
+): GeoPoint? {
     val lat = intent.getDoubleExtra(prefix + "_lat", Double.NaN).notNaNOrNull() ?: return null
     val lon = intent.getDoubleExtra(prefix + "_lon", Double.NaN).notNaNOrNull() ?: return null
-    return Position(
+    return GeoPoint(
         latitude = lat,
         longitude = lon,
     )
@@ -77,7 +76,7 @@ fun locationToIntent(
 fun positionToIntent(
     intent: Intent,
     prefix: String,
-    location: Position?,
+    location: GeoPoint?,
 ) {
     if (location == null) return
     intent.apply {
@@ -103,10 +102,10 @@ fun locationFromBundle(
 fun positionFromBundle(
     bundle: Bundle,
     prefix: String,
-): Position? {
+): GeoPoint? {
     val lat = bundle.getDouble(prefix + "_lat", Double.NaN).notNaNOrNull() ?: return null
     val lon = bundle.getDouble(prefix + "_lon", Double.NaN).notNaNOrNull() ?: return null
-    return Position(
+    return GeoPoint(
         latitude = lat,
         longitude = lon,
     )
@@ -127,7 +126,7 @@ fun locationToBundle(
 fun positionToBundle(
     bundle: Bundle,
     prefix: String,
-    location: Position?,
+    location: GeoPoint?,
 ) {
     if (location == null) return
     bundle.apply {

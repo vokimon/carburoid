@@ -15,13 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import net.canvoki.carburoid.R
+import net.canvoki.carburoid.location.GeoPoint
 import net.canvoki.carburoid.network.Suggestion
 import net.canvoki.carburoid.network.nameLocation
 import net.canvoki.carburoid.ui.AppScaffold
 import net.canvoki.shared.log
-import org.maplibre.spatialk.geojson.Position
-
-fun Position.pretty(): String = "(${ "%.3f".format(latitude) }, ${ "%.3f".format(longitude) })"
 
 class LocationPickerActivity : AppCompatActivity() {
     companion object {
@@ -30,13 +28,13 @@ class LocationPickerActivity : AppCompatActivity() {
         const val EXTRA_CURRENT_LON = "current_lon"
         const val EXTRA_TARGET_LAT = "target_lat"
         const val EXTRA_TARGET_LON = "target_lon"
-        val FALLBACK_POSITION = Position(latitude = 40.0, longitude = -1.0)
+        val FALLBACK_POSITION = GeoPoint(latitude = 40.0, longitude = -1.0)
     }
 
     private var currentDescription by mutableStateOf<String>("")
-    private var currentPosition by mutableStateOf<Position>(FALLBACK_POSITION)
+    private var currentPosition by mutableStateOf<GeoPoint>(FALLBACK_POSITION)
     private var targetDescription by mutableStateOf<String>("")
-    private var targetPosition by mutableStateOf<Position?>(null)
+    private var targetPosition by mutableStateOf<GeoPoint?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +66,7 @@ class LocationPickerActivity : AppCompatActivity() {
                         locationDescription = currentDescription,
                         onSuggestionSelected = { suggestion ->
                             currentDescription = suggestion.display
-                            currentPosition = Position(latitude = suggestion.lat, longitude = suggestion.lon)
+                            currentPosition = GeoPoint(latitude = suggestion.lat, longitude = suggestion.lon)
                         },
                     )
                     LocationPickerMap(
