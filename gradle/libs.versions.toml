@@ -27,6 +27,8 @@ androidx-test-runner = "1.6.2"
 kotlinx-coroutines-bom = "1.10.2"
 kotlinx-serialization-bom = "1.10.0"
 maplibre-compose = "0.12.1"
+guava = "33.2.1-jre"
+
 
 # Testing
 junit = "4.13.2"
@@ -86,6 +88,7 @@ kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.re
 java-diff-utils = { group = "io.github.java-diff-utils", name = "java-diff-utils", version.ref = "java-diff-utils" }
 
 # ===== OTHER LIBRARIES =====
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 koalaplot-core-android = { group = "io.github.koalaplot", name = "koalaplot-core-android", version.ref = "koalaplot" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
 maplibre-compose = { module = "org.maplibre.compose:maplibre-compose", version.ref = "maplibre-compose" }

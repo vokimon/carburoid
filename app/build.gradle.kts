@@ -136,6 +136,7 @@ android {
 }
 
 tasks.withType<Test> {
+    maxParallelForks = Runtime.getRuntime().availableProcessors() / 2
     testLogging {
         events("failed", "skipped")//, "standardOut", "standardError", "passed", "started"
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
@@ -169,6 +170,7 @@ dependencies {
     implementation(libs.androidx.compose.ui)
 
     // Other libraries
+    implementation(libs.guava)
     implementation(libs.maplibre.compose)
     implementation(libs.maplibre.composeMaterial3)
     implementation(libs.koalaplot.core.android)

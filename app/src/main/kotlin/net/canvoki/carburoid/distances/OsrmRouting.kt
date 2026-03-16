@@ -1,11 +1,11 @@
-package net.canvoki.carburoid.distance
+package net.canvoki.carburoid.distances
 
+import com.google.common.util.concurrent.RateLimiter
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.appendPathSegments
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import net.canvoki.carburoid.distance.OsrmRouting
 import net.canvoki.carburoid.network.Http
 import net.canvoki.shared.log
 
@@ -13,6 +13,12 @@ import net.canvoki.shared.log
 private data class OsrmTableResponse(
     val distances: List<List<Double>>,
 )
+
+// The API delays calls if they come from the same source.
+// Results are better if spaced minimum two seconds (0.5 per second)
+// If not, latencies get up to 8 seconds.
+val maxCallsPerSecond = 0.5
+val rateLimiter = RateLimiter.create(maxCallsPerSecond)
 
 private val OsrmJson =
     Json {
@@ -31,6 +37,8 @@ class OsrmRouting {
             val allCoords = sources + destinations
             // incoming as lat-lon, api expects lon-lat
             val coordString = allCoords.joinToString(";") { "${it.second},${it.first}" }
+
+            rateLimiter.acquire()
 
             val url = "https://router.project-osrm.org/table/v1/driving/"
             val response =

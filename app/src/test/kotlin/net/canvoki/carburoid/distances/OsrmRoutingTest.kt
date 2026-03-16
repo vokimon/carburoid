@@ -1,4 +1,4 @@
-package net.canvoki.carburoid.distance
+package net.canvoki.carburoid.distances
 
 import kotlinx.coroutines.runBlocking
 import net.canvoki.shared.log
