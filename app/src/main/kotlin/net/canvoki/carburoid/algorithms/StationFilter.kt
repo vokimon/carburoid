@@ -37,7 +37,6 @@ class StationFilter(
 
     fun onReconfigure(config: FilterConfig): List<GasStation> {
         this.config = config
-        sortByDistance()
         paretoFilter()
         return filteredStations
     }
