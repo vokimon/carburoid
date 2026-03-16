@@ -1,7 +1,6 @@
 package net.canvoki.carburoid
 
 import android.content.Intent
-import android.location.Location
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.core.content.IntentCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
+import net.canvoki.carburoid.location.GeoPoint
 import net.canvoki.carburoid.plotnavigator.PlotNavigatorActivity
 import net.canvoki.carburoid.product.ProductSelection
 import net.canvoki.carburoid.repository.GasStationRepository
@@ -91,7 +91,7 @@ class MainActivity : ComponentActivity() {
      * Returns location retrieved from activity status after pause/stop
      * if available, else returns null.
      */
-    private fun locationFromSavedInstance(saved: Bundle?): Pair<Location, Location?>? {
+    private fun locationFromSavedInstance(saved: Bundle?): Pair<GeoPoint, GeoPoint?>? {
         if (saved == null) return null
         // Not really from the state but from the preferences
         // Using the saved instance just to know we must recover it
@@ -102,11 +102,11 @@ class MainActivity : ComponentActivity() {
      * Returns location retrieved from incoming Deep Link Intent,
      * if available, else returns null.
      */
-    private fun locationFromDeepLinkIntent(intent: Intent?): Pair<Location, Location?>? {
+    private fun locationFromDeepLinkIntent(intent: Intent?): Pair<GeoPoint, GeoPoint?>? {
         intent ?: return null
         val current =
-            IntentCompat.getParcelableExtra(intent, MainActivity.EXTRA_LOCATION, Location::class.java) ?: return null
-        val target = IntentCompat.getParcelableExtra(intent, MainActivity.EXTRA_LOCATION, Location::class.java)
+            IntentCompat.getParcelableExtra(intent, MainActivity.EXTRA_LOCATION, GeoPoint::class.java) ?: return null
+        val target = IntentCompat.getParcelableExtra(intent, MainActivity.EXTRA_LOCATION, GeoPoint::class.java)
 
         return current to target
     }

@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
+import net.canvoki.carburoid.location.GeoPoint
 import net.canvoki.shared.test.yieldUntilIdle
 import org.junit.Test
 import kotlin.test.assertTrue
@@ -17,9 +18,11 @@ class CurrentDistancePolicyTest {
     @Test
     fun `test distance policy method change triggers notification`() =
         runTest {
-            val mockLocation = mockk<Location>(relaxed = true)
-            every { mockLocation.latitude } returns 40.7128
-            every { mockLocation.longitude } returns -74.0060
+            val geoPoint =
+                GeoPoint(
+                    latitude = 40.7128,
+                    longitude = -74.0060,
+                )
             val collector = mutableListOf<Unit>()
 
             val collectorJob =
@@ -33,7 +36,7 @@ class CurrentDistancePolicyTest {
 
             assertTrue(collector.isEmpty(), "Collector should have no events.")
 
-            val newDistanceMethod = DistanceFromAddress(mockLocation)
+            val newDistanceMethod = DistanceFromAddress(geoPoint)
             CurrentDistancePolicy.setMethod(newDistanceMethod)
             yieldUntilIdle()
 

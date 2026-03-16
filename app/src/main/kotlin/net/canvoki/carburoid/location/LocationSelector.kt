@@ -3,7 +3,6 @@ package net.canvoki.carburoid.location
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.location.Location
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity

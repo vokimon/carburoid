@@ -2,14 +2,14 @@ package net.canvoki.carburoid.location
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.location.Location
 import android.location.LocationManager
+import net.canvoki.carburoid.location.GeoPoint
 
 class LocationProvider(
     private val context: Context,
 ) {
     fun getLastKnownLocation(
-        onSuccess: (Location?) -> Unit,
+        onSuccess: (GeoPoint?) -> Unit,
         onError: (Exception) -> Unit,
     ) {
         try {
@@ -21,7 +21,7 @@ class LocationProvider(
 
             @SuppressLint("MissingPermission")
             val net = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-            onSuccess(gps ?: net)
+            onSuccess((gps ?: net)?.let { GeoPoint.fromAndroidLocation(it) })
         } catch (e: Exception) {
             onError(e)
         }

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
-import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -30,6 +29,7 @@ import kotlinx.coroutines.withContext
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.distances.DistanceFromAddress
+import net.canvoki.carburoid.location.GeoPoint
 import net.canvoki.shared.log
 import net.canvoki.shared.timeit
 import net.canvoki.shared.usermessage.UserMessage
@@ -40,13 +40,13 @@ fun Double.notNaNOrNull(): Double? = this.takeUnless { this.isNaN() }
 fun locationFromIntent(
     intent: Intent,
     prefix: String,
-): Location? {
+): GeoPoint? {
     val lat = intent.getDoubleExtra(prefix + "_lat", Double.NaN).notNaNOrNull() ?: return null
     val lon = intent.getDoubleExtra(prefix + "_lon", Double.NaN).notNaNOrNull() ?: return null
-    return Location("user_picked").apply {
-        latitude = lat
-        longitude = lon
-    }
+    return GeoPoint(
+        latitude = lat,
+        longitude = lon,
+    )
 }
 
 fun positionFromIntent(
@@ -64,7 +64,7 @@ fun positionFromIntent(
 fun locationToIntent(
     intent: Intent,
     prefix: String,
-    location: Location?,
+    location: GeoPoint?,
 ) {
     if (location == null) return
     intent.apply {
@@ -85,20 +85,6 @@ fun positionToIntent(
     }
 }
 
-/*
-fun locationFromBundle(
-    bundle: Bundle,
-    prefix: String,
-): Location? {
-    val lat = bundle.getDouble(prefix + "_lat", Double.NaN).notNaNOrNull() ?: return null
-    val lon = bundle.getDouble(prefix + "_lon", Double.NaN).notNaNOrNull() ?: return null
-    return Location("user_picked").apply {
-        latitude = lat
-        longitude = lon
-    }
-}
-*/
-
 fun positionFromBundle(
     bundle: Bundle,
     prefix: String,
@@ -114,7 +100,7 @@ fun positionFromBundle(
 fun locationToBundle(
     bundle: Bundle,
     prefix: String,
-    location: Location?,
+    location: GeoPoint?,
 ) {
     if (location == null) return
     bundle.apply {
@@ -145,7 +131,7 @@ class LocationService(
         const val EXTRA_TARGET_PREFIX = "target"
     }
 
-    private val _locationChanged = MutableSharedFlow<Location>(replay = 0)
+    private val _locationChanged = MutableSharedFlow<GeoPoint>(replay = 0)
     val locationChanged = _locationChanged.asSharedFlow()
 
     private val _descriptionUpdated = MutableSharedFlow<String>(replay = 0)
@@ -155,11 +141,11 @@ class LocationService(
 
     private val prefs = context.getSharedPreferences("location_prefs", Context.MODE_PRIVATE)
 
-    private var currentLocation: Location? = null
+    private var currentLocation: GeoPoint? = null
 
-    private var fixedLocation: Location? = null
+    private var fixedLocation: GeoPoint? = null
 
-    private var targetLocation: Location? = null
+    private var targetLocation: GeoPoint? = null
 
     private var description: String? = null
 
@@ -168,8 +154,8 @@ class LocationService(
     private fun tr(stringId: Int): String = context.getString(stringId)
 
     fun setFixedLocation(
-        location: Location,
-        target: Location?,
+        location: GeoPoint,
+        target: GeoPoint?,
     ) {
         saveLocation(PREF_CURRENT_LOCATION, location)
         saveLocation(PREF_TARGET_LOCATION, target)
@@ -203,18 +189,18 @@ class LocationService(
         setLocation(current, target)
     }
 
-    private fun getLastResortLocation(): Pair<Location, Location?> {
+    private fun getLastResortLocation(): Pair<GeoPoint, GeoPoint?> {
         val madrid =
-            Location("").apply {
-                latitude = 40.4168
-                longitude = -3.7038
-            }
+            GeoPoint(
+                latitude = 40.4168,
+                longitude = -3.7038,
+            )
         return madrid to null
     }
 
     private fun setLocation(
-        location: Location,
-        target: Location?,
+        location: GeoPoint,
+        target: GeoPoint?,
     ) {
         currentLocation = location
         targetLocation = target
@@ -236,7 +222,7 @@ class LocationService(
         )
     }
 
-    private fun handleDeviceLocationSuccess(location: Location?) {
+    private fun handleDeviceLocationSuccess(location: GeoPoint?) {
         if (location == null) {
             setFallback()
             UserMessage.Info(tr(R.string.location_not_available)).post()
@@ -298,7 +284,7 @@ class LocationService(
 
     fun getCurrentLocationDescription(): String = description ?: "Location not available"
 
-    private suspend fun geocodeLocation(location: Location): String? {
+    private suspend fun geocodeLocation(location: GeoPoint): String? {
         return withContext(Dispatchers.IO) {
             if (!Geocoder.isPresent()) {
                 return@withContext null
@@ -332,7 +318,7 @@ class LocationService(
 
     private fun saveLocation(
         prefix: String,
-        location: Location?,
+        location: GeoPoint?,
     ) {
         prefs.edit {
             if (location == null) {
@@ -345,7 +331,7 @@ class LocationService(
         }
     }
 
-    fun loadLocation(prefix: String): Location? {
+    fun loadLocation(prefix: String): GeoPoint? {
         val latBits = prefs.getLong(prefix + "_lat", Long.MIN_VALUE)
         val lngBits = prefs.getLong(prefix + "_lon", Long.MIN_VALUE)
 
@@ -353,13 +339,15 @@ class LocationService(
             return null
         }
 
-        val location = Location("")
-        location.latitude = java.lang.Double.longBitsToDouble(latBits)
-        location.longitude = java.lang.Double.longBitsToDouble(lngBits)
+        val location =
+            GeoPoint(
+                latitude = java.lang.Double.longBitsToDouble(latBits),
+                longitude = java.lang.Double.longBitsToDouble(lngBits),
+            )
         return location
     }
 
-    fun loadLastLocation(): Pair<Location, Location?>? =
+    fun loadLastLocation(): Pair<GeoPoint, GeoPoint?>? =
         loadLocation(PREF_CURRENT_LOCATION)?.let {
             it to loadLocation(PREF_TARGET_LOCATION)
         }
@@ -391,9 +379,9 @@ class LocationService(
         }
     }
 
-    fun getCurrentLocation(): Location? = fixedLocation ?: currentLocation
+    fun getCurrentLocation(): GeoPoint? = fixedLocation ?: currentLocation
 
-    fun getTargetLocation(): Location? = targetLocation
+    fun getTargetLocation(): GeoPoint? = targetLocation
 
     @Composable
     fun rememberLocationRefresher(): () -> Unit {
