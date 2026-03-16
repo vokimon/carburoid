@@ -7,7 +7,7 @@ val isTestEnvironmentsds: Boolean by lazy {
 val isTestEnvironment: Boolean by lazy {
     // Fallback to println in JVM tests
     try {
-        android.util.Log.d("Carburoid", "test log")
+        Log.d("Carburoid", "test log")
         false
     } catch (e: Throwable) {
         true
