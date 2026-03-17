@@ -37,4 +37,6 @@ object CurrentDistancePolicy {
      * Stablishes if the GasStation is beyond seas.
      */
     fun isBeyondSea(station: GasStation): Boolean = method?.isBeyondSea(station) ?: false
+
+    suspend fun refineRoadDistances(stations: List<GasStation>) = method?.refineRoadDistances(stations)
 }

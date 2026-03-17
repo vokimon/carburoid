@@ -116,4 +116,11 @@ class StationFilter(
         }
         filteredStations = result
     }
+
+    fun refineRoadDistances() {
+        val unrefinedDistances = filteredStations.filter { !it.hasRoadDistance() }
+        if (unrefinedDistances.isEmpty()) {
+            return
+        }
+    }
 }

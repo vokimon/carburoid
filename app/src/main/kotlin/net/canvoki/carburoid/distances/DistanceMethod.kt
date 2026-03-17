@@ -16,4 +16,9 @@ interface DistanceMethod {
      * Tells whether the coordinates are considered in a different land mass.
      */
     fun isBeyondSea(station: GasStation): Boolean
+
+    /**
+     * Refines road distance for the provided stations
+     */
+    suspend fun refineRoadDistances(stations: List<GasStation>) {}
 }

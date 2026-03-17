@@ -56,4 +56,41 @@ class DistanceFromAddress(
 
         return gasStationLandMass != originLandMass && gasStationLandMass != destinationLandMass
     }
+
+    override suspend fun refineRoadDistances(stations: List<GasStation>) {
+        if (stations.isEmpty()) return
+
+        val originCoord = Pair(origin.latitude, origin.longitude)
+        val destCoord = destination?.let { Pair(it.latitude, it.longitude) }
+        val stationCoords = stations.map { Pair(it.latitude ?: 0.0, it.longitude ?: 0.0) }
+        println("Refining $origin -> $destination, passing by $stations")
+
+        val distancesFromA =
+            OsrmRouting.getDistances(
+                sources = listOf(originCoord),
+                destinations = stationCoords,
+            )[0]
+
+        if (destCoord == null) {
+            // Single-point mode: A → Sᵢ
+            stations.forEachIndexed { i, station ->
+                station.setRoadDistance(distancesFromA[i].toFloat())
+            }
+        } else {
+            // Route mode: compute deviation = (A→Sᵢ + Sᵢ→B − A→B)
+            val extendedSources = stationCoords + listOf(originCoord)
+            val allDistancesToB =
+                OsrmRouting
+                    .getDistances(
+                        sources = extendedSources,
+                        destinations = listOf(destCoord),
+                    ).map { it[0] }
+            val distancesToB = allDistancesToB.dropLast(1)
+            val aToB = allDistancesToB.last() // A→B
+            stations.zip(distancesFromA.zip(distancesToB)) { station, (aToS, sToB) ->
+                val deviation = (aToS + sToB - aToB).coerceAtLeast(0.0)
+                station.setRoadDistance(deviation.toFloat())
+            }
+        }
+    }
 }
