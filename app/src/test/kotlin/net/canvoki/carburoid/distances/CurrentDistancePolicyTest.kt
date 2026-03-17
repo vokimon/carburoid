@@ -49,69 +49,89 @@ class CurrentDistancePolicyTest {
         }
 
     @Test
-    fun `refineRoadDistances`() =
+    fun `refineRoadDistances with destination`() =
         runBlocking {
-            skipOn<java.net.SocketTimeoutException> {
-                val origin = locationOf(BarcelonaGrid.CASANOVA_PARIS)
-                val destination = locationOf(BarcelonaGrid.BALMES_VALENCIA)
-                println("Within test: $origin -> $destination")
-                val method = DistanceFromAddress(origin, destination)
-
-                val stations =
+            assertRefinedDistances(
+                origin = BarcelonaGrid.CASANOVA_PARIS,
+                destination = BarcelonaGrid.BALMES_VALENCIA,
+                expected =
                     listOf(
-                        createStation(1, BarcelonaGrid.URGELL_PARIS),
-                        createStation(2, BarcelonaGrid.MUNTANER_VALENCIA),
-                        createStation(3, BarcelonaGrid.MUNTANER_ARAGO),
-                    )
+                        "1537 road",
+                        "803 road",
+                        "1313 road",
+                    ),
+                BarcelonaGrid.URGELL_PARIS,
+                BarcelonaGrid.MUNTANER_VALENCIA,
+                BarcelonaGrid.MUNTANER_ARAGO,
+            )
+        }
 
-                // Ensure they start with crow
-                stations.forEach { it.computeDistance() }
+    @Test
+    fun `refineRoadDistances with NO destination`() =
+        runBlocking {
+            assertRefinedDistances(
+                origin = BarcelonaGrid.CASANOVA_PARIS,
+                destination = null,
+                expected =
+                    listOf(
+                        "1252 road",
+                        "784 road",
+                        "922 road",
+                    ),
+                BarcelonaGrid.URGELL_PARIS,
+                BarcelonaGrid.MUNTANER_VALENCIA,
+                BarcelonaGrid.MUNTANER_ARAGO,
+            )
+        }
 
-                // Act
-                method.refineRoadDistances(stations)
+    private suspend fun assertRefinedDistances(
+        origin: BarcelonaGridPoint,
+        destination: BarcelonaGridPoint?,
+        expected: List<String>,
+        vararg stations: BarcelonaGridPoint,
+    ) {
+        skipOn<java.net.SocketTimeoutException> {
+            val method =
+                DistanceFromAddress(
+                    origin = GeoPoint(origin.latitude, origin.longitude),
+                    destination = destination?.let { GeoPoint(it.latitude, it.longitude) },
+                )
 
-                // Assert: distance value + source (road/crow)
-                val actual =
-                    stations.joinToString("\n") { station ->
-                        val source = if (station.hasRoadDistance()) "road" else "crow"
-                        val distance = station.distanceInMeters?.let { "%.0f".format(it) } ?: "null"
-                        "$distance $source"
+            val stationObjects =
+                stations.mapIndexed { index, point ->
+                    object : BaseGasStation() {
+                        override val id = index
+                        override val name = "S$index"
+                        override val latitude = point.latitude
+                        override val longitude = point.longitude
+                        override val price = 1.5
+                        override val isPublicPrice = true
+                        override val address = ""
+                        override val city = "Barcelona"
+                        override val state = "Barcelona"
+                        override val openingHours = OpeningHours.parse("")
+                        override val prices = emptyMap<String, Double?>()
+
+                        val geoPoint = GeoPoint(latitude = point.latitude, longitude = point.longitude)
+
+                        override fun toJson() = ""
+
+                        override fun toString() = "${geoPoint.pretty()}"
                     }
+                }
 
-                val expected =
-                    """
-                    1537 road
-                    803 road
-                    1313 road
-                    """.trimIndent()
+            stationObjects.forEach { it.computeDistance() }
+            method.refineRoadDistances(stationObjects)
 
-                assertEquals(expected, actual)
-            }
+            val actual =
+                stationObjects.joinToString("\n") { station ->
+                    val source = if (station.hasRoadDistance()) "road" else "crow"
+                    val distance = station.distanceInMeters?.let { "%.0f".format(it) } ?: "null"
+                    "$distance $source"
+                }
+
+            val expectedString = expected.joinToString("\n")
+            assertEquals(expectedString, actual)
         }
-
-    private fun createStation(
-        id: Int,
-        point: BarcelonaGridPoint,
-    ): GasStation =
-        object : BaseGasStation() {
-            override val id = id
-            override val name = "$id"
-            override val latitude = point.latitude
-            override val longitude = point.longitude
-            override val price = 1.5
-            override val isPublicPrice = true
-            override val address = ""
-            override val city = "Barcelona"
-            override val state = "Barcelona"
-            override val openingHours = OpeningHours.parse("")
-            override val prices = emptyMap<String, Double?>()
-
-            override fun toJson() = ""
-        }
-
-    private fun locationOf(point: BarcelonaGridPoint) =
-        GeoPoint(
-            latitude = point.latitude,
-            longitude = point.longitude,
-        )
+    }
 }
