@@ -1,5 +1,6 @@
 package net.canvoki.carburoid.distances
 
+import net.canvoki.carburoid.location.GeoPoint
 import kotlin.math.abs
 
 data class BarcelonaGridPoint(
@@ -11,6 +12,10 @@ data class BarcelonaGridPoint(
     val coordinate: Pair<Double, Double> get() = latitude to longitude
 
     fun manhattanBlocksTo(other: BarcelonaGridPoint): Int = abs(vIndex - other.vIndex) + abs(hIndex - other.hIndex)
+
+    fun toGeoPoint() = GeoPoint(latitude = latitude, longitude = longitude)
+
+    fun toLatLonPair() = toGeoPoint().toLatLonPair()
 }
 
 object BarcelonaGrid {
