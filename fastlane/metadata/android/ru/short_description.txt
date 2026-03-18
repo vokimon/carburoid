@@ -1,1 +1,1 @@
-Find gas stations by price and distance in Spain and France.
+Находите автозаправки в Испании и Франции по цене и расстоянию.

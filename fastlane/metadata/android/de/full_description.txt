@@ -1,0 +1,13 @@
+Carburoid zeigt nur Tankstellen an, die wirklich infrage kommen.
+Sortiert nach Entfernung: Ist eine Tankstelle teurer als naheliegende Alternativen, wird sie ausgeblendet.
+So schrumpft die Liste von Tausenden auf wenige Dutzend.
+Um zu wählen, scroll einfach nach unten – der Preis verbessert sich, bis die zusätzliche Fahrtstrecke nicht mehr lohnt.
+
+Funktionen:
+
+- 🏛️ Offizielle Regierungsdaten aus Spanien und Frankreich
+- 🎯 Nur relevante Tankstellen: entweder näher oder günstiger
+- 🕒 Berücksichtigt Öffnungszeiten
+- 🗺️ Funktioniert mit deiner bevorzugten Karten-App
+- 🌐 Übersetzungen auf Spanisch, Katalanisch, Baskisch, Galicisch, Aragonesisch …
+- ☀️ Helle und dunkle Darstellung

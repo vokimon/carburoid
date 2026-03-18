@@ -2,26 +2,20 @@
 
 Do you want to help? This is my roadmap.
 
-- [x] Refactor: Unify location representation
-    - android.location.Location: Non portable, non-testable (android dependency), verbose construction, required for location services
-    - org.maplibre.spatialk.geojson.Position: Portable, library dependant
-    - net.canvoki.carburoid.location.GeoPoint: Portable, featureless
-    - latitude, longitude pair: ambiguous position
-- [x] Remove `activity_main.xml`
-- [x] Compose migration: Details
-- [x] Compose migration: Location picker
-- [x] Location Picker: Use a compose based map
-- [x] Location Picker: Long press to select target position (route)
-- [x] Location Picker: Sent target position to the main app
-- [x] Location Picker: Use maplibre material3 module
-- [x] Location Picker: Migrate the location Search
-- [x] Location Search: Feedback when doing a name query after tapping (show coords meanwhile)
-- [x] Location Search: Feedback when doing a search query after typing (show searching)
+- [ ] Make visible that we are in Route mode
+    - Duplication the origin location widget for destination? It takes too much screen
+    - Splitting the location widget for origin and destination? too small
+    - Just changing the icon to indicate we are in route mode? Maybe too subtle
+    - ...?
+- [ ] Location Unification: split latitude, longitude parameters
 - [ ] Location Picker: button to set the current location to gps
 - [ ] Location Picker: button to clear the target location
 - [ ] Location Picker: button to swap current and target
 - [ ] Location Search: When empty, autocomplete show later searches
 - [ ] Location Search: Prioritize near matches to the current position
+- [ ] Route: Split A and B for more stability on changing A as the car moves.
+- [ ] Route: Display both deviation and distance from A to the station
+- [ ] Route: Consider distance to the station as secondary filter criteria
 - [ ] Brands: Define optional brand field in base Gas Station
 - [ ] Brands: Station card: consider optional brand
 - [ ] Brands: Station detal: consider optional brand
@@ -38,7 +32,6 @@ Do you want to help? This is my roadmap.
 - [ ] Language: Asturian
 - [ ] Language: Aranese (Occitan)
 - [ ] Language: Occitan
-- [ ] Language: French
 - [ ] Language: Breton
 - [ ] Language: Alsacian
 - [ ] Fix: Regression: on network failures should not auto-retry
@@ -55,15 +48,10 @@ Do you want to help? This is my roadmap.
 - [ ] DeepLinks: Google started to use opaque urls like https://maps.app.goo.gl/jweCgQbzCw9PretY6
     - [ ] We could fetch the url, and take the coords from the 304 redirect
     - [ ] We could explain the user how to do it (share with a browser, from browser share the url to Carburoid)
-- [ ] Road distance: Real road distance (instead of geodesic/helicopter distance)
-    - [ ] Road Distance: Refactor: Invert Paretto: Sort by price, filter by distance, to ease distance recomputation
+- [x] Road distance: Real road distance (instead of geodesic/helicopter distance)
     - [ ] Road Distance: Split the sorting and the filtering
     - [ ] Road Distance: Dual distance and reseting
     - [ ] Road Distance: Async road distance 
-- [x] Routes: Set a route from LocationPicker -> Long press to set the destination
-- [x] Routes: Remove the target tapping on it
-- [x] Routes: Do not reset the target when origin is set
-- [x] Routes: Fix: Keep target on screen direction change
 - [ ] Routes: Accept routes as deep links
         - https://www.google.com/maps/dir/Start/Waypoint1/Waypoint2/.../Destination
         - xml+gpx
@@ -102,11 +90,38 @@ Do you want to help? This is my roadmap.
             - station detail page: curl https://www.prix-carburants.gouv.fr/station/36150001
     - Portugal (portal, not api): https://precoscombustiveis.dgeg.gov.pt/
     - Germany: https://creativecommons.tankerkoenig.de/swagger/
-- [ ] Electrical
+- [ ] Electric Recharge
     - Existing Open APIs
         - https://openchargemap.org
         - https://www.chargemap.com
 
+## Done 1.5.0
+
+- [x] Refactor: Unify location representation
+    - [x] Location Unification: android.location.Location: Non portable, non-testable (android dependency), verbose construction, required for location services
+        -> Only used in location services and heaviside distance computation
+    - [x] Location Unification: org.maplibre.spatialk.geojson.Position: Portable, library dependant
+        -> Only used to comunicate with maplibre
+    - [x] Location Unification: net.canvoki.carburoid.location.GeoPoint: Portable, featureless
+        -> The one used
+    - [x] Location Unification: latitude, longitude pair: ambiguous position
+        -> Turned into GeoPoints
+- [x] Remove `activity_main.xml`
+- [x] Compose migration: Details
+- [x] Compose migration: Location picker
+- [x] Routes: Set a route from LocationPicker -> Long press to set the destination
+- [x] Routes: Remove the target tapping on it
+- [x] Routes: Do not reset the target when origin is set
+- [x] Routes: Fix: Keep target on screen direction change
+- [x] Location Picker: Use a compose based map
+- [x] Location Picker: Long press to select target position (route)
+- [x] Location Picker: Sent target position to the main app
+- [x] Location Picker: Use maplibre material3 module
+- [x] Location Picker: Migrate the location Search
+- [x] Location Search: Feedback when doing a name query after tapping (show coords meanwhile)
+- [x] Location Search: Feedback when doing a search query after typing (show searching)
+- [x] Language: French
+- [x] Language: German
 
 ## Done
 
