@@ -64,13 +64,13 @@ class DistanceFromAddress(
             OsrmRouting.getDistances(
                 sources = listOf(origin),
                 destinations = stationCoords,
-            )[0]
+            )
 
         if (distancesFromA.isEmpty()) return
         if (destination == null) {
             // Single-point mode: A → Sᵢ
             stations.forEachIndexed { i, station ->
-                station.setRoadDistance(distancesFromA[i].toFloat())
+                station.setRoadDistance(distancesFromA[0][i].toFloat())
             }
         } else {
             // Route mode: compute deviation = (A→Sᵢ + Sᵢ→B − A→B)
