@@ -235,7 +235,7 @@ class LocationService(
             return
         }
         // Provisional description
-        description = "(${ "%.3f".format(location.latitude) }, ${ "%.3f".format(location.longitude) })"
+        description = location.pretty()
         CoroutineScope(Dispatchers.Main).launch {
             _descriptionUpdated.emit(description ?: "")
         }
