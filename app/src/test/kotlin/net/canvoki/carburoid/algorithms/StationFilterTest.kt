@@ -1,5 +1,6 @@
 package net.canvoki.carburoid.algorithms
 
+import kotlinx.coroutines.runBlocking
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.distances.DistanceMethod
 import net.canvoki.carburoid.model.GasStation
@@ -89,7 +90,10 @@ class StationFilterTest {
                 onlyPublicPrices = onlyPublicPrices,
                 hideClosedMarginInMinutes = hideClosedMarginInMinutes,
             )
-        val result = StationFilter(config).filter(stations)
+        val result =
+            runBlocking {
+                StationFilter(config).filter(stations)
+            }
         assertResult(expected, result)
     }
 
