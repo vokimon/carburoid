@@ -44,27 +44,40 @@ class OsrmRouting {
 
             val url = "https://router.project-osrm.org/table/v1/driving/"
             var fullUrl = ""
-            val response =
-                Http.client
-                    .get(url) {
-                        url {
-                            appendPathSegments(coordString)
-                            encodedParameters.append("sources", (0..sources.size - 1).joinToString(";"))
-                            encodedParameters.append(
-                                "destinations",
-                                (sources.size..sources.size + destinations.size - 1).joinToString(";"),
-                            )
-                            parameters.append("annotations", "distance")
-                            parameters.append("skip_waypoints", "true")
-                            fullUrl = toString()
-                        }
-                        timeout {
-                            socketTimeoutMillis = 100_000
-                        }
-                    }.body<String>()
-            //log("${fullUrl}")
-            //log(response)
-            return OsrmJson.decodeFromString<OsrmTableResponse>(response).distances
+            try {
+                val response =
+                    Http.client
+                        .get(url) {
+                            url {
+                                appendPathSegments(coordString)
+                                encodedParameters.append("sources", (0..sources.size - 1).joinToString(";"))
+                                encodedParameters.append(
+                                    "destinations",
+                                    (sources.size..sources.size + destinations.size - 1).joinToString(";"),
+                                )
+                                parameters.append("annotations", "distance")
+                                parameters.append("skip_waypoints", "true")
+                                fullUrl = toString()
+                            }
+                            timeout {
+                                socketTimeoutMillis = 100_000
+                            }
+                        }.body<String>()
+                try {
+                    //log("${fullUrl}")
+                    //log(response)
+                    return OsrmJson.decodeFromString<OsrmTableResponse>(response).distances
+                } catch (e: Exception) {
+                    log("Error: $fullUrl")
+                    log("Error $response")
+                    return emptyList()
+                }
+            } catch (e: Exception) {
+                log("$fullUrl")
+                log("Error: $e")
+                //log(response)
+                return emptyList()
+            }
         }
     }
 }

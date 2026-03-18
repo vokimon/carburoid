@@ -20,16 +20,21 @@ class OsrmRoutingTest {
         fromLon: Double,
         toLat: Double,
         toLon: Double,
-        expectedBlocks: Int,
+        expectedBlocks: Int?,
     ) {
         skipOn<java.net.SocketTimeoutException> {
-            val roadDistance =
+            val roadDistances =
                 runBlocking {
                     OsrmRouting.getDistances(
                         listOf(GeoPoint(latitude = fromLat, longitude = fromLon)),
                         listOf(GeoPoint(latitude = toLat, longitude = toLon)),
-                    )[0][0]
+                    )
                 }
+            if (expectedBlocks == null) {
+                assertEquals(roadDistances, emptyList<List<Double>>())
+                return
+            }
+            val roadDistance = roadDistances[0][0]
             val expectedDistance = expectedBlocks * BARCELONA_EIXAMPLE_BLOCK_DISTANCE
             assertEquals(
                 expectedDistance,
@@ -75,6 +80,17 @@ class OsrmRoutingTest {
         assertBarcelonaDistance(
             BarcelonaGrid.BALMES_MALLORCA,
             BarcelonaGrid.MUNTANER_ARAGO,
+        )
+    }
+
+    @Test
+    fun `route with errors`() {
+        assertBarcelonaDistance(
+            fromLat = 0.0,
+            fromLon = 0.0,
+            toLat = BarcelonaGrid.MUNTANER_ARAGO.latitude,
+            toLon = BarcelonaGrid.MUNTANER_ARAGO.longitude,
+            expectedBlocks = null, // Error
         )
     }
 }
