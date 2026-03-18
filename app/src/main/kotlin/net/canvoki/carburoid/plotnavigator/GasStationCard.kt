@@ -109,9 +109,13 @@ fun GasStationCard(
                         station?.price?.let { prefix + "%.03f €".format(it) } ?: "?"
                     }
                 val distanceText =
-                    remember(station?.id, station?.let { CurrentDistancePolicy.getDistance(it) }) {
-                        val distance = station?.let { CurrentDistancePolicy.getDistance(it) }
-                        distance?.let { "%.01f km".format(it / 1000) } ?: "?? km"
+                    remember(station?.id, station?.distanceInMeters, station?.hasRoadDistance()) {
+                        buildString {
+                            val distance = station?.distanceInMeters
+                            val approximatedSign = if (station?.hasRoadDistance() == false) "~" else ""
+                            append(approximatedSign)
+                            append(distance?.let { "%.01f km".format(it / 1000) } ?: "?? km")
+                        }
                     }
 
                 Text(

@@ -98,7 +98,7 @@ class MainSharedViewModel(
 
     private fun runProcessingBlock(
         reason: String,
-        block: suspend () -> List<GasStation>,
+        work: suspend (suspend (List<GasStation>) -> Unit) -> Unit,
     ) {
         // Cancel any existing job
         reloadJob?.cancel()
@@ -107,47 +107,46 @@ class MainSharedViewModel(
             viewModelScope.launch {
                 _stationsReloadStarted.emit(Unit)
 
-                val result =
-                    withContext(Dispatchers.Default) {
-                        timeit("PROCESSING STATIONS $reason") {
-                            // Emulate slower conditions in debug
-                            if (BuildConfig.DEBUG) {
-                                Thread.sleep(500)
-                            }
-                            block()
+                withContext(Dispatchers.Default) {
+                    timeit("PROCESSING STATIONS $reason") {
+                        // Emulate slower conditions in debug
+                        if (BuildConfig.DEBUG) {
+                            Thread.sleep(500)
+                        }
+                        work { stations ->
+                            ensureActive()
+                            _stationsToDisplay = stations
+                            _stationsUpdated.emit(stations)
                         }
                     }
-                // Only update if the job has not been cancelled
-                ensureActive()
-                _stationsToDisplay = result
-                _stationsUpdated.emit(_stationsToDisplay)
+                }
             }
     }
 
     fun onNewStations(reason: String = "Unknonw") {
-        runProcessingBlock(reason) {
+        runProcessingBlock(reason) { onUpdate ->
             val stations = getStations()
             val config = FilterSettings.config(getApplication())
-            filter.filter(stations, config)
+            filter.onNewStations(stations, config, onUpdate = onUpdate)
         }
     }
 
     fun onProductChanged() {
-        runProcessingBlock("Product Change") {
-            filter.onNewPrices()
+        runProcessingBlock("Product Change") { onUpdate ->
+            filter.onNewPrices(onUpdate = onUpdate)
         }
     }
 
     fun onDistancesChange() {
-        runProcessingBlock("Distances change") {
-            filter.onDistancesChange()
+        runProcessingBlock("Distances change") { onUpdate ->
+            filter.onDistancesChange(onUpdate = onUpdate)
         }
     }
 
     fun onFilterConfigChanges() {
-        runProcessingBlock("Filters change") {
+        runProcessingBlock("Filters change") { onUpdate ->
             val config = FilterSettings.config(getApplication())
-            filter.onReconfigure(config)
+            filter.onReconfigure(config, onUpdate = onUpdate)
         }
     }
 }

@@ -2,6 +2,7 @@ package net.canvoki.carburoid.distances
 
 import com.google.common.util.concurrent.RateLimiter
 import io.ktor.client.call.body
+import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
 import io.ktor.http.appendPathSegments
 import kotlinx.serialization.Serializable
@@ -17,7 +18,7 @@ private data class OsrmTableResponse(
 // The API delays calls if they come from the same source.
 // Results are better if spaced minimum two seconds (0.5 per second)
 // If not, latencies get up to 8 seconds.
-val maxCallsPerSecond = 0.5
+val maxCallsPerSecond = 1.0
 val rateLimiter = RateLimiter.create(maxCallsPerSecond)
 
 private val OsrmJson =
@@ -41,21 +42,26 @@ class OsrmRouting {
             rateLimiter.acquire()
 
             val url = "https://router.project-osrm.org/table/v1/driving/"
+            var fullUrl = ""
             val response =
                 Http.client
                     .get(url) {
                         url {
                             appendPathSegments(coordString)
-                            parameters.append("sources", (0..sources.size - 1).joinToString(";"))
-                            parameters.append(
+                            encodedParameters.append("sources", (0..sources.size - 1).joinToString(";"))
+                            encodedParameters.append(
                                 "destinations",
                                 (sources.size..sources.size + destinations.size - 1).joinToString(";"),
                             )
                             parameters.append("annotations", "distance")
                             parameters.append("skip_waypoints", "true")
-                            //log("${toString()}")
+                            fullUrl = toString()
+                        }
+                        timeout {
+                            socketTimeoutMillis = 100_000
                         }
                     }.body<String>()
+            //log("${fullUrl}")
             //log(response)
             return OsrmJson.decodeFromString<OsrmTableResponse>(response).distances
         }

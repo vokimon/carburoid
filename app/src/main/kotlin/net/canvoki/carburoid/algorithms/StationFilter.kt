@@ -15,7 +15,9 @@ class StationFilter(
     var filteredStations = emptyList<GasStation>()
         private set
 
-    fun filter(
+    private typealias OnUpdate = suspend (List<GasStation>) -> Unit
+
+    suspend fun filter(
         stations: List<GasStation>,
         config: FilterConfig? = null,
     ): List<GasStation> {
@@ -23,33 +25,43 @@ class StationFilter(
         return filteredStations
     }
 
-    fun onNewStations(
+    suspend fun onNewStations(
         stations: List<GasStation>,
         config: FilterConfig? = null,
+        onUpdate: OnUpdate = {},
     ): List<GasStation> {
         if (config != null) this.config = config
         this.stations = stations
         computeCrowDistances()
         sortByDistance()
         paretoFilter()
+        notifyAndRefine(onUpdate)
         return filteredStations
     }
 
-    fun onReconfigure(config: FilterConfig): List<GasStation> {
+    suspend fun onReconfigure(
+        config: FilterConfig,
+        onUpdate: OnUpdate = {},
+    ): List<GasStation> {
         this.config = config
         paretoFilter()
+        onUpdate(filteredStations)
+        notifyAndRefine(onUpdate)
         return filteredStations
     }
 
-    fun onDistancesChange(): List<GasStation> {
+    suspend fun onDistancesChange(onUpdate: OnUpdate = {}): List<GasStation> {
         computeCrowDistances()
         sortByDistance()
         paretoFilter()
+        notifyAndRefine(onUpdate)
         return filteredStations
     }
 
-    fun onNewPrices(): List<GasStation> {
+    suspend fun onNewPrices(onUpdate: OnUpdate = {}): List<GasStation> {
         paretoFilter()
+        onUpdate(filteredStations)
+        notifyAndRefine(onUpdate)
         return filteredStations
     }
 
@@ -117,10 +129,23 @@ class StationFilter(
         filteredStations = result
     }
 
-    fun refineRoadDistances() {
-        val unrefinedDistances = filteredStations.filter { !it.hasRoadDistance() }
-        if (unrefinedDistances.isEmpty()) {
-            return
+    private suspend fun notifyAndRefine(onUpdate: OnUpdate) {
+        onUpdate(filteredStations)
+        var iterations = 0
+        while (true) {
+            val approximated = filteredStations.filter { !it.hasRoadDistance() }
+            if (approximated.isEmpty()) return
+
+            var previousResult = filteredStations
+
+            CurrentDistancePolicy.refineRoadDistances(approximated)
+            sortByDistance()
+            paretoFilter()
+
+            onUpdate(filteredStations)
+            iterations++
+
+            if (previousResult == filteredStations) return
         }
     }
 }

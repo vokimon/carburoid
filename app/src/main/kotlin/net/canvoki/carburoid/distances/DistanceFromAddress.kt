@@ -60,10 +60,9 @@ class DistanceFromAddress(
     override suspend fun refineRoadDistances(stations: List<GasStation>) {
         if (stations.isEmpty()) return
 
-        val originCoord = Pair(origin.latitude, origin.longitude)
-        val destCoord = destination?.let { Pair(it.latitude, it.longitude) }
+        val originCoord = origin.toLatLonPair()
+        val destCoord = destination?.toLatLonPair()
         val stationCoords = stations.map { Pair(it.latitude ?: 0.0, it.longitude ?: 0.0) }
-        println("Refining $origin -> $destination, passing by $stations")
 
         val distancesFromA =
             OsrmRouting.getDistances(
@@ -71,6 +70,7 @@ class DistanceFromAddress(
                 destinations = stationCoords,
             )[0]
 
+        if (distancesFromA.isEmpty()) return
         if (destCoord == null) {
             // Single-point mode: A → Sᵢ
             stations.forEachIndexed { i, station ->
@@ -85,6 +85,7 @@ class DistanceFromAddress(
                         sources = extendedSources,
                         destinations = listOf(destCoord),
                     ).map { it[0] }
+            if (allDistancesToB.isEmpty()) return
             val distancesToB = allDistancesToB.dropLast(1)
             val aToB = allDistancesToB.last() // A→B
             stations.zip(distancesFromA.zip(distancesToB)) { station, (aToS, sToB) ->

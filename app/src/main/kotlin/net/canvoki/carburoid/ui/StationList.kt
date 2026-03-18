@@ -171,7 +171,7 @@ fun StationList(
             } else {
                 items(
                     items = stations,
-                    key = { it.id },
+                    key = { "${it.id}-${it.hasRoadDistance()}" },
                     contentType = { "station" },
                 ) { station ->
                     GasStationCard(station, onClick = {
