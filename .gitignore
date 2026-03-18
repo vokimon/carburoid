@@ -27,4 +27,6 @@ tools/fdroid-server
 tools/graphhopper-data
 tools/graphhopper-cli.jar
 
-media/splash.png
+media/promo/banner.png
+media/promo/splash.png
+
