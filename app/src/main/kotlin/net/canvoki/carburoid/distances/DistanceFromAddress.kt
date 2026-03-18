@@ -84,7 +84,7 @@ class DistanceFromAddress(
             if (allDistancesToB.isEmpty()) return
             val distancesToB = allDistancesToB.dropLast(1)
             val aToB = allDistancesToB.last() // A→B
-            stations.zip(distancesFromA.zip(distancesToB)) { station, (aToS, sToB) ->
+            stations.zip(distancesFromA[0].zip(distancesToB)) { station, (aToS, sToB) ->
                 val deviation = (aToS + sToB - aToB).coerceAtLeast(0.0)
                 station.setRoadDistance(deviation.toFloat())
             }
