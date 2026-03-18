@@ -7,6 +7,7 @@ import io.ktor.client.request.get
 import io.ktor.http.appendPathSegments
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import net.canvoki.carburoid.location.GeoPoint
 import net.canvoki.carburoid.network.Http
 import net.canvoki.shared.log
 
@@ -29,15 +30,15 @@ private val OsrmJson =
 class OsrmRouting {
     companion object {
         suspend fun getDistances(
-            sources: List<Pair<Double, Double>>,
-            destinations: List<Pair<Double, Double>>,
+            sources: List<GeoPoint>,
+            destinations: List<GeoPoint>,
         ): List<List<Double>> {
             if (destinations.isEmpty()) return emptyList()
             if (sources.isEmpty()) return emptyList()
 
             val allCoords = sources + destinations
             // incoming as lat-lon, api expects lon-lat
-            val coordString = allCoords.joinToString(";") { "${it.second},${it.first}" }
+            val coordString = allCoords.joinToString(";") { "${it.longitude},${it.latitude}" }
 
             rateLimiter.acquire()
 

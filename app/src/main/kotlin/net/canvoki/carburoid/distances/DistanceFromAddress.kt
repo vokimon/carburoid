@@ -59,31 +59,27 @@ class DistanceFromAddress(
 
     override suspend fun refineRoadDistances(stations: List<GasStation>) {
         if (stations.isEmpty()) return
-
-        val originCoord = origin.toLatLonPair()
-        val destCoord = destination?.toLatLonPair()
-        val stationCoords = stations.map { Pair(it.latitude ?: 0.0, it.longitude ?: 0.0) }
-
+        val stationCoords = stations.map { GeoPoint(latitude = it.latitude ?: 0.0, longitude = it.longitude ?: 0.0) }
         val distancesFromA =
             OsrmRouting.getDistances(
-                sources = listOf(originCoord),
+                sources = listOf(origin),
                 destinations = stationCoords,
             )[0]
 
         if (distancesFromA.isEmpty()) return
-        if (destCoord == null) {
+        if (destination == null) {
             // Single-point mode: A → Sᵢ
             stations.forEachIndexed { i, station ->
                 station.setRoadDistance(distancesFromA[i].toFloat())
             }
         } else {
             // Route mode: compute deviation = (A→Sᵢ + Sᵢ→B − A→B)
-            val extendedSources = stationCoords + listOf(originCoord)
+            val extendedSources = stationCoords + listOf(origin)
             val allDistancesToB =
                 OsrmRouting
                     .getDistances(
                         sources = extendedSources,
-                        destinations = listOf(destCoord),
+                        destinations = listOf(destination),
                     ).map { it[0] }
             if (allDistancesToB.isEmpty()) return
             val distancesToB = allDistancesToB.dropLast(1)

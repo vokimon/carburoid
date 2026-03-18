@@ -1,6 +1,7 @@
 package net.canvoki.carburoid.distances
 
 import kotlinx.coroutines.runBlocking
+import net.canvoki.carburoid.location.GeoPoint
 import net.canvoki.shared.log
 import net.canvoki.shared.test.assertEquals
 import net.canvoki.shared.test.skipOn
@@ -25,8 +26,8 @@ class OsrmRoutingTest {
             val roadDistance =
                 runBlocking {
                     OsrmRouting.getDistances(
-                        listOf(fromLat to fromLon),
-                        listOf(toLat to toLon),
+                        listOf(GeoPoint(latitude = fromLat, longitude = fromLon)),
+                        listOf(GeoPoint(latitude = toLat, longitude = toLon)),
                     )[0][0]
                 }
             val expectedDistance = expectedBlocks * BARCELONA_EIXAMPLE_BLOCK_DISTANCE

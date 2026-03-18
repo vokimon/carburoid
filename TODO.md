@@ -2,7 +2,7 @@
 
 Do you want to help? This is my roadmap.
 
-- [ ] Refactor: Unify location representation
+- [x] Refactor: Unify location representation
     - android.location.Location: Non portable, non-testable (android dependency), verbose construction, required for location services
     - org.maplibre.spatialk.geojson.Position: Portable, library dependant
     - net.canvoki.carburoid.location.GeoPoint: Portable, featureless
