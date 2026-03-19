@@ -15,13 +15,14 @@ because they were neither cheaper nor closer than others already listed.
 ## How Carburoid eases choosing a Gas Station?
 
 What you see is a filtered list of gas stations sorted by distance
-but skipping those that are not cheaper than the ones already listed,
-and thus providing no value for you.
+but skipping those that do not provide value because they 
+are more expensive than nearest ones.
 
-So the list starts with the nearest gas station whichever the price,
-the next one is the next in distance that lowers or matches that price, and so on.
+So the list starts with the nearest gas station whichever the price.
+The next one is the next in distance that lowers or matches the first price, and so on.
+
 As you scroll you go up in distance and down in price.
-**You can stop scrolling whereever the saving is not worth the distance.**
+**You can stop scrolling wherever the saving is not worth the distance.**
 
 ## Why do I want an application to be FLOSS?
 
@@ -131,20 +132,35 @@ if you still want to share a Google Maps location,
 the workaround is to share the link via a web browser first,
 then share the resulting (parseable) URL from the browser with Carburoid.
 
-## Can this app work in countries other than Spain?
+## Can this app work for my country?
 
-That would require development, but we’re open to expanding
-or helping you adapt it for your country.
-It’s not an easy task, but it starts with finding a public fuel-price API
-similar to the one we use in Spain.
-Do that research for us and that will work a lot for us.
+Right now, Spain and France are supported.
+The system is designed with some level of extensibility in mind.
 
-What could be different:
+Contributions are very welcome, especially for:
 
-- API and the structure of the responses it gives
-- How to organize station addresses
-- Product list
-- Land masses (for Italy would be Peninsula, Sicily, Sardinia...)
+- Extending the common code to make it more generic
+- Submitting a PR to add a new language
+- Providing information on how to integrate a new language
+
+The current common code requires a reliable public API that returns, for every station:
+
+- GPS position
+- Name
+- Brand
+- Address (ideally split into street, province, and city)
+- Prices by product
+
+Ideally, this should be available through a single call covering all stations and all products, and in JSON format.
+Otherwise, common code would require a refactor.
+We are generalizing on demand in order not to over generalize.
+
+We would also need:
+
+- A mapping between product names/IDs and standardized products (currently based on Spanish ones)
+- A way to quickly group gas stations by landmasses (e.g., for Italy: Peninsula, Sicily, Sardinia)
+
+Developer tip: take a look at classes with “French/France” and “Spain/Spanish” in their names.
 
 ## Can you change the license to MIT or something similar?
 
