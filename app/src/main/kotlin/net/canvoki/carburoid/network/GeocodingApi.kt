@@ -2,6 +2,7 @@ package net.canvoki.carburoid.network
 
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import net.canvoki.carburoid.country.CountryRegistry
 import net.canvoki.carburoid.location.GeoPoint
 import net.canvoki.shared.log
 import org.json.JSONArray
@@ -15,6 +16,7 @@ data class Suggestion(
 
 suspend fun searchLocation(query: String): List<Suggestion> {
     try {
+        val countryCode = CountryRegistry.current.countryCode.lowercase()
         val response: String =
             Http.client
                 .get("https://nominatim.openstreetmap.org/search") {
@@ -22,7 +24,7 @@ suspend fun searchLocation(query: String): List<Suggestion> {
                         parameters.append("limit", "10")
                         parameters.append("format", "json")
                         parameters.append("q", query)
-                        parameters.append("countrycodes", "es") // TODO: Use current country
+                        parameters.append("countrycodes", countryCode)
                     }
                 }.body()
         val array = JSONArray(response)
