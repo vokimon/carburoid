@@ -21,6 +21,14 @@ full_description_md: |-
   - 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese…
   - ☀️ Dark and Light themes
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_5_1_md: |-
+  Route deviation really activated and France location search
+
+  - 🐛 Route deviation was only active on debug
+  - 🐛 Location search not limited to Spain, adapts to data source (so it works in France now)
+  - ✨ Fallback name for french gas stations
+  - ✨ Updated France station name database
+  - 🌐 DE translation marked as complete (it was complete but marked as not)
 changes_1_5_0_md: |-
   Route deviation, refine the list using real road distances and more languages
 
@@ -131,7 +139,8 @@ changes_1_2_3_md: |-
   - 🌐 Spanish contained untranslated Catalan words (Fixes #4)
       - Thanks to wuniversales for the report
   - 🏗️ agp upgraded back. FDroid server got an upgrade.
-changes_1_2_2_md: '- 🏗️ agp downgraded 8.13.0 -> 8.11.0 because fdroid build server (Fixes #1)'
+changes_1_2_2_md: '- 🏗️ agp downgraded 8.13.0 -> 8.11.0 because fdroid build server
+  (Fixes #1)'
 changes_1_2_1_md: |-
   Layout fixes on Android 15 and issues on language/rotation changes
 

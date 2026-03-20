@@ -1,6 +1,8 @@
 # Change log
 
-## Unrelased
+## 1.5.1 (2026-03-20)
+
+Route deviation really activated and France location search
 
 - 🐛 Route deviation was only active on debug
 - 🐛 Location search not limited to Spain, adapts to data source (so it works in France now)
