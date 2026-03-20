@@ -1,7 +1,7 @@
 project_name: Carburoid
 splash_motto: Tanke zum besten Preis – ganz in deiner Nähe
 short_description: Finde Tankstellen in Spanien und Frankreich nach Preis und Entfernung.
-full_description_md: |+
+full_description_md: |
   Carburoid zeigt nur Tankstellen an, die wirklich infrage kommen.
   Sortiert nach Entfernung: Ist eine Tankstelle teurer als naheliegende Alternativen, wird sie ausgeblendet.
   So schrumpft die Liste von Tausenden auf wenige Dutzend.
