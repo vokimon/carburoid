@@ -1,7 +1,9 @@
-Carburoid mostra només les benzineres que mereixen consideració.
-Ordenades per distància si una benzinera és més cara que les més properes, no es mostra.
-Això redueix la llista de milers a unes dotzenes.
-I de cara a escollir, pots baixar a la lista per millorar el preu fins que, per distància, no et compensi.
+Quant cal conduir per trobar una benzinera més barata?
+
+Carburoid mostra només les poques desenes de benziners que importen,
+eliminant milers que són més cares que d’altres més properes.
+A mesura que baixes a la llista, el preu disminueix, però la distància augmenta.
+Tu decideixes fins a quin punt et compensa conduir per estalviar.
 
 Funcionalitats:
 

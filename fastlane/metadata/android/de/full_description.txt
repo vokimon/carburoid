@@ -1,7 +1,9 @@
-Carburoid zeigt nur Tankstellen an, die wirklich infrage kommen.
-Sortiert nach Entfernung: Ist eine Tankstelle teurer als naheliegende Alternativen, wird sie ausgeblendet.
-So schrumpft die Liste von Tausenden auf wenige Dutzend.
-Um zu wählen, scroll einfach nach unten – der Preis verbessert sich, bis die zusätzliche Fahrtstrecke nicht mehr lohnt.
+Wie weit sollte man fahren, um eine günstigere Tankstelle zu finden?
+
+Carburoid zeigt nur die wenigen Dutzend Tankstellen, die wirklich wichtig sind.
+Sie blendet die Tausenden im Land aus, die teurer sind als andere, die näher liegen.
+In der Liste sinken die Preise, je weiter man nach unten scrollt, nehmen die Entfernungen zu.
+Du entscheidest selbst, wie weit es sich lohnt zu fahren, um zu sparen.
 
 Funktionen:
 
