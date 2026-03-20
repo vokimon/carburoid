@@ -3,8 +3,8 @@ package net.canvoki.carburoid.location
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.location.Geocoder
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -82,6 +82,41 @@ fun positionToBundle(
     bundle.apply {
         putDouble(prefix + "_lat", location.latitude)
         putDouble(prefix + "_lon", location.longitude)
+    }
+}
+
+fun positionFromPreferences(
+    prefs: SharedPreferences,
+    prefix: String,
+): GeoPoint? {
+    val latBits = prefs.getLong(prefix + "_lat", Long.MIN_VALUE)
+    val lngBits = prefs.getLong(prefix + "_lon", Long.MIN_VALUE)
+
+    if (latBits == Long.MIN_VALUE || lngBits == Long.MIN_VALUE) {
+        return null
+    }
+
+    val location =
+        GeoPoint(
+            latitude = java.lang.Double.longBitsToDouble(latBits),
+            longitude = java.lang.Double.longBitsToDouble(lngBits),
+        )
+    return location
+}
+
+fun positionToPreferences(
+    prefs: SharedPreferences,
+    prefix: String,
+    location: GeoPoint?,
+) {
+    prefs.edit {
+        if (location == null) {
+            remove(prefix + "_lat")
+            remove(prefix + "_lon")
+        } else {
+            putLong(prefix + "_lat", java.lang.Double.doubleToRawLongBits(location.latitude))
+            putLong(prefix + "_lon", java.lang.Double.doubleToRawLongBits(location.longitude))
+        }
     }
 }
 
@@ -254,32 +289,10 @@ class LocationService(
         prefix: String,
         location: GeoPoint?,
     ) {
-        prefs.edit {
-            if (location == null) {
-                remove(prefix + "_lat")
-                remove(prefix + "_lon")
-            } else {
-                putLong(prefix + "_lat", java.lang.Double.doubleToRawLongBits(location.latitude))
-                putLong(prefix + "_lon", java.lang.Double.doubleToRawLongBits(location.longitude))
-            }
-        }
+        positionToPreferences(prefs, prefix, location)
     }
 
-    fun loadLocation(prefix: String): GeoPoint? {
-        val latBits = prefs.getLong(prefix + "_lat", Long.MIN_VALUE)
-        val lngBits = prefs.getLong(prefix + "_lon", Long.MIN_VALUE)
-
-        if (latBits == Long.MIN_VALUE || lngBits == Long.MIN_VALUE) {
-            return null
-        }
-
-        val location =
-            GeoPoint(
-                latitude = java.lang.Double.longBitsToDouble(latBits),
-                longitude = java.lang.Double.longBitsToDouble(lngBits),
-            )
-        return location
-    }
+    fun loadLocation(prefix: String): GeoPoint? = positionFromPreferences(prefs, prefix)
 
     fun loadLastLocation(): Pair<GeoPoint, GeoPoint?>? =
         loadLocation(PREF_CURRENT_LOCATION)?.let {
