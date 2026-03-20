@@ -1,11 +1,13 @@
 project_name: Carburoid
 splash_motto: Llena al mejor precio, más cerca
 short_description: Encuentra gasolineras en España y Francia por precio y distancia.
-full_description_md: |+
-  Carburoid muestra solo las gasolineras que merecen consideración.
-  Ordenadas por distancia, si una gasolinera es más cara que las más cercanas, no se muestra.
-  Esto reduce la lista de miles a unas docenas.
-  Para escoger una, solo baja en la lista para mejorar el precio hasta que la distancia no te compense.
+full_description_md: |-
+  ¿Cuánto hay que conducir para encontrar una gasolinera más barata?
+
+  Carburoid muestra solo las pocas decenas de gasolineras que importan,
+  eliminando miles que son más caras que otras más cercanas.
+  A medida que bajas en la lista, el precio disminuye, pero la distancia aumenta.
+  Tú decides hasta qué punto te compensa conducir para ahorrar.
 
   Funcionalidades:
 
@@ -13,6 +15,6 @@ full_description_md: |+
   - 🎯 Solo gasolineras relevantes: o más cercanas o más baratas que otras
   - 🕒 Considera los horarios de apertura
   - 🗺️ Se integra con la aplicación de mapas que uses
-  - 🌐 Traducciones al Español, Catalán, Vasco, Gallego, Aragonés...
+  - 🌐 Traducciones al Español, Catalán, Vasco, Gallego, Aragonés…
   - ☀️ Temas oscuro y claro
 keywords: gasolinera, estación de servicio, combustible, carburante, gasoil, diesel, gasolina
