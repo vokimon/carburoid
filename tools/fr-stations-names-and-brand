@@ -90,7 +90,7 @@ def process_id(id):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python extract_both.py <station_id>")
+        print("Usage: python extract_both.py <n_stations>")
         sys.exit(1)
     #process_id(sys.argv[1])
     process_batch(int(sys.argv[1]))
