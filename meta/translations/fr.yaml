@@ -3,10 +3,12 @@ short_description: Trouvez les stations services par prix et par distance en Esp
 keywords: station service, essence, diesel, gazole, carburant
 project_name: Carburoid
 full_description_md: |-
-  Carburoid ne montre que les stations services intéressantes.
-  Elles sont triées par distance et ne sont affichées que si le carburant est moins cher dans les stations plus lointaines.
-  Cela permet de n'afficher qu'une dizaine de stations services au lieu de quelques milliers.
-  Pour choisir une station service, descendez dans la liste pour trouvez des stations moins chères jusqu'à ce que la distance ne deviennne trop grande pour espérer faire des économies.
+  Jusqu’où conduire pour trouver une station moins chère ?
+
+  Carburoid n’affiche que quelques dizaines de stations qui comptent,
+  en supprimant des milliers plus chères que des stations plus proches.
+  Les prix diminuent en descendant la liste, mais la distance augmente.
+  Vous décidez jusqu’où il vaut la peine de conduire pour économiser.
 
   Fonctionnalités:
 
