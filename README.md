@@ -10,10 +10,13 @@
 
 Find gas stations by price and distance in Spain and France.
 
-Carburoid shows only gas stations worth considering.
-Sorted by distance, whenever a station is more expensive than the closer ones, it is hidden.
-This reduces the list from thousands to a few dozens.
-To choose a station, just scroll down to improve the price until the distance is not worth for you the saving.
+How far should you go to find a cheaper gas station?
+
+Carburoid shows only the few dozen stations that matter.
+It hides the thousands across the country that are more expensive than closer ones.
+
+Prices go down in the list as distance increases.
+You decide how far it’s worth driving for the savings.
 
 Features:
 
