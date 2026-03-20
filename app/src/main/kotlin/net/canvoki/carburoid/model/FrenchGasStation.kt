@@ -166,16 +166,16 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
                 ?.let { it / 100000.0 }
 
         val openingHours = obj["horaires_jour"]?.jsonPrimitive?.content?.let { FranceOpeningHours.parse(it) }
-        val extraDb: FranceExtraStationData.Db? = FranceExtraStationData.db()
-        val extraData: FranceExtraStationData? = extraDb?.let { it.get(id.toString()) }
-        val name: String =
-            when {
-                extraData != null -> "${extraData.brand} - ${extraData.name}"
-                else -> {
+        val idString = id.toString()
+        val extraData = FranceExtraStationData.db()?.let { it.get(idString) }
+        val name =
+            listOfNotNull(extraData?.brand, extraData?.name)
+                .filterNot { it.isNullOrBlank() }
+                .joinToString(" - ")
+                .ifEmpty {
                     log("FR: NO NAME FOR STATION $id")
-                    id.toString() // fallback
+                    id.toString()
                 }
-            }
 
         // Extract prices: any field ending with "_prix"
         val prices = mutableMapOf<String, Double?>()

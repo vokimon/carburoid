@@ -14,8 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.res.stringResource
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import kotlinx.coroutines.CoroutineScope
@@ -29,12 +27,9 @@ import kotlinx.coroutines.withContext
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.distances.DistanceFromAddress
-import net.canvoki.carburoid.location.GeoPoint
-import net.canvoki.carburoid.location.describeLocation
 import net.canvoki.shared.log
 import net.canvoki.shared.timeit
 import net.canvoki.shared.usermessage.UserMessage
-import java.util.Locale
 
 fun Double.notNaNOrNull(): Double? = this.takeUnless { this.isNaN() }
 
