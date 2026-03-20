@@ -248,37 +248,7 @@ class LocationService(
 
     fun getCurrentLocationDescription(): String = description ?: "Location not available"
 
-    private suspend fun geocodeLocation(location: GeoPoint): String? {
-        return withContext(Dispatchers.IO) {
-            if (!Geocoder.isPresent()) {
-                return@withContext null
-            }
-
-            try {
-                timeit("GEOCODING $location") {
-                    val geocoder = Geocoder(context, Locale.getDefault())
-
-                    @Suppress("DEPRECATION")
-                    val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                    if (addresses == null || addresses.isEmpty()) {
-                        null
-                    } else {
-                        val address = addresses[0]
-                        listOfNotNull(
-                            address.thoroughfare,
-                            address.subThoroughfare,
-                            address.locality,
-                            address.adminArea,
-                            address.countryName,
-                        ).filter { it.isNotBlank() == true }.joinToString(", ")
-                    }
-                }
-            } catch (e: Exception) {
-                log("Error getting address: ${e.message}")
-                null
-            }
-        }
-    }
+    private suspend fun geocodeLocation(location: GeoPoint): String? = describeLocation(context, location)
 
     private fun saveLocation(
         prefix: String,
