@@ -28,6 +28,7 @@ changes_1_5_1_md: |-
   - 🐛 Location search not limited to Spain, adapts to data source (so it works in France now)
   - ✨ Fallback name for french gas stations
   - ✨ Updated France station name database
+  - ♻️ Using nominatim for all location naming queries
   - 🌐 DE translation marked as complete (it was complete but marked as not)
 changes_1_5_0_md: |-
   Route deviation, refine the list using real road distances and more languages
