@@ -8,6 +8,7 @@ Route deviation really activated and France location search
 - 🐛 Location search not limited to Spain, adapts to data source (so it works in France now)
 - ✨ Fallback name for french gas stations
 - ✨ Updated France station name database
+- ♻️ Using nominatim for all location naming queries
 - 🌐 DE translation marked as complete (it was complete but marked as not)
 
 ## 1.5.0 (2026-03-18)

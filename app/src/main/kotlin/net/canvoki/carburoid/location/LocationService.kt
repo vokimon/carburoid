@@ -27,6 +27,7 @@ import kotlinx.coroutines.withContext
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
 import net.canvoki.carburoid.distances.DistanceFromAddress
+import net.canvoki.carburoid.network.nameLocation
 import net.canvoki.shared.log
 import net.canvoki.shared.timeit
 import net.canvoki.shared.usermessage.UserMessage
@@ -272,14 +273,12 @@ class LocationService(
         }
         geocodingJob =
             launch {
-                description = geocodeLocation(location) ?: description
+                description = nameLocation(location) ?: description
                 _descriptionUpdated.emit(description ?: "")
             }
     }
 
     fun getCurrentLocationDescription(): String = description ?: "Location not available"
-
-    private suspend fun geocodeLocation(location: GeoPoint): String? = describeLocation(context, location)
 
     private fun saveLocation(
         prefix: String,
