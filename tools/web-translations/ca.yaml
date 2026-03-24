@@ -17,19 +17,19 @@ FEATURE_ROUND_TRIP_DETOUR_MODES_TITLE: Round trip and Detour modes
 FEATURE_ROUND_TRIP_DETOUR_MODES_DESCRIPTION: |
     Round trip mode considers just the distance between your position and the gas station.
     By setting a destination point, the detour distance is used instead.
-FEATURE_FREEDOM_AS_FEATURE_TITLE: Freedom as a feature
+FEATURE_FREEDOM_AS_FEATURE_TITLE: La llibertat com a funcionalitat
 FEATURE_FREEDOM_AS_FEATURE_DESCRIPTION: |
-    AGPLv3 protects your freedoms as user.
-    Code is maintained in community and anyone can audit it.
-    No spyware. No data collection. No paid station doping.
-    F-Droid ensures that binaries come from the source as published.
-FEATURE_FREEDOM_AS_FEATURE_ACTION_GITHUB: Source Code
-FEATURE_FREEDOM_AS_FEATURE_ACTION_LICENSE: GNU Affero GPLv3 or later
-FEATURE_TRANSLATIONS_TITLE: Translations
+    AGPLv3 protegeix la teva llibertat com a usuari.
+    El codi el manté la comunitat i tothom pot auditar-ho.
+    Sense espies. Sense recolecció de dades. Sense dopping pagat de benzineres.
+    F-Droid assegura que els APK provenen del codi font tal com està publicat.
+FEATURE_FREEDOM_AS_FEATURE_ACTION_GITHUB: Codi Font
+FEATURE_FREEDOM_AS_FEATURE_ACTION_LICENSE: GNU Affero GPLv3 o posterior
+FEATURE_TRANSLATIONS_TITLE: Traduccions
 FEATURE_TRANSLATIONS_DESCRIPTION: |
-    Special care is taken to support minoritarian languages.
-    This is a community effort, translate your own language with Weblate.
-FEATURE_TRANSLATIONS_ACTION_WEBLATE: Translate
+    Posem cura especial en donar suport a les llengües minoritàries.
+    És un esforç comunitari, tradueix la teva llengua amb Weblate.
+FEATURE_TRANSLATIONS_ACTION_WEBLATE: Tradueix
 ACTION_FDROID: Get it on F-Droid
 ACTION_DONATE: Donate
 ACTION_SOCIAL: Follow us
