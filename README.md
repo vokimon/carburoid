@@ -4,6 +4,7 @@
 [![Get it on F-Droid](https://img.shields.io/f-droid/v/net.canvoki.carburoid.svg?logo=F-Droid)](https://f-droid.org/packages/net.canvoki.carburoid)
 ![GitHub Downloads](https://img.shields.io/github/downloads/vokimon/carburoid/total?logo=github)
 <a rel="me" href="https://masto.es/@carburoid"><img alt="Mastodon" src="https://img.shields.io/mastodon/follow/116250870368086238?domain=masto.es"></a>
+[![Hypercommit](https://img.shields.io/badge/Hypercommit-DB2475)](https://hypercommit.com/carburoid)
 ![Carburoid. Fillup cheaper, closer](media/promo/banner.svg)
 
 # Carburoid
