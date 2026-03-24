@@ -1,6 +1,6 @@
 app_name: "Carburoid"
-motto: "Fill up cheaper, closer"
-description: "An Open Source Android app to find cheap gas stations"
+motto: MOTTO
+description: DESCRIPTION
 platforms: "Android"
 author: "David García Garzón"
 copyright_years: 2026
@@ -20,72 +20,48 @@ branding:
   border_color: "#dddddd"
   footer_background: "#111"
 features:
-  - title:
-      en: "Official Data"
-      ca: "Dades oficials"
-    description:
-      en: |
-        We use official data sent by gas stations to the regulators.
-        Currently supporting Spain and France.
-      ca: |
-        Fem servir dades oficials enviades per les benzineres al regulador.
-        Ara mateix cobrim Espanya i França.
+  - title: FEATURE_OFFICIAL_DATA_TITLE
+    description: FEATURE_OFFICIAL_DATA_DESCRIPTION
     image: "../assets/government.svg"
-  - title:
-      en: "Only relevant stations"
-      ca: "Només benzineres rellevants"
-    description:
-      en: |
-        Carburoid discards stations that do not improve the price of closer ones.
-        This reduces the list of candidates from thousands to a few dozens.
+  - title: FEATURE_RELEVANT_STATIONS_TITLE
+    description: FEATURE_RELEVANT_STATIONS_DESCRIPTION
     image: "../assets/skipirrelevant.svg"
-  - title: "Your choice"
-    description: |
-        Prices improve as you scroll down the list, but distances also increase.
-        It is up to you to decide how far is worth going for the savings.
+  - title: FEATURE_YOUR_CHOICE_TITLE
+    description: FEATURE_YOUR_CHOICE_DESCRIPTION
     image: "../assets/yourchoice.svg"
-  - title: "Round trip and Detour modes"
-    description: |
-        Round trip mode considers just the distance between your position and the gas station.
-        By setting a destination point, the detour distance is used instead.
+  - title: FEATURE_ROUND_TRIP_DETOUR_MODES_TITLE
+    description: FEATURE_ROUND_TRIP_DETOUR_MODES_DESCRIPTION
     image: "../assets/detour.svg"
-  - title: "Freedom as a feature"
-    description: |
-        AGPLv3 protects your freedoms as user.
-        Code is maintained in community and anyone can audit it.
-        No spyware. No data collection. No paid station doping.
-        F-Droid ensures that binaries come from the source as published.
+  - title: FEATURE_FREEDOM_AS_FEATURE_TITLE
+    description: FEATURE_FREEDOM_AS_FEATURE_DESCRIPTION
     image: "../assets/agplv3.svg"
     actions:
     - link: https://github.com/vokimon/carburoid
-      label: Source Code
+      label: FEATURE_FREEDOM_AS_FEATURE_ACTION_GITHUB
       icon: ../assets/github.svg
     - link: https://github.com/vokimon/carburoid/blob/master/LICENSE
-      label: Affero GPLv3 or later
+      label: FEATURE_FREEDOM_AS_FEATURE_ACTION_LICENSE
       icon: ../assets/gnu.svg
-  - title: "Translations"
-    description: |
-        Special care is taken to support minoritarian languages.
-        This is a community effort, translate your own language with Weblate.
+  - title: FEATURE_TRANSLATIONS_TITLE
+    description: FEATURE_TRANSLATIONS_DESCRIPTION
     image: "../assets/globe.svg"
     actions:
     - link: https://hosted.weblate.org/projects/carburoid/
-      label: Translate
+      label: FEATURE_TRANSLATIONS_ACTION_WEBLATE
       icon: ../assets/weblate.svg
 actions:
-  - label: "Get it on F-Droid"
+  - label: ACTION_FDROID
     link: "https://f-droid.org/packages/net.canvoki.carburoid/"
     icon: "../assets/fdroid.svg"
-#  - label: "Donate"
+#  - label: ACTION_DONATE
 #    link: "https://patreon.com/miappgenial"
 #    icon: "../assets/patreon.svg"
-  - label: "Follow us"
+  - label: ACTION_SOCIAL
     link: "https://masto.es/@carburoid"
     icon: "../assets/mastodon.svg"
-#  - label: "Google Play"
+#  - label: ACTION_GOOGLE_PLAY
 #    link: "https://play.google.com/store/apps/details?id=net.canvoki.carburoid"
 #    icon: "../assets/googleplay.svg"
-#  - label: "App Store"
+#  - label: ACTION_APP_STORE
 #    link: "https://apps.apple.com/app/id123456789"
 #    icon: "../assets/appstore.svg"
-footer_text: "© 2026 David García Garzón"

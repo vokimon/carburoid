@@ -16,6 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent
 DATA_FILE = BASE_DIR / "web-data.yaml"
 TEMPLATE_FILE = BASE_DIR / "web-template.html"
 OUTPUT_DIR = BASE_DIR / "web"
+TRANSLATIONS_DIR = BASE_DIR / "web-translations"
 
 
 def load_data():
@@ -34,6 +35,46 @@ def load_template():
 
     with open(TEMPLATE_FILE) as t:
         return Template(t.read())
+
+def load_translations():
+    translations = {}
+    for lang_file in TRANSLATIONS_DIR.glob("*.yaml"):
+        typer.echo(f"🌐 Loading translation {lang_file}")
+        lang = lang_file.stem
+        with open(lang_file) as f:
+            translations[lang] = yaml.safe_load(f)
+    return translations
+
+
+def apply_translations(data, translations, fallback_lang):
+    """
+    Recursively traverse the data.
+    - If a value is a string in all uppercase and exists in external translations,
+      replace it with a dict of all languages.
+    - Otherwise, keep the value as-is.
+    """
+    # Recurse for dicts
+    if isinstance(data, dict):
+        return {
+            k: apply_translations(v, translations, fallback_lang)
+           for k, v in data.items()
+        }
+
+    # Recurse for lists
+    if isinstance(data, list):
+        return [
+            apply_translations(item, translations, fallback_lang)
+            for item in data
+        ]
+
+    if not isinstance(data, str): return data
+    if not data.isupper(): return data
+    if data not in translations.get('en', {}): return data
+
+    return {
+        lang: ext.get(data, data)
+        for lang, ext in translations.items()
+    }
 
 def translate_data(data: dict, lang: str, fallback_lang: str) -> dict:
     """
@@ -92,9 +133,11 @@ def main(ctx: typer.Context):
 @app.command()
 def build():
     """Generate the static site"""
+    translations = load_translations()
     data = load_data()
-    template = load_template()
     fallback_lang = "en" # TODO: read it from data
+    data = apply_translations(data, translations, fallback_lang)
+    template = load_template()
     langs = detect_languages(data, fallback_lang)
     for lang in langs:
         translated_data = translate_data(data, lang, fallback_lang)

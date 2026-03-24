@@ -1,0 +1,37 @@
+MOTTO: Fill up cheaper, closer
+DESCRIPTION: An Open Source Android app to find cheap gas stations
+KEYWORDS: gas station, petrol, gasoil, diesel, gasoline, android
+FEATURE_OFFICIAL_DATA_TITLE: Official Data
+FEATURE_OFFICIAL_DATA_DESCRIPTION: |
+    We use official data sent by gas stations to the regulators.
+    Currently supporting Spain and France.
+FEATURE_RELEVANT_STATIONS_TITLE: Only relevant stations
+FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
+    Carburoid discards stations that do not improve the price of closer ones.
+    This reduces the list of candidates from thousands to a few dozens.
+FEATURE_YOUR_CHOICE_TITLE: Your choice
+FEATURE_YOUR_CHOICE_DESCRIPTION: |
+    Prices improve as you scroll down the list, but distances also increase.
+    It is up to you to decide how far is worth going for the savings.
+FEATURE_ROUND_TRIP_DETOUR_MODES_TITLE: Round trip and Detour modes
+FEATURE_ROUND_TRIP_DETOUR_MODES_DESCRIPTION: |
+    Round trip mode considers just the distance between your position and the gas station.
+    By setting a destination point, the detour distance is used instead.
+FEATURE_FREEDOM_AS_FEATURE_TITLE: Freedom as a feature
+FEATURE_FREEDOM_AS_FEATURE_DESCRIPTION: |
+    AGPLv3 protects your freedoms as user.
+    Code is maintained in community and anyone can audit it.
+    No spyware. No data collection. No paid station doping.
+    F-Droid ensures that binaries come from the source as published.
+FEATURE_FREEDOM_AS_FEATURE_ACTION_GITHUB: Source Code
+FEATURE_FREEDOM_AS_FEATURE_ACTION_LICENSE: GNU Affero GPLv3 or later
+FEATURE_TRANSLATIONS_TITLE: Translations
+FEATURE_TRANSLATIONS_DESCRIPTION: |
+    Special care is taken to support minoritarian languages.
+    This is a community effort, translate your own language with Weblate.
+FEATURE_TRANSLATIONS_ACTION_WEBLATE: Translate
+ACTION_FDROID: Get it on F-Droid
+ACTION_DONATE: Donate
+ACTION_SOCIAL: Follow us
+ACTION_GOOGLE_PLAY: Google Play
+ACTION_APP_STORE: App Store
