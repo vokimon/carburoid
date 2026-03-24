@@ -1,8 +1,25 @@
 RewriteEngine On
 
-RewriteRule ^$ /en/ [L,R=302]
-
-# Avoid caching for / so every time reads the language
+# Disable caching for root (/), consider the language every time
 <If "%{REQUEST_URI} == '/'">
     Header always set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header always set Pragma "no-cache"
+    Header always set Expires "0"
 </If>
+
+# Only act on root path (/)
+RewriteCond %{REQUEST_URI} ^/$
+
+# Extract primary language from Accept-Language header (e.g. "ca" from "ca-ES")
+RewriteCond %{HTTP:Accept-Language} ^([a-z]{2}) [NC]
+RewriteRule ^$ - [E=LANG:%1]
+
+# If matching language directory exists → redirect
+RewriteCond %{REQUEST_URI} ^/$
+RewriteCond %{ENV:LANG} !^$
+RewriteCond %{DOCUMENT_ROOT}/%{ENV:LANG} -d
+RewriteRule ^$ /%{ENV:LANG}/ [L,R=302]
+
+# Fallback to English
+RewriteCond %{REQUEST_URI} ^/$
+RewriteRule ^$ /en/ [L,R=302]
