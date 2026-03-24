@@ -6,6 +6,14 @@
     padding: 0;
 }
 
+/* RTL for languages needing it */
+html:lang(ar),
+html:lang(he),
+html:lang(fa),
+html:lang(ur) {
+  direction: rtl;
+}
+
 html {
     font-family: 'Inter', system-ui, sans-serif;
     font-size: 16px;

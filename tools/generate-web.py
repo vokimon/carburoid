@@ -141,6 +141,7 @@ def build():
     langs = detect_languages(data, fallback_lang)
     for lang in langs:
         translated_data = translate_data(data, lang, fallback_lang)
+        translated_data['lang'] = lang
         html_output = template.render(**translated_data)
         lang_dir = OUTPUT_DIR / lang
 
