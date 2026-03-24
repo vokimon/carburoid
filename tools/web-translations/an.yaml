@@ -6,6 +6,7 @@ FEATURE_OFFICIAL_DATA_TITLE: Datos oficiales
 FEATURE_OFFICIAL_DATA_DESCRIPTION: |
     Usamos datos oficiales que as benzineras remiten a os reguladors.
     Agora mismo cubrimos España y Francia.
+FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY: Afigir o mio país
 FEATURE_RELEVANT_STATIONS_TITLE: Solo benzineras rellevants
 FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
     Carburoid descarta as benzineras que no mejoran o precio d’otras más cercanas.

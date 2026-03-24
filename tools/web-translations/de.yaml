@@ -6,6 +6,7 @@ FEATURE_OFFICIAL_DATA_TITLE: Offizielle Daten
 FEATURE_OFFICIAL_DATA_DESCRIPTION: |
     Wir verwenden offizielle Daten, die von Tankstellen an die Regulierungsbehörden gesendet werden.
     Derzeit decken wir Spanien und Frankreich ab.
+FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY: Mein Land hinzufügen
 FEATURE_RELEVANT_STATIONS_TITLE: Nur relevante Tankstellen
 FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
     Carburoid verwirft Tankstellen, die den Preis der nächstgelegenen nicht verbessern.

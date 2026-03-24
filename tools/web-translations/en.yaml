@@ -6,6 +6,7 @@ FEATURE_OFFICIAL_DATA_TITLE: Official Data
 FEATURE_OFFICIAL_DATA_DESCRIPTION: |
     We use official data sent by gas stations to the regulators.
     Currently supporting Spain and France.
+FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY: Add my country
 FEATURE_RELEVANT_STATIONS_TITLE: Only relevant stations
 FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
     Carburoid discards stations that do not improve the price of closer ones.

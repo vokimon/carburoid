@@ -40,16 +40,7 @@ features:
     image: "../assets/government.svg"
     actions:
     - link: https://github.com/vokimon/carburoid/blob/master/FAQ.md#can-this-app-work-for-my-country
-      label: # FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY
-        en: "Add my country"
-        ca: "Afegiu el meu país"
-        an: "Afigir o mio país"
-        es: "Añadir mi país"
-        gl: "Engadir o meu país"
-        de: "Mein Land hinzufügen"
-        fr: "Ajouter mon pays"
-        eu: "Nire herrialdea gehitu"
-        ar: "أضف بلدي"
+      label: FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY
   - title: FEATURE_RELEVANT_STATIONS_TITLE
     description: FEATURE_RELEVANT_STATIONS_DESCRIPTION
     image: "../assets/skipirrelevant.svg"

@@ -6,6 +6,7 @@ FEATURE_OFFICIAL_DATA_TITLE: Datos oficiais
 FEATURE_OFFICIAL_DATA_DESCRIPTION: |
     Usamos datos oficiais que envían as estacións de servizo aos reguladores.
     Actualmente cubrimos España e Francia.
+FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY: Engadir o meu país
 FEATURE_RELEVANT_STATIONS_TITLE: Só estacións relevantes
 FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
     Carburoid descarta estacións que non melloran o prezo das máis próximas.

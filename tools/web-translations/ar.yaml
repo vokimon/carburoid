@@ -6,6 +6,7 @@ FEATURE_OFFICIAL_DATA_TITLE: بيانات رسمية
 FEATURE_OFFICIAL_DATA_DESCRIPTION: |
     نستخدم البيانات الرسمية التي ترسلها محطات الوقود إلى الجهات المنظمة.
     نحن ندعم حاليًا إسبانيا وفرنسا.
+FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY: أضف بلدي
 FEATURE_RELEVANT_STATIONS_TITLE: المحطات المهمة فقط
 FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
     يقوم Carburoid باستبعاد المحطات التي لا تحسن السعر مقارنة بالأقرب.
