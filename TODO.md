@@ -70,7 +70,7 @@ Do you want to help? This is my roadmap.
             </intent-filter>
             ```
 - [ ] Favorites gas stations (white list by station)
-- [ ] Favorites gas stations (white list by trade mark)
+- [ ] Favorites gas stations (white list by brand)
 - [ ] Discounts: https://geoportalgasolineras.es/geoportal-instalaciones/PlanesDescuento (portal, csv)
     - [ ] https://geoportalgasolineras.es/geoportal/rest/discountPlans
     - [ ] https://geoportalgasolineras.es/geoportal/rest/9999/planesDescuentoEstacion

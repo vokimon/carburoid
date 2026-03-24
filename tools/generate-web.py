@@ -35,13 +35,12 @@ def load_template():
     with open(TEMPLATE_FILE) as t:
         return Template(t.read())
 
-def translate_data(data: dict, lang: str = "en", fallback_lang: str = "en") -> dict:
+def translate_data(data: dict, lang: str, fallback_lang: str) -> dict:
     """
     Recursively traverse the YAML data.
     - If a value is a dict with 'en', 'es', etc., pick the correct language
     - Otherwise, keep the value as-is
     """
-    FALLBACK_LANG = "en"
     if isinstance(data, dict):
         # Translation
         if fallback_lang in data:
@@ -57,7 +56,7 @@ def translate_data(data: dict, lang: str = "en", fallback_lang: str = "en") -> d
     # base case: primitive value
     return data
 
-def detect_languages(data, fallback_lang="en") -> set:
+def detect_languages(data: dict, fallback_lang: str) -> set:
     """
     Recursively detect all language keys in a YAML-like structure.
     - If a dict has fallback_lang, treat it as a language dict and collect all keys.
@@ -95,10 +94,10 @@ def build():
     """Generate the static site"""
     data = load_data()
     template = load_template()
-
-    langs = detect_languages(data, fallback_lang='en')
+    fallback_lang = "en" # TODO: read it from data
+    langs = detect_languages(data, fallback_lang)
     for lang in langs:
-        translated_data = translate_data(data, lang)
+        translated_data = translate_data(data, lang, fallback_lang)
         html_output = template.render(**translated_data)
         lang_dir = OUTPUT_DIR / lang
 
