@@ -2,12 +2,16 @@
 
 import subprocess
 from pathlib import Path
-
 import typer
 import yaml
 from jinja2 import Template
 from dotenv import load_dotenv
 import os
+import http.server
+import socketserver
+from threading import Timer
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 app = typer.Typer(invoke_without_command=True)
 
@@ -17,6 +21,95 @@ DATA_FILE = BASE_DIR / "web-data.yaml"
 TEMPLATE_FILE = BASE_DIR / "web-template.html"
 OUTPUT_DIR = BASE_DIR / "web"
 TRANSLATIONS_DIR = BASE_DIR / "web-translations"
+
+import time
+
+class RebuildHandler(FileSystemEventHandler):
+    def __init__(self, build_fn, watched_paths, debounce=1.5):
+        self.build_fn = build_fn
+        self.watched_paths = [str(p.resolve()) for p in watched_paths]
+        self.debounce = debounce
+        self.last_run = 0
+        self.timer = None
+
+    def _is_relevant(self, path: str) -> bool:
+        path = str(Path(path).resolve())
+        return any(path.startswith(w) for w in self.watched_paths)
+
+    def on_modified(self, event):
+        self.process_event(event)
+
+    def on_deleted(self, event):
+        self.process_event(event)
+
+    def on_created(self, event):
+        self.process_event(event)
+
+    def process_event(self, event):
+        if event.is_directory:
+            return
+
+        if not self._is_relevant(event.src_path):
+            return
+
+        if not event.src_path.endswith((".yaml", ".html")):
+            return
+
+        if self.timer:
+            self.timer.cancel()
+
+        typer.echo(f"📁 {event.event_type}: {event.src_path}")
+        self.timer = Timer(self.debounce, self._trigger_build)
+        self.timer.start()
+
+    def _trigger_build(self):
+        self.timer = None
+        typer.echo("🔄 Change detected, rebuilding...")
+        try:
+            self.build_fn()
+        except Exception as e:
+            typer.echo(f"❌ Build failed: {e}")
+
+def serve_directory(directory: Path, port: int):
+    handler = http.server.SimpleHTTPRequestHandler
+
+    os.chdir(directory)
+
+    with socketserver.TCPServer(("", port), handler) as httpd:
+        typer.echo(f"🌍 Serving at http://localhost:{port}")
+        httpd.serve_forever()
+
+@app.command()
+def serve(port: int = 8000):
+    """Serve the site locally and rebuild on changes"""
+
+    # Initial build
+    build()
+
+    watched_paths = [
+        DATA_FILE,
+        TEMPLATE_FILE,
+        TRANSLATIONS_DIR,
+    ]
+
+    # Start watcher
+    event_handler = RebuildHandler(build, watched_paths)
+    observer = Observer()
+
+    observer.schedule(event_handler, str(DATA_FILE))
+    observer.schedule(event_handler, str(TEMPLATE_FILE))
+    observer.schedule(event_handler, str(TRANSLATIONS_DIR), recursive=True)
+    observer.start()
+
+    typer.echo("👀 Watching for changes...")
+
+    try:
+        serve_directory(OUTPUT_DIR, port)
+    except KeyboardInterrupt:
+        typer.echo("\n🛑 Stopping...")
+        observer.stop()
+
+    observer.join()
 
 
 def load_data():
