@@ -1,38 +1,38 @@
-MOTTO: Benzina al millor preu, més aprop
-DESCRIPTION: App Open Source per Android per trobrar benzineres barates
+MOTTO: Benzina al millor preu, més a prop
+DESCRIPTION: App Open Source per Android per trobar benzineres barates
 KEYWORDS: benzinera, gasolinera, estació de servei, combustible, gasoil, diesel, benzina, gasolina
 FEATURE_OFFICIAL_DATA_TITLE: Dades oficials
 FEATURE_OFFICIAL_DATA_DESCRIPTION: |
     Fem servir dades oficials enviades per les benzineres al regulador.
     Ara mateix cobrim Espanya i França.
-FEATURE_RELEVANT_STATIONS_TITLE: Només benzineres relevants
+FEATURE_RELEVANT_STATIONS_TITLE: Només benzineres rellevants
 FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
     Carburoid descarta les benzineres que no milloren el preu d'altres més properes.
     Això redueix la llista de candidates de milers a decenes.
 FEATURE_YOUR_CHOICE_TITLE: Tu decideixes
 FEATURE_YOUR_CHOICE_DESCRIPTION: |
-    Els preus milloren segons vas baixant a la llista, però, també, puja la distància.
-    Tu decideixes cóm de lluny vols anar que encara et pagui la pena l'estalvi.
-FEATURE_ROUND_TRIP_DETOUR_MODES_TITLE: Round trip and Detour modes
+    Els preus milloren a mesura que baixes per la llista, però la distància també augmenta.
+    Tu decideixes fins on val la pena anar per l'estalvi.
+FEATURE_ROUND_TRIP_DETOUR_MODES_TITLE: Anada i tornada o ruta amb desviament
 FEATURE_ROUND_TRIP_DETOUR_MODES_DESCRIPTION: |
-    Round trip mode considers just the distance between your position and the gas station.
-    By setting a destination point, the detour distance is used instead.
+    El mode "Anada i tornada" només considera la distància entre la teva posició i la benzinera.
+    Si fixes un punt de destinació, es considera la distància que implica el desviament per la benzinera.
 FEATURE_FREEDOM_AS_FEATURE_TITLE: La llibertat com a funcionalitat
 FEATURE_FREEDOM_AS_FEATURE_DESCRIPTION: |
-    AGPLv3 protegeix la teva llibertat com a usuari.
-    El codi el manté la comunitat i tothom pot auditar-ho.
-    Sense espies. Sense recolecció de dades. Sense dopping pagat de benzineres.
-    F-Droid assegura que els APK provenen del codi font tal com està publicat.
+    La llicència AGPLv3 protegeix la teva llibertat com a usuària.
+    El codi és mantingut per la comunitat i tothom el pot auditar.
+    Sense espies. Sense recollida de dades. Sense promoció pagada de benzineres.
+    F-Droid assegura que els APK provenen del codi font tal com s'ha publicat.
 FEATURE_FREEDOM_AS_FEATURE_ACTION_GITHUB: Codi Font
 FEATURE_FREEDOM_AS_FEATURE_ACTION_LICENSE: GNU Affero GPLv3 o posterior
 FEATURE_TRANSLATIONS_TITLE: Traduccions
 FEATURE_TRANSLATIONS_DESCRIPTION: |
     Posem cura especial en donar suport a les llengües minoritàries.
     És un esforç comunitari, tradueix la teva llengua amb Weblate.
-FEATURE_TRANSLATIONS_ACTION_WEBLATE: Tradueix
-ACTION_FDROID: Get it on F-Droid
-ACTION_DONATE: Donate
-ACTION_SOCIAL: Follow us
+FEATURE_TRANSLATIONS_ACTION_WEBLATE: Traduiu
+ACTION_FDROID: Descarregueu a F-Droid
+ACTION_DONATE: Feu una donació
+ACTION_SOCIAL: Seguiu-nos
 ACTION_GOOGLE_PLAY: Google Play
 ACTION_APP_STORE: App Store
-
+COOKIE_NOTICE: Aquest lloc no fa servir galetes. La teva privacitat sí que ens importa de veritat.

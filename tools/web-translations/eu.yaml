@@ -1,0 +1,38 @@
+MOTTO: Betetze merkeago, hurbilago
+DESCRIPTION: Androiderako Open Source aplikazioa gasolindegi merkeak aurkitzeko
+KEYWORDS: gasolindegi, zerbitzugunea, erregaia, gasolio, diesel, gasolina, Android
+FEATURE_OFFICIAL_DATA_TITLE: Datu ofizialak
+FEATURE_OFFICIAL_DATA_DESCRIPTION: |
+    Gasolindegiek araudi‑erakundeei bidalitako datu ofizialak erabiltzen ditugu.
+    Une honetan Espainia eta Frantzia estaltzen ditugu.
+FEATURE_RELEVANT_STATIONS_TITLE: Soilik egokiak diren estazioak
+FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
+    Carburoid‑ek ez ditu kontuan hartzen hurbilen dagoen prezioa hobetu ez duten gasolindegiak.
+    Horrek hautagaien zerrenda mila batetik dozena batetara murrizten du.
+FEATURE_YOUR_CHOICE_TITLE: Zure hautua
+FEATURE_YOUR_CHOICE_DESCRIPTION: |
+    Prezioak hobetzen dira zerrendan behera egiten duzun heinean, baina distantziak ere handitzen dira.
+    Zure esku dago aurrezkiak merezi duen distantzia zehaztea.
+FEATURE_ROUND_TRIP_DETOUR_MODES_TITLE: Itzulingurua edo bidegabeko ibilbidea
+FEATURE_ROUND_TRIP_DETOUR_MODES_DESCRIPTION: |
+    “Itzulingurua” moduak zure kokapenetik gasolindegiraino dagoen distantzia bakarrik kontuan hartzen du.
+    Helmuga puntua ezarriz gero, bidegabeko ibilbidearekin batera kalkulatzen da.
+FEATURE_FREEDOM_AS_FEATURE_TITLE: Askatasuna funtzionalitate gisa
+FEATURE_FREEDOM_AS_FEATURE_DESCRIPTION: |
+    AGPLv3 lizentziak erabiltzaile gisa zure askatasuna babesten du.
+    Kodea komunitateak mantentzen du eta edozeinek ikuskapena egin dezake.
+    Ez dago espioitzarik. Ez dago datuen bilketarik. Ez dago ordainpeko sustapenik gasolindegientzat.
+    F‑Droid‑ek ziurtatzen du binarioak iturburu‑kodetik datozela publikatu bezala.
+FEATURE_FREEDOM_AS_FEATURE_ACTION_GITHUB: Iturburu kodea
+FEATURE_FREEDOM_AS_FEATURE_ACTION_LICENSE: GNU Affero GPLv3 edo ondorengoa
+FEATURE_TRANSLATIONS_TITLE: Itzulpenak
+FEATURE_TRANSLATIONS_DESCRIPTION: |
+    Arreta berezia eskaintzen zaio hizkuntza gutxituak laguntzeari.
+    Komunitate‑ahalegina da — itzuli zure hizkuntza Weblate erabiliz.
+FEATURE_TRANSLATIONS_ACTION_WEBLATE: Itzuli
+ACTION_FDROID: Eskuragarri F‑Droid‑en
+ACTION_DONATE: Eman dohaintza
+ACTION_SOCIAL: Jarraituz gurekin
+ACTION_GOOGLE_PLAY: Google Play
+ACTION_APP_STORE: App Store
+COOKIE_NOTICE: Gune honek ez du cookie‑rik erabiltzen. Zure pribatutasuna benetan garrantzitsua da guretzat.

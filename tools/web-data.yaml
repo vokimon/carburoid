@@ -65,3 +65,4 @@ actions:
 #  - label: ACTION_APP_STORE
 #    link: "https://apps.apple.com/app/id123456789"
 #    icon: "../assets/appstore.svg"
+cookie_notice: COOKIE_NOTICE

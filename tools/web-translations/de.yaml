@@ -1,0 +1,38 @@
+MOTTO: Tanken günstiger, näher
+DESCRIPTION: Open‑Source‑App für Android, um günstige Tankstellen zu finden
+KEYWORDS: Tankstelle, Benzin, Diesel, Kraftstoff, Gasolin, Android
+FEATURE_OFFICIAL_DATA_TITLE: Offizielle Daten
+FEATURE_OFFICIAL_DATA_DESCRIPTION: |
+    Wir verwenden offizielle Daten, die von Tankstellen an die Regulierungsbehörden gesendet werden.
+    Derzeit decken wir Spanien und Frankreich ab.
+FEATURE_RELEVANT_STATIONS_TITLE: Nur relevante Tankstellen
+FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
+    Carburoid verwirft Tankstellen, die den Preis der nächstgelegenen nicht verbessern.
+    Dadurch wird die Kandidatenliste von Tausenden auf einige Dutzend reduziert.
+FEATURE_YOUR_CHOICE_TITLE: Deine Wahl
+FEATURE_YOUR_CHOICE_DESCRIPTION: |
+    Die Preise verbessern sich, je weiter du in der Liste nach unten gehst, aber die Entfernungen nehmen auch zu.
+    Du entscheidest, wie weit sich eine Fahrt für die Ersparnis lohnt.
+FEATURE_ROUND_TRIP_DETOUR_MODES_TITLE: Hin‑ und Rückfahrt oder Route mit Umweg
+FEATURE_ROUND_TRIP_DETOUR_MODES_DESCRIPTION: |
+    Der Modus “Hin‑ und Rückfahrt” berücksichtigt nur die Entfernung zwischen deinem Standort und der Tankstelle.
+    Bei Festlegung eines Ziels wird die Entfernung einschließlich des Umwegs berechnet.
+FEATURE_FREEDOM_AS_FEATURE_TITLE: Freiheit als Funktion
+FEATURE_FREEDOM_AS_FEATURE_DESCRIPTION: |
+    Die Lizenz AGPLv3 schützt deine Freiheit als Benutzerin.
+    Der Code wird von der Community gepflegt und kann von jeder Person geprüft werden.
+    Kein Spionieren. Keine Datensammlung. Keine bezahlte Förderung von Tankstellen.
+    F‑Droid stellt sicher, dass die Binärdateien aus dem Quellcode stammen, wie veröffentlicht.
+FEATURE_FREEDOM_AS_FEATURE_ACTION_GITHUB: Quellcode
+FEATURE_FREEDOM_AS_FEATURE_ACTION_LICENSE: GNU Affero GPLv3 oder später
+FEATURE_TRANSLATIONS_TITLE: Übersetzungen
+FEATURE_TRANSLATIONS_DESCRIPTION: |
+    Besonderer Wert wird auf die Unterstützung von Minderheitensprachen gelegt.
+    Dies ist eine Gemeinschaftsanstrengung — übersetze deine Sprache mit Weblate.
+FEATURE_TRANSLATIONS_ACTION_WEBLATE: Übersetzen
+ACTION_FDROID: Verfügbar auf F‑Droid
+ACTION_DONATE: Spende
+ACTION_SOCIAL: Folge uns
+ACTION_GOOGLE_PLAY: Google Play
+ACTION_APP_STORE: App Store
+COOKIE_NOTICE: Diese Seite verwendet keine Cookies. Deine Privatsphäre ist uns wirklich wichtig.

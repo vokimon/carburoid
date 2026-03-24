@@ -1,0 +1,38 @@
+MOTTO: Llena más barato, más cerca
+DESCRIPTION: App Open Source para Android para encontrar gasolineras baratas
+KEYWORDS: gasolinera, estación de servicio, combustible, gasoil, diésel, gasolina, Android
+FEATURE_OFFICIAL_DATA_TITLE: Datos oficiales
+FEATURE_OFFICIAL_DATA_DESCRIPTION: |
+    Usamos datos oficiales que envían las gasolineras a los reguladores.
+    Actualmente cubrimos España y Francia.
+FEATURE_RELEVANT_STATIONS_TITLE: Solo estaciones relevantes
+FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
+    Carburoid descarta las estaciones que no mejoran el precio de otras más cercanas.
+    Esto reduce la lista de candidatos de miles a unas pocas decenas.
+FEATURE_YOUR_CHOICE_TITLE: Tú decides
+FEATURE_YOUR_CHOICE_DESCRIPTION: |
+    Los precios mejoran conforme bajas en la lista, pero la distancia también aumenta.
+    Tú decides hasta dónde conviene ir para ahorrar.
+FEATURE_ROUND_TRIP_DETOUR_MODES_TITLE: Ida y vuelta o ruta con desvío
+FEATURE_ROUND_TRIP_DETOUR_MODES_DESCRIPTION: |
+    El modo “Ida y vuelta” solo considera la distancia entre tu ubicación y la gasolinera.
+    Si fijas un punto de destino, se calcula la distancia incluyendo el desvío.
+FEATURE_FREEDOM_AS_FEATURE_TITLE: Libertad como funcionalidad
+FEATURE_FREEDOM_AS_FEATURE_DESCRIPTION: |
+    La licencia AGPLv3 protege tu libertad como usuaria.
+    El código lo mantiene la comunidad y cualquier persona puede auditarlo.
+    Sin espías. Sin recolección de datos. Sin promoción pagada de gasolineras.
+    F‑Droid garantiza que los binarios provienen del código fuente tal como se publicó.
+FEATURE_FREEDOM_AS_FEATURE_ACTION_GITHUB: Código fuente
+FEATURE_FREEDOM_AS_FEATURE_ACTION_LICENSE: GNU Affero GPLv3 o posterior
+FEATURE_TRANSLATIONS_TITLE: Traducciones
+FEATURE_TRANSLATIONS_DESCRIPTION: |
+    Prestamos especial atención al apoyo de lenguas minoritarias.
+    Es un esfuerzo comunitario — traduce tu lengua con Weblate.
+FEATURE_TRANSLATIONS_ACTION_WEBLATE: Traducir
+ACTION_FDROID: Disponible en F‑Droid
+ACTION_DONATE: Haz una donación
+ACTION_SOCIAL: Síguenos
+ACTION_GOOGLE_PLAY: Google Play
+ACTION_APP_STORE: App Store
+COOKIE_NOTICE: Este sitio no usa cookies. Tu privacidad sí que nos importa de verdad.
