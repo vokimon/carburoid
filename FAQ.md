@@ -134,16 +134,14 @@ then share the resulting (parseable) URL from the browser with Carburoid.
 
 ## Can this app work for my country?
 
-Right now, Spain and France are supported.
-The system is designed with some level of extensibility in mind.
+Right now, only **Spain and France** are supported.
+The system is designed to be extensible up to some point.
+Community contributions to add new countries is very welcome.
 
-Contributions are very welcome, especially for:
+You can help by providing information about your country’s data sources,
+contributing code, or improving the common code to support more cases.
 
-- Extending the common code to make it more generic
-- Submitting a PR to add a new language
-- Providing information on how to integrate a new language
-
-The current common code requires a reliable public API that returns, for every station:
+To add support for a country, we need a **reliable public API** that provides, for every gas station:
 
 - GPS position
 - Name
@@ -151,16 +149,19 @@ The current common code requires a reliable public API that returns, for every s
 - Address (ideally split into street, province, and city)
 - Prices by product
 
-Ideally, this should be available through a single call covering all stations and all products, and in JSON format.
-Otherwise, common code would require a refactor.
-We are generalizing on demand in order not to over generalize.
+We also need:
 
-We would also need:
+- A mapping between **product names/IDs and standardized products** (currently based on Spanish ones)
+- A way to **group stations by regions or landmasses** (e.g. Italy: Peninsula, Sicily, Sardinia)
 
-- A mapping between product names/IDs and standardized products (currently based on Spanish ones)
-- A way to quickly group gas stations by landmasses (e.g., for Italy: Peninsula, Sicily, Sardinia)
+Often APIs are documented in the native language,
+so explaining us how the API works is also very helpful.
 
-Developer tip: take a look at classes with “French/France” and “Spain/Spanish” in their names.
+The current common code expects a **single API call returning JSON** with all stations in the country and prices for all the products.
+If your data source fits there, you can follow existing implementations by looking at files with **“France/French”** or **“Spain/Spanish”** in their names.
+
+If the API requires multiple queries, does not return JSON, or lacks some of the required data, the common code will need to be extended.
+In that case, it’s best to **contact the maintainers first** to agree on the approach before starting implementation.
 
 ## Can you change the license to MIT or something similar?
 
