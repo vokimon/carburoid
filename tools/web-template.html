@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }} | {{motto}}</title>
+    <style>
+        :root {
+            --primary-color: {{ branding.primary_color }};
+            --secondary-color: {{ branding.secondary_color }};
+            --tertiary-color: {{ branding.tertiary_color }};
+            --background-color: {{ branding.background_color }};
+            --text-color: {{ branding.text_color }};
+            --muted-text-color: {{ branding.muted_text_color }};
+            --border-color: {{ branding.border_color }};
+            --footer-background: {{ branding.footer_background }};
+        }
+    </style>
+    <link rel="stylesheet" href="../assets/style.css">
+    <link rel="stylesheet" href="../assets/phoneframe.css">
+
+    <link rel="me" href="{{ mastodon_url }}" />
+
+    <meta name="description" content="{{ app_name}} {{description }}" />
+    <meta name="keywords" content="{{ keywords }}" />
+    <meta name="author" content="{{ author }}" />
+    <link rel="canonical" href="{{ site_url }}" />
+  
+    <!-- Robots -->
+    <meta name="robots" content="index, follow" />
+  
+    <!-- Open Graph (Facebook, LinkedIn) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{ app_name }} - {{ motto }}" />
+    <meta property="og:description" content="{{ description }}" />
+    <meta property="og:url" content="{{ site_url }}" />
+    <meta property="og:image" content="{{ splash_image }}" />
+    <meta property="og:site_name" content="{{ app_name }}" />
+  
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ app_name }} - {{ motto }}" />
+    <meta name="twitter:description" content="{{ description }}" />
+    <meta name="twitter:image" content="{{ splash_image }}" />
+  
+    <!-- Favicon -->
+    <link rel="icon" href="{{ logo_url }}" />
+  
+    <!-- Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+</head>
+<body>
+<header class="hero">
+    <div class="hero-container">
+
+        <div class="hero-content">
+        <div class="hero-logo">
+            <img src="{{ logo_url }}" alt="{{ app_name }} Logo">
+        </div>
+
+            <h1>{{ app_name }}</h1>
+            <p class="motto">{{ motto }}</p>
+            <p class="description">{{ description }}</p>
+
+            <div class="actions">
+                {% for action in actions %}
+                <a 
+                    href="{{ action.link }}" 
+                    target="_blank"
+                    class="btn {% if loop.index0 == 0 %}btn-primary{% else %}btn-secondary{% endif %}"
+                >
+                    {% if action.icon %}
+                    <img src="{{ action.icon }}" alt="">
+                    {% endif %}
+                    <span>{{ action.label }}</span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="screenshots">
+            <img class="mobile-frame-img" style="--frame-width: 200px" src="{{ main_screenshot }}" alt="Captura de pantalla principal de {{ app_name }}">
+        </div>
+    </div>
+</header>
+
+
+<section class="features">
+  {% for feature in features %}
+  <div class="feature">
+    <div class="feature-inner">
+      <div class="feature-image">
+        {% if feature.image %}
+        <img src="{{ feature.image }}" alt="{{ feature.title }}">
+        {% endif %}
+      </div>
+      <div class="feature-content">
+        <h2>{{ feature.title }}</h2>
+        <p>{{ feature.description }}</p>
+        {% if feature.actions %}
+        <div class="actions">
+            {% for action in feature.actions %}
+            <a 
+                href="{{ action.link }}" 
+                target="_blank"
+                class="btn {% if loop.index0 == 0 %}btn-primary{% else %}btn-secondary{% endif %}"
+            >
+                {% if action.icon %}
+                <img src="{{ action.icon }}" alt="">
+                {% endif %}
+                <span>{{ action.label }}</span>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</section>
+
+<footer>
+    <p>This site does not use cookies. We <b>really</b> care about your privacy.</p>
+    <p>© {{ copyright_years }} {{ author }}</p>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  "name": "{{ app_name }}",
+  "description": "{{description}}",
+  "operatingSystem": "{{ platforms }}"
+}
+</script>
+
+</body>
+</html>

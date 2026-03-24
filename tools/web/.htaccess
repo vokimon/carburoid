@@ -1,0 +1,8 @@
+RewriteEngine On
+
+RewriteRule ^$ /en/ [L,R=302]
+
+# Avoid caching for / so every time reads the language
+<If "%{REQUEST_URI} == '/'">
+    Header always set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+</If>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="148mm"
+   height="80mm"
+   viewBox="0 0 148 80"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   sodipodi:docname="skipirrelevant.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.2578844"
+     inkscape:cx="234.52076"
+     inkscape:cy="266.32018"
+     inkscape:window-width="1829"
+     inkscape:window-height="957"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <marker
+       style="overflow:visible"
+       id="ConcaveTriangle"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Concave triangle arrow"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.7)"
+         d="M -2,-4 9,0 -2,4 c 2,-2.33 2,-5.66 0,-8 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:none"
+         id="path7" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:9.64431px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;opacity:0.99;fill:#e2b49a;stroke:#333333;stroke-width:0.211667;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1"
+       x="31.885908"
+       y="46.585995"
+       id="text1"
+       transform="scale(0.98723505,1.01293)"><tspan
+         sodipodi:role="line"
+         id="tspan1"
+         style="fill:#e2b49a;stroke-width:0.211667;fill-opacity:1"
+         x="31.885908"
+         y="46.585995">1.80€</tspan></text>
+    <g
+       id="g5"
+       transform="matrix(2.106949,0,0,2.0437601,-82.440957,-92.732433)"
+       style="stroke-width:0.481901;fill:#00ff00">
+      <path
+         style="opacity:1;fill:none;stroke:#aa0000;stroke-width:1.4457;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+         d="M 66.46742,80.980877 82.032577,60.415143"
+         id="path4" />
+      <path
+         style="opacity:1;fill:none;stroke:#aa0000;stroke-width:1.4457;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+         d="M 82.032577,80.980877 66.46742,60.415143"
+         id="path5" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:9.64431px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;opacity:0.99;fill:#e2b49a;stroke:#333333;stroke-width:0.211667;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1"
+       x="74.710899"
+       y="46.585995"
+       id="text2"
+       transform="scale(0.98723505,1.01293)"><tspan
+         sodipodi:role="line"
+         id="tspan2"
+         style="fill:#e2b49a;stroke-width:0.211667;fill-opacity:1"
+         x="74.710899"
+         y="46.585995">2.10€</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:9.64431px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;opacity:0.99;fill:#e2b49a;stroke:#333333;stroke-width:0.211667;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1"
+       x="117.53589"
+       y="46.585995"
+       id="text3"
+       transform="scale(0.98723505,1.01293)"><tspan
+         sodipodi:role="line"
+         id="tspan3"
+         style="fill:#e2b49a;stroke-width:0.211667;fill-opacity:1"
+         x="117.53589"
+         y="46.585995">1.70€</tspan></text>
+    <path
+       style="opacity:0.99;fill:none;stroke:#aaccff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#ConcaveTriangle)"
+       d="m 31.721671,29.082225 c 0,0 16.787534,-21.2443348 42.278328,-21.2443348 15.394475,0 30.242411,14.6388118 30.242411,14.6388118"
+       id="path3"
+       sodipodi:nodetypes="csc" />
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:9.64431px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;opacity:0.99;fill:#d5d5ff;stroke:#333333;stroke-width:0.211667;stroke-linecap:round;stroke-linejoin:round"
+       x="31.885908"
+       y="62.487381"
+       id="text5"
+       transform="scale(0.98723505,1.01293)"><tspan
+         sodipodi:role="line"
+         id="tspan5"
+         style="fill:#d5d5ff;stroke-width:0.211667"
+         x="31.885908"
+         y="62.487381">10km</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:9.64431px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;opacity:0.99;fill:#d5d5ff;stroke:#333333;stroke-width:0.211667;stroke-linecap:round;stroke-linejoin:round"
+       x="74.710899"
+       y="62.487381"
+       id="text6"
+       transform="scale(0.98723505,1.01293)"><tspan
+         sodipodi:role="line"
+         id="tspan6"
+         style="fill:#d5d5ff;stroke-width:0.211667"
+         x="74.710899"
+         y="62.487381">20km</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:9.64431px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;opacity:0.99;fill:#d5d5ff;stroke:#333333;stroke-width:0.211667;stroke-linecap:round;stroke-linejoin:round"
+       x="117.53589"
+       y="62.487381"
+       id="text7"
+       transform="scale(0.98723505,1.01293)"><tspan
+         sodipodi:role="line"
+         id="tspan7"
+         style="fill:#d5d5ff;stroke-width:0.211667"
+         x="117.53589"
+         y="62.487381">30km</tspan></text>
+  </g>
+</svg>

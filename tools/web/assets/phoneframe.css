@@ -1,0 +1,90 @@
+
+:root {
+  --frame-width: 300px;
+
+  /* Configuration ratios */
+  --frame-thickness-r: 0.02;
+  --radius-r: 0.12;
+
+  --notch-w-r: 0.28;
+  --notch-h-r: 0.045;
+
+  --home-w-r: 0.32;
+  --home-h-r: 0.018;
+
+  --safe-gap-r: 0.02;
+
+  --front-surface-color: #222;
+  --frame-color: #222;
+  --notch-color: #25F;
+
+  --shadow: 20px;
+  --shadow-blur: 20px;
+  --shadow-color: rgba(0,0,0,0.2);
+}
+
+.mobile-frame-img {
+  /* Derived values */
+  --frame-thickness: calc(var(--frame-width) * var(--frame-thickness-r));
+  --radius: calc(var(--frame-width) * var(--radius-r));
+
+  --notch-w: calc(var(--frame-width) * var(--notch-w-r));
+  --notch-h: calc(var(--frame-width) * var(--notch-h-r));
+
+  --home-w: calc(var(--frame-width) * var(--home-w-r));
+  --home-h: calc(var(--frame-width) * var(--home-h-r));
+
+  --safe-gap: calc(var(--frame-width) * var(--safe-gap-r));
+
+  /* Safe padding = max(radius, element height + gap) */
+  --padding-top: max(var(--radius), calc(var(--notch-h) + var(--safe-gap)));
+  --padding-bottom: max(var(--radius), calc(var(--home-h) + var(--safe-gap)));
+
+  width: var(--frame-width);
+  height: auto;
+  color: var(--notch-color);
+
+  margin: var(--frame-thickness);
+
+  padding: var(--padding-top) 0 var(--padding-bottom) 0;
+  box-sizing: border-box;
+
+  border-radius: var(--radius);
+  outline: var(--frame-thickness) solid var(--frame-color);
+
+  box-shadow:
+    0 var(--shadow-y) var(--shadow-blur) var(--shadow-color),
+    0 calc(var(--shadow-y)/2) calc(var(--shadow-blur)/2) rgba(0,0,0,0.1);
+
+  object-fit: contain;
+
+  /* backgrounds */
+  background-origin: padding-box;
+  background-repeat: no-repeat;
+
+  background-image:
+    /* notch */
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'>\
+<rect width='100' height='20' rx='10' fill='currentColor'/>\
+</svg>"),
+    /* home */
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'>\
+<rect y='5' width='100' height='10' rx='5' fill='currentColor'/>\
+</svg>"),
+    /* plain front surface */
+    linear-gradient(var(--front-surface-color), var(--front-surface-color));
+
+  /* sizes: notch, home, front surface */
+  background-size:
+    var(--notch-w) var(--notch-h),
+    var(--home-w) var(--home-h),
+    100% 100%;
+
+  /* positions: notch top, home bottom, front surface covers all */
+  background-position:
+    center calc(var(--padding-top) / 5),
+    center calc(100% - var(--padding-bottom) / 2),
+    0 0;
+}
