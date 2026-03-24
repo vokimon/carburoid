@@ -135,14 +135,14 @@ def build():
     """Generate the static site"""
     translations = load_translations()
     data = load_data()
-    fallback_lang = "en" # TODO: read it from data
+    fallback_lang = data.get("fallback_language", "en")
     data = apply_translations(data, translations, fallback_lang)
     template = load_template()
     langs = detect_languages(data, fallback_lang)
     for lang in langs:
         translated_data = translate_data(data, lang, fallback_lang)
         translated_data['lang'] = lang
-        html_output = template.render(**translated_data)
+        html_output = template.render(langs=langs, **translated_data)
         lang_dir = OUTPUT_DIR / lang
 
         lang_dir.mkdir(parents=True, exist_ok=True)

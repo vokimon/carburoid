@@ -53,6 +53,22 @@
 </head>
 <body>
 <header class="hero">
+    <nav class="lang-dropdown">
+    <button class="btn btn-small lang-toggle">
+        <img src="../assets/language.svg"> {{ lang.upper() }}
+    </button>
+    <ul class="lang-menu">
+        {% for code in langs|sort %}
+        <li>
+            <a href="/{{ code|lower }}/" lang="{{ code|lower }}"
+            {% if code|lower == lang %} aria-current="page" class="active"{% endif %}>
+            {{ code.upper() }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    </nav>
+
     <div class="hero-container">
 
         <div class="hero-content">

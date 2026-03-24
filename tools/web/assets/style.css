@@ -26,6 +26,75 @@ body {
     color: var(--tertiary-color);
 }
 
+.lang-toggle {
+  all: unset; /* remove all button styles */
+}
+
+.btn.btn-small {
+  padding-block: 0.4rem;
+  padding-inline: 0.7rem;
+  font-size: 0.8rem;
+  border-radius: 999px;
+  gap: 0rem;
+}
+
+
+.lang-toggle.btn.btn-small {
+  padding-block: 0.4rem;
+  padding-inline: 0.7rem;
+  font-size: 0.8rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lang-dropdown {
+  position: absolute;
+  inset-block-start: 1rem;
+  inset-inline-end: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 1000;
+}
+
+.lang-menu {
+  display: none;
+  margin: 0.3rem 0 0 0;
+  padding: 0.2rem 0;
+  list-style: none;
+  background: color-mix(in srgb, #ffffff 6%, var(--primary-color));
+  border-radius: 0.4rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  min-width: max-content;
+}
+
+.lang-dropdown:has(:focus-within) .lang-menu {
+  display: block;
+}
+
+.lang-menu li a {
+  display: block;
+  padding: 0.3rem 0.8rem;
+  text-decoration: none;
+  color: inherit;
+  opacity: 0.85;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.lang-menu li a:hover,
+.lang-menu li a:focus-visible {
+  background: rgba(0,0,0,0.08);
+  opacity: 1;
+}
+
+.lang-menu li a.active {
+  font-weight: 600;
+  pointer-events: none;
+  opacity: 1;
+}
+
 .hero {
     background-color: var(--primary-color);
     color: #ffffff;
@@ -87,70 +156,72 @@ body {
     width: 100%;
 }
 
-.actions {
-    .btn {
-        text-align: center;
-        flex-grow: 0;
-        flex-shrink: 0;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        gap: 0.5rem;
-        padding-block: 0.75rem;
-        padding-inline: 1.25rem;
-        border-radius: 999px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 0.95rem;
-        transition-property: transform, background-color, box-shadow;
-        transition-duration: 0.2s;
-        transition-timing-function: ease;
-        cursor: pointer;
-        @media (max-width: 600px) {
-            width: 100%;
-        }
-    }
-    .btn img {
-        height: 20px;
-        width: 20px;
-        margin-inline-end: 10px;
-        display: inline-block;
-    }
-    .btn span {
-        display: inline-block;
-    }
-
-    .btn {
-        background-color: rgba(255,255,255,0.15);
-        color: #ffffff;
-    }
-
-    .btn:hover {
-        background-color: rgba(255,255,255,0.25);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-    }
-
-    .btn:active {
-        transform: translateY(0);
-    }
-
-    .btn-primary {
-        background-color: var(--secondary-color);
-        color: #ffffff;
-    }
-
-    .btn.btn-primary:hover {
-        background-color: var(--secondary-color);
-        box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-    }
-
-    .btn-primary:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
+.btn {
+    text-align: center;
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.5rem;
+    padding-block: 0.75rem;
+    padding-inline: 1.25rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition-property: transform, background-color, box-shadow;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    cursor: pointer;
 }
+
+.actions .btn {
+    @media (max-width: 600px) {
+        width: 100%;
+    }
+}
+
+.btn img {
+    height: 20px;
+    width: 20px;
+    margin-inline-end: 10px;
+    display: inline-block;
+}
+.btn span {
+    display: inline-block;
+}
+
+.btn {
+    background-color: rgba(255,255,255,0.15);
+    color: #ffffff;
+}
+
+.btn:hover {
+    background-color: rgba(255,255,255,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    background-color: var(--secondary-color);
+    color: #ffffff;
+}
+
+.btn.btn-primary:hover {
+    background-color: var(--secondary-color);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
 
 .feature .actions {
     justify-content: flex-end;
