@@ -18,7 +18,22 @@ branding:
   background_color: "#525"
   muted_text_color: "#444444"
   border_color: "#dddddd"
-  footer_background: "#111"
+actions:
+  - label: ACTION_FDROID
+    link: "https://f-droid.org/packages/net.canvoki.carburoid/"
+    icon: "../assets/fdroid.svg"
+#  - label: ACTION_DONATE
+#    link: "https://patreon.com/miappgenial"
+#    icon: "../assets/patreon.svg"
+  - label: ACTION_SOCIAL
+    link: "https://masto.es/@carburoid"
+    icon: "../assets/mastodon.svg"
+#  - label: ACTION_GOOGLE_PLAY
+#    link: "https://play.google.com/store/apps/details?id=net.canvoki.carburoid"
+#    icon: "../assets/googleplay.svg"
+#  - label: ACTION_APP_STORE
+#    link: "https://apps.apple.com/app/id123456789"
+#    icon: "../assets/appstore.svg"
 features:
   - title: FEATURE_OFFICIAL_DATA_TITLE
     description: FEATURE_OFFICIAL_DATA_DESCRIPTION
@@ -49,20 +64,4 @@ features:
     - link: https://hosted.weblate.org/projects/carburoid/
       label: FEATURE_TRANSLATIONS_ACTION_WEBLATE
       icon: ../assets/weblate.svg
-actions:
-  - label: ACTION_FDROID
-    link: "https://f-droid.org/packages/net.canvoki.carburoid/"
-    icon: "../assets/fdroid.svg"
-#  - label: ACTION_DONATE
-#    link: "https://patreon.com/miappgenial"
-#    icon: "../assets/patreon.svg"
-  - label: ACTION_SOCIAL
-    link: "https://masto.es/@carburoid"
-    icon: "../assets/mastodon.svg"
-#  - label: ACTION_GOOGLE_PLAY
-#    link: "https://play.google.com/store/apps/details?id=net.canvoki.carburoid"
-#    icon: "../assets/googleplay.svg"
-#  - label: ACTION_APP_STORE
-#    link: "https://apps.apple.com/app/id123456789"
-#    icon: "../assets/appstore.svg"
 cookie_notice: COOKIE_NOTICE
