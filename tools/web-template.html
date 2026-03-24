@@ -58,13 +58,8 @@
         <img src="../assets/language.svg"> {{ lang.upper() }}
     </button>
     <ul class="lang-menu">
-        {% for code in langs|sort %}
-        <li>
-            <a href="/{{ code|lower }}/" lang="{{ code|lower }}"
-            {% if code|lower == lang %} aria-current="page" class="active"{% endif %}>
-            {{ code.upper() }}
-            </a>
-        </li>
+        {% for code, name in langs.items() |sort %}
+        <li><a href="/{{ code }}/" lang="{{ code }}"{% if code == lang %} aria-current="page" class="active"{% endif %}>{{name}} ({{ code.upper() }})</a></li>
         {% endfor %}
     </ul>
     </nav>

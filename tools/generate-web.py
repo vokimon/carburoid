@@ -138,7 +138,10 @@ def build():
     fallback_lang = data.get("fallback_language", "en")
     data = apply_translations(data, translations, fallback_lang)
     template = load_template()
-    langs = detect_languages(data, fallback_lang)
+    langs = {
+        lang: translations[lang].get('LANGUAGE_NAME', lang)
+        for lang in detect_languages(data, fallback_lang)
+    }
     for lang in langs:
         translated_data = translate_data(data, lang, fallback_lang)
         translated_data['lang'] = lang
