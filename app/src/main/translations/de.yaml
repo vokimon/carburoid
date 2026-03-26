@@ -6,14 +6,14 @@ settings_category_language_appearance: Sprache und Aussehen
 settings_category_station_filters: Tankstellenfilter
 settings_filter_expensive: Verstecke irrevelante Tankstellen
 settings_filter_expensive_summary: Eine Tankstelle gilt als irrelevant, wenn es eine andere gibt, die näher und günstiger ist. (Empfohlen)
-settings_filter_expensive_warning: Carburoid ist für die Verwendung mit aktiviertem Filter ausgelegt. Wenn Sie ihn deaktivieren, werden viel mehr Tnkstellen angezeigt, was die Anwendung erheblich verlangsamt. Sie sollten ihn später wieder aktivieren.
+settings_filter_expensive_warning: Carburoid ist für die Verwendung mit aktiviertem Filter ausgelegt. Wenn Sie ihn deaktivieren, werden viel mehr Tankstellen angezeigt, was die Anwendung erheblich verlangsamt. Sie sollten ihn später wieder aktivieren.
 settings_filter_non_public: Zeige nur öffentliche Preise
-settings_filter_non_public_summary: Verbergen Preise, für die eine Mitgliedschaft oder sonstige Voraussetzungen erforderlich sind.
-settings_filter_beyond_sea: Tankstellen hinter dem Meer verstecken
+settings_filter_non_public_summary: Verberge Preise, für die eine Mitgliedschaft oder sonstige Voraussetzungen erforderlich sind.
+settings_filter_beyond_sea: Tankstellen jenseits des Meeres verbergen
 settings_filter_beyond_sea_summary: Nur diejenigen in Ihrer Region anzeigen (Halbinsel, Balearen, Kanarische Inseln oder Ceuta und Melilla)
 settings_filter_closed: Zeige geschlossene Tankstellen
 settings_filter_closed_summary: Lege einen Zeitpuffer für Tankstellen fest, die bald öffnen werden
-settings_filter_closed_tolerance_none: Keine Grenze, immer filtern
+settings_filter_closed_tolerance_none: Keine Grenzen, immer filtern
 settings_filter_closed_tolerance_half_hour: Eine halbe Stunde
 settings_filter_closed_tolerance_one_hour: Eine Stunde
 settings_filter_closed_tolerance_two_hours: Zwei Stunden
@@ -50,13 +50,13 @@ location_selector_hint: Standort
 location_selector_locate_device: Gerät lokalisieren
 price_not_public: ✱ Bedingter Preis
 detail_location: Standort
-detail_opening_hours: Stunden
+detail_opening_hours: Öffnungszeiten
 detail_other_products: Andere Produkte
 station_no_name: Unbenannt
 station_no_address: Keine Adresse
 station_no_city: Keine Stadt
 station_no_price: Nicht zutreffend
-station_status_unknown: Geschlossen?
+station_status_unknown: Geschlossen??
 station_status_permanently_closed: Permanent geschlossen
 station_status_closed: Geschlossen
 station_status_opens_at: Öffnet {when}
@@ -75,7 +75,7 @@ location_picker_title: Wähle Standort
 location_picker_search_icon_description: Suchen
 location_picker_search_location_hint: Suche Ort oder Adresse
 location_picker_searching: Suchen…
-location_picker_no_results: Kein Standort gefunden
+location_picker_no_results: Keine Standorte gefunden
 loading_new_data: Herunterladen von neuen Daten…
 settings_country_title: Datenanbieter
 settings_country_summary: Wähle den Anbieter der Kraftstoffpreisdaten
