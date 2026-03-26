@@ -1,6 +1,6 @@
 LANGUAGE_NAME: Català
 MOTTO: Benzina al millor preu, més a prop
-DESCRIPTION: App Open Source per Android per trobar benzineres barates
+DESCRIPTION: Applicació lliure per Android per trobar benzineres barates
 KEYWORDS: benzinera, gasolinera, estació de servei, combustible, gasoil, diesel, benzina, gasolina
 FEATURE_OFFICIAL_DATA_TITLE: Dades oficials
 FEATURE_OFFICIAL_DATA_DESCRIPTION: |
@@ -38,3 +38,5 @@ ACTION_SOCIAL: Seguiu-nos
 ACTION_GOOGLE_PLAY: Google Play
 ACTION_APP_STORE: App Store
 COOKIE_NOTICE: Aquest lloc no fa servir galetes. La teva privacitat sí que ens importa de veritat.
+
+
