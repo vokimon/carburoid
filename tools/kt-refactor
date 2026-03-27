@@ -1,0 +1,347 @@
+#!/usr/bin/env python3
+"""kt-refactor: A general Kotlin refactoring tool."""
+import re
+import shutil
+from pathlib import Path
+import typer
+
+app = typer.Typer(
+    name="kt-refactor",
+    help="A general Kotlin refactoring tool with subcommands.",
+    no_args_is_help=True,
+    add_completion=True,
+)
+
+
+def read_content(path: Path) -> str:
+    """Read file content with UTF-8 encoding."""
+    return path.read_text(encoding='utf-8')
+
+
+def write_content(path: Path, content: str) -> None:
+    """Write file content with UTF-8 encoding."""
+    path.write_text(content, encoding='utf-8')
+
+
+def package_from_source(file_path: Path) -> str:
+    """Extract package declaration from Kotlin/Java file."""
+    content = read_content(file_path)
+    for line in content.splitlines():
+        line = line.strip()
+        if line.startswith('package '):
+            pkg = line[8:].rstrip(';').strip()
+            return pkg
+    return ""
+
+
+def package_from_path(dir_path: Path) -> str:
+    """Extract package name from directory path containing java/ or kotlin/."""
+    dir_str = str(dir_path)
+    if 'java/' in dir_str:
+        pkg_path = dir_str.split('java/', 1)[1]
+    elif 'kotlin/' in dir_str:
+        pkg_path = dir_str.split('kotlin/', 1)[1]
+    else:
+        return None
+    return pkg_path.replace('/', '.').rstrip('.')
+
+
+def escape_regex_dots(s: str) -> str:
+    """Escape dots for use in regex patterns."""
+    return s.replace('.', r'\.')
+
+
+def find_source_files() -> list[Path]:
+    """Find all .kt and .java files under app/src."""
+    files = []
+    src_dir = Path('app/src')
+    if src_dir.exists():
+        for ext in ['*.kt', '*.java']:
+            files.extend(src_dir.rglob(ext))
+    return files
+
+
+def symbol_in_list(symbol: str, symbol_list: list[str]) -> bool:
+    """Check if symbol is in list using space-padded substring match."""
+    padded_list = ' ' + ' '.join(symbol_list) + ' '
+    padded_symbol = f' {symbol} '
+    return padded_symbol in padded_list
+
+
+def is_file_mode(source: str) -> bool:
+    """Check if source is a file path or FQN."""
+    return '.kt' in source or '.java' in source or '/' in source
+
+
+def determine_target_info(source_file: Path, target_path: Path) -> dict:
+    """Determine target file info based on whether target is a file or directory."""
+    target_is_explicit_file = '.kt' in str(target_path) or '.java' in str(target_path)
+
+    if target_is_explicit_file:
+        target_dir = target_path.parent
+        target_basename = target_path.stem
+        target_pkg = package_from_path(target_dir)
+        new_file = target_path
+
+        if target_pkg is None:
+            typer.echo("❌ Target directory should contain 'java/' or 'kotlin/' path")
+            raise typer.Exit(1)
+
+        return {
+            'target_dir': target_dir,
+            'target_basename': target_basename,
+            'target_pkg': target_pkg,
+            'new_file': new_file,
+        }
+
+    target_dir = target_path
+    source_basename = source_file.stem
+    source_ext = source_file.suffix
+    target_filename = f"{source_basename}{source_ext}"
+    target_basename = source_basename
+    target_pkg = package_from_path(target_dir)
+    new_file = target_dir / target_filename
+
+    if target_pkg is None:
+        typer.echo("❌ Target directory should contain 'java/' or 'kotlin/' path")
+        raise typer.Exit(1)
+
+    return {
+        'target_dir': target_dir,
+        'target_basename': target_basename,
+        'target_pkg': target_pkg,
+        'new_file': new_file,
+    }
+
+
+def move_and_update_package(source_file: Path, new_file: Path, current_pkg: str, target_pkg: str, target_dir: Path) -> None:
+    """Move file and update its package declaration."""
+    target_dir.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(source_file), str(new_file))
+
+    escaped_current = escape_regex_dots(current_pkg)
+    content = read_content(new_file)
+    content = re.sub(f'^package {escaped_current}', f'package {target_pkg}', content, flags=re.MULTILINE)
+    write_content(new_file, content)
+
+
+def cleanup_empty_directories(source_file: Path) -> None:
+    """Remove empty parent directories after moving a file."""
+    source_dir = source_file.parent
+    if source_dir.is_dir() and not any(source_dir.iterdir()):
+        typer.echo(f"🧹 Removing empty directory: {source_dir}")
+        try:
+            while source_dir.is_dir() and not any(source_dir.iterdir()):
+                source_dir.rmdir()
+                source_dir = source_dir.parent
+        except OSError:
+            pass
+
+
+def collect_symbols_to_update(source_basename: str, target_basename: str, symbols: list[str]) -> list[str]:
+    """Collect all symbols that need reference updates."""
+    symbols_to_update = [source_basename]
+    typer.echo(f"🔍 Including original symbol: {source_basename}")
+
+    if target_basename != source_basename:
+        symbols_to_update.append(target_basename)
+        typer.echo(f"🔍 Including new symbol (rename): {target_basename}")
+
+    for symbol in symbols:
+        if not symbol_in_list(symbol, symbols_to_update):
+            symbols_to_update.append(symbol)
+            typer.echo(f"🔍 Including explicit symbol: {symbol}")
+
+    return symbols_to_update
+
+
+def update_symbol_references(symbol: str, current_pkg: str, target_pkg: str) -> None:
+    """Update all references to a symbol from old package to new package."""
+    old_fqn = f"{current_pkg}.{symbol}"
+    new_fqn = f"{target_pkg}.{symbol}"
+
+    typer.echo("")
+    typer.echo(f"🔄 Updating symbol references for: {symbol}")
+    typer.echo(f"   Old: {old_fqn}")
+    typer.echo(f"   New: {new_fqn}")
+
+    escaped_old_fqn = escape_regex_dots(old_fqn)
+    escaped_new_fqn = escape_regex_dots(new_fqn)
+
+    # Pass 1: Update explicit FQN references
+    for file in find_source_files():
+        try:
+            content = read_content(file)
+            if old_fqn in content:
+                content = re.sub(escaped_old_fqn, new_fqn, content)
+                write_content(file, content)
+        except Exception:
+            pass
+
+    # Pass 2: Update import statements
+    for file in find_source_files():
+        try:
+            content = read_content(file)
+            import_old = f'import {old_fqn}'
+            if import_old in content:
+                content = re.sub(f'import {escaped_old_fqn}', f'import {new_fqn}', content)
+                write_content(file, content)
+        except Exception:
+            pass
+
+
+def update_fqn_references(old_fqn: str, new_fqn: str) -> None:
+    """Update all references from old FQN to new FQN."""
+    escaped_old_fqn = escape_regex_dots(old_fqn)
+    escaped_new_fqn = escape_regex_dots(new_fqn)
+
+    # Pass 1: Update explicit FQN references
+    for file in find_source_files():
+        try:
+            content = read_content(file)
+            if old_fqn in content:
+                content = re.sub(escaped_old_fqn, new_fqn, content)
+                write_content(file, content)
+        except Exception:
+            pass
+
+    # Pass 2: Update import statements
+    for file in find_source_files():
+        try:
+            content = read_content(file)
+            import_old = f'import {old_fqn}'
+            if import_old in content:
+                content = re.sub(f'import {escaped_old_fqn}', f'import {new_fqn}', content)
+                write_content(file, content)
+        except Exception:
+            pass
+
+
+def verify_remaining_refs(fqns: list[str]) -> bool:
+    """Check for remaining references to old FQNs."""
+    found_refs = False
+    for old_fqn in fqns:
+        for file in find_source_files():
+            file_str = str(file)
+            if '.git' in file_str or '/build/' in file_str:
+                continue
+            try:
+                content = read_content(file)
+                if old_fqn in content:
+                    if not found_refs:
+                        found_refs = True
+                    typer.echo(f"{file_str}:{old_fqn}")
+            except Exception:
+                pass
+    return found_refs
+
+
+def handle_file_mode(source: str, target: str, symbols: list[str]) -> None:
+    """Handle file move/rename mode."""
+    source_file = Path(source)
+    target_path = Path(target)
+
+    if not source_file.is_file():
+        typer.echo(f"❌ Source file not found: {source_file}")
+        raise typer.Exit(1)
+
+    current_pkg = package_from_source(source_file)
+    if not current_pkg:
+        typer.echo(f"❌ No package declaration found in: {source_file}")
+        raise typer.Exit(1)
+
+    source_basename = source_file.stem
+
+    target_info = determine_target_info(source_file, target_path)
+    target_dir = target_info['target_dir']
+    target_basename = target_info['target_basename']
+    target_pkg = target_info['target_pkg']
+    new_file = target_info['new_file']
+
+    typer.echo("📁 Moving/Renaming file:")
+    typer.echo(f"  From: {source_file}")
+    if '.kt' in str(target_path) or '.java' in str(target_path):
+        typer.echo(f"  To:   {new_file} (rename)")
+        typer.echo(f"  Old symbol: {source_basename}")
+        typer.echo(f"  New symbol: {target_basename}")
+    else:
+        typer.echo(f"  To:   {new_file}")
+    typer.echo(f"  Current package: {current_pkg}")
+    typer.echo(f"  Target package:  {target_pkg}")
+    typer.echo("")
+
+    move_and_update_package(source_file, new_file, current_pkg, target_pkg, target_dir)
+    cleanup_empty_directories(source_file)
+
+    typer.echo("✅ File moved/renamed successfully!")
+
+    symbols_to_update = collect_symbols_to_update(source_basename, target_basename, symbols)
+
+    for symbol in symbols_to_update:
+        update_symbol_references(symbol, current_pkg, target_pkg)
+
+    typer.echo("")
+    typer.echo("🔍 Verification:")
+    fqns_to_check = [f"{current_pkg}.{s}" for s in symbols_to_update]
+    if not verify_remaining_refs(fqns_to_check):
+        typer.echo("✅ No remaining references found for moved symbols!")
+
+
+def handle_symbol_mode(source: str, target: str) -> None:
+    """Handle symbol-only FQN to FQN mode."""
+    old_fqn = source
+    new_fqn = target
+
+    if '.' not in old_fqn or '.' not in new_fqn:
+        typer.echo("❌ Invalid FQN format. Both arguments must contain dots.")
+        raise typer.Exit(1)
+
+    typer.echo("🔄 Symbol-only update:")
+    typer.echo(f"  Old: {old_fqn}")
+    typer.echo(f"  New: {new_fqn}")
+    typer.echo("")
+
+    update_fqn_references(old_fqn, new_fqn)
+
+    typer.echo("✅ Symbol references updated!")
+
+    typer.echo("")
+    typer.echo("🔍 Verification:")
+    if not verify_remaining_refs([old_fqn]):
+        typer.echo("✅ No remaining references found!")
+
+
+@app.command("move", context_settings={"allow_extra_args": True})
+def move(
+    source: str = typer.Argument(..., help="Source file path or old fully-qualified name"),
+    target: str = typer.Argument(..., help="Target directory/file path or new fully-qualified name"),
+    symbols: list[str] = typer.Argument(None, help="Additional symbols to update besides the one named like the file"),
+):
+    """
+    Moves kotlin artifacts between packages or modules adapting imports.
+
+    Usage:
+      File move:   kt-refactor move <source_file> <target_dir> [symbols...]
+
+      File rename: kt-refactor move <source_file> <target_file.kt> [symbols...]
+      Symbol only: kt-refactor move <old_fully_qualified_name> <new_fully_qualified_name>
+
+    Examples:
+      kt-refactor move app/src/main/java/net/canvoki/carburoid/ui/settings/LinkPreference.kt app/src/main/java/net/canvoki/shared/component/preferences/ OtherSymbol ExtraSymbol
+      kt-refactor move app/src/main/java/net/canvoki/carburoid/ui/settings/OldName.kt app/src/main/java/net/canvoki/shared/component/preferences/NewName.kt
+      kt-refactor move net.canvoki.carburoid.ui.settings.LinkPreference net.canvoki.shared.component.preferences.LinkPreference
+    """
+    if symbols is None:
+        symbols = []
+
+    if is_file_mode(source):
+        handle_file_mode(source, target, symbols)
+    else:
+        handle_symbol_mode(source, target)
+
+    typer.echo("")
+    typer.echo("💡 Done! Review changes with: git diff")
+
+
+if __name__ == "__main__":
+    app()
