@@ -7,11 +7,18 @@ import typer
 
 app = typer.Typer(
     name="kt-refactor",
-    help="A general Kotlin refactoring tool with subcommands.",
+    help="A general Kotlin refactoring tool.",
     no_args_is_help=True,
-    add_completion=True,
 )
 
+def fail(reason: str):
+    """Print error message and exit."""
+    typer.echo(f"❌ {reason}", error=True)
+    raise typer.Exit(1)
+
+def success(goal: str):
+    """Print success message."""
+    typer.echo(f"✅ {goal}", error=True)
 
 def read_content(path: Path) -> str:
     """Read file content with UTF-8 encoding."""
@@ -68,61 +75,20 @@ def symbol_in_list(symbol: str, symbol_list: list[str]) -> bool:
     return padded_symbol in padded_list
 
 
-def is_file_mode(source: str) -> bool:
+def is_source_a_file(source: str) -> bool:
     """Check if source is a file path or FQN."""
     return '.kt' in source or '.java' in source or '/' in source
 
 
-def determine_target_info(source_file: Path, target_path: Path) -> dict:
-    """Determine target file info based on whether target is a file or directory."""
-    target_is_explicit_file = '.kt' in str(target_path) or '.java' in str(target_path)
-
-    if target_is_explicit_file:
-        target_dir = target_path.parent
-        target_basename = target_path.stem
-        target_pkg = package_from_path(target_dir)
-        new_file = target_path
-
-        if target_pkg is None:
-            typer.echo("❌ Target directory should contain 'java/' or 'kotlin/' path")
-            raise typer.Exit(1)
-
-        return {
-            'target_dir': target_dir,
-            'target_basename': target_basename,
-            'target_pkg': target_pkg,
-            'new_file': new_file,
-        }
-
-    target_dir = target_path
-    source_basename = source_file.stem
-    source_ext = source_file.suffix
-    target_filename = f"{source_basename}{source_ext}"
-    target_basename = source_basename
-    target_pkg = package_from_path(target_dir)
-    new_file = target_dir / target_filename
-
-    if target_pkg is None:
-        typer.echo("❌ Target directory should contain 'java/' or 'kotlin/' path")
-        raise typer.Exit(1)
-
-    return {
-        'target_dir': target_dir,
-        'target_basename': target_basename,
-        'target_pkg': target_pkg,
-        'new_file': new_file,
-    }
-
-
-def move_and_update_package(source_file: Path, new_file: Path, current_pkg: str, target_pkg: str, target_dir: Path) -> None:
+def move_and_update_package(source_file: Path, target_file: Path, current_pkg: str, target_pkg: str) -> None:
     """Move file and update its package declaration."""
-    target_dir.mkdir(parents=True, exist_ok=True)
-    shutil.move(str(source_file), str(new_file))
+    target_file.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(source_file), str(target_file))
 
     escaped_current = escape_regex_dots(current_pkg)
-    content = read_content(new_file)
+    content = read_content(target_file)
     content = re.sub(f'^package {escaped_current}', f'package {target_pkg}', content, flags=re.MULTILINE)
-    write_content(new_file, content)
+    write_content(target_file, content)
 
 
 def cleanup_empty_directories(source_file: Path) -> None:
@@ -168,7 +134,6 @@ def update_symbol_references(symbol: str, current_pkg: str, target_pkg: str) -> 
     escaped_old_fqn = escape_regex_dots(old_fqn)
     escaped_new_fqn = escape_regex_dots(new_fqn)
 
-    # Pass 1: Update explicit FQN references
     for file in find_source_files():
         try:
             content = read_content(file)
@@ -178,7 +143,6 @@ def update_symbol_references(symbol: str, current_pkg: str, target_pkg: str) -> 
         except Exception:
             pass
 
-    # Pass 2: Update import statements
     for file in find_source_files():
         try:
             content = read_content(file)
@@ -195,7 +159,6 @@ def update_fqn_references(old_fqn: str, new_fqn: str) -> None:
     escaped_old_fqn = escape_regex_dots(old_fqn)
     escaped_new_fqn = escape_regex_dots(new_fqn)
 
-    # Pass 1: Update explicit FQN references
     for file in find_source_files():
         try:
             content = read_content(file)
@@ -205,7 +168,6 @@ def update_fqn_references(old_fqn: str, new_fqn: str) -> None:
         except Exception:
             pass
 
-    # Pass 2: Update import statements
     for file in find_source_files():
         try:
             content = read_content(file)
@@ -242,40 +204,38 @@ def handle_file_mode(source: str, target: str, symbols: list[str]) -> None:
     target_path = Path(target)
 
     if not source_file.is_file():
-        typer.echo(f"❌ Source file not found: {source_file}")
-        raise typer.Exit(1)
+        fail(f"Source file not found: {source_file}")
 
     current_pkg = package_from_source(source_file)
     if not current_pkg:
-        typer.echo(f"❌ No package declaration found in: {source_file}")
-        raise typer.Exit(1)
+        fail(f"No package declaration found in: {source_file}")
 
-    source_basename = source_file.stem
+    target_is_explicit_file = '.kt' in str(target_path) or '.java' in str(target_path)
 
-    target_info = determine_target_info(source_file, target_path)
-    target_dir = target_info['target_dir']
-    target_basename = target_info['target_basename']
-    target_pkg = target_info['target_pkg']
-    new_file = target_info['new_file']
+    target_file = target_path if target_is_explicit_file else target_path / source_file.name
+
+    target_pkg = package_from_path(target_file.parent)
+    if target_pkg is None:
+        fail("Target directory should contain 'java/' or 'kotlin/' path")
 
     typer.echo("📁 Moving/Renaming file:")
     typer.echo(f"  From: {source_file}")
-    if '.kt' in str(target_path) or '.java' in str(target_path):
-        typer.echo(f"  To:   {new_file} (rename)")
-        typer.echo(f"  Old symbol: {source_basename}")
-        typer.echo(f"  New symbol: {target_basename}")
+    if target_is_explicit_file:
+        typer.echo(f"  To:   {target_file} (rename)")
+        typer.echo(f"  Old symbol: {source_file.stem}")
+        typer.echo(f"  New symbol: {target_file.stem}")
     else:
-        typer.echo(f"  To:   {new_file}")
+        typer.echo(f"  To:   {target_file}")
     typer.echo(f"  Current package: {current_pkg}")
     typer.echo(f"  Target package:  {target_pkg}")
     typer.echo("")
 
-    move_and_update_package(source_file, new_file, current_pkg, target_pkg, target_dir)
+    move_and_update_package(source_file, target_file, current_pkg, target_pkg)
     cleanup_empty_directories(source_file)
 
-    typer.echo("✅ File moved/renamed successfully!")
+    success("File moved/renamed successfully!")
 
-    symbols_to_update = collect_symbols_to_update(source_basename, target_basename, symbols)
+    symbols_to_update = collect_symbols_to_update(source_file.stem, target_file.stem, symbols)
 
     for symbol in symbols_to_update:
         update_symbol_references(symbol, current_pkg, target_pkg)
@@ -284,7 +244,7 @@ def handle_file_mode(source: str, target: str, symbols: list[str]) -> None:
     typer.echo("🔍 Verification:")
     fqns_to_check = [f"{current_pkg}.{s}" for s in symbols_to_update]
     if not verify_remaining_refs(fqns_to_check):
-        typer.echo("✅ No remaining references found for moved symbols!")
+        success("No remaining references found for moved symbols!")
 
 
 def handle_symbol_mode(source: str, target: str) -> None:
@@ -293,8 +253,7 @@ def handle_symbol_mode(source: str, target: str) -> None:
     new_fqn = target
 
     if '.' not in old_fqn or '.' not in new_fqn:
-        typer.echo("❌ Invalid FQN format. Both arguments must contain dots.")
-        raise typer.Exit(1)
+        fail("Invalid FQN format. Both arguments must contain dots.")
 
     typer.echo("🔄 Symbol-only update:")
     typer.echo(f"  Old: {old_fqn}")
@@ -303,15 +262,15 @@ def handle_symbol_mode(source: str, target: str) -> None:
 
     update_fqn_references(old_fqn, new_fqn)
 
-    typer.echo("✅ Symbol references updated!")
+    success("Symbol references updated!")
 
     typer.echo("")
     typer.echo("🔍 Verification:")
     if not verify_remaining_refs([old_fqn]):
-        typer.echo("✅ No remaining references found!")
+        success("No remaining references found!")
 
 
-@app.command("move", context_settings={"allow_extra_args": True})
+@app.command("move")
 def move(
     source: str = typer.Argument(..., help="Source file path or old fully-qualified name"),
     target: str = typer.Argument(..., help="Target directory/file path or new fully-qualified name"),
@@ -322,7 +281,6 @@ def move(
 
     Usage:
       File move:   kt-refactor move <source_file> <target_dir> [symbols...]
-
       File rename: kt-refactor move <source_file> <target_file.kt> [symbols...]
       Symbol only: kt-refactor move <old_fully_qualified_name> <new_fully_qualified_name>
 
@@ -334,7 +292,7 @@ def move(
     if symbols is None:
         symbols = []
 
-    if is_file_mode(source):
+    if is_source_a_file(source):
         handle_file_mode(source, target, symbols)
     else:
         handle_symbol_mode(source, target)
