@@ -136,7 +136,7 @@ then share the resulting (parseable) URL from the browser with Carburoid.
 
 Right now, only **Spain and France** are supported.
 The system is designed to be extensible up to some point.
-Community contributions to add new countries is very welcome.
+Community contributions adding new countries are very welcome.
 
 You can help by providing information about your country’s data sources,
 contributing code, or improving the common code to support more cases.
