@@ -57,11 +57,6 @@ def package_from_path(dir_path: Path) -> str:
     return pkg_path.replace('/', '.').rstrip('.')
 
 
-def escape_regex_dots(s: str) -> str:
-    """Escape dots for use in regex patterns."""
-    return s.replace('.', r'\.')
-
-
 def find_source_files() -> list[Path]:
     """Find all .kt and .java files under app/src."""
     files = []
@@ -89,7 +84,7 @@ def move_and_update_package(source_file: Path, target_file: Path, current_pkg: s
     target_file.parent.mkdir(parents=True, exist_ok=True)
     shutil.move(str(source_file), str(target_file))
 
-    escaped_current = escape_regex_dots(current_pkg)
+    escaped_current = re.escape(current_pkg)
     content = read_content(target_file)
     content = re.sub(f'^package {escaped_current}', f'package {target_pkg}', content, flags=re.MULTILINE)
     write_content(target_file, content)
@@ -135,28 +130,30 @@ def update_symbol_references(symbol: str, current_pkg: str, target_pkg: str) -> 
     typer.echo(f"   Old: {old_fqn}")
     typer.echo(f"   New: {new_fqn}")
 
-    escaped_old_fqn = escape_regex_dots(old_fqn)
-    escaped_new_fqn = escape_regex_dots(new_fqn)
+    escaped_old_fqn = re.escape(old_fqn)
+    import_old = f'import {old_fqn}'
+    import_new = f'import {new_fqn}'
+
+    word_boundary = r'(?<![.\w])'
+    word_boundary_end = r'(?![.\w])'
+
+    fqn_pattern = f'{word_boundary}{escaped_old_fqn}{word_boundary_end}'
+    import_pattern = rf'import\s+{escaped_old_fqn}{word_boundary_end}'
 
     for file in find_source_files():
         try:
             content = read_content(file)
+            updated = False
+
             if old_fqn in content:
-                content = re.sub(escaped_old_fqn, new_fqn, content)
-                write_content(file, content)
-        except PermissionError:
-            warn(f"Permission denied: {file}")
-        except UnicodeDecodeError:
-            warn(f"Cannot read file (not UTF-8): {file}")
-        except Exception as e:
-            warn(f"Failed to update {file}: {type(e).__name__}")
+                content = re.sub(fqn_pattern, new_fqn, content)
+                updated = True
 
-    for file in find_source_files():
-        try:
-            content = read_content(file)
-            import_old = f'import {old_fqn}'
             if import_old in content:
-                content = re.sub(f'import {escaped_old_fqn}', f'import {new_fqn}', content)
+                content = re.sub(import_pattern, import_new, content)
+                updated = True
+
+            if updated:
                 write_content(file, content)
         except PermissionError:
             warn(f"Permission denied: {file}")
@@ -168,28 +165,30 @@ def update_symbol_references(symbol: str, current_pkg: str, target_pkg: str) -> 
 
 def update_fqn_references(old_fqn: str, new_fqn: str) -> None:
     """Update all references from old FQN to new FQN."""
-    escaped_old_fqn = escape_regex_dots(old_fqn)
-    escaped_new_fqn = escape_regex_dots(new_fqn)
+    escaped_old_fqn = re.escape(old_fqn)
+    import_old = f'import {old_fqn}'
+    import_new = f'import {new_fqn}'
+
+    word_boundary = r'(?<![.\w])'
+    word_boundary_end = r'(?![.\w])'
+
+    fqn_pattern = f'{word_boundary}{escaped_old_fqn}{word_boundary_end}'
+    import_pattern = rf'import\s+{escaped_old_fqn}{word_boundary_end}'
 
     for file in find_source_files():
         try:
             content = read_content(file)
+            updated = False
+
             if old_fqn in content:
-                content = re.sub(escaped_old_fqn, new_fqn, content)
-                write_content(file, content)
-        except PermissionError:
-            warn(f"Permission denied: {file}")
-        except UnicodeDecodeError:
-            warn(f"Cannot read file (not UTF-8): {file}")
-        except Exception as e:
-            warn(f"Failed to update {file}: {type(e).__name__}")
+                content = re.sub(fqn_pattern, new_fqn, content)
+                updated = True
 
-    for file in find_source_files():
-        try:
-            content = read_content(file)
-            import_old = f'import {old_fqn}'
             if import_old in content:
-                content = re.sub(f'import {escaped_old_fqn}', f'import {new_fqn}', content)
+                content = re.sub(import_pattern, import_new, content)
+                updated = True
+
+            if updated:
                 write_content(file, content)
         except PermissionError:
             warn(f"Permission denied: {file}")
