@@ -13,12 +13,16 @@ app = typer.Typer(
 
 def fail(reason: str):
     """Print error message and exit."""
-    typer.echo(f"❌ {reason}", error=True)
+    typer.echo(f"❌ {reason}", err=True)
     raise typer.Exit(1)
 
 def success(goal: str):
     """Print success message."""
-    typer.echo(f"✅ {goal}", error=True)
+    typer.echo(f"✅ {goal}", err=True)
+
+def warn(message: str):
+    """Print warning message without exiting."""
+    typer.echo(f"⚠️  {message}", err=True)
 
 def read_content(path: Path) -> str:
     """Read file content with UTF-8 encoding."""
@@ -100,8 +104,8 @@ def cleanup_empty_directories(source_file: Path) -> None:
             while source_dir.is_dir() and not any(source_dir.iterdir()):
                 source_dir.rmdir()
                 source_dir = source_dir.parent
-        except OSError:
-            pass
+        except OSError as e:
+            warn(f"Could not remove empty directory: {e}")
 
 
 def collect_symbols_to_update(source_basename: str, target_basename: str, symbols: list[str]) -> list[str]:
@@ -140,8 +144,12 @@ def update_symbol_references(symbol: str, current_pkg: str, target_pkg: str) -> 
             if old_fqn in content:
                 content = re.sub(escaped_old_fqn, new_fqn, content)
                 write_content(file, content)
-        except Exception:
-            pass
+        except PermissionError:
+            warn(f"Permission denied: {file}")
+        except UnicodeDecodeError:
+            warn(f"Cannot read file (not UTF-8): {file}")
+        except Exception as e:
+            warn(f"Failed to update {file}: {type(e).__name__}")
 
     for file in find_source_files():
         try:
@@ -150,8 +158,12 @@ def update_symbol_references(symbol: str, current_pkg: str, target_pkg: str) -> 
             if import_old in content:
                 content = re.sub(f'import {escaped_old_fqn}', f'import {new_fqn}', content)
                 write_content(file, content)
-        except Exception:
-            pass
+        except PermissionError:
+            warn(f"Permission denied: {file}")
+        except UnicodeDecodeError:
+            warn(f"Cannot read file (not UTF-8): {file}")
+        except Exception as e:
+            warn(f"Failed to update {file}: {type(e).__name__}")
 
 
 def update_fqn_references(old_fqn: str, new_fqn: str) -> None:
@@ -165,8 +177,12 @@ def update_fqn_references(old_fqn: str, new_fqn: str) -> None:
             if old_fqn in content:
                 content = re.sub(escaped_old_fqn, new_fqn, content)
                 write_content(file, content)
-        except Exception:
-            pass
+        except PermissionError:
+            warn(f"Permission denied: {file}")
+        except UnicodeDecodeError:
+            warn(f"Cannot read file (not UTF-8): {file}")
+        except Exception as e:
+            warn(f"Failed to update {file}: {type(e).__name__}")
 
     for file in find_source_files():
         try:
@@ -175,8 +191,12 @@ def update_fqn_references(old_fqn: str, new_fqn: str) -> None:
             if import_old in content:
                 content = re.sub(f'import {escaped_old_fqn}', f'import {new_fqn}', content)
                 write_content(file, content)
-        except Exception:
-            pass
+        except PermissionError:
+            warn(f"Permission denied: {file}")
+        except UnicodeDecodeError:
+            warn(f"Cannot read file (not UTF-8): {file}")
+        except Exception as e:
+            warn(f"Failed to update {file}: {type(e).__name__}")
 
 
 def verify_remaining_refs(fqns: list[str]) -> bool:
@@ -193,6 +213,10 @@ def verify_remaining_refs(fqns: list[str]) -> bool:
                     if not found_refs:
                         found_refs = True
                     typer.echo(f"{file_str}:{old_fqn}")
+            except PermissionError:
+                warn(f"Permission denied: {file}")
+            except UnicodeDecodeError:
+                warn(f"Cannot read file (not UTF-8): {file}")
             except Exception:
                 pass
     return found_refs
