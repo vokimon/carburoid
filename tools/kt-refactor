@@ -53,7 +53,7 @@ def package_from_path(dir_path: Path) -> str:
     elif 'kotlin/' in dir_str:
         pkg_path = dir_str.split('kotlin/', 1)[1]
     else:
-        return None
+        fail("Target directory should contain 'java/' or 'kotlin/' path")
     return pkg_path.replace('/', '.').rstrip('.')
 
 
@@ -61,12 +61,15 @@ def find_source_files() -> list[Path]:
     """Find all .kt and .java files under app/src, excluding .git and build."""
     files = []
     src_dir = Path('app/src')
-    if src_dir.exists():
-        for ext in ['*.kt', '*.java']:
-            for file in src_dir.rglob(ext):
-                file_str = str(file)
-                if '.git' not in file_str and '/build/' not in file_str:
-                    files.append(file)
+    if not src_dir.exists():
+        return []
+    for ext in ['*.kt', '*.java']:
+        for file in src_dir.rglob(ext):
+            if '.git' in str(file):
+                continue
+            if '/build/' in str(file):
+                continue
+            files.append(file)
     return files
 
 
@@ -82,7 +85,7 @@ def is_source_a_file(source: str) -> bool:
     return '.kt' in source or '.java' in source or '/' in source
 
 
-def build_update_patterns(old_fqn: str) -> tuple[str, str, str, str]:
+def build_update_patterns(old_fqn: str) -> tuple[str, str]:
     """Build regex patterns for updating FQN references."""
     escaped_old_fqn = re.escape(old_fqn)
     word_boundary = r'(?<![.\w])'
@@ -94,27 +97,45 @@ def build_update_patterns(old_fqn: str) -> tuple[str, str, str, str]:
     return fqn_pattern, import_pattern
 
 
-def update_file_content(file: Path, old_fqn: str, new_fqn: str) -> bool:
+def update_file_content(
+    file: Path,
+    old_fqn: str,
+    new_fqn: str,
+    symbol: str,
+    old_pkg: str,
+) -> bool:
     """Update FQN references in a single file. Returns True if file was modified."""
     content = read_content(file)
-    updated = False
+    file_pkg = package_from_source(file)
 
     fqn_pattern, import_pattern = build_update_patterns(old_fqn)
-    import_old = f'import {old_fqn}'
     import_new = f'import {new_fqn}'
 
-    if old_fqn in content:
+    has_import_statement = re.search(import_pattern, content) is not None
+    has_fqn_references = re.search(fqn_pattern, content) is not None
+    needs_import_insertion = (file_pkg == old_pkg) and import_new not in content
+
+    has_unqualified_refs = False
+    if needs_import_insertion:
+        unqualified_pattern = r'(?<![.\w])' + re.escape(symbol) + r'(?![.\w])'
+        has_unqualified_refs = re.search(unqualified_pattern, content) is not None
+
+    if not (has_import_statement or has_fqn_references or has_unqualified_refs):
+        return False
+
+    if has_fqn_references:
         content = re.sub(fqn_pattern, new_fqn, content)
-        updated = True
 
-    if import_old in content:
+    if has_import_statement:
         content = re.sub(import_pattern, import_new, content)
-        updated = True
+    elif has_unqualified_refs:
+        package_line = re.search(r'^package\s+[\w.]+;', content, flags=re.MULTILINE)
+        if package_line:
+            insert_pos = package_line.end()
+            content = content[:insert_pos] + f'\n{import_new}' + content[insert_pos:]
 
-    if updated:
-        write_content(file, content)
-
-    return updated
+    write_content(file, content)
+    return True
 
 
 def move_and_update_package(source_file: Path, target_file: Path, current_pkg: str, target_pkg: str) -> None:
@@ -169,7 +190,7 @@ def update_symbol_references(symbol: str, current_pkg: str, target_pkg: str) -> 
     typer.echo(f"   New: {new_fqn}")
 
     for file in find_source_files():
-        update_file_content(file, old_fqn, new_fqn)
+        update_file_content(file, old_fqn, new_fqn, symbol, current_pkg)
 
 
 def update_fqn_references(old_fqn: str, new_fqn: str) -> None:
@@ -180,7 +201,7 @@ def update_fqn_references(old_fqn: str, new_fqn: str) -> None:
     typer.echo(f"   New: {new_fqn}")
 
     for file in find_source_files():
-        update_file_content(file, old_fqn, new_fqn)
+        update_file_content(file, old_fqn, new_fqn, "", "")
 
 
 def verify_remaining_refs(fqns: list[str]) -> bool:
@@ -189,10 +210,10 @@ def verify_remaining_refs(fqns: list[str]) -> bool:
     for old_fqn in fqns:
         for file in find_source_files():
             content = read_content(file)
-            if old_fqn in content:
-                if not found_refs:
-                    found_refs = True
-                typer.echo(f"{file}:{old_fqn}")
+            if old_fqn not in content:
+                continue
+            found_refs = True
+            typer.echo(f"{file}:{old_fqn}")
     return found_refs
 
 
@@ -211,10 +232,7 @@ def handle_file_mode(source: str, target: str, symbols: list[str]) -> None:
     target_is_explicit_file = '.kt' in str(target_path) or '.java' in str(target_path)
 
     target_file = target_path if target_is_explicit_file else target_path / source_file.name
-
     target_pkg = package_from_path(target_file.parent)
-    if target_pkg is None:
-        fail("Target directory should contain 'java/' or 'kotlin/' path")
 
     typer.echo("📁 Moving/Renaming file:")
     typer.echo(f"  From: {source_file}")
@@ -243,6 +261,8 @@ def handle_file_mode(source: str, target: str, symbols: list[str]) -> None:
     fqns_to_check = [f"{current_pkg}.{s}" for s in symbols_to_update]
     if not verify_remaining_refs(fqns_to_check):
         success("No remaining references found for moved symbols!")
+
+    warn(f"{target_file.name} may have compilation errors due to references to {current_pkg}")
 
 
 def handle_symbol_mode(source: str, target: str) -> None:
