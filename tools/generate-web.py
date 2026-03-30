@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 import os
 import http.server
 import socketserver
+import time
 from threading import Timer
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -22,7 +23,6 @@ TEMPLATE_FILE = BASE_DIR / "web-template.html"
 OUTPUT_DIR = BASE_DIR / "web"
 TRANSLATIONS_DIR = BASE_DIR / "web-translations"
 
-import time
 
 class RebuildHandler(FileSystemEventHandler):
     def __init__(self, build_fn, watched_paths, debounce=1.5):

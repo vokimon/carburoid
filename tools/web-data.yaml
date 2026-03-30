@@ -16,8 +16,6 @@ branding:
   secondary_color: "#d69999"
   tertiary_color: "#f0e0dd"
   background_color: "#525"
-  muted_text_color: "#444444"
-  border_color: "#dddddd"
 actions:
   - label: ACTION_FDROID
     link: "https://f-droid.org/packages/net.canvoki.carburoid/"

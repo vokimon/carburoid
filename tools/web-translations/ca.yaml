@@ -10,7 +10,7 @@ FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY: Afegiu el meu país
 FEATURE_RELEVANT_STATIONS_TITLE: Només benzineres rellevants
 FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
     Carburoid descarta les benzineres que no milloren el preu d'altres més properes.
-    Això redueix la llista de candidates de milers a decenes.
+    Això redueix la llista de candidates de milers a desenes.
 FEATURE_YOUR_CHOICE_TITLE: Tu decideixes
 FEATURE_YOUR_CHOICE_DESCRIPTION: |
     Els preus milloren a mesura que baixes per la llista, però la distància també augmenta.
@@ -18,7 +18,7 @@ FEATURE_YOUR_CHOICE_DESCRIPTION: |
 FEATURE_ROUND_TRIP_DETOUR_MODES_TITLE: Anada i tornada o ruta amb desviament
 FEATURE_ROUND_TRIP_DETOUR_MODES_DESCRIPTION: |
     El mode "Anada i tornada" només considera la distància entre la teva posició i la benzinera.
-    Si fixes un punt de destinació, es considera la distància que implica el desviament per la benzinera.
+    Si fixes un punt de destinació, es considera la distància que implica fer el desviament per anar a la benzinera.
 FEATURE_FREEDOM_AS_FEATURE_TITLE: La llibertat com a funcionalitat
 FEATURE_FREEDOM_AS_FEATURE_DESCRIPTION: |
     La llicència AGPLv3 protegeix la teva llibertat com a usuària.
