@@ -17,14 +17,9 @@ class DistanceFromAddress(
     override fun computeDistance(station: GasStation): Float? {
         val originLoc = origin.toAndroidLocation()
         val stationLoc =
-            station.latitude?.let { lat ->
-                station.longitude?.let { lng ->
-                    GeoPoint(
-                        latitude = lat,
-                        longitude = lng,
-                    ).toAndroidLocation()
-                }
-            } ?: return null
+            station.geoPoint()?.let {
+                it.toAndroidLocation()
+            } ?: GeoPoint(latitude = 0.0, longitude = 0.0).toAndroidLocation()
         if (destination == null) {
             return originLoc.distanceTo(stationLoc)
         }
@@ -36,12 +31,9 @@ class DistanceFromAddress(
 
     override fun isBeyondSea(station: GasStation): Boolean {
         val gasStationLandMass =
-            CountryRegistry.current.landMass(
-                GeoPoint(
-                    latitude = station.latitude!!,
-                    longitude = station.longitude!!,
-                ),
-            )
+            station.geoPoint()?.let {
+                CountryRegistry.current.landMass(it)
+            }
         val destinationLandMass =
             destination?.let {
                 CountryRegistry.current.landMass(it)
@@ -55,7 +47,7 @@ class DistanceFromAddress(
 
     override suspend fun refineRoadDistances(stations: List<GasStation>) {
         if (stations.isEmpty()) return
-        val stationCoords = stations.map { GeoPoint(latitude = it.latitude ?: 0.0, longitude = it.longitude ?: 0.0) }
+        val stationCoords = stations.map { it.geoPoint() ?: GeoPoint(latitude = 0.0, longitude = 0.0) }
         val distancesFromA =
             OsrmRouting.getDistances(
                 sources = listOf(origin),

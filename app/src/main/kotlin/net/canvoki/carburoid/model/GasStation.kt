@@ -1,6 +1,7 @@
 package net.canvoki.carburoid.model
 
 import net.canvoki.carburoid.distances.CurrentDistancePolicy
+import net.canvoki.carburoid.location.GeoPoint
 import net.canvoki.carburoid.product.ProductManager
 import java.time.Instant
 import java.time.ZoneId
@@ -41,6 +42,8 @@ interface GasStation {
 
     fun toJson(): String
 
+    fun geoPoint(): GeoPoint?
+
     companion object {
         fun parse(json: String): GasStation = SpanishGasStation.parse(json)
     }
@@ -62,6 +65,12 @@ abstract class BaseGasStation : GasStation {
     override fun computeDistance() {
         _distanceInMeters = CurrentDistancePolicy.getDistance(this)
         roadDistanceInMeters = null
+    }
+
+    override fun geoPoint(): GeoPoint? {
+        val lat = latitude ?: return null
+        val lon = longitude ?: return null
+        return GeoPoint(latitude = lat, longitude = lon)
     }
 }
 
