@@ -82,6 +82,7 @@ settings_country_summary: Wähle den Anbieter der Kraftstoffpreisdaten
 settings_country_es: Spanien
 settings_country_fr: Frankreich
 settings_country_fr_warning_wip: Die Daten zu französischen Tankstellen sind noch in Bearbeitung. Die Namen der Tankstellen und die Öffnungszeiten sind noch nicht verfügbar.
+settings_country_pt: Portugal
 settings_warning_dialog_wip: In Arbeit
 warning_dialog_title: Warnung
 button_closer: Näher

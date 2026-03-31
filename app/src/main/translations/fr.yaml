@@ -91,5 +91,6 @@ settings_country_summary: Choisissez la source des données des prix des carbura
 settings_country_es: Espagne
 settings_country_fr: France
 settings_country_fr_warning_wip: Les données française sont toujours en cours d'intégration. Les noms des stations services et les horaires d'ouverture ne sont pas encore disponibles.
+settings_country_pt: Portugal
 settings_warning_dialog_wip: En cours de développement
 warning_dialog_title: Attention

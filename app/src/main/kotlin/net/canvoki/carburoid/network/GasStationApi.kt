@@ -34,3 +34,14 @@ object FranceGasStationApi : GasStationApi {
             .get(ENDPOINT)
             .body()
 }
+
+object PortugalGasStationApi : GasStationApi {
+    private const val ENDPOINT =
+        "https://precoscombustiveis.dgeg.gov.pt/api/" +
+            "PrecoComb/PesquisarPostos?qtdPorPagina=10000000&pagina=1"
+
+    override suspend fun getGasStations(): String =
+        Http.client
+            .get(ENDPOINT)
+            .body()
+}

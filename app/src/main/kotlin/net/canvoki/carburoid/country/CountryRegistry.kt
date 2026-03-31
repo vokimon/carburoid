@@ -7,6 +7,7 @@ object CountryRegistry {
         listOf(
             SpainImplementation,
             FranceImplementation,
+            PortugalImplementation,
         )
 
     private val providers: Map<String, CountryImplementation> =

@@ -89,8 +89,8 @@ settings_country_summary: Selecciona el proveedor de datos de precios de carbura
 settings_country_es: España
 settings_country_fr: Francia
 settings_country_fr_warning_wip: Los datos de las gasolineras francesas aún están en desarrollo. No hay nombres de estaciones ni horarios disponibles todavía.
+settings_country_pt: Portugal
 settings_warning_dialog_wip: En desarrollo
 warning_dialog_title: Advertencia
 button_closer: Más cerca
 button_cheaper: Más barato
-
