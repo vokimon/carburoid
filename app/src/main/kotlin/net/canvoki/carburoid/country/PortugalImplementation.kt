@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.distances.LandMass
 import net.canvoki.carburoid.distances.PortugalLandMass
+import net.canvoki.carburoid.location.GeoPoint
 import net.canvoki.carburoid.model.PortugalGasStationResponse
 import net.canvoki.carburoid.network.PortugalGasStationApi
 import net.canvoki.carburoid.product.PortugalProductCatalog
@@ -17,8 +18,5 @@ object PortugalImplementation : CountryImplementation {
 
     override fun parse(json: String) = PortugalGasStationResponse.parse(json)
 
-    override fun landMass(
-        longitude: Double,
-        latitude: Double,
-    ): LandMass = PortugalLandMass.of(longitude, latitude)
+    override fun landMass(pos: GeoPoint): LandMass = PortugalLandMass.of(pos)
 }

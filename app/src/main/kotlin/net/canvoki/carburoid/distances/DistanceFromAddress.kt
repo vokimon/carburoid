@@ -12,10 +12,7 @@ class DistanceFromAddress(
     private val destination: GeoPoint? = null,
 ) : DistanceMethod {
     val originLandMass =
-        CountryRegistry.current.landMass(
-            origin.latitude,
-            origin.longitude,
-        )
+        CountryRegistry.current.landMass(origin)
 
     override fun computeDistance(station: GasStation): Float? {
         val originLoc = origin.toAndroidLocation()
@@ -40,15 +37,14 @@ class DistanceFromAddress(
     override fun isBeyondSea(station: GasStation): Boolean {
         val gasStationLandMass =
             CountryRegistry.current.landMass(
-                station.latitude!!,
-                station.longitude!!,
+                GeoPoint(
+                    latitude = station.latitude!!,
+                    longitude = station.longitude!!,
+                ),
             )
         val destinationLandMass =
             destination?.let {
-                CountryRegistry.current.landMass(
-                    it.latitude,
-                    it.longitude,
-                )
+                CountryRegistry.current.landMass(it)
             }
         if (destinationLandMass == null) {
             return gasStationLandMass != originLandMass

@@ -1,17 +1,20 @@
 package net.canvoki.carburoid.distances
 
+import net.canvoki.carburoid.location.GeoPoint
+
 enum class FranceLandMass : LandMass {
     MAINLAND,
     CORSICA,
     ;
 
     companion object {
-        fun of(
-            latitude: Double,
-            longitude: Double,
-        ): LandMass =
+        fun of(pos: GeoPoint): LandMass =
             when {
-                latitude >= 41.3 && latitude <= 43.1 && longitude >= 8.5 && longitude <= 9.5 -> FranceLandMass.CORSICA
+                pos.latitude >= 41.3 &&
+                    pos.latitude <= 43.1 &&
+                    pos.longitude >= 8.5 &&
+                    pos.longitude <= 9.5 ->
+                    FranceLandMass.CORSICA
                 else -> FranceLandMass.MAINLAND
             }
     }
