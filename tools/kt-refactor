@@ -84,19 +84,6 @@ def is_source_a_file(source: str) -> bool:
     """Check if source is a file path or FQN."""
     return '.kt' in source or '.java' in source or '/' in source
 
-
-def build_update_patterns(old_fqn: str) -> tuple[str, str]:
-    """Build regex patterns for updating FQN references."""
-    escaped_old_fqn = re.escape(old_fqn)
-    word_boundary = r'(?<![.\w])'
-    word_boundary_end = r'(?![.\w])'
-
-    fqn_pattern = f'{word_boundary}{escaped_old_fqn}{word_boundary_end}'
-    import_pattern = rf'import\s+{escaped_old_fqn}{word_boundary_end}'
-
-    return fqn_pattern, import_pattern
-
-
 def update_file_content(
     file: Path,
     old_fqn: str,
@@ -108,17 +95,29 @@ def update_file_content(
     content = read_content(file)
     file_pkg = package_from_source(file)
 
-    fqn_pattern, import_pattern = build_update_patterns(old_fqn)
+    escaped_old_fqn = re.escape(old_fqn)
+    escaped_symbol = re.escape(symbol)
+    word_boundary = r'(?<![.\w])'
+    word_boundary_end = r'(?![.\w])'
+
+    fqn_pattern = f'{word_boundary}{escaped_old_fqn}{word_boundary_end}'
+    unqualified_pattern = f'{word_boundary}{escaped_symbol}{word_boundary_end}'
+    import_pattern = rf'import\s+{escaped_old_fqn}{word_boundary_end}'
+    shadowing_pattern = rf'import\s+[\w.]+\.{escaped_symbol}{word_boundary_end}'
+
     import_new = f'import {new_fqn}'
 
     has_import_statement = re.search(import_pattern, content) is not None
     has_fqn_references = re.search(fqn_pattern, content) is not None
-    needs_import_insertion = (file_pkg == old_pkg) and import_new not in content
+
+    file_needs_import = (file_pkg == old_pkg)
 
     has_unqualified_refs = False
-    if needs_import_insertion:
-        unqualified_pattern = r'(?<![.\w])' + re.escape(symbol) + r'(?![.\w])'
+    has_shadowing_import = False
+
+    if file_needs_import:
         has_unqualified_refs = re.search(unqualified_pattern, content) is not None
+        has_shadowing_import = re.search(shadowing_pattern, content) is not None
 
     if not (has_import_statement or has_fqn_references or has_unqualified_refs):
         return False
@@ -128,7 +127,7 @@ def update_file_content(
 
     if has_import_statement:
         content = re.sub(import_pattern, import_new, content)
-    elif has_unqualified_refs:
+    elif has_unqualified_refs and not has_shadowing_import:
         package_line = re.search(r'^package\s+[\w.]+;', content, flags=re.MULTILINE)
         if package_line:
             insert_pos = package_line.end()
@@ -136,7 +135,6 @@ def update_file_content(
 
     write_content(file, content)
     return True
-
 
 def move_and_update_package(source_file: Path, target_file: Path, current_pkg: str, target_pkg: str) -> None:
     """Move file and update its package declaration."""
@@ -201,7 +199,8 @@ def update_fqn_references(old_fqn: str, new_fqn: str) -> None:
     typer.echo(f"   New: {new_fqn}")
 
     for file in find_source_files():
-        update_file_content(file, old_fqn, new_fqn, "", "")
+        symbol = old_fqn.split('.')[-1]
+        update_file_content(file, old_fqn, new_fqn, symbol, "")
 
 
 def verify_remaining_refs(fqns: list[str]) -> bool:
@@ -229,19 +228,14 @@ def handle_file_mode(source: str, target: str, symbols: list[str]) -> None:
     if not current_pkg:
         fail(f"No package declaration found in: {source_file}")
 
-    target_is_explicit_file = '.kt' in str(target_path) or '.java' in str(target_path)
-
-    target_file = target_path if target_is_explicit_file else target_path / source_file.name
+    target_file = target_path if target_path.suffix in ('.kt', 'java') else target_path / source_file.name
     target_pkg = package_from_path(target_file.parent)
 
     typer.echo("📁 Moving/Renaming file:")
     typer.echo(f"  From: {source_file}")
-    if target_is_explicit_file:
-        typer.echo(f"  To:   {target_file} (rename)")
-        typer.echo(f"  Old symbol: {source_file.stem}")
-        typer.echo(f"  New symbol: {target_file.stem}")
-    else:
-        typer.echo(f"  To:   {target_file}")
+    typer.echo(f"  To:   {target_file}")
+    typer.echo(f"  Old symbol: {source_file.stem}")
+    typer.echo(f"  New symbol: {target_file.stem}")
     typer.echo(f"  Current package: {current_pkg}")
     typer.echo(f"  Target package:  {target_pkg}")
     typer.echo("")
@@ -295,17 +289,17 @@ def move(
     symbols: list[str] = typer.Argument(None, help="Additional symbols to update besides the one named like the file"),
 ):
     """
-    Moves kotlin artifacts between packages or modules adapting imports.
-
-    Usage:
-      File move:   kt-refactor move <source_file> <target_dir> [symbols...]
-      File rename: kt-refactor move <source_file> <target_file.kt> [symbols...]
-      Symbol only: kt-refactor move <old_fully_qualified_name> <new_fully_qualified_name>
-
-    Examples:
-      kt-refactor move app/src/main/java/net/canvoki/carburoid/ui/settings/LinkPreference.kt app/src/main/java/net/canvoki/shared/component/preferences/ OtherSymbol ExtraSymbol
-      kt-refactor move app/src/main/java/net/canvoki/carburoid/ui/settings/OldName.kt app/src/main/java/net/canvoki/shared/component/preferences/NewName.kt
-      kt-refactor move net.canvoki.carburoid.ui.settings.LinkPreference net.canvoki.shared.component.preferences.LinkPreference
+    Moves kotlin artifacts between packages or modules adapting imports.\n
+\n
+    Usage:\n
+      File move:   kt-refactor move <source_file> <target_dir> [symbols...]\n
+      File rename: kt-refactor move <source_file> <target_file.kt> [symbols...]\n
+      Symbol only: kt-refactor move <old_fully_qualified_name> <new_fully_qualified_name>\n
+\n
+    Examples:\n
+      kt-refactor move app/src/main/java/net/canvoki/carburoid/ui/settings/LinkPreference.kt app/src/main/java/net/canvoki/shared/component/preferences/ OtherSymbol ExtraSymbol\n
+      kt-refactor move app/src/main/java/net/canvoki/carburoid/ui/settings/OldName.kt app/src/main/java/net/canvoki/shared/component/preferences/NewName.kt\n
+      kt-refactor move net.canvoki.carburoid.ui.settings.LinkPreference net.canvoki.shared.component.preferences.LinkPreference\n
     """
     if symbols is None:
         symbols = []
