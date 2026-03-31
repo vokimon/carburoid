@@ -88,21 +88,18 @@ data class PortugalGasStationResponse(
 ) : GasStationResponse {
     companion object {
         fun parse(jsonStr: String): PortugalGasStationResponse {
-            log("Parsing")
             val apiResponse = json.decodeFromString<PortugalApiResponse>(jsonStr)
 
             val stationsById = mutableMapOf<Int, MutableList<PortugalRawRecord>>()
             for (record in apiResponse.results) {
                 stationsById.getOrPut(record.id) { mutableListOf() }.add(record)
             }
-            log("$stationsById")
 
             val stations =
                 stationsById.values.map { records ->
                     buildStation(records)
                 }
 
-            log("$stations")
             return PortugalGasStationResponse(stations)
         }
 
