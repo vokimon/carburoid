@@ -1,5 +1,9 @@
 # Change log
 
+## Unreleased
+
+- ✨ Portugal data source
+
 ## 1.5.1 (2026-03-20)
 
 Route deviation really activated and France location search

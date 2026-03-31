@@ -7,7 +7,7 @@ Tú decides hasta qué punto te compensa conducir para ahorrar.
 
 Funcionalidades:
 
-- 🏛️ Datos oficiales de los gobiernos: España y Francia
+- 🏛️ Datos oficiales de los gobiernos: España, Francia, Portugal
 - 🎯 Solo gasolineras relevantes: o más cercanas o más baratas que otras
 - 🕒 Considera los horarios de apertura
 - 🗺️ Se integra con la aplicación de mapas que uses

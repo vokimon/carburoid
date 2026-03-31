@@ -1,6 +1,6 @@
 project_name: Carburoid
 splash_motto: Tanke zum besten Preis – ganz in deiner Nähe
-short_description: Finde Tankstellen in Spanien und Frankreich nach Preis und Entfernung.
+short_description: Finde Tankstellen in Spanien, Frankreich und Portugal nach Preis und Entfernung.
 full_description_md: |-
   Wie weit sollte man fahren, um eine günstigere Tankstelle zu finden?
 
@@ -11,7 +11,7 @@ full_description_md: |-
 
   Funktionen:
 
-  - 🏛️ Offizielle Regierungsdaten aus Spanien und Frankreich
+  - 🏛️ Offizielle Regierungsdaten aus Spanien, Frankreich und Portugal
   - 🎯 Nur relevante Tankstellen: entweder näher oder günstiger
   - 🕒 Berücksichtigt Öffnungszeiten
   - 🗺️ Funktioniert mit deiner bevorzugten Karten-App

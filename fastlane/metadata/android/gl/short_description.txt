@@ -1,1 +1,1 @@
-Find gas stations by price and distance in Spain and France.
+Find gas stations by price and distance in Spain, France and Portugal.

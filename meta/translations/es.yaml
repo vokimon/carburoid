@@ -1,6 +1,6 @@
 project_name: Carburoid
 splash_motto: Llena al mejor precio, más cerca
-short_description: Encuentra gasolineras en España y Francia por precio y distancia.
+short_description: Encuentra gasolineras en España, Francia y Portugal por precio y distancia.
 full_description_md: |-
   ¿Cuánto hay que conducir para encontrar una gasolinera más barata?
 
@@ -11,7 +11,7 @@ full_description_md: |-
 
   Funcionalidades:
 
-  - 🏛️ Datos oficiales de los gobiernos: España y Francia
+  - 🏛️ Datos oficiales de los gobiernos: España, Francia, Portugal
   - 🎯 Solo gasolineras relevantes: o más cercanas o más baratas que otras
   - 🕒 Considera los horarios de apertura
   - 🗺️ Se integra con la aplicación de mapas que uses

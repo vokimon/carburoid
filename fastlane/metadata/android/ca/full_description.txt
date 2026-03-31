@@ -7,7 +7,7 @@ Tu decideixes fins a quin punt et compensa conduir per estalviar.
 
 Funcionalitats:
 
-- 🏛️ Dades oficials dels governs: Espanya i França
+- 🏛️ Dades oficials dels governs: Espanya, França, Portugal
 - 🎯 Només benzineres rellevants: o més properes o més barates que d'altres.
 - 🕒 Considera els horaris d'apertura
 - 🗺️ S'integra amb l'aplicació de mapes que prefereixis

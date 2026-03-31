@@ -8,7 +8,7 @@
 
 # Carburoid
 
-Find gas stations by price and distance in Spain and France.
+Find gas stations by price and distance in Spain, France and Portugal.
 
 How far should you go to find a cheaper gas station?
 
@@ -19,7 +19,7 @@ and you decide how far it’s worth driving for the savings.
 
 Features:
 
-- 🏛️ Official government data sources (Spain, France)
+- 🏛️ Official government data sources (Spain, France, Portugal)
 - 🎯 Only relevant gas stations: either closer or cheaper than others
 - 🕒 Smart about opening and closing hours
 - 🗺️ Integrates with your preferred map application

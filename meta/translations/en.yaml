@@ -3,7 +3,7 @@
 # Edit other language translations, not this one.
 project_name: Carburoid
 splash_motto: Fill up cheaper, closer
-short_description: Find gas stations by price and distance in Spain and France.
+short_description: Find gas stations by price and distance in Spain, France and Portugal.
 full_description_md: |-
   How far should you go to find a cheaper gas station?
 
@@ -14,7 +14,7 @@ full_description_md: |-
 
   Features:
 
-  - 🏛️ Official government data sources (Spain, France)
+  - 🏛️ Official government data sources (Spain, France, Portugal)
   - 🎯 Only relevant gas stations: either closer or cheaper than others
   - 🕒 Smart about opening and closing hours
   - 🗺️ Integrates with your preferred map application

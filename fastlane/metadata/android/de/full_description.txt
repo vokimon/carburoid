@@ -7,7 +7,7 @@ Du entscheidest selbst, wie weit es sich lohnt zu fahren, um zu sparen.
 
 Funktionen:
 
-- 🏛️ Offizielle Regierungsdaten aus Spanien und Frankreich
+- 🏛️ Offizielle Regierungsdaten aus Spanien, Frankreich und Portugal
 - 🎯 Nur relevante Tankstellen: entweder näher oder günstiger
 - 🕒 Berücksichtigt Öffnungszeiten
 - 🗺️ Funktioniert mit deiner bevorzugten Karten-App
