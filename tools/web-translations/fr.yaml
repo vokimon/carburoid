@@ -5,7 +5,7 @@ KEYWORDS: station‑service, essence, diesel, carburant, gasoline, Android
 FEATURE_OFFICIAL_DATA_TITLE: Données officielles
 FEATURE_OFFICIAL_DATA_DESCRIPTION: |
     Nous utilisons des données officielles envoyées par les stations‑service aux régulateurs.
-    Actuellement, nous couvrons l’Espagne et la France.
+    Actuellement, nous couvrons l'Espagne, la France et le Portugal.
 FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY: Ajouter mon pays
 FEATURE_RELEVANT_STATIONS_TITLE: Stations pertinentes uniquement
 FEATURE_RELEVANT_STATIONS_DESCRIPTION: |

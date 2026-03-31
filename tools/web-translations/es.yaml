@@ -5,7 +5,7 @@ KEYWORDS: gasolinera, estación de servicio, combustible, gasoil, diésel, gasol
 FEATURE_OFFICIAL_DATA_TITLE: Datos oficiales
 FEATURE_OFFICIAL_DATA_DESCRIPTION: |
     Usamos datos oficiales que envían las gasolineras a los reguladores.
-    Actualmente cubrimos España y Francia.
+    Actualmente cubrimos España, Francia y Portugal.
 FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY: Añadir mi país
 FEATURE_RELEVANT_STATIONS_TITLE: Solo estaciones relevantes
 FEATURE_RELEVANT_STATIONS_DESCRIPTION: |

@@ -5,7 +5,7 @@ KEYWORDS: benzinera, gasolinera, estació de servei, combustible, gasoil, diesel
 FEATURE_OFFICIAL_DATA_TITLE: Dades oficials
 FEATURE_OFFICIAL_DATA_DESCRIPTION: |
     Fem servir dades oficials enviades per les benzineres al regulador.
-    Ara mateix cobrim Espanya i França.
+    Ara mateix cobrim Espanya, França i Portugal.
 FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY: Afegiu el meu país
 FEATURE_RELEVANT_STATIONS_TITLE: Només benzineres rellevants
 FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
