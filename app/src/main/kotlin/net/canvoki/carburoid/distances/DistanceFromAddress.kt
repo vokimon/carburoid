@@ -14,12 +14,14 @@ class DistanceFromAddress(
     val originLandMass =
         CountryRegistry.current.landMass(origin)
 
+    val invalidLocation = GeoPoint(0.0, 0.0)
+
     override fun computeDistance(station: GasStation): Float? {
         val originLoc = origin.toAndroidLocation()
         val stationLoc =
             station.geoPoint()?.let {
                 it.toAndroidLocation()
-            } ?: GeoPoint(latitude = 0.0, longitude = 0.0).toAndroidLocation()
+            } ?: return null
         if (destination == null) {
             return originLoc.distanceTo(stationLoc)
         }
@@ -47,7 +49,7 @@ class DistanceFromAddress(
 
     override suspend fun refineRoadDistances(stations: List<GasStation>) {
         if (stations.isEmpty()) return
-        val stationCoords = stations.map { it.geoPoint() ?: GeoPoint(latitude = 0.0, longitude = 0.0) }
+        val stationCoords = stations.map { (it.geoPoint() ?: invalidLocation) }
         val distancesFromA =
             OsrmRouting.getDistances(
                 sources = listOf(origin),
