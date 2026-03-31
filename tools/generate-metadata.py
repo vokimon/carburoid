@@ -257,7 +257,8 @@ def generate_fdroid_metadata_file(metadata_path):
     meta.AuthorName = config.fdroid_fields["AuthorName"]
     meta.AuthorEmail = config.fdroid_fields["AuthorEmail"]
     meta.AuthorWebSite = config.fdroid_fields["AuthorWebSite"]
-    #meta.WebSite = config.repo_url  # TODO: get it from config so we can override it
+    if config.website:
+        meta.WebSite = config.website
     if config.donate_url:
         meta.Donate = config.donate_url
     if config.liberapay_id:
@@ -340,6 +341,7 @@ class Config():
     branch: str = field(default_factory=git.current_branch)
     git_hash: str = field(default_factory=git.revision_hash)
     repo_hosting: str = field(default_factory=git.repo_host)
+    website: str = ''
 
     unique_name: str = field(default_factory=deduce_unique_name)
     categories: list[str] = field(default_factory=list)
@@ -793,7 +795,7 @@ def update_flatpak_metainfo():
     # Strip scheme if present
     repo_host = 'https://github.com'
     url_fields = {
-        'homepage': config.repo_url,
+        'homepage': config.website or config.repo_url,
         'vcs-browser': config.repo_url,
         'bugtracker': config.issues_url,
     }

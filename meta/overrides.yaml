@@ -1,6 +1,7 @@
 license: AGPL-3.0-or-later # or-later not autodetected
 translate_url: https://hosted.weblate.org/projects/carburoid/
 version_tag_prefix: carburoid-
+website: https://carburoid.canvoki.net
 keywords:
 - gas station
 - petrol
@@ -14,7 +15,6 @@ fdroid_fields:
   AuthorEmail: fdroid@canvoki.net
   AuthorName: David García Garzón
   AuthorWebSite: https://canvoki.net/coder
-  WebSite: https://carburoid.canvoki.net
   UpdateCheckMode: Tags carburoid-([\d.]+)
   Binaries: https://github.com/vokimon/carburoid/releases/download/carburoid-%v/net.canvoki.carburoid-floss-%v-release.apk
   UpdateCheckData: 'version.properties|versionCode=(\d+)|.|versionName=([\d.]+)'
