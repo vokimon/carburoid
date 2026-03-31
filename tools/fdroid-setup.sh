@@ -25,7 +25,7 @@ fi
 
 if [ ! -e "$FDROID_DATA_PATH" ]
 then
-    run git clone --depth=100 git@gitlab.com:vokimon/fdroid-data.git  $FDROID_DATA_PATH
+    run git clone --depth=100 git@gitlab.com:$GITLAB_USER/fdroiddata.git  $FDROID_DATA_PATH
     pushd $FDROID_DATA_PATH
         run git remote set-branches origin $APP_ID
         run git fetch origin $APP_ID && run git checkout $APP_ID || run git checkout -b $APP_ID
