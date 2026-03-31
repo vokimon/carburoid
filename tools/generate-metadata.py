@@ -276,13 +276,15 @@ def generate_fdroid_metadata_file(metadata_path):
     meta.Repo = config.repo_url + '.git' # TODO: provider dependant derivation
     # TODO: Consider flavors in the output name
     meta.Binaries = f"{config.repo_url}/releases/download/{config.version_tag_prefix}%v/{config.unique_name}-%v-release.apk"
-    meta.Builds = [ns(
+    meta.Builds = [ns(ns(
         versionName = config.last_version,
         versionCode = int(version_to_code(config.last_version)),
         commit = config.version_tag_prefix + config.last_version,
+        subdir = config.fdroid_extra_build.get('subdir', '.'), # to set order
         submodules = config.submodules,
-        subdir = "app", # TODO: app dir, needed?
-        gradle = ['floss'], # TODO: flavors, if none, 'true'
+        gradle = config.fdroid_flavors or True,
+        ),
+        **config.fdroid_extra_build
     )]
     # TODO: Do it in the gathering phase with overridable value
     fingerprint = extract_key_fingerprint()
@@ -355,6 +357,8 @@ class Config():
     fdroid_antifeatures: list[str] = field(default_factory=list)
     fdroid_categories: list[str] = field(default_factory=list)
     fdroid_fields: dict = field(default_factory=dict)
+    fdroid_extra_build: dict = field(default_factory=dict)
+    fdroid_flavors: list[str] = field(default_factory=list)
     translate_url: str = ""
     donate_url: str = ""
     liberapay_id: str = ""

@@ -12,12 +12,18 @@ fdroid_categories:
 submodules: true
 fdroid_fields:
   AuthorEmail: fdroid@canvoki.net
-  AuthorName: David García Gazón
+  AuthorName: David García Garzón
   AuthorWebSite: https://canvoki.net/coder
+  WebSite: https://carburoid.canvoki.net
   UpdateCheckMode: Tags carburoid-([\d.]+)
   Binaries: https://github.com/vokimon/carburoid/releases/download/carburoid-%v/net.canvoki.carburoid-floss-%v-release.apk
   UpdateCheckData: 'version.properties|versionCode=(\d+)|.|versionName=([\d.]+)'
   AntiFeatures:
     NonFreeNet:
       en-US: Rely on sedeaplicaciones.minetur.gob.es and data.economie.gouv.fr
-
+fdroid_extra_build:
+  subdir: app
+  gradle:
+    - floss
+  scandelete:
+    - build-logic
