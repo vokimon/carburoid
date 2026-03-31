@@ -1,5 +1,6 @@
 package net.canvoki.carburoid.model
 
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
@@ -7,6 +8,8 @@ import kotlinx.serialization.json.put
 import net.canvoki.carburoid.model.OpeningHours
 import net.canvoki.shared.test.assertEquals
 import net.canvoki.shared.test.assertJsonEqual
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 
 class FrenchGasStationTest {
@@ -28,6 +31,7 @@ class FrenchGasStationTest {
     ) = FrenchGasStation(
         id = id,
         name = "$id",
+        brand = null,
         latitude = latitude,
         longitude = longitude,
         address = address,
@@ -226,4 +230,96 @@ class FrenchGasStationTest {
             result = result,
         )
     }
+
+    // ===== FranceExtraStationData Tests =====
+
+    private var originalExtraData: FranceExtraStationData.Db? = null
+
+    @Before
+    fun saveRestoreExtraDataState() {
+        originalExtraData = FranceExtraStationData.db()
+        FranceExtraStationData.clear()
+    }
+
+    @After
+    fun restoreExtraDataState() {
+        originalExtraData?.let { FranceExtraStationData.set(it) } ?: FranceExtraStationData.clear()
+    }
+
+    @Test
+    fun `brand and name populated from extra data when ID exists in database`() =
+        runBlocking {
+            val tsvContent = "77170013\tTotalEnergies\tStation Centrale"
+            FranceExtraStationData.load(tsvContent)
+
+            val json = frenchStationJson(id = 77170013)
+            val station = FrenchGasStation.parse(json)
+
+            assertEquals("TotalEnergies", station.brand)
+            assertEquals("Station Centrale", station.name)
+        }
+
+    @Test
+    fun `brand null and name from ID when ID not in extra data database`() =
+        runBlocking {
+            val tsvContent = "11111111\tBrand A\tName A"
+            FranceExtraStationData.load(tsvContent)
+
+            val json = frenchStationJson(id = 99999999)
+            val station = FrenchGasStation.parse(json)
+
+            assertEquals(null, station.brand)
+            assertEquals("99999999", station.name)
+        }
+
+    @Test
+    fun `extra data with empty brand results in empty string brand`() =
+        runBlocking {
+            val tsvContent = "77170013\t\tNo Brand Station"
+            FranceExtraStationData.load(tsvContent)
+
+            val json = frenchStationJson(id = 77170013)
+            val station = FrenchGasStation.parse(json)
+
+            assertEquals("No Brand Station", station.name)
+            assertEquals("", station.brand)
+        }
+
+    @Test
+    fun `extra data with empty name results in brand only name`() =
+        runBlocking {
+            val tsvContent = "77170013\tTotalEnergies\t"
+            FranceExtraStationData.load(tsvContent)
+
+            val json = frenchStationJson(id = 77170013)
+            val station = FrenchGasStation.parse(json)
+
+            assertEquals("TotalEnergies 77170013", station.name)
+            assertEquals("TotalEnergies", station.brand)
+        }
+
+    @Test
+    fun `extra data with both brand and name empty results in ID as name`() =
+        runBlocking {
+            val tsvContent = "77170013\t\t"
+            FranceExtraStationData.load(tsvContent)
+
+            val json = frenchStationJson(id = 77170013)
+            val station = FrenchGasStation.parse(json)
+
+            assertEquals("77170013", station.name)
+            assertEquals("", station.brand)
+        }
+
+    @Test
+    fun `extra data load is idempotent`() =
+        runBlocking {
+            val tsvContent = "77170013\tTotalEnergies\tStation Centrale"
+            FranceExtraStationData.load(tsvContent)
+            FranceExtraStationData.load(tsvContent)
+
+            val db = FranceExtraStationData.db()
+            assertEquals(1, db?.size)
+            assertEquals("TotalEnergies", db?.get("77170013")?.brand)
+        }
 }

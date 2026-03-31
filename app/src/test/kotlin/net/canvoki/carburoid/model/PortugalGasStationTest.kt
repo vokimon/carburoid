@@ -13,7 +13,6 @@ class PortugalGasStationTest {
         id: Int,
         product: String,
         price: String,
-        // Optional overrides for edge cases (English names, non-nullable with defaults)
         name: String = "Station $id",
         brand: String = "Brand $id",
         city: String = "Lisboa",

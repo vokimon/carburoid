@@ -68,14 +68,13 @@ data class FranceExtraStationData(
 
         fun db(): Db? = extraData
 
-        suspend fun load(context: Context) {
+        fun set(db: Db) {
+            extraData = db
+        }
+
+        suspend fun load(tsvContent: String) {
             if (extraData != null) return
             try {
-                val tsvContent =
-                    context.assets
-                        .open("fr-stations-brands-names.tsv")
-                        .bufferedReader(StandardCharsets.UTF_8)
-                        .use { it.readText() }
                 val parsed =
                     tsvContent
                         .lines()
@@ -92,6 +91,22 @@ data class FranceExtraStationData(
                 log("Failed to load French station extra data: ${e.message}")
                 extraData = emptyMap()
             }
+        }
+
+        suspend fun load(context: Context) {
+            if (extraData != null) return
+            val tsvContent =
+                try {
+                    context.assets
+                        .open("fr-stations-brands-names.tsv")
+                        .bufferedReader(StandardCharsets.UTF_8)
+                        .use { it.readText() }
+                } catch (e: Exception) {
+                    log("Failed to load French station extra data: ${e.message}")
+                    extraData = emptyMap()
+                    return
+                }
+            load(tsvContent)
         }
     }
 }
@@ -115,6 +130,7 @@ data class FrenchGasStationResponse(
 data class FrenchGasStation(
     override val id: Int,
     override val name: String?,
+    override val brand: String?,
     override val latitude: Double?,
     override val longitude: Double?,
     override val address: String?,
@@ -169,13 +185,12 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
         val idString = id.toString()
         val extraData = FranceExtraStationData.db()?.let { it.get(idString) }
         val name =
-            listOfNotNull(extraData?.brand, extraData?.name)
-                .filterNot { it.isNullOrBlank() }
-                .joinToString(" - ")
-                .ifEmpty {
-                    log("FR: NO NAME FOR STATION $id")
-                    id.toString()
-                }
+            when {
+                extraData?.name?.isNotBlank() == true -> extraData.name
+                extraData?.brand?.isNotBlank() == true -> "${extraData.brand} $id"
+                else -> id.toString()
+            }
+        val brand = extraData?.brand
 
         // Extract prices: any field ending with "_prix"
         val prices = mutableMapOf<String, Double?>()
@@ -197,6 +212,7 @@ object FrenchGasStationSerializer : KSerializer<FrenchGasStation> {
         return FrenchGasStation(
             id = id,
             name = name,
+            brand = brand,
             address = address,
             city = city,
             state = state,

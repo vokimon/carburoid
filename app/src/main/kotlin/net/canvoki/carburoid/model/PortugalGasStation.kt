@@ -66,13 +66,13 @@ private data class PortugalApiResponse(
 data class PortugalGasStation(
     override val id: Int,
     override val name: String?,
+    override val brand: String?,
     override val address: String?,
     override val city: String?,
     override val state: String?,
     val postalCode: String?,
     override val latitude: Double?,
     override val longitude: Double?,
-    val brand: String?,
     override val prices: Map<String, Double?> = emptyMap(),
     override val openingHours: OpeningHours? = OpeningHours.parse("L-D: 24H"),
 ) : BaseGasStation() {

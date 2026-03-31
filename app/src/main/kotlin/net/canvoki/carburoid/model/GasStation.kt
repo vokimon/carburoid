@@ -9,6 +9,7 @@ import java.time.ZoneId
 interface GasStation {
     val id: Int
     val name: String?
+    val brand: String?
     val address: String?
     val city: String?
     val state: String?
@@ -50,6 +51,7 @@ interface GasStation {
 }
 
 abstract class BaseGasStation : GasStation {
+    override val brand: String? get() = null
     private var _distanceInMeters: Float? = null
     private var roadDistanceInMeters: Float? = null
 
