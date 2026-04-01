@@ -70,8 +70,8 @@ station_no_distance: ?? km
 station_status_unknown: Çerrao??
 station_status_permanently_closed: Çerrao Permanentmente
 station_status_closed: Çerrao
-station_status_opens_at: Abre {wen}
-station_status_closes_at: Çierra {wen}
+station_status_opens_at: Abre {when}
+station_status_closes_at: Çierra {when}
 station_status_open: Abierto
 station_status_247: Abierto 24
 location_not_available: No çe detêttó la ubicaçión
@@ -81,7 +81,7 @@ location_deactivated: La ubicaçión êttá deçâttibá
 location_activate: Âttiba
 location_permisions_concede: Permite
 refreshing_data: Çe êttán âttualîççando lô datô…
-failed_download: 'A fayao la dêccarga de datô: {errôh}'
+failed_download: 'A fayao la dêccarga de datô: {error}'
 open_in_maps: Abre en er mapa
 location_picker_title: Çelêççiona una ubicaçión
 location_picker_search_icon_description: Bûcca

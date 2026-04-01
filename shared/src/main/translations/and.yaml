@@ -2,7 +2,7 @@ language_code: and
 language_name: Andalûh
 settings_language_title: Idioma
 settings_language_summary: Cambia el idioma de la aplicaçión
-settings_language_label_incomplete: '{languahe_natibe_name} (incompleto)'
+settings_language_label_incomplete: '{language_native_name} (incompleto)'
 language_system_default: Çîttema
 settings_translate_title: Îh a Weblate
 settings_translate_summary: Ayuda a traduçîh tu idioma
