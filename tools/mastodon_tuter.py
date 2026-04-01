@@ -1,14 +1,21 @@
 #!/usr/bin/env python
 
-# pip install typer mastodon dotenv yaml
-
 import os
 import sys
-import typer
-import yaml
-from mastodon import Mastodon
-from dotenv import load_dotenv
-from typing import List, Dict, Any, Optional, Set
+try:
+    import typer
+    import yaml
+    from mastodon import Mastodon
+    from dotenv import load_dotenv
+    from typing import List, Dict, Any, Optional, Set
+except ImportError:
+    print("""\
+Either you are not in the Python environment or you didn't install the dependencies.
+If you already have a user writable Python environment, install the dependencies with:
+$ pip install typer mastodon dotenv yaml
+""")
+    raise
+
 
 app = typer.Typer(
     name = "mastodon stuter",
