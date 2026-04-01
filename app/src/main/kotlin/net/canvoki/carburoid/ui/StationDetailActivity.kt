@@ -42,8 +42,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import net.canvoki.carburoid.CarburoidApplication
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.model.GasStation
@@ -265,10 +267,27 @@ fun HeroDetails(station: GasStation) {
     Column(
         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
     ) {
+        // Brand row (optional, subtle)
+        station.brand?.takeIf { it.isNotBlank() }?.let { brand ->
+            Text(
+                text = brand.uppercase(),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.8f),
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 0.5.sp,
+                modifier = Modifier.padding(bottom = 4.dp),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+
+        // Station name (primary)
         Text(
             text = station.name?.titlecase() ?: stringResource(R.string.station_no_name),
             style = MaterialTheme.typography.displayMedium,
+            fontWeight = FontWeight.Bold,
         )
+
         // Price and product name section
         Row(
             modifier = Modifier.fillMaxWidth(),
