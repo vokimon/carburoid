@@ -7,7 +7,6 @@ Do you want to help? This is my roadmap.
     - Splitting the location widget for origin and destination? too small
     - Just changing the icon to indicate we are in route mode? Maybe too subtle
     - ...?
-- [ ] Location Unification: split latitude, longitude parameters
 - [ ] Location Picker: button to set the current location to gps
 - [ ] Location Picker: button to clear the target location
 - [ ] Location Picker: button to swap current and target
@@ -16,10 +15,7 @@ Do you want to help? This is my roadmap.
 - [ ] Route: Split A and B for more stability on changing A as the car moves.
 - [ ] Route: Display both deviation and distance from A to the station
 - [ ] Route: Consider distance to the station as secondary filter criteria
-- [ ] Brands: Define optional brand field in base Gas Station
-- [ ] Brands: Station card: consider optional brand
-- [ ] Brands: Station detal: consider optional brand
-- [ ] Brands: France remove brand from name
+- [ ] Brands: Station card: consider showing optional brand
 - [ ] Brands: Spain use heuristics to deduce brand
 - [ ] Brands: Brands API/Web to get info (history, ethics, relations...)
 - [ ] Brands: Obtain/Show brand icon
@@ -29,6 +25,7 @@ Do you want to help? This is my roadmap.
 - [ ] Products: Disable or remove unavailable products.
 - [ ] Products: Use short names (now that we are translating we could translate shorter)
 - [ ] Products: What to do with official short names: G95E85 GOA GOA+ BGNL... 
+- [ ] Language: Portuguese
 - [ ] Language: Asturian
 - [ ] Language: Aranese (Occitan)
 - [ ] Language: Occitan
@@ -88,12 +85,19 @@ Do you want to help? This is my roadmap.
             - url: https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/records?limit=-1&include_links=true&include_app_metas
             - brand: curl 'https://www.prix-carburants.gouv.fr/map/recuperer_infos_pdv/36100003'   --compressed   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:145.0) Gecko/20100101 Firefox/145.0'   -H 'Accept: */*'   -H 'Accept-Language: ca,en-US;q=0.7,en;q=0.3'   -H 'Accept-Encoding: gzip, deflate, br, zstd'   -H 'Referer: https://www.prix-carburants.gouv.fr/'   -H 'x-requested-with: XMLHttpRequest'   -H 'Connection: keep-alive'   -H 'Cookie: visid_incap_3031704=8zpXEhBVSVKze0FK8gtMwGEwQmkAAAAAQUIPAAAAAAAOkGXNP3/InPIUJGP7EzA+; incap_ses_507_3031704=D401VUe8bVyHuK1lUDoJB8fta2kAAAAAv3xpGGAHh275p+KP92tVMQ==; public=5gkldnq9vn8aek8gcsg97c18ft'   -H 'Sec-Fetch-Dest: empty'   -H 'Sec-Fetch-Mode: cors'   -H 'Sec-Fetch-Site: same-origin'   -H 'Priority: u=4'   -H 'TE: trailers'
             - station detail page: curl https://www.prix-carburants.gouv.fr/station/36150001
-    - Portugal (portal, not api): https://precoscombustiveis.dgeg.gov.pt/
     - Germany: https://creativecommons.tankerkoenig.de/swagger/
 - [ ] Electric Recharge
     - Existing Open APIs
         - https://openchargemap.org
         - https://www.chargemap.com
+
+## Done
+
+- [x] Location Unification: splitted latitude, longitude parameters
+- [x] Portugal (portal, not api): https://precoscombustiveis.dgeg.gov.pt/
+- [x] Brands: Define optional brand field in base Gas Station
+- [x] Brands: France remove brand from name
+- [x] Brands: Station detal: show optional brand
 
 ## Done 1.5.0
 

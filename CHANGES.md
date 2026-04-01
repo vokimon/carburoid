@@ -3,6 +3,8 @@
 ## Unreleased
 
 - ✨ Portugal data source
+- ✨ Brand field in details (for France and Portugal, not yet Spain)
+- ♻️ Most latitude/longitude pairs encapsulated as GeoPoints
 
 ## 1.5.1 (2026-03-20)
 
