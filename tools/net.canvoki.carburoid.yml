@@ -114,10 +114,20 @@ Builds:
     scandelete:
       - build-logic
 
+  - versionName: 1.6.0
+    versionCode: 1060000
+    commit: carburoid-1.6.0
+    subdir: app
+    submodules: true
+    gradle:
+      - floss
+    scandelete:
+      - build-logic
+
 AllowedAPKSigningKeys: 8cdfd389b1a7979943201321188a416ed54dbdf1c432ed07e2bb44b5b3cea722
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags carburoid-([\d.]+)
 UpdateCheckData: version.properties|versionCode=(\d+)|.|versionName=([\d.]+)
-CurrentVersion: 1.5.0
-CurrentVersionCode: 1050000
+CurrentVersion: 1.6.0
+CurrentVersionCode: 1060000

@@ -1,6 +1,8 @@
 # Change log
 
-## Unreleased
+## 1.6.0 (2026-04-01)
+
+Portugal gas stations data and brands
 
 - ✨ Portugal data source
 - ✨ Brand field in details (for France and Portugal, not yet Spain)
