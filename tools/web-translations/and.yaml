@@ -1,0 +1,41 @@
+LANGUAGE_NAME: Andalûh
+MOTTO: Yena mâh barato, mâh çerca
+DESCRIPTION: Aplicaçión libre pa Androîh pa encontrâh gaçolinerâ baratâ
+KEYWORDS: gaçolinera, êttaçión de çerbiçio, combûttible, gaçoîh, diéçê, gaçolina,
+  Androîh
+FEATURE_OFFICIAL_DATA_TITLE: Datô ofiçialê
+FEATURE_OFFICIAL_DATA_DESCRIPTION: |
+  Uçamô datô ofiçialê que embían lâ gaçolinerâ a lô reguladorê.
+  Âttuarmente cubrimô Êppaña, Françia y Portugâh.
+FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY: Añadîh mi paîh
+FEATURE_RELEVANT_STATIONS_TITLE: Çolo êttaçionê relebantê
+FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
+  Carburoîh dêccarta lâ êttaçionê que no mehoran er preçio de otrâ mâh çercanâ.
+  Êtto reduçe la lîtta de candidatô de milê a unâ pocâ deçenâ.
+FEATURE_YOUR_CHOICE_TITLE: Tú deçidê
+FEATURE_YOUR_CHOICE_DESCRIPTION: |
+  Lô preçiô mehoran conforme bahâ en la lîtta, pero la dîttançia también aumenta.
+  Tú deçidê âtta dónde combiene îh pa aorrâh.
+FEATURE_ROUND_TRIP_DETOUR_MODES_TITLE: Ida y buerta o ruta con dêbbío
+FEATURE_ROUND_TRIP_DETOUR_MODES_DESCRIPTION: |
+  Er modo “Ida y buerta” çolo conçidera la dîttançia entre tu ubicaçión y la gaçolinera.
+  Çi fihâ un punto de dêttino, çe carcula la dîttançia incluyendo er dêbbío.
+FEATURE_FREEDOM_AS_FEATURE_TITLE: Libertá como funçionalidá
+FEATURE_FREEDOM_AS_FEATURE_DESCRIPTION: |
+  La liçençia AGPL3 protehe tu libertá como uçuaria.
+  Er código lo mantiene la comunidá y cuarquiêh perçona puede auditâl-lo.
+  Çin êppíâ. Çin recolêççión de datô. Çin promoçión pagá de gaçolinerâ.
+  F‑Droîh garantiça que lô binariô probienen der código fuente tar como çe publicó.
+FEATURE_FREEDOM_AS_FEATURE_ACTION_GITHUB: Código fuente
+FEATURE_FREEDOM_AS_FEATURE_ACTION_LICENSE: GNU Âffero AGPLv3 o pôtteriôh
+FEATURE_TRANSLATIONS_TITLE: Tradûççionê
+FEATURE_TRANSLATIONS_DESCRIPTION: |
+  Prêttamô êppeçiâh atençión al apoyo de lenguâ minoritariâ.
+  Êh un êffuerço comunitario — traduçe tu lengua con Weblate.
+FEATURE_TRANSLATIONS_ACTION_WEBLATE: Traduçîh
+ACTION_FDROID: Dîpponible en F‑Droîh
+ACTION_DONATE: Âh una donaçión
+ACTION_SOCIAL: Çígenô
+ACTION_GOOGLE_PLAY: Google Play
+ACTION_APP_STORE: Âpp Store
+COOKIE_NOTICE: Êtte çitio no uça cookiê. Tu pribaçidá çí que nô importa de berdá.

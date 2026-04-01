@@ -1,5 +1,9 @@
 # Change log
 
+## Unreleased
+
+- 🌐 New language: Andalucian
+
 ## 1.6.0 (2026-04-01)
 
 Portugal gas stations data and brands

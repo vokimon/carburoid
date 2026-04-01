@@ -1,0 +1,102 @@
+app_name: Carburoîh
+menu_back: Atrâh
+menu_settings: Ahûttê
+menu_chart: Gráfico
+settings_category_language_appearance: Idioma y apariençia
+settings_category_station_filters: Firtrao de gaçolinerâ
+settings_filter_expensive: Ocurtâh irrelebantê
+settings_filter_expensive_summary: Una gaçolinera çe conçidera irrelebante çi ay otra
+  mâh çercana y mâh barata. (Recomendao)
+settings_filter_expensive_warning: Carburoîh êttá diçeñá pa funçionâh con êtte firtro
+  âttibao. Deçâttibâl-lo muêttra muxâ mâh êttaçionê, lo que ralentiça conçiderablemente
+  la aplicaçión. Conçidera borbêh a âttibâl-lo mâh tarde.
+settings_filter_non_public: Çólo preçiô públicô
+settings_filter_non_public_summary: Ocurta lô preçiô que requieran afiliaçión.
+settings_filter_beyond_sea: Ocurta gaçolinerâ al otro lao der mâh
+settings_filter_beyond_sea_summary: Muêttra çolo lâ que êttén en tu çona (Penínçula,
+  Balearê, Canariâ o Çeuta y Meliya)
+settings_filter_closed: Muêttra êttaçionê çerrâh
+settings_filter_closed_summary: Êttableçe un marhen de tiempo pa êttaçionê que abrirán
+  pronto
+settings_filter_closed_tolerance_none: Çin marhen, firtra çiempre
+settings_filter_closed_tolerance_half_hour: Media ora
+settings_filter_closed_tolerance_one_hour: Una ora
+settings_filter_closed_tolerance_two_hours: Dôh orê
+settings_filter_closed_tolerance_twelve_hours: Medio día
+settings_filter_closed_tolerance_one_day: Un día
+settings_filter_closed_tolerance_never: Muêttra çiempre
+no_gas_stations: No çe encontraron gaçolinerâ coinçidentê
+product_selector_hint: Prodûtto
+product_selector_icon_description: Çelêttôh de prodûtto
+product_category_recent: Reçientê
+product_category_diesel: Gaçóleo
+product_category_gasoline: Gaçolina
+product_category_gaseous: Gaçeoçô
+product_category_additives: Aditibô
+product_name_gasoleo_a: Gaçóleo A
+product_name_gasoleo_premium: Gaçóleo Premium
+product_name_gasoleo_b: Gaçóleo B
+product_name_diesel_renovable: Diéçê Renobable
+product_name_gasolina_95_e10: Gaçolina 95 E10
+product_name_gasolina_95_e25: Gaçolina 95 E25
+product_name_gasolina_95_e5: Gaçolina 95 E5
+product_name_gasolina_95_e5_premium: Gaçolina 95 E5 Premium
+product_name_gasolina_95_e85: Gaçolina 95 E85
+product_name_gasolina_98_e10: Gaçolina 98 E10
+product_name_gasolina_98_e5: Gaçolina 98 E5
+product_name_gasolina_renovable: Gaçolina Renobable
+product_name_gas_natural_comprimido: Gâh Naturâh Comprimío
+product_name_gas_natural_licuado: Gâh Naturâh Licuao
+product_name_biogas_natural_comprimido: Biogâ Naturâh Comprimío
+product_name_biogas_natural_licuado: Biogâ Naturâh Licuao
+product_name_biodiesel: Biodiéçê
+product_name_bioetanol: Bioetanôh
+product_name_gases_licuados_del_petroleo: Gaçê licuáô der petróleo
+product_name_hidrogeno: Idróheno
+product_name_amoniaco: Amoníaco
+product_name_metanol: Metanôh
+product_name_adblue: Âbblue
+location_selector_hint: Ubicaçión
+location_selector_locate_device: Ubica er dîppoçitibo
+price_not_public: ✱ Preçio condiçionao
+detail_location: Ubicaçión
+detail_opening_hours: Orario de çerbiçio
+detail_other_products: Otrô Prodûttô
+station_no_name: Çin rótulo
+station_no_address: Çin dirêççión
+station_no_city: Çin muniçipio
+station_no_price: No dîpponible
+station_no_distance: ?? km
+station_status_unknown: Çerrao??
+station_status_permanently_closed: Çerrao Permanentmente
+station_status_closed: Çerrao
+station_status_opens_at: Abre {wen}
+station_status_closes_at: Çierra {wen}
+station_status_open: Abierto
+station_status_247: Abierto 24
+location_not_available: No çe detêttó la ubicaçión
+location_error: Errôh detêttando la ubicaçión
+location_forbidden: Denegao âççeço a la ubicaçión
+location_deactivated: La ubicaçión êttá deçâttibá
+location_activate: Âttiba
+location_permisions_concede: Permite
+refreshing_data: Çe êttán âttualîççando lô datô…
+failed_download: 'A fayao la dêccarga de datô: {errôh}'
+open_in_maps: Abre en er mapa
+location_picker_title: Çelêççiona una ubicaçión
+location_picker_search_icon_description: Bûcca
+location_picker_search_location_hint: Bûcca una çiudá o dirêççión
+location_picker_searching: Bûccando…
+location_picker_no_results: No çe encontraron ubicaçionê
+loading_new_data: Dêccargando datô nuebô…
+settings_country_title: Probeedôh de datô
+settings_country_summary: Çelêççiona er probeedôh de datô de preçiô de carburantê
+settings_country_es: Êppaña
+settings_country_fr: Françia
+settings_country_fr_warning_wip: Lô datô de lâ gaçolinerâ françeçâ aún êttán en deçarroyo.
+  No ay nombrê de êttaçionê ni orariô dîpponiblê todabía.
+settings_country_pt: Portugâh
+settings_warning_dialog_wip: En deçarroyo
+warning_dialog_title: Âbbertençia
+button_closer: Mâh çerca
+button_cheaper: Mâh barato
