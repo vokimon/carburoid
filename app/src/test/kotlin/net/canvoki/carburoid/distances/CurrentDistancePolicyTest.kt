@@ -93,8 +93,8 @@ class CurrentDistancePolicyTest {
         skipOn<java.net.SocketTimeoutException> {
             val method =
                 DistanceFromAddress(
-                    origin = GeoPoint(origin.latitude, origin.longitude),
-                    destination = destination?.let { GeoPoint(it.latitude, it.longitude) },
+                    origin = origin.toGeoPoint(),
+                    destination = destination?.toGeoPoint(),
                 )
 
             val stationObjects =
@@ -112,7 +112,7 @@ class CurrentDistancePolicyTest {
                         override val openingHours = OpeningHours.parse("")
                         override val prices = emptyMap<String, Double?>()
 
-                        val geoPoint = GeoPoint(latitude = point.latitude, longitude = point.longitude)
+                        val geoPoint = point.toGeoPoint()
 
                         override fun toJson() = ""
 

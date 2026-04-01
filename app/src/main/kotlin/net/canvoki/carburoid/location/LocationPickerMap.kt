@@ -41,7 +41,6 @@ import org.maplibre.compose.sources.rememberGeoJsonSource
 import org.maplibre.compose.style.BaseStyle
 import org.maplibre.compose.style.rememberStyleState
 import org.maplibre.compose.util.ClickResult
-import org.maplibre.spatialk.geojson.BoundingBox
 import org.maplibre.spatialk.geojson.Feature
 import org.maplibre.spatialk.geojson.FeatureCollection
 import kotlin.math.max
@@ -109,13 +108,7 @@ fun LocationPickerMap(
             )
         } else {
             cameraState.animateTo(
-                boundingBox =
-                    BoundingBox(
-                        west = min(currentPosition.longitude, targetPosition.longitude),
-                        south = min(currentPosition.latitude, targetPosition.latitude),
-                        east = max(currentPosition.longitude, targetPosition.longitude),
-                        north = max(currentPosition.latitude, targetPosition.latitude),
-                    ),
+                boundingBox = currentPosition.boundingBoxTo(targetPosition),
                 padding = PaddingValues(48.dp),
                 duration = 800.milliseconds,
             )

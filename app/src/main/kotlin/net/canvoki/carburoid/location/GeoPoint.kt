@@ -1,6 +1,7 @@
 package net.canvoki.carburoid.location
 
 import net.canvoki.carburoid.network.Uri
+import org.maplibre.spatialk.geojson.BoundingBox
 import android.location.Location as AndroidLocation
 import org.maplibre.spatialk.geojson.Point as MapLibrePoint
 import org.maplibre.spatialk.geojson.Position as MapLibrePosition
@@ -29,6 +30,25 @@ data class GeoPoint(
     fun toLonLatPair(): Pair<Double, Double> = longitude to latitude
 
     fun pretty(): String = "(${ "%.4f".format(latitude) }, ${ "%.4f".format(longitude) })"
+
+    fun toGeoUri(): String = "geo:$latitude,$longitude"
+
+    fun boundingBoxTo(otherCorner: GeoPoint): BoundingBox {
+        fun minmax(
+            a: Double,
+            b: Double,
+        ): Pair<Double, Double> = if (a < b) (a to b) else (b to a)
+
+        val (west, east) = minmax(longitude, otherCorner.longitude)
+        val (south, north) = minmax(latitude, otherCorner.latitude)
+
+        return BoundingBox(
+            west = west,
+            south = south,
+            east = east,
+            north = north,
+        )
+    }
 
     companion object {
         /** Converts a libremap Postiion to a GeoPoint */

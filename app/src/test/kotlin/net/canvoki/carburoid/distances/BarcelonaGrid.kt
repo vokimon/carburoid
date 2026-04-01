@@ -9,8 +9,6 @@ data class BarcelonaGridPoint(
     val vIndex: Int, // Vertical axis (NW–SE streets: Urgell, Casanova, Balmes...)
     val hIndex: Int, // Horizontal axis (NE–SW avenues: Paris, Valencia, Aragó...)
 ) {
-    val coordinate: Pair<Double, Double> get() = latitude to longitude
-
     fun manhattanBlocksTo(other: BarcelonaGridPoint): Int = abs(vIndex - other.vIndex) + abs(hIndex - other.hIndex)
 
     fun toGeoPoint() = GeoPoint(latitude = latitude, longitude = longitude)

@@ -208,7 +208,10 @@ fun LocationDetails(station: GasStation) {
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)),
                 ) {
-                    context.openUri("geo:${station.latitude},${station.longitude}")
+                    val uri = station.geoPoint()?.toGeoUri()
+                    uri?.let {
+                        context.openUri(it)
+                    }
                 }.padding(8.dp),
     ) {
         Icon(
