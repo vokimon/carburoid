@@ -11,7 +11,7 @@ fun WeblateLink(
     instanceUrl: String = "https://hosted.weblate.org",
 ) {
     LinkPreference(
-        url = "${instanceUrl}/projects/$project/${ component ?: "" }",
+        url = "$instanceUrl/projects/$project/${ component ?: "" }",
         title = stringResource(R.string.settings_translate_title),
         summary = stringResource(R.string.settings_translate_summary),
         iconResId = R.drawable.ic_weblate,

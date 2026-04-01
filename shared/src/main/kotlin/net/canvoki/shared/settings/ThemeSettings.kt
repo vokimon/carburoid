@@ -50,9 +50,7 @@ object ThemeSettings {
     }
 
     @Composable
-    fun effectiveColorScheme(): ColorScheme {
-        return if (isDarkTheme()) darkColorScheme() else lightColorScheme()
-    }
+    fun effectiveColorScheme(): ColorScheme = if (isDarkTheme()) darkColorScheme() else lightColorScheme()
 
     @Composable
     fun isDarkTheme(): Boolean {

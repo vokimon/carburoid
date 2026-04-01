@@ -24,8 +24,8 @@ import androidx.preference.PreferenceScreen
 import net.canvoki.shared.R
 import net.canvoki.shared.component.preferences.ListPreference
 import net.canvoki.shared.component.preferences.rememberMutablePreference
-import net.canvoki.shared.nolog as log
 import java.util.Locale
+import net.canvoki.shared.nolog as log
 
 object LanguageSettings {
     private const val SYSTEM_LANGUAGE = "system"
@@ -48,9 +48,10 @@ object LanguageSettings {
         val oldCache = availableLanguagesCache
         if (oldCache != null) return oldCache
         val supportedCodes = context.resources.getStringArray(R.array.supported_language_codes).toSet()
-        val newCache = supportedCodes.map { code ->
-            LanguageOption(code, languageName(context, code))
-        }
+        val newCache =
+            supportedCodes.map { code ->
+                LanguageOption(code, languageName(context, code))
+            }
         availableLanguagesCache = newCache
         return newCache
     }
@@ -121,20 +122,22 @@ object LanguageSettings {
         val nativeNames = getNativeNames(context)
         val systemOption = "system" to stringResource(R.string.language_system_default)
         val incompleteCodes = stringArrayResource(R.array.incomplete_language_codes).toSet()
-        val options = buildList {
-            add(systemOption)
-            nativeNames.forEach { option ->
-                val label = if (option.code in incompleteCodes) {
-                    stringResource(R.string.settings_language_label_incomplete, option.name)
-                } else  {
-                    option.name
+        val options =
+            buildList {
+                add(systemOption)
+                nativeNames.forEach { option ->
+                    val label =
+                        if (option.code in incompleteCodes) {
+                            stringResource(R.string.settings_language_label_incomplete, option.name)
+                        } else {
+                            option.name
+                        }
+                    add(option.code to label)
                 }
-                add (option.code to label)
             }
-        }
         val title = stringResource(R.string.settings_language_title)
         val summary =
-            (options.find { it.first == currentValue }?: systemOption).second
+            (options.find { it.first == currentValue } ?: systemOption).second
 
         ListPreference(
             title = title,

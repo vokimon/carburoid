@@ -6,13 +6,14 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.spotless)
-    id("com.github.ben-manes.versions") version "0.52.0"
+    id("com.github.ben-manes.versions") version "0.53.0"
 }
 
 spotless {
     kotlin {
         target(
             "app/src/**/*.kt",
+            "shared/src/**/*.kt",
             "buildSrc/src/**/*.kt"
         )
         ktlint("1.7.1")
