@@ -41,10 +41,10 @@ body:
       label: API features
       description: How the API works?
       options:
-        - label: Is the API an official source (not a third party) (Recommended)
-        - label: Can it be used without registration or authentication (Required)
-        - label: Can all stations and prices for all products be taken in a single call (Recommended)
-        - label: Is the result formated as JSON? (Strongly recommended)
+        - label: The API is an official source (not a third party) (Recommended)
+        - label: The API can be used without registration or authentication (Required)
+        - label: The API has a single entry point to get all the product of all the stations, and thus not paginated (Recommended)
+        - label: The result is formatted as JSON (Strongly recommended)
 
   - type: checkboxes
     id: api_content
@@ -65,9 +65,9 @@ body:
       label: Fuel products
       description: |
         List the fuel types available and how they are named in the API.
-        If possible, map them to common products (e.g. Diesel, Gasoline 95, etc.).
+        If possible, map them to Spanish products (e.g. Gasoleo A, Gasoline 95, etc.).
       placeholder: |
-        "diesel": Diesel
+        "diesel": Gasoleo A
         "gasolina95": Gasoline 95
 
   - type: textarea
@@ -75,7 +75,7 @@ body:
     attributes:
       label: Land masses
       description: |
-        Which are the different territories separated by sea?
+        List different territories that are separated by sea
       placeholder: |
         Mainland, Sicily, Sardinia
 
