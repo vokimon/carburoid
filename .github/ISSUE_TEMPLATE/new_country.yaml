@@ -1,0 +1,98 @@
+name: "🌍 New country support"
+description: Provide information to help add support for a new country
+title: "🌍 Country: [country name]"
+labels: [country-request]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping expand Carburoid to new countries! 🚀
+
+        This form is intended for contributors who want to help **add support for a new country**
+        by providing information about available data sources.
+
+        You do NOT need to submit code — just fill in as much information as you can.
+
+  - type: input
+    id: country
+    attributes:
+      label: Country
+      description: Which country do you want to add?
+      placeholder: e.g. Italy
+    validations:
+      required: true
+
+  - type: textarea
+    id: api
+    attributes:
+      label: Public API or data source
+      description: |
+        Provide a link to the API or data source (official/open data preferred).
+        If possible, include documentation links.
+      placeholder: |
+        https://example.gov/api/fuel-prices
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: api_features
+    attributes:
+      label: API features
+      description: How the API works?
+      options:
+        - label: Is the API an official source (not a third party) (Recommended)
+        - label: Can it be used without registration or authentication (Required)
+        - label: Can all stations and prices for all products be taken in a single call (Recommended)
+        - label: Is the result formated as JSON? (Strongly recommended)
+
+  - type: checkboxes
+    id: api_content
+    attributes:
+      label: API response content
+      description: Does the API provide for every station
+      options:
+        - label: Latitude and Longitude
+        - label: Name
+        - label: Brand
+        - label: Address (street, city, state, country...)
+        - label: Prices for every product
+        - label: Open Hours
+
+  - type: textarea
+    id: products
+    attributes:
+      label: Fuel products
+      description: |
+        List the fuel types available and how they are named in the API.
+        If possible, map them to common products (e.g. Diesel, Gasoline 95, etc.).
+      placeholder: |
+        "diesel": Diesel
+        "gasolina95": Gasoline 95
+
+  - type: textarea
+    id: regions
+    attributes:
+      label: Land masses
+      description: |
+        Which are the different territories separated by sea?
+      placeholder: |
+        Mainland, Sicily, Sardinia
+
+  - type: textarea
+    id: sample
+    attributes:
+      label: Sample response
+      description: |
+        Provide a sample JSON response from the API (or a fragment).
+        This helps a lot!
+        You can summarize it by pasting the container and an instance of a gas station.
+      render: json
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional notes
+      description: |
+        Complementary sources for missing information.
+        Other info...
