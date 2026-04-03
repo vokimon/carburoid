@@ -1,0 +1,13 @@
+## 1.5.0 (2026-03-18)
+
+Route deviation, refine the list using real road distances and more languages
+
+- ✨ Progressive refining of the list using real road distances instead of straight lines distances
+- ✨ Routes from A-B using deviation to take the station as distance
+- ⚡️ Avoid redundant recomputations on filter reconfig, repositions and product change
+- ♻️ Unified position representation (less bugs and regressions about mixing latitude and longitude)
+- 🌐 FR translation (thanks, Sudoman and Florent Ruquoy!)
+- 🌐 DE translation (thanks, Zintor!)
+- 🌐 Metadata and shared lib translation to DE and RU (Thanks AI! 😛)
+- 🏗 Removed unused dependencies
+

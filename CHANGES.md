@@ -1,8 +1,11 @@
 # Change log
 
-## Unreleased
+## 1.6.1 (2026-04-02)
 
-- 🌐 New language: Andalucian
+Andalusian translation and dependency boost
+
+- 🌐 New language: Andalusian
+- 🏗️ Bump dependencies
 
 ## 1.6.0 (2026-04-01)
 

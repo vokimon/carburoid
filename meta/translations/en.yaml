@@ -21,7 +21,14 @@ full_description_md: |-
   - 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese…
   - ☀️ Dark and Light themes
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_6_1_md: |-
+  Andalusian translation and dependency boost
+
+  - 🌐 New language: Andalusian
+  - 🏗️ Bump dependencies
 changes_1_6_0_md: |-
+  Portugal gas stations data and brands
+
   - ✨ Portugal data source
   - ✨ Brand field in details (for France and Portugal, not yet Spain)
   - ♻️ Most latitude/longitude pairs encapsulated as GeoPoints

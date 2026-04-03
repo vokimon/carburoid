@@ -1,0 +1,14 @@
+## 1.0.1 (2025-10-15)
+
+First version on FDroid, featuring:
+
+- 🏗️ floss and nonfree flavors, using or not privative GPlay location services
+- 🌐 Galician translation. Thanks Beatriz Plana
+- 🌐 Basque translation. Thanks Javier Calzado Sànchez (javikalsan)
+- 🐛 After changing language, product list disappeared
+- 🐛 Settings title was untranslated
+- 💄 Icons, colors and pill bg for open/closed status
+- 💄 Translate preference moved down
+- 💄 Better Material support
+- ♻️  Station "open status" is more modular
+
