@@ -1,6 +1,6 @@
 # Change log
 
-## 1.6.1 (2026-04-02)
+## 1.6.1 (2026-04-04)
 
 Andalusian translation and dependency boost
 
