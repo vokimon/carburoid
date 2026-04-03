@@ -27,6 +27,9 @@ TARGET_SDK = 36
 MIN_SDK = 26
 JAVA_VERSION = 17
 GRADLE_VERSION = "8.14.4"
+BUILD_TOOLS_VERSION = "36.0.0"
+CMDLINE_TOOLS_VERSION = "19.0"
+NDK_VERSION = "r26c"
 
 # Color codes for CLI output
 COLOR_BLUE = "\033[34m"
@@ -665,51 +668,51 @@ def generate_icons(project_root: Path) -> None:
             parents=True, exist_ok=True
         )
 
-    if shutil.which("convert"):
-        for density in densities:
-            icon_path = (
-                project_root
-                / f"app/src/main/res/mipmap-{density}/ic_launcher.png"
-            )
-            run(
-                "convert",
-                "-size",
-                "48x48",
-                "xc:blue",
-                "-gravity",
-                "center",
-                "-fill",
-                "white",
-                "-pointsize",
-                "24",
-                "-annotate",
-                "0",
-                "App",
-                str(icon_path),
-                check=False,
-            )
-            round_path = icon_path.with_name("ic_launcher_round.png")
-            run(
-                "convert",
-                "-size",
-                "48x48",
-                "xc:purple",
-                "-gravity",
-                "center",
-                "-fill",
-                "white",
-                "-pointsize",
-                "24",
-                "-annotate",
-                "0",
-                "App",
-                str(round_path),
-                check=False,
-            )
-        success("Placeholder icons generated with ImageMagick.")
-    else:
+    if not shutil.which("convert"):
         warn("'convert' not found. Install 'imagemagick' for auto-generated icons.")
         warn("You must add app/src/main/res/mipmap-*/ic_launcher.png manually.")
+        return
+    for density in densities:
+        icon_path = (
+            project_root
+            / f"app/src/main/res/mipmap-{density}/ic_launcher.png"
+        )
+        run(
+            "convert",
+            "-size",
+            "48x48",
+            "xc:blue",
+            "-gravity",
+            "center",
+            "-fill",
+            "white",
+            "-pointsize",
+            "24",
+            "-annotate",
+            "0",
+            "App",
+            str(icon_path),
+            check=False,
+        )
+        round_path = icon_path.with_name("ic_launcher_round.png")
+        run(
+            "convert",
+            "-size",
+            "48x48",
+            "xc:purple",
+            "-gravity",
+            "center",
+            "-fill",
+            "white",
+            "-pointsize",
+            "24",
+            "-annotate",
+            "0",
+            "App",
+            str(round_path),
+            check=False,
+        )
+    success("Placeholder icons generated with ImageMagick.")
 
 
 def generate_gitignore(project_root: Path) -> None:
@@ -981,12 +984,12 @@ def main(
         "apt",
         "install",
         "gradle",
-        f"google-android-build-tools-{TARGET_SDK}.0.0-installer",
-        "google-android-cmdline-tools-19.0-installer",
         "google-android-emulator-installer",
-        "google-android-ndk-r26c-installer",
-        f"google-android-platform-{TARGET_SDK}-installer",
         "google-android-platform-tools-installer",
+        f"google-android-build-tools-{BUILD_TOOLS_VERSION}-installer",
+        f"google-android-cmdline-tools-{CMDLINE_TOOLS_VERSION}-installer",
+        f"google-android-ndk-{NDK_VERSION}-installer",
+        f"google-android-platform-{TARGET_SDK}-installer",
     )
 
     # Create project
