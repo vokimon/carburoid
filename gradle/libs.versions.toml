@@ -5,18 +5,18 @@ targetSdk = "36"
 minSdk = "26"
 
 # Plugins
-agp = "8.13.1"
-kotlin = "2.3.10"
+agp = "8.13.2"
+kotlin = "2.3.20"
 compose-compiler = "1.5.15"
-spotless = "8.1.0"
+spotless = "8.4.0"
 
 # Libraries
-androidx-activity-compose = "1.12.4"
+androidx-activity-compose = "1.13.0"
 androidx-appcompat = "1.7.1"
-androidx-compose-bom = "2026.02.00"
+androidx-compose-bom = "2026.03.01"
 androidx-constraintlayout = "2.2.1"
 androidx-core-ktx = "1.17.0"
-androidx-datastore-preferences = "1.2.0"
+androidx-datastore-preferences = "1.2.1"
 androidx-lifecycle-runtime-ktx = "2.10.0"
 androidx-material = "1.13.0"
 androidx-preference-ktx = "1.2.1"
@@ -27,18 +27,18 @@ androidx-test-runner = "1.6.2"
 kotlinx-coroutines-bom = "1.10.2"
 kotlinx-serialization-bom = "1.10.0"
 maplibre-compose = "0.12.1"
-guava = "33.2.1-jre"
+guava = "33.5.0-jre"
 
 
 # Testing
 junit = "4.13.2"
-mockk = "1.14.6"
-robolectric = "4.16"
-java-diff-utils = "4.12"
+mockk = "1.14.9"
+robolectric = "4.16.1"
+java-diff-utils = "4.16"
 
 # Other libraries
 koalaplot = "0.11.0"
-ktor = "3.4.0"
+ktor = "3.4.2"
 play-services-location = "21.3.0"
 
 [libraries]
@@ -51,8 +51,8 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 
 # Kotlinx Coroutines BOM
 kotlinx-coroutines-bom = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines-bom" }
-kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android" }
-kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-bom"  }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-bom" }
 
 # Kotlinx Serialization BOM
 kotlinx-serialization-bom = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-bom", version.ref = "kotlinx-serialization-bom" }
