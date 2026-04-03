@@ -9,9 +9,16 @@
 
 set -e  # Exit on any error
 
+export TARGET_SDK=36
+export MIN_SDK=26
+export JAVA_VERSION=17
+
 run() {
     echo -e "\033[34m:: $@\033[0m"
     "$@"
+}
+norun() {
+    echo -e "Skipped: \033[33m:: $@\033[0m"
 }
 
 load_dotenv() {
@@ -33,16 +40,16 @@ update_dotenv() {
 
     for var_name in "$@"; do
         local value="${!var_name}"
-        # Escape sed special chars in value
-        local escaped_value
-        escaped_value=$(printf '%s\n' "$value" | sed 's/[\/&]/\\&/g')
 
         if grep -qE "^$var_name=" "$dotenv_file"; then
+            # Escape sed special chars in value
+            local escaped_value
+            escaped_value=$(printf '%s\n' "$value" | sed 's/[\/&]/\\&/g')
             # Replace line in content variable
-            content=$(printf '%s\n' "$content" | sed "s/^$var_name=.*/$var_name=$escaped_value/")
+            content=$(printf '%s\n' "$content" | sed "s/^$var_name=.*/$var_name=\"$escaped_value\"/")
         else
             # Append new variable at end
-            content="${content}"$'\n'"$var_name=$value"
+            content="${content}"$'\n'"$var_name=\"$value\""
         fi
     done
 
@@ -102,7 +109,7 @@ package_to_name() {
 
 
 install_system_dependencies() {
-    run sudo apt install \
+    norun sudo apt install \
         gradle \
         google-android-build-tools-35.0.1-installer \
         google-android-cmdline-tools-17.0-installer \
@@ -122,7 +129,7 @@ in_git_repo() {
     fi
 }
 
-load_dotenv
+load_dotenv # Take existing params from previous executions as defaults
 parameter PACKAGE_NAME "$1" "Enter package name" "com.example.dummy"
 package_short_name=${PACKAGE_NAME##*.} # the last dotted separated part
 parameter PROJECT_NAME "$2" "Enter project name" "$(package_to_name $PACKAGE_NAME)"
@@ -130,8 +137,23 @@ parameter RELEASE_STORE_FILE "" "Enter keystore path" "$(pwd)/${package_short_na
 password_parameter RELEASE_STORE_PASSWORD "Enter key store password"
 parameter RELEASE_KEY_ALIAS "" "Enter key alias" "${package_short_name}"
 password_parameter RELEASE_KEY_PASSWORD "Enter key password"
+parameter AUTHOR_NAME "" "Enter your name" "$(getent passwd "$USER" | cut -d: -f5 | cut -d, -f1)"
+parameter AUTHOR_COMPANY "" "Enter your company" ""
+parameter AUTHOR_ROLE "" "Enter your role" ""
+parameter AUTHOR_CITY "" "Enter your city" ""
+parameter AUTHOR_STATE "" "Enter your state" ""
+parameter AUTHOR_COUNTRY "" "Enter your contry ISO code" ""
+
+ #RELEASE_KEY_CN="CN=David García Garzón, OU=Unknown, O=Unknown, L=Sant Joan Despí, ST=Barcelona, C=ES"
+
 
 update_dotenv .env \
+    AUTHOR_NAME \
+    AUTHOR_COMPANY \
+    AUTHOR_ROLE \
+    AUTHOR_CITY \
+    AUTHOR_STATE \
+    AUTHOR_COUNTRY \
     RELEASE_STORE_FILE \
     RELEASE_STORE_PASSWORD \
     RELEASE_KEY_ALIAS \
@@ -147,9 +169,8 @@ run keytool -genkeypair \
   -alias $RELEASE_KEY_ALIAS \
   -keyalg RSA \
   -keysize 4096 \
-  -validity 10000
-
-#RELEASE_KEY_CN="CN=David García Garzón, OU=Unknown, O=Unknown, L=Sant Joan Despí, ST=Barcelona, C=ES"
+  -validity 10000 \
+  -dname "CN=$AUTHOR_NAME, OU=$AUTHOR_ROLE, O=$AUTHOR_COMPANY, L=$AUTHOR_CITY, ST=$AUTHOR_STATE, C=$AUTHOR_COUNTRY"
 
 install_system_dependencies
 
@@ -182,10 +203,10 @@ generateGradleWrapper() {
 
     which gradle || run sudo apt install gradle # this install a very old version
     run gradle --version
-    run gradle wrapper --gradle-version 8.4 # update to a decent (supporting latest as version)
+    run gradle wrapper --gradle-version 8.14.4 # update to a decent (supporting latest as version)
     run ./gradlew --version
-    run ./gradlew wrapper --gradle-version latest # update to the latest
-    run ./gradlew --version
+    #run ./gradlew wrapper --gradle-version latest # update to the latest
+    #run ./gradlew --version
 }
 
 # Create minimal settings.gradle to allow 'wrapper' task
@@ -199,23 +220,30 @@ generateGradleWrapper
 cat > gradle.properties <<EOF
 android.useAndroidX=true
 android.enableJetifier=true
-org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+org.gradle.daemon=true
+org.gradle.parallel=true
+kotlin.daemon.jvmargs=-Xmx2g
 EOF
 
 # --- Root build.gradle ---
-cat > build.gradle <<EOF
-// Top-level build file
-buildscript {
-    ext.kotlin_version = '1.9.24'
-    ext.agp_version = '8.4.0'
+cat > build.gradle.kts <<EOF
+// Project level build file
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.compose) apply false
+    alias(libs.plugins.spotless)
+    id("com.github.ben-manes.versions") version "0.53.0"
+}
 
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath "com.android.tools.build:gradle:\$agp_version"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:\$kotlin_version"
+spotless {
+    kotlin {
+        target(
+            "app/src/**/*.kt",
+            "buildSrc/src/**/*.kt"
+        )
+        ktlint("1.7.1")
     }
 }
 
@@ -225,89 +253,331 @@ allprojects {
         mavenCentral()
     }
 }
+EOF
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
+cat > version.properties <<EOF
+versionName=0.0.1
+versionCode=00000100
 EOF
 
 # --- settings.gradle (final) ---
 cat > settings.gradle <<EOF
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+    //includeBuild("build-logic/plugins/android-yaml-strings")
+}
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
 rootProject.name = '$PROJECT_NAME'
 include ':app'
 EOF
 
-# --- app/build.gradle ---
-cat > app/build.gradle <<EOF
+# --- app/build.gradle.kts ---
+cat > app/build.gradle.kts <<EOF
+// App module build file
+import java.util.Properties
+import java.io.FileInputStream
+import com.android.build.api.variant.ApkOutput
+import com.android.build.gradle.internal.api.ApkVariantOutputImpl
+
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    id("net.canvoki.android-yaml-strings") version "1.0.0"
 }
 
+val versionPropsFile = rootProject.file("version.properties")
+val versionProps = Properties().apply {
+    FileInputStream(versionPropsFile).use { load(it) }
+}
+
+fun loadEnv() {
+    val envFile = rootProject.file(".env")
+    if (!envFile.exists()) return
+    envFile.forEachLine { line ->
+        if (line.trim().isEmpty() || line.startsWith("#")) return@forEachLine
+        val parts = line.split("=", limit = 2)
+        if (parts.size == 2) {
+            val key = parts[0].trim()
+            val value = parts[1].trim()
+            // Elimina cometes dobles o simples envolvents
+            val cleanedValue = value.removeSurrounding("\"").removeSurrounding("'")
+            project.ext.set(key, cleanedValue)
+        }
+    }
+}
+
+loadEnv()
+
 android {
-    namespace '$PACKAGE_NAME'
-    compileSdk 34
+    signingConfigs {
+        create("release") {
+            storeFile = file(project.property("RELEASE_STORE_FILE").toString())
+            storePassword = project.property("RELEASE_STORE_PASSWORD").toString()
+            keyAlias = project.property("RELEASE_KEY_ALIAS").toString()
+            keyPassword = project.property("RELEASE_KEY_PASSWORD").toString()
+        }
+    }
+
+    namespace = "$PACKAGE_NAME"
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId "$PACKAGE_NAME"
-        minSdk 24
-        targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        applicationId = "$PACKAGE_NAME"
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
+        versionCode = versionProps.getProperty("versionCode").toInt()
+        versionName = versionProps.getProperty("versionName")
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    // Rename apks adding appid and version
+    applicationVariants.all {
+        outputs.all {
+            if (this is ApkVariantOutputImpl) {
+                val version = mergedFlavor.versionName
+                val buildType = buildType.name
+                val appId = applicationId
+                val flavorInfix = if (android.productFlavors.size > 1) "-\$flavorName" else ""
+                outputFileName = "\${appId}\${flavorInfix}-\${version}-\${buildType}.apk"
+            }
+        }
+    }
+
+    bundle {
+        language {
+            // Because user may change the language, all should be present
+            enableSplit = false
+        }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+
+    flavorDimensions += "freeness"
+
+    productFlavors {
+        create("floss") {
+            dimension = "freeness"
+            isDefault = true
+        }
+        create("nonfree") {
+            dimension = "freeness"
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_$JAVA_VERSION
+        targetCompatibility = JavaVersion.VERSION_$JAVA_VERSION
     }
 
-    kotlinOptions {
-        jvmTarget = '17'
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_$JAVA_VERSION)
+            freeCompilerArgs.add("-Xnested-type-aliases")
+        }
     }
 
     buildFeatures {
-        viewBinding true
+        buildConfig = true
+        viewBinding = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
+    }
+
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+        unitTests.all {
+            it.jvmArgs(
+                "-XX:+EnableDynamicAgentLoading",
+                "--add-opens", "java.base/java.time=ALL-UNNAMED",
+                "--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED"
+            )
+        }
+    }
+    // Dependencies info is encrypted Google only to read block
+    dependenciesInfo {
+        includeInApk = false // APK
+        includeInBundle = false // AAB
+    }
+}
+
+tasks.withType<Test> {
+    maxParallelForks = Runtime.getRuntime().availableProcessors() / 2
+    testLogging {
+        events("failed", "skipped")//, "standardOut", "standardError", "passed", "started"
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        showStandardStreams = true
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
     }
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.13.1'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'com.google.android.material:material:1.12.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    // Platform BOM imports
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(platform(libs.kotlinx.coroutines.bom))
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    // AndroidX
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    // Compose
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // Tes
+    testImplementation(libs.junit)
+    testImplementation(libs.java.diff.utils)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.robolectric)
+
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
 }
 EOF
+
+mkdir -p gradle
+cat > gradle/libs.versions.toml <<EOF
+[versions]
+# Android sdk
+compileSdk  = "$TARGET_SDK"
+targetSdk = "$TARGET_SDK"
+minSdk = "$MIN_SDK"
+
+# Plugins
+agp = "8.13.1"
+kotlin = "2.3.10"
+compose-compiler = "1.5.15"
+spotless = "8.1.0"
+
+# Libraries
+androidx-activity-compose = "1.12.4"
+androidx-appcompat = "1.7.1"
+androidx-compose-bom = "2026.02.00"
+androidx-constraintlayout = "2.2.1"
+androidx-core-ktx = "1.17.0"
+androidx-lifecycle-runtime-ktx = "2.10.0"
+androidx-material = "1.13.0"
+androidx-preference-ktx = "1.2.1"
+androidx-test-core = "1.7.0"
+androidx-test-ext-junit = "1.3.0"
+androidx-test-espresso-core = "3.7.0"
+androidx-test-runner = "1.6.2"
+kotlinx-coroutines-bom = "1.10.2"
+
+
+# Testing
+junit = "4.13.2"
+mockk = "1.14.6"
+robolectric = "4.16"
+java-diff-utils = "4.12"
+
+[libraries]
+# AndroidX Compose BOM
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+
+# Kotlinx Coroutines BOM
+kotlinx-coroutines-bom = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines-bom" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test" }
+
+# AndroidX (no-BOM)
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
+androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-runtime-ktx" }
+androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "androidx-preference-ktx" }
+
+# AndroidX Test
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidx-test-core" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidx-test-runner" }
+
+# Testing libs
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
+java-diff-utils = { group = "io.github.java-diff-utils", name = "java-diff-utils", version.ref = "java-diff-utils" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+EOF
+
+
 
 # --- AndroidManifest.xml ---
 cat > app/src/main/AndroidManifest.xml <<EOF
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <!--
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <queries>
+        <intent>
+            <action android:name="android.settings.LOCATION_SOURCE_SETTINGS" />
+        </intent>
+    </queries>
+    -->
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.$PROJECT_NAME"
-        tools:targetApi="31">
+        tools:targetApi="$TARGET_SDK">
 
+        <!-- Android 12+ themed icon declaration -->
+        <!--
+        <meta-data
+            android:name="android.graphics.drawable.themedIcon"
+            android:resource="@mipmap/ic_launcher_themed" />
+        -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -316,6 +586,7 @@ cat > app/src/main/AndroidManifest.xml <<EOF
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
@@ -323,10 +594,10 @@ EOF
 
 # --- Create package directories ---
 PACKAGE_DIR=$(echo "$PACKAGE_NAME" | tr '.' '/')
-mkdir -p "app/src/main/java/$PACKAGE_DIR"
+mkdir -p "app/src/main/kotlin/$PACKAGE_DIR"
 
 # --- MainActivity.kt ---
-cat > "app/src/main/java/$PACKAGE_DIR/MainActivity.kt" <<EOF
+cat > "app/src/main/kotlin/$PACKAGE_DIR/MainActivity.kt" <<EOF
 package $PACKAGE_NAME
 
 import android.os.Bundle
@@ -381,8 +652,9 @@ cat > app/src/main/res/values/themes.xml <<EOF
 </resources>
 EOF
 
-# --- backup_rules.xml & data_extraction_rules.xml ---
 mkdir -p app/src/main/res/xml
+
+# --- backup_rules.xml (API 23+) & data_extraction_rules.xml (API 31+) ---
 
 cat > app/src/main/res/xml/backup_rules.xml <<EOF
 <?xml version="1.0" encoding="utf-8"?>
