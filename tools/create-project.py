@@ -816,13 +816,10 @@ def prompt_parameter(
 
     if is_password:
         import getpass
+        return getpass.getpass(f"{prompt_text} ({var_name}): ")
 
-        value = getpass.getpass(f"{prompt_text} ({var_name}): ")
-    else:
-        value = input(f"{prompt_text} ({var_name}) [{default_value}]: ").strip()
-        if not value:
-            value = default_value
-    return value
+    value = input(f"{prompt_text} ({var_name}) [{default_value}]: ").strip()
+    return value if value else default_value
 
 
 app = typer.Typer(add_completion=False)
