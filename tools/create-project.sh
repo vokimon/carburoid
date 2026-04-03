@@ -1,17 +1,14 @@
 #!/bin/bash
-
 # create-android-kotlin-project.sh
 # Creates a minimal Android Kotlin project structure from CLI, no IDE.
-# sudo apt install
-# Uses downloaded Gradle 8.7 to generate wrapper — Java 21 compatible.
-# Prompts for project/package using 3-arg prompt_with_default.
-# Detects Git repo in current or parent directories.
 
 set -e  # Exit on any error
 
 export TARGET_SDK=36
 export MIN_SDK=26
 export JAVA_VERSION=17
+#export GRADLE_VERSION=latest
+export GRADLE_VERSION=8.14.4
 
 run() {
     echo -e "\033[34m:: $@\033[0m"
@@ -161,16 +158,21 @@ update_dotenv .env \
 
 load_dotenv
 
-run keytool -genkeypair \
-  -keystore $RELEASE_STORE_FILE \
-  -storetype PKCS12 \
-  -storepass:env RELEASE_STORE_PASSWORD \
-  -keypass:env RELEASE_KEY_PASSWORD \
-  -alias $RELEASE_KEY_ALIAS \
-  -keyalg RSA \
-  -keysize 4096 \
-  -validity 10000 \
-  -dname "CN=$AUTHOR_NAME, OU=$AUTHOR_ROLE, O=$AUTHOR_COMPANY, L=$AUTHOR_CITY, ST=$AUTHOR_STATE, C=$AUTHOR_COUNTRY"
+# Generate keystore only if it doesn't exist (avoid losing existing keys)
+if [ -f "$RELEASE_STORE_FILE" ]; then
+    echo -e "\033[33m⚠️  WARNING: Reusing existing keystore: $RELEASE_STORE_FILE\033[0m"
+else
+    run keytool -genkeypair \
+      -keystore "$RELEASE_STORE_FILE" \
+      -storetype PKCS12 \
+      -storepass:env RELEASE_STORE_PASSWORD \
+      -keypass:env RELEASE_KEY_PASSWORD \
+      -alias "$RELEASE_KEY_ALIAS" \
+      -keyalg RSA \
+      -keysize 4096 \
+      -validity 10000 \
+      -dname "CN=$AUTHOR_NAME, OU=$AUTHOR_ROLE, O=$AUTHOR_COMPANY, L=$AUTHOR_CITY, ST=$AUTHOR_STATE, C=$AUTHOR_COUNTRY"
+fi
 
 install_system_dependencies
 
@@ -203,7 +205,7 @@ generateGradleWrapper() {
 
     which gradle || run sudo apt install gradle # this install a very old version
     run gradle --version
-    run gradle wrapper --gradle-version 8.14.4 # update to a decent (supporting latest as version)
+    run gradle wrapper --gradle-version $GRADLE_VERSION # update to a decent (supporting latest as version)
     run ./gradlew --version
     #run ./gradlew wrapper --gradle-version latest # update to the latest
     #run ./gradlew --version
@@ -226,6 +228,76 @@ org.gradle.parallel=true
 kotlin.daemon.jvmargs=-Xmx2g
 EOF
 
+mkdir -p gradle
+cat > gradle/libs.versions.toml <<EOF
+[versions]
+# Android sdk
+compileSdk  = "$TARGET_SDK"
+targetSdk = "$TARGET_SDK"
+minSdk = "$MIN_SDK"
+
+# Plugins
+agp = "8.13.2"
+kotlin = "2.3.20"
+compose-compiler = "1.5.15"
+spotless = "8.4.0"
+
+# Libraries
+androidx-activity-compose = "1.13.0"
+androidx-appcompat = "1.7.1"
+androidx-compose-bom = "2026.03.01"
+androidx-constraintlayout = "2.2.1"
+androidx-core-ktx = "1.17.0"
+androidx-lifecycle-runtime-ktx = "2.10.0"
+androidx-material = "1.13.0"
+androidx-preference-ktx = "1.2.1"
+androidx-test-core = "1.7.0"
+androidx-test-ext-junit = "1.3.0"
+androidx-test-espresso-core = "3.7.0"
+androidx-test-runner = "1.6.2"
+kotlinx-coroutines-bom = "1.10.2"
+
+# Testing
+junit = "4.13.2"
+
+[libraries]
+# AndroidX Compose BOM
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+
+# Kotlinx Coroutines BOM
+kotlinx-coroutines-bom = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines-bom" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-bom" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-bom" }
+
+# AndroidX (no-BOM)
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
+androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-runtime-ktx" }
+androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "androidx-preference-ktx" }
+
+# AndroidX Test
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidx-test-core" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidx-test-runner" }
+
+# Testing libs
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+EOF
+
 # --- Root build.gradle ---
 cat > build.gradle.kts <<EOF
 // Project level build file
@@ -244,6 +316,25 @@ spotless {
             "buildSrc/src/**/*.kt"
         )
         ktlint("1.7.1")
+    }
+}
+
+// Dependency updates configuration: reject unstable versions
+tasks.withType<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask> {
+    rejectVersionIf {
+        candidate.version.matches(Regex(".*[.-](alpha|beta|rc|dev|snapshot|eap).*", RegexOption.IGNORE_CASE))
+    }
+    outputFormatter = "json,plain"
+    checkForGradleUpdate = true
+}
+
+// Pin specific dependency versions to avoid breaking changes
+allprojects {
+    configurations.all {
+        resolutionStrategy {
+            // Force specific versions for critical dependencies
+            // Example: force("androidx.compose.compiler:compiler:1.5.15")
+        }
     }
 }
 
@@ -455,93 +546,13 @@ dependencies {
 
     // Tes
     testImplementation(libs.junit)
-    testImplementation(libs.java.diff.utils)
-    testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.kotlin.test)
-    testImplementation(libs.robolectric)
 
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.kotlinx.coroutines.test)
 }
-EOF
-
-mkdir -p gradle
-cat > gradle/libs.versions.toml <<EOF
-[versions]
-# Android sdk
-compileSdk  = "$TARGET_SDK"
-targetSdk = "$TARGET_SDK"
-minSdk = "$MIN_SDK"
-
-# Plugins
-agp = "8.13.1"
-kotlin = "2.3.10"
-compose-compiler = "1.5.15"
-spotless = "8.1.0"
-
-# Libraries
-androidx-activity-compose = "1.12.4"
-androidx-appcompat = "1.7.1"
-androidx-compose-bom = "2026.02.00"
-androidx-constraintlayout = "2.2.1"
-androidx-core-ktx = "1.17.0"
-androidx-lifecycle-runtime-ktx = "2.10.0"
-androidx-material = "1.13.0"
-androidx-preference-ktx = "1.2.1"
-androidx-test-core = "1.7.0"
-androidx-test-ext-junit = "1.3.0"
-androidx-test-espresso-core = "3.7.0"
-androidx-test-runner = "1.6.2"
-kotlinx-coroutines-bom = "1.10.2"
-
-
-# Testing
-junit = "4.13.2"
-mockk = "1.14.6"
-robolectric = "4.16"
-java-diff-utils = "4.12"
-
-[libraries]
-# AndroidX Compose BOM
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-
-# Kotlinx Coroutines BOM
-kotlinx-coroutines-bom = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines-bom" }
-kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android" }
-kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test" }
-
-# AndroidX (no-BOM)
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
-androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-runtime-ktx" }
-androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "androidx-preference-ktx" }
-
-# AndroidX Test
-androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidx-test-core" }
-androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidx-test-runner" }
-
-# Testing libs
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
-robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
-kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
-java-diff-utils = { group = "io.github.java-diff-utils", name = "java-diff-utils", version.ref = "java-diff-utils" }
-
-[plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 EOF
 
 
@@ -695,6 +706,13 @@ else
     echo "   → You must add app/src/main/res/mipmap-*/ic_launcher.png manually."
 fi
 
+# Copy configuration files to project for build (source of truth remains in parent directory)
+echo "📦 Copying configuration to project directory..."
+cp "../.env" "./.env"
+echo "   ✅ .env copied from parent directory"
+cp "$RELEASE_STORE_FILE" "./$(basename "$RELEASE_STORE_FILE")"
+echo "   ✅ Keystore copied: $(basename "$RELEASE_STORE_FILE")"
+
 # --- .gitignore ---
 cat > .gitignore <<EOF
 .gradle/
@@ -738,7 +756,8 @@ echo "     - Add to PATH: export PATH=\$PATH:\$ANDROID_HOME/cmdline-tools/latest
 echo "  2. Accept licenses: sdkmanager --licenses"
 echo "  3. Build: ./gradlew assembleDebug"
 echo "  4. Install on device: ./gradlew installDebug"
+echo "  5. Check dependency updates: ./gradlew dependencyUpdates"
 echo ""
-echo "✅ This project uses Gradle Wrapper 8.7 — fully compatible with Java 21."
+echo "✅ This project uses Gradle Wrapper $GRADLE_VERSION — fully compatible with Java $JAVA_VERSION."
 echo "📂 Project root: $(pwd)"
 echo "📚 You can now open in Android Studio if desired — but not required!"
