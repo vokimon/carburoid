@@ -996,7 +996,7 @@ def main(
     step(f"Creating Android Kotlin project: {proj_name}")
     step(f"Package: {pkg_name}")
 
-    project_root = Path.cwd() / proj_name
+    project_root = Path.cwd() / proj_name.lower()
     project_root.mkdir(exist_ok=True)
 
     # Git initialization
