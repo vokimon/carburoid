@@ -981,11 +981,11 @@ def main(
         "apt",
         "install",
         "gradle",
-        "google-android-build-tools-35.0.1-installer",
-        "google-android-cmdline-tools-17.0-installer",
+        f"google-android-build-tools-{TARGET_SDK}.0.0-installer",
+        "google-android-cmdline-tools-19.0-installer",
         "google-android-emulator-installer",
         "google-android-ndk-r26c-installer",
-        "google-android-platform-34-installer",
+        f"google-android-platform-{TARGET_SDK}-installer",
         "google-android-platform-tools-installer",
     )
 
@@ -1048,8 +1048,8 @@ def main(
      - Set ANDROID_HOME: export ANDROID_HOME=$HOME/Android
      - Add to PATH: export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
   2. Accept licenses: sdkmanager --licenses
-  3. Build: ./gradlew assembleDebug
-  4. Install on device: ./gradlew installDebug
+  3. Build: ./gradlew build
+  4. Install on device: ./gradlew installFlossDebug
   5. Check dependency updates: ./gradlew dependencyUpdates
 
 ✅ This project uses Gradle Wrapper {GRADLE_VERSION} — fully compatible with Java {JAVA_VERSION}.
