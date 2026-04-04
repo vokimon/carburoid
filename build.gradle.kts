@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.spotless)
     id("com.github.ben-manes.versions") version "0.53.0"
 }
+
 tasks.withType<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask> {
     rejectVersionIf {
         candidate.version.matches(Regex(".*[.-](alpha|beta|rc|dev|snapshot|eap).*", RegexOption.IGNORE_CASE))

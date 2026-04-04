@@ -23,13 +23,15 @@ $ pip install typer python-dotenv
     raise
 
 # Project defaults
+# https://developer.android.com/build/releases/agp-8-13-0-release-notes
 TARGET_SDK = 36
 MIN_SDK = 26
 JAVA_VERSION = 17
 GRADLE_VERSION = "8.14.4"
-BUILD_TOOLS_VERSION = "36.0.0"
+BUILD_TOOLS_VERSION = "35.0.0"
 CMDLINE_TOOLS_VERSION = "19.0"
 NDK_VERSION = "r26c"
+AGP_VERSION = "8.13.0"
 
 # Color codes for CLI output
 COLOR_BLUE = "\033[34m"
@@ -85,6 +87,7 @@ def write_content(path: Path, content: str, **substitutions: str) -> None:
     Raises KeyError if a template variable is not provided.
     Use $$ to escape a literal $.
     """
+    step(f"Writing {path}...")
     rendered = Template(content).substitute(substitutions)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(rendered, encoding="utf-8")
@@ -132,7 +135,7 @@ def generate_gradle_wrapper(project_root: Path, gradle_version: str) -> None:
 def generate_project_structure(project_root: Path, package_name: str) -> None:
     """Create base directory structure."""
     dirs = [
-        project_root / "app/src/main/java",
+        project_root / "app/src/main/kotlin",
         project_root / "app/src/main/res/layout",
         project_root / "app/src/main/res/values",
         project_root / "app/src/main/res/xml",
@@ -172,16 +175,6 @@ plugins {
     id("com.github.ben-manes.versions") version "0.53.0"
 }
 
-spotless {
-    kotlin {
-        target(
-            "app/src/**/*.kt",
-            "buildSrc/src/**/*.kt"
-        )
-        ktlint("1.7.1")
-    }
-}
-
 // Dependency updates configuration: reject unstable versions
 tasks.withType<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask> {
     rejectVersionIf {
@@ -191,13 +184,13 @@ tasks.withType<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
     checkForGradleUpdate = true
 }
 
-// Pin specific dependency versions to avoid breaking changes
-allprojects {
-    configurations.all {
-        resolutionStrategy {
-            // Force specific versions for critical dependencies
-            // Example: force("androidx.compose.compiler:compiler:1.5.15")
-        }
+spotless {
+    kotlin {
+        target(
+            "app/src/**/*.kt",
+            "buildSrc/src/**/*.kt"
+        )
+        ktlint("1.7.1")
     }
 }
 
@@ -446,7 +439,7 @@ targetSdk = "{target_sdk}"
 minSdk = "{min_sdk}"
 
 # Plugins
-agp = "8.13.2"
+agp = "${AGP_VERSION}"
 kotlin = "2.3.20"
 compose-compiler = "1.5.15"
 spotless = "8.4.0"
