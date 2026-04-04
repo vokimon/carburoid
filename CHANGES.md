@@ -1,5 +1,9 @@
 # Change log
 
+## unreleased
+
+- ⚡️ Release APK minimized and resource shrinked 63M -> 51M Closes #25
+
 ## 1.6.1 (2026-04-04)
 
 Andalusian translation and dependency boost
