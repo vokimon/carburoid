@@ -4,21 +4,29 @@
 # sudo apt install librsvg2-bin libxml2-utils build-essential
 # pip install typer[all] requests lxml svgpathtools rich yamlns
 
-import requests
-from pathlib import Path
-from xml.etree import ElementTree as ET
-from typing import Optional
-from yamlns import ns
-from rich import print
-from rich.columns import Columns
-import typer
-from typing import Annotated
+try:
+    import requests
+    from pathlib import Path
+    from xml.etree import ElementTree as ET
+    from typing import Optional
+    from yamlns import ns
+    from rich import print
+    from rich.columns import Columns
+    import typer
+    from typing import Annotated
+except ImportError:
+    print("""\
+Missing dependencies. Within a user writable Python environment, run:
+sudo apt install librsvg2-bin libxml2-utils build-essential
+pip install typer[all] requests lxml svgpathtools rich yamlns
+""")
+    raise
 
 app = typer.Typer()
 
 DATA_JSON_URL = "https://material-icons.github.io/material-icons/data.json"
 VALID_VARIANTS = ["baseline", "outlined", "sharp", "round"]
-
+DEFAULT_VARIANT = "baseline"
 
 def download_raw(url: str) -> Optional[bytes]:
     print(url)
@@ -45,6 +53,34 @@ def find_icon_metadata(metadata, icon_name: str):
         raise typer.Exit(code=-1)
     return ns(icon_metadata[0])
 
+def download_material_icon(icon_name, variant):
+    if variant not in VALID_VARIANTS:
+        raise typer.BadParameter(
+            f"Invalid variant '{variant}'. Must be one of: {', '.join(VALID_VARIANTS)}"
+        )
+
+    metadata = load_collection_metadata()
+    icon_metadata = find_icon_metadata(metadata, icon_name)
+
+    icon_url = metadata.root + metadata.asset_url_pattern.format(
+        icon=icon_name,
+        family=variant
+    )
+    svg_content = download_raw(icon_url)
+
+    if svg_content: return svg_content
+
+    print(f"[yellow]Variant '{variant}' not found for icon '{icon_name}'. Trying default 'baseline'...[/yellow]")
+    fallback_url = metadata.root + metadata.asset_url_pattern.format(icon=icon_name, family="baseline")
+    svg_content = download_raw(fallback_url)
+
+    if svg_content: return svg_content
+
+    available = ", ".join(icon_metadata.get("unsupported_families", []))
+    raise typer.Exit(
+        code=1,
+        message=f"[red]Icon '{icon_name}' not available in any variant. Supported variants might be: {available}[/red]"
+    )
 
 def svg_to_vector_drawable(svg_data: bytes) -> str:
     tree = ET.ElementTree(ET.fromstring(svg_data))
@@ -72,7 +108,6 @@ def svg_to_vector_drawable(svg_data: bytes) -> str:
 def target_path(icon_name: str, flavor: str = 'main', project_root: Path = Path()) -> Path:
     return project_root / "app/src" / flavor / "res/drawable" / f"ic_{icon_name}.xml"
 
-
 @app.command()
 def fetch_icon(
     icon_name: str = typer.Argument(
@@ -80,7 +115,7 @@ def fetch_icon(
         help="Material icon name (e.g., 'settings')"
     ),
     variant: str = typer.Argument(
-        "baseline",
+        DEFAULT_VARIANT,
         help="Icon style variant",
         show_default=True,
         case_sensitive=False,
@@ -103,30 +138,7 @@ def fetch_icon(
     and place it into the proper path in the project,
     so that they are available as "@drawable/ic_{name}"
     """
-    if variant not in VALID_VARIANTS:
-        raise typer.BadParameter(
-            f"Invalid variant '{variant}'. Must be one of: {', '.join(VALID_VARIANTS)}"
-        )
-
-    metadata = load_collection_metadata()
-    icon_metadata = find_icon_metadata(metadata, icon_name)
-
-    icon_url = metadata.root + metadata.asset_url_pattern.format(
-        icon=icon_name,
-        family=variant
-    )
-    svg_content = download_raw(icon_url)
-
-    if not svg_content:
-        print(f"[yellow]Variant '{variant}' not found for icon '{icon_name}'. Trying default 'baseline'...[/yellow]")
-        fallback_url = metadata.root + metadata.asset_url_pattern.format(icon=icon_name, family="baseline")
-        svg_content = download_raw(fallback_url)
-        if not svg_content:
-            available = ", ".join(icon_metadata.get("unsupported_families", []))
-            raise typer.Exit(
-                code=1,
-                message=f"[red]Icon '{icon_name}' not available in any variant. Supported variants might be: {available}[/red]"
-            )
+    svg_content = download_material_icon(icon_name, variant)
 
     print(f"[green]✔ Downloaded SVG for {icon_name} ({variant})[/green]")
 
@@ -152,13 +164,6 @@ def import_icon(
             help="Material icon svg file",
         ),
     ],
-    variant: str = typer.Argument(
-        "baseline",
-        help="Icon style variant",
-        show_default=True,
-        case_sensitive=False,
-        autocompletion=lambda: VALID_VARIANTS,
-    ),
     flavor: str = typer.Option(
         "main",
         help="Android source set flavor",
@@ -193,6 +198,38 @@ def import_icon(
     target.write_text(vector_drawable)
 
     print("[bold green]✓ Done![/bold green]")
+
+
+@app.command()
+def download_icon(
+    icon_name: str = typer.Argument(
+        ...,
+        help="Material icon name (e.g., 'settings')"
+    ),
+    variant: str = typer.Argument(
+        DEFAULT_VARIANT,
+        help="Icon style variant",
+        show_default=True,
+        case_sensitive=False,
+        autocompletion=lambda: VALID_VARIANTS,
+    ),
+    output: Path = typer.Option(
+        None,
+        "-o","--output",
+        help="Android project root directory"
+    ),
+):
+    """
+    Download a material icon as svg.
+    """
+    svg_content = download_material_icon(icon_name, variant)
+
+    print(f"[green]✔ Downloaded SVG for {icon_name} ({variant})[/green]")
+    output_file = Path(output or f'{icon_name}.svg')
+    output_file.write_bytes(svg_content)
+    print(f"[green]✔ Saved as  {output_file}[/green]")
+    print("[bold green]✓ Done![/bold green]")
+
 
 
 if __name__ == "__main__":
