@@ -32,6 +32,8 @@ BUILD_TOOLS_VERSION = "35.0.0"
 CMDLINE_TOOLS_VERSION = "19.0"
 NDK_VERSION = "r26c"
 AGP_VERSION = "8.13.0"
+DEFAULT_ICON_BG = "#d69999"
+DEFAULT_ICON_FG = "#712b5e"
 
 # Color codes for CLI output
 COLOR_BLUE = "\033[34m"
@@ -428,7 +430,7 @@ dependencies {
 
 
 def generate_version_catalog(
-    project_root: Path, target_sdk: int, min_sdk: int
+    project_root: Path, target_sdk: int, min_sdk: int, agp_version: str,
 ) -> None:
     """Generate gradle/libs.versions.toml."""
     content = f"""\
@@ -439,7 +441,7 @@ targetSdk = "{target_sdk}"
 minSdk = "{min_sdk}"
 
 # Plugins
-agp = "${AGP_VERSION}"
+agp = "{agp_version}"
 kotlin = "2.3.20"
 compose-compiler = "1.5.15"
 spotless = "8.4.0"
@@ -652,62 +654,97 @@ def generate_resources(project_root: Path, project_name: str) -> None:
         data_extraction_rules,
     )
 
+def generate_placeholder_svg(
+    output_path: Path,
+    bg_color: str,
+    fg_color: str,
+) -> None:
+    """Generate a placeholder SVG with a simple geometric figure as foreground."""
+    # Simple rounded square / app-like icon path (24x24 viewBox, centered)
+    # This is a generic "app" shape: rounded square with a small inner detail
+    path_data = "M12 2L4 4C2.89543 4.27614 2 5.16157 2 6.26667V17.7333C2 18.8384 2.89543 19.7239 4 20L12 22L20 20C21.1046 19.7239 22 18.8384 22 17.7333V6.26667C22 5.16157 21.1046 4.27614 20 4L12 2Z"
 
-def generate_icons(project_root: Path) -> None:
-    """Generate placeholder launcher icons using ImageMagick if available."""
-    step("Generating placeholder launcher icons...")
-    densities = ["mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"]
-    for density in densities:
-        (project_root / f"app/src/main/res/mipmap-{density}").mkdir(
-            parents=True, exist_ok=True
-        )
+    svg_content = f'''<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="24" height="24" viewBox="0 0 24 24">
+  <path d="{path_data}" fill="{fg_color}"/>
+</svg>'''
 
-    if not shutil.which("convert"):
-        warn("'convert' not found. Install 'imagemagick' for auto-generated icons.")
-        warn("You must add app/src/main/res/mipmap-*/ic_launcher.png manually.")
-        return
-    for density in densities:
-        icon_path = (
-            project_root
-            / f"app/src/main/res/mipmap-{density}/ic_launcher.png"
-        )
-        run(
-            "convert",
-            "-size",
-            "48x48",
-            "xc:blue",
-            "-gravity",
-            "center",
-            "-fill",
-            "white",
-            "-pointsize",
-            "24",
-            "-annotate",
-            "0",
-            "App",
-            str(icon_path),
-            check=False,
-        )
-        round_path = icon_path.with_name("ic_launcher_round.png")
-        run(
-            "convert",
-            "-size",
-            "48x48",
-            "xc:purple",
-            "-gravity",
-            "center",
-            "-fill",
-            "white",
-            "-pointsize",
-            "24",
-            "-annotate",
-            "0",
-            "App",
-            str(round_path),
-            check=False,
-        )
-    success("Placeholder icons generated with ImageMagick.")
+    write_content(output_path, svg_content)
 
+def use_custom_svg(
+    custom_path: Path,
+    output_path: Path,
+) -> None:
+    """Copy custom SVG to project root as icon.svg."""
+    if not custom_path.exists():
+        fail(f"Custom icon SVG not found: {custom_path}")
+
+    shutil.copy2(custom_path, output_path)
+    step(f"Copied custom SVG: {custom_path} → {output_path}")
+
+def generate_launcher_icon(
+    project_root: Path,
+    svg_path: Path,
+    bg_color: str,
+    fg_color: str,
+    minsdk: int,
+) -> None:
+    """Generate adaptive launcher icons by calling app-icon-generator.py."""
+    script_dir = Path(__file__).parent
+    icon_generator = script_dir / "app-icon-generator.py"
+
+    if not icon_generator.exists():
+        fail(f"app-icon-generator.py not found at {icon_generator}")
+
+    step(f"Generating adaptive icons from {svg_path}...")
+
+    run(
+        sys.executable,
+        str(icon_generator),
+        "launcher-icon",
+        str(svg_path),
+        "--bg", bg_color,
+        "--fg", fg_color,
+        "--out", str(project_root / "app/src/main/res"),
+        "--minsdk", str(minsdk),
+    )
+    success("Adaptive icons generated.")
+
+def download_material_icon_svg(
+    icon_name: str,
+    output_path: Path,
+) -> None:
+    """Download Material Icon SVG by delegating to material-icons-android-importer.py."""
+    script_dir = Path(__file__).parent
+    importer = script_dir / "material-icons-android-importer.py"
+
+    run(
+        sys.executable,
+        str(importer),
+        "download-icon",
+        icon_name,
+        "--output", str(output_path),
+    )
+
+def generate_icons(
+    project_root: Path,
+    bg_color: str,
+    fg_color: str,
+    icon: str,
+    minsdk: int,
+) -> None:
+    """Generate adaptive launcher icons (placeholder or custom SVG + app-icon-generator)."""
+    svg_path = project_root / "icon.svg"
+
+    if icon == 'default':
+        generate_placeholder_svg(svg_path, bg_color, fg_color)
+    elif icon.endswith('.svg'):
+        use_custom_svg(Path(icon), svg_path)
+    else:
+        download_material_icon_svg(icon, svg_path)
+
+    generate_launcher_icon(project_root, svg_path, bg_color, fg_color, minsdk)
 
 def generate_gitignore(project_root: Path) -> None:
     """Generate .gitignore file."""
@@ -846,6 +883,21 @@ def main(
     author_city: Optional[str] = typer.Option(None, help="Author city"),
     author_state: Optional[str] = typer.Option(None, help="Author state"),
     author_country: Optional[str] = typer.Option(None, help="Author country ISO code"),
+    icon: str = typer.Option(
+        None,
+        "--icon",
+        help="Launcher icon: 'default' (generated), path to SVG file, or Material Icon ID",
+    ),
+    icon_bg: str = typer.Option(
+        DEFAULT_ICON_BG,
+        "--icon-bg",
+        help="Launcher icon background color",
+    ),
+    icon_fg: str = typer.Option(
+        DEFAULT_ICON_FG,
+        "--icon-fg",
+        help="Launcher icon foreground color",
+    ),
 ):
     """Create a minimal Android Kotlin project structure from CLI."""
     # Load existing .env for defaults
@@ -942,6 +994,13 @@ def main(
         default_value="",
         env_vars=env_vars,
     )
+    icon = prompt_parameter(
+        var_name="ICON",
+        cli_value=icon,
+        prompt_text="Application icon (default, an svg file with just a path or a material-icon id)",
+        default_value="default",
+        env_vars=env_vars,
+    )
 
     # Update .env with collected values
     update_dotenv(
@@ -956,6 +1015,7 @@ def main(
         RELEASE_STORE_PASSWORD=store_pass,
         RELEASE_KEY_ALIAS=key_alias,
         RELEASE_KEY_PASSWORD=key_pass,
+        ICON=icon,
     )
 
     # Generate keystore
@@ -1010,7 +1070,7 @@ def main(
         project_root=project_root, package_name=pkg_name, java_version=str(JAVA_VERSION)
     )
     generate_version_catalog(
-        project_root=project_root, target_sdk=TARGET_SDK, min_sdk=MIN_SDK
+        project_root=project_root, target_sdk=TARGET_SDK, min_sdk=MIN_SDK, agp_version=AGP_VERSION,
     )
     generate_manifest(
         project_root=project_root, project_name=proj_name, target_sdk=TARGET_SDK
@@ -1018,7 +1078,13 @@ def main(
     generate_kotlin_files(project_root=project_root, package_name=pkg_name)
     generate_layout(project_root=project_root)
     generate_resources(project_root=project_root, project_name=proj_name)
-    generate_icons(project_root=project_root)
+    generate_icons(
+        project_root=project_root,
+        bg_color=icon_bg,
+        fg_color=icon_fg,
+        icon=icon,
+        minsdk=MIN_SDK,
+    )
     generate_gitignore(project_root=project_root)
     copy_config_files(
         project_root=project_root, env_path=dotenv_path, keystore_path=store_file
