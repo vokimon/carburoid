@@ -889,12 +889,12 @@ def main(
         help="Launcher icon: 'default' (generated), path to SVG file, or Material Icon ID",
     ),
     icon_bg: str = typer.Option(
-        DEFAULT_ICON_BG,
+        None,
         "--icon-bg",
         help="Launcher icon background color",
     ),
     icon_fg: str = typer.Option(
-        DEFAULT_ICON_FG,
+        None,
         "--icon-fg",
         help="Launcher icon foreground color",
     ),
@@ -997,10 +997,25 @@ def main(
     icon = prompt_parameter(
         var_name="ICON",
         cli_value=icon,
-        prompt_text="Application icon (default, an svg file with just a path or a material-icon id)",
+        prompt_text="Application icon (default, svg file or a material-icon id)",
         default_value="default",
         env_vars=env_vars,
     )
+    icon_fg = prompt_parameter(
+        var_name="ICON_FG",
+        cli_value=icon_fg,
+        prompt_text="Application icon foreground color",
+        default_value=DEFAULT_ICON_FG,
+        env_vars=env_vars,
+    )
+    icon_bg = prompt_parameter(
+        var_name="ICON_BG",
+        cli_value=icon_bg,
+        prompt_text="Application icon background color",
+        default_value=DEFAULT_ICON_BG,
+        env_vars=env_vars,
+    )
+
 
     # Update .env with collected values
     update_dotenv(
@@ -1016,6 +1031,8 @@ def main(
         RELEASE_KEY_ALIAS=key_alias,
         RELEASE_KEY_PASSWORD=key_pass,
         ICON=icon,
+        ICON_FG=icon_fg,
+        ICON_BG=icon_bg,
     )
 
     # Generate keystore
