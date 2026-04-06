@@ -532,11 +532,10 @@ def generate_manifest(project_root: Path, project_name: str, target_sdk: int) ->
         tools:targetApi="{target_sdk}">
 
         <!-- Android 12+ themed icon declaration -->
-        <!--
         <meta-data
             android:name="android.graphics.drawable.themedIcon"
             android:resource="@mipmap/ic_launcher_themed" />
-        -->
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
