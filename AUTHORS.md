@@ -21,3 +21,4 @@ Thanks to all contributors for their work!
 - **Javier Calzado Sánchez** ([@javikalsan](https://github.com/javikalsan)) — Basque
 - **Florent Rucquoy** ([@florent.rucquoy](https://hosted.weblate.org/user/florent.rucquoy/)) - French
 - **Sudoman** ([@sudoman](https://www.openstreetmap.org/user/sudo_man)) - French
+- **Jorge A. Silva** ([jeenio](https://jorgeasilva.pt/)) - Portuguese
