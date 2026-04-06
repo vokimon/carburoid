@@ -1,1 +1,40 @@
-{}
+LANGUAGE_NAME: Inglês
+MOTTO: Abasteça mais barato, mais perto
+DESCRIPTION: Uma app Open Source (Android) para encontrar postos de combustível baratos
+KEYWORDS: posto de combustível, posto de abastecimento, gasóleo, diesel, gasolina, android
+FEATURE_OFFICIAL_DATA_TITLE: Dados oficiais
+FEATURE_OFFICIAL_DATA_DESCRIPTION: |
+  Usamos dados oficiais enviados pelos postos de combustível aos reguladores.
+  Atualmente cobrimos Portugal, Espanha e França.
+FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY: Adicionar o meu país
+FEATURE_RELEVANT_STATIONS_TITLE: Apenas postos relevantes
+FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
+  Carburoid descarta postos mais caros que outros mais próximos.
+  Isto reduz a lista de candidatos de milhares para algumas dezenas.
+FEATURE_YOUR_CHOICE_TITLE: Tu escolhes
+FEATURE_YOUR_CHOICE_DESCRIPTION: |
+  Os preços melhoram à medida que desce a lista, mas as distâncias também aumentam.
+  Cabe-te a ti decidir até onde vale a pena ir para as poupanças.
+FEATURE_ROUND_TRIP_DETOUR_MODES_TITLE: Modos de ida e volta e desvios
+FEATURE_ROUND_TRIP_DETOUR_MODES_DESCRIPTION: |
+  O modo de ida e volta considera apenas a distância entre a sua posição e o posto de combustível.
+  Ao definir um ponto de destino, utiliza-se a distância do desvio.
+FEATURE_FREEDOM_AS_FEATURE_TITLE: A liberdade como funcionalidade
+FEATURE_FREEDOM_AS_FEATURE_DESCRIPTION: |
+  O AGPLv3 protege as tuas liberdades como utilizador.
+  O código é mantido na comunidade e qualquer pessoa pode auditá-lo.
+  Sem spyware. Sem recolha de dados. Sem promoções pagas por postos.
+  O F-Droid garante que os binários provêm da fonte tal como publicada.
+FEATURE_FREEDOM_AS_FEATURE_ACTION_GITHUB: Código fonte
+FEATURE_FREEDOM_AS_FEATURE_ACTION_LICENSE: GNU Affero GPLv3 ou posterior
+FEATURE_TRANSLATIONS_TITLE: Traduções
+FEATURE_TRANSLATIONS_DESCRIPTION: |
+  É dado especial cuidado ao apoio dos idiomas minoritários.
+  Isto é um esforço comunitário, traduz a tua própria língua com o Weblate.
+FEATURE_TRANSLATIONS_ACTION_WEBLATE: Traduzir
+ACTION_FDROID: Descarregue no F-Droid
+ACTION_DONATE: Faça um donativo
+ACTION_SOCIAL: Segue-nos
+ACTION_GOOGLE_PLAY: Google Play
+ACTION_APP_STORE: App Store
+COOKIE_NOTICE: Este website não utiliza cookies. Nós importamo-nos mesmo com a tua privacidade.
