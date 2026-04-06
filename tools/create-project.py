@@ -32,8 +32,8 @@ BUILD_TOOLS_VERSION = "35.0.0"
 CMDLINE_TOOLS_VERSION = "19.0"
 NDK_VERSION = "r26c"
 AGP_VERSION = "8.13.0"
-DEFAULT_ICON_BG = "#d69999"
-DEFAULT_ICON_FG = "#712b5e"
+DEFAULT_ICON_BG = "#eeeeee"
+DEFAULT_ICON_FG = "#2196F3"
 
 # Color codes for CLI output
 COLOR_BLUE = "\033[34m"
@@ -506,6 +506,7 @@ spotless = {{ id = "com.diffplug.spotless", version.ref = "spotless" }}
 
 def generate_manifest(project_root: Path, project_name: str, target_sdk: int) -> None:
     """Generate AndroidManifest.xml."""
+
     content = f"""\
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -842,10 +843,9 @@ def prompt_parameter(
         step(f"{var_name} taken from command line: '{cli_value}'")
         return cli_value
 
-    current_value = env_vars.get(var_name)
-    if current_value:
-        step(f"{var_name} taken from .env")
-        return current_value
+    env_value = env_vars.get(var_name)
+    if env_value:
+        return env_value
 
     if is_password:
         import getpass
@@ -996,21 +996,21 @@ def main(
     icon = prompt_parameter(
         var_name="ICON",
         cli_value=icon,
-        prompt_text="Application icon (default, svg file or a material-icon id)",
+        prompt_text="Enter base for application icon (default, svg file or a material-icon id)",
         default_value="default",
         env_vars=env_vars,
     )
     icon_fg = prompt_parameter(
         var_name="ICON_FG",
         cli_value=icon_fg,
-        prompt_text="Application icon foreground color",
+        prompt_text="Enter application icon foreground color",
         default_value=DEFAULT_ICON_FG,
         env_vars=env_vars,
     )
     icon_bg = prompt_parameter(
         var_name="ICON_BG",
         cli_value=icon_bg,
-        prompt_text="Application icon background color",
+        prompt_text="Enter application icon background color",
         default_value=DEFAULT_ICON_BG,
         env_vars=env_vars,
     )
@@ -1121,11 +1121,7 @@ def main(
     # Next steps
     print(
         f"""\n📌 Next steps:
-  1. Ensure Android SDK is installed:
-     - Download Command-line Tools from https://developer.android.com/studio#command-tools
-     - Extract to e.g., $HOME/Android/cmdline-tools
-     - Set ANDROID_HOME: export ANDROID_HOME=$HOME/Android
-     - Add to PATH: export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+  1. Ensure ANDROID HOME is exported properly.
   2. Accept licenses: sdkmanager --licenses
   3. Build: ./gradlew build
   4. Install on device: ./gradlew installFlossDebug

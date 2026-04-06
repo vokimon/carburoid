@@ -48,3 +48,7 @@ echo done
 
 # ./gradlew dependencyUpdates -DdependencyUpdates.gradleReleaseChannel="current"
 
+# take screenshot
+# screenshot2 -d lala.png # first device
+# screenshot2 -e lala.png # first emulator
+
