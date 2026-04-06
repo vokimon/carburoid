@@ -1,1 +1,96 @@
-{}
+app_name: Carburoid
+menu_back: Voltar
+menu_settings: Definições
+menu_chart: Gráfico
+settings_category_language_appearance: Idioma e aparência
+settings_category_station_filters: Filtros de postos de abastecimento
+settings_filter_expensive: Esconder postos de abastecimento irrelevantes
+settings_filter_expensive_summary: Um posto de abastecimento é considerado irrelevante se existir outro mais próximo e mais barato. (Recomendado)
+settings_filter_expensive_warning: Carburoid foi concebido para funcionar com este filtro ativado. Desativá-lo mostra muito mais postos de abastecimento, o que atrasa significativamente a aplicação. Considere reativar mais tarde.
+settings_filter_non_public: Mostrar apenas preços públicos
+settings_filter_non_public_summary: Esconde os preços que exigem cartão de membro ou qualquer outra coisa.
+settings_filter_beyond_sea: Esconder postos de abastecimento fora do Continente
+settings_filter_beyond_sea_summary: Esconde os preços nas ilhas (Açores, Madeira)
+settings_filter_closed: Mostrar postos de abastecimento fechados
+settings_filter_closed_summary: Defina uma margem de tempo para os postos de abastecimento que vão abrir em breve
+settings_filter_closed_tolerance_none: Sem margem, filtrar sempre
+settings_filter_closed_tolerance_half_hour: 30 minutos
+settings_filter_closed_tolerance_one_hour: 1 hora
+settings_filter_closed_tolerance_two_hours: 2 horas
+settings_filter_closed_tolerance_twelve_hours: 12 horas
+settings_filter_closed_tolerance_one_day: 1 dia
+settings_filter_closed_tolerance_never: Mostrar sempre
+no_gas_stations: Sem postos de abastecimento encontrados
+product_selector_hint: Produto
+product_selector_icon_description: Seleção de produto
+product_category_recent: Recente
+product_category_diesel: Gasóleo
+product_category_gasoline: Gasolina
+product_category_gaseous: Gás
+product_category_additives: Aditivos
+product_name_gasoleo_a: Gasóleo Simples (B7)
+product_name_gasoleo_premium: Gasóleo Especial (B7)
+product_name_gasoleo_b: Gasóleo agrícola (B)
+product_name_diesel_renovable: Gasóleo Renovável
+product_name_gasolina_95_e10: Gasolina 95 E10
+product_name_gasolina_95_e25: Gasolina 95 E25
+product_name_gasolina_95_e5: Gasolina 95 E5
+product_name_gasolina_95_e5_premium: Gasolina Especial 95 E5
+product_name_gasolina_95_e85: Gasolina 95 E85
+product_name_gasolina_98_e10: Gasolina 98 E10
+product_name_gasolina_98_e5: Gasolina 98 E5
+product_name_gasolina_renovable: Gasolina Renovável
+product_name_gas_natural_comprimido: Gás Natural Comprimido
+product_name_gas_natural_licuado: Gás Natural Liquefeito
+product_name_biogas_natural_comprimido: Biogás Natural Comprimido
+product_name_biogas_natural_licuado: Biogás Liquefeito
+product_name_biodiesel: Biodiesel
+product_name_bioetanol: Bioetanol
+product_name_gases_licuados_del_petroleo: Gás de Petróleo Liquefeito (GPL)
+product_name_hidrogeno: Hidrogénio
+product_name_amoniaco: Amoníaco
+product_name_metanol: Metanol
+product_name_adblue: AdBlue
+location_selector_hint: Localização
+location_selector_locate_device: Localizar dispositivo
+price_not_public: ✱ Preço não divulgado
+detail_location: Localização
+detail_opening_hours: Horário de funcionamento
+detail_other_products: Outros Produtos
+station_no_name: Nome desconhecido
+station_no_address: Sem endereço
+station_no_city: Fora de cidade
+station_no_price: Não disponível
+station_no_distance: ?? km
+station_status_unknown: Encerrado??
+station_status_permanently_closed: Encerrado permanentemente
+station_status_closed: Encerrado
+station_status_opens_at: Abre {when}
+station_status_closes_at: Encerra {when}
+station_status_open: Aberto
+station_status_247: 24/7
+location_not_available: Sem dados de localização
+location_error: Erro na deteção da localização
+location_forbidden: Sem permissão de localização
+location_deactivated: Localização está desativada
+location_activate: Ativar
+location_permisions_concede: Permitir
+refreshing_data: Atualizando dados…
+failed_download: 'Erro de download: {error}'
+open_in_maps: Mostrar num mapa
+location_picker_title: Selecionar localização
+location_picker_search_icon_description: Procurar
+location_picker_search_location_hint: Procurar cidade ou endereço
+location_picker_searching: A procurar…
+location_picker_no_results: Sem localizações encontradas
+loading_new_data: Descarregando dados novos…
+settings_country_title: Fornecedor de dados
+settings_country_summary: Selecionar o fornecedor dos preços de combustível
+settings_country_es: Espanha
+settings_country_fr: França
+settings_country_fr_warning_wip: Os dados dos postos de combustível franceses ainda estão em desenvolvimento. Os nomes dos postos e o horário de funcionamento ainda não estão disponíveis.
+settings_country_pt: Portugal
+settings_warning_dialog_wip: Em desenvolvimento
+warning_dialog_title: Aviso
+button_closer: Mais perto
+button_cheaper: Mais barato
