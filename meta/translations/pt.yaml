@@ -1,1 +1,61 @@
-{}
+project_name: Carburoid
+splash_motto: Abastece mais barato, mais perto
+short_description: Encontra postos de combustível por preço e distância em Portugal, Espanha e França.
+full_description_md: |-
+  Até onde temos que ir para encontrar um posto de abastecimento mais barato?
+
+  Carburoid mostra apenas algumas dezenas de postos de combustível que importam.
+  Esconde milhares em todo o país que são mais caros do que os mais próximos.
+  Assim, os preços caem na lista à medida que a distância aumenta
+  e tu decides até onde vale a pena conduzir para poupar.
+
+  Características:
+
+  - 🏛️ Fontes de dados oficiais do governo (Portugal, Espanha e França)
+  - 🎯 Apenas postos de abastecimento de combustível relevantes: mais próximos ou mais baratos que outros
+  - 🕒 Pesquisa inteligente sobre o horário de abertura e fecho
+  - 🗺️ Integra-se com a tua aplicação de mapas preferida
+  - 🌐 Traduções disponíveis em inglês, francês, espanhol, catalão, basco, galego, aragonês…
+  - ☀️ Temas escuros e claros
+keywords: posto de combustível, posto de abastecimento, gasolina, gasóleo, diesel
+changes_1_6_1_md: |-
+  Tradução para andaluz e bump das dependências
+
+  - 🌐 Novo idioma: andaluz
+  - 🏗️ Bump das dependências
+changes_1_6_0_md: |-
+  Dados e marcas dos postos de abastecimento de combustível em Portugal
+
+  - ✨ Fonte de dados de Portugal
+  - ✨ Campo da marca nos detalhes (para França e Portugal, ainda não para Espanha)
+  - ♻️ A maioria dos pares latitude/longitude encapsulados como GeoPoints
+changes_1_5_1_md: |-
+  Desvio de rota realmente ativado e pesquisa de localização em França
+
+  - 🐛 O desvio de rota apenas estava ativo na depuração
+  - 🐛 Pesquisa de localização não limitada a Espanha, adapta-se à fonte de dados (por isso funciona em França agora)
+  - ✨ Nome alternativo para os postos de abastecimento de combustível franceses
+  - ✨ Base de dados de nomes de postos de França atualizada
+  - ♻️ Utilização do nominatim para todas as consultas de nomenclatura de locais
+  - 🌐 Tradução DE marcada como completa (estava completa, mas marcada como incompleta)
+changes_1_5_0_md: |-
+  Desvio de percurso, refina a lista utilizando distâncias rodoviárias reais e mais idiomas
+
+  - ✨ Refinamento progressivo da lista utilizando distâncias rodoviárias reais em vez de distâncias em linha reta
+  - ✨ Percursos de A-B utilizando o desvio para considerar o posto de combustível como distância
+  - ⚡️ Evita recomputações redundantes na reconfiguração de filtros, reposicionamentos e alterações de produtos
+  - ♻️ Representação de posição unificada (menos bugs e regressões sobre a mistura de latitude e longitude)
+  - 🌐 Tradução FR (obrigado, Sudoman e Florent Ruquoy!)
+  - 🌐 Tradução DE (obrigado, Zintor!)
+  - 🌐 Metadados e tradução de biblioteca partilhada para DE e RU (Obrigado AI! 😛)
+  - 🏗 Dependências não utilizadas removidas
+changes_1_4_4_md: |-
+  Novo seletor de local e continuação da tradução para francês
+
+  - 🌐 Tradução FR 43%
+  - ✨ Seletor de localização: mapa de tema escuro no modo escuro
+  - ✨ Seletor de local: toque longo para definir uma rota (desativado para esta versão)
+  - ✨ Seletor de localização: posicionamento da rota no mapa automático (desativado para esta versão)
+  - ♻️ Seletor de localização: utilizando o maplibre-compose
+  - 🐛 Seletor de localização: obtém a localização correta quando vem do GPS
+  - ♻️ Detalhes do posto de combustível migrados para compor
