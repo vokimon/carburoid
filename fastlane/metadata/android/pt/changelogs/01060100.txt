@@ -1,0 +1,7 @@
+## 1.6.1 (2026-04-04)
+
+Andalusian translation and dependency boost
+
+- 🌐 New language: Andalusian
+- 🏗️ Bump dependencies
+

@@ -21,6 +21,12 @@ full_description_md: |-
   - 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese…
   - ☀️ Dark and Light themes
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_6_2_md: |-
+  Smaller apks and Portuguese translation
+
+  - 🌐 New language: Portuguese (thanks, Jorge A. Silva!)
+  - 🌐 Fixes to Andalusian (thanks, Felî Ontañón!)
+  - ⚡️ Release APK minimized and resource shrinked 63M -> 51M Closes #25
 changes_1_6_1_md: |-
   Andalusian translation and dependency boost
 

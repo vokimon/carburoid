@@ -1,7 +1,11 @@
 # Change log
 
-## unreleased
+## 1.6.2 (2026-04-06)
 
+Smaller apks and Portuguese translation
+
+- 🌐 New language: Portuguese (thanks, Jorge A. Silva!)
+- 🌐 Fixes to Andalusian (thanks, Felî Ontañón!)
 - ⚡️ Release APK minimized and resource shrinked 63M -> 51M Closes #25
 
 ## 1.6.1 (2026-04-04)

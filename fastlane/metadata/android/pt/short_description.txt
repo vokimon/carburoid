@@ -1,0 +1,1 @@
+Encontra postos de combustível por preço e distância em Portugal, Espanha e França.
