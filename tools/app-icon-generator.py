@@ -19,6 +19,7 @@ DENSITY_SIZES = {
 
 def write_file(file, content):
     typer.echo(f"📝 Generating {file}...")
+    file.parent.mkdir(parents=True, exist_ok=True)
     Path(file).write_text(content)
 
 
@@ -84,6 +85,7 @@ def material_icon_to_launcher_svg(
 
 
 def rasterize_svg_to_png(svg_content: str, size: int, output: Path):
+    output.parent.mkdir(parents=True, exist_ok=True)
     return cairosvg.svg2png(
         bytestring=svg_content.encode('utf-8'),
         write_to=str(output),
@@ -137,8 +139,6 @@ def launcher_icon(
         typer.echo(f"❌ No se encontró el archivo: {svg_path}")
         raise typer.Exit()
 
-    output_dir.mkdir(parents=True, exist_ok=True)
-
     path_data, viewport_w, viewport_h = extract_svg_data(svg_path)
     svg = material_icon_to_launcher_svg(
         path_d=path_data,
@@ -159,7 +159,6 @@ def launcher_icon(
 
         squared = mipmap_dir / "ic_launcher.png"
         typer.echo(f"📝 Generating {squared}...")
-        mipmap_dir.mkdir(parents=True, exist_ok=True)
         rasterize_svg_to_png(
             svg_content=svg,
             size=size,
@@ -180,7 +179,6 @@ def launcher_icon(
 
     v24suffix = '-v24' if minsdk < 26 else ''
     drawable_dir = output_dir / ("drawable-anydpi" + v24suffix)
-    drawable_dir.mkdir(parents=True, exist_ok=True)
 
     def write_drawable(name, foreground_color):
         write_file(drawable_dir / f"ic_launcher_{name}.xml", f"""\
@@ -205,7 +203,6 @@ def launcher_icon(
 
     v26suffix = '-v26' if minsdk < 26 else ''
     adaptive_dir = output_dir / ("mipmap-anydpi" + v26suffix)
-    adaptive_dir.mkdir(parents=True, exist_ok=True)
 
     write_file(adaptive_dir / "ic_launcher_background.xml", f"""\
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
