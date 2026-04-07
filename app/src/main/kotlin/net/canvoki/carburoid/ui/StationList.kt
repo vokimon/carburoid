@@ -49,6 +49,7 @@ import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.plotnavigator.GasStationCard
 import net.canvoki.carburoid.ui.DownloadingPill
 import net.canvoki.shared.component.VerticalScrollbar
+import net.canvoki.shared.component.WatermarkBox
 import net.canvoki.shared.log
 import net.canvoki.shared.settings.ThemeSettings
 
@@ -89,21 +90,11 @@ fun PullOnRefresh(
 
 @Composable
 fun LoadingPlaceholder(modifier: Modifier = Modifier) {
-    Box(
+    WatermarkBox(
         modifier = modifier,
-        contentAlignment = Alignment.Center,
+        watermark = painterResource(R.drawable.ic_local_gas_station),
     ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_local_gas_station),
-            contentDescription = null,
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .alpha(0.1f),
-            tint = MaterialTheme.colorScheme.onSurface,
-        )
         Column(
-            modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -120,19 +111,10 @@ fun LoadingPlaceholder(modifier: Modifier = Modifier) {
 
 @Composable
 fun NoStationsPlaceholder(modifier: Modifier = Modifier) {
-    Box(
+    WatermarkBox(
         modifier = modifier,
-        contentAlignment = Alignment.Center,
+        watermark = painterResource(R.drawable.ic_local_gas_station),
     ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_local_gas_station),
-            contentDescription = null,
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .alpha(0.1f),
-            tint = MaterialTheme.colorScheme.onSurface,
-        )
         Text(
             text = stringResource(R.string.no_gas_stations),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
