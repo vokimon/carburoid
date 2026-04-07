@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.algorithms.FilterSettings
 import net.canvoki.carburoid.country.CountrySettings
-import net.canvoki.carburoid.ui.AppScaffold
+import net.canvoki.shared.component.AppScaffold
 import net.canvoki.shared.component.preferences.PreferenceCategory
 import net.canvoki.shared.component.preferences.WeblateLink
 import net.canvoki.shared.settings.LanguageSettings

@@ -27,9 +27,9 @@ import net.canvoki.carburoid.R
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.carburoid.repository.RepositoryEvent
-import net.canvoki.carburoid.ui.AppScaffold
 import net.canvoki.carburoid.ui.Selectors
 import net.canvoki.carburoid.ui.StationList
+import net.canvoki.shared.component.AppScaffold
 import net.canvoki.shared.usermessage.UserMessage
 import net.canvoki.shared.nolog as log
 

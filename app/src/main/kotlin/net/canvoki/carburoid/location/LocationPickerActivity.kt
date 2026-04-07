@@ -18,7 +18,7 @@ import net.canvoki.carburoid.R
 import net.canvoki.carburoid.location.GeoPoint
 import net.canvoki.carburoid.network.Suggestion
 import net.canvoki.carburoid.network.nameLocation
-import net.canvoki.carburoid.ui.AppScaffold
+import net.canvoki.shared.component.AppScaffold
 import net.canvoki.shared.log
 
 class LocationPickerActivity : AppCompatActivity() {

@@ -16,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import net.canvoki.carburoid.R
 import net.canvoki.carburoid.model.GasStation
-import net.canvoki.carburoid.ui.AppScaffold
+import net.canvoki.shared.component.AppScaffold
 
 @Composable
 fun PlotNavigatorScreen(

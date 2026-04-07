@@ -1,5 +1,11 @@
 # Change log
 
+## Unreleased
+
+- ♻️ AppScaffold extracted to shared library
+- ♻️ WatermarkBox extracted to shared library
+- 💄 Padding to the station not found message
+
 ## 1.6.2 (2026-04-06)
 
 Smaller apks and Portuguese translation

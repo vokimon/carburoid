@@ -53,7 +53,7 @@ import net.canvoki.carburoid.plotnavigator.OpeningStatusPill
 import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.product.translateProductName
 import net.canvoki.carburoid.repository.GasStationRepository
-import net.canvoki.carburoid.ui.AppScaffold
+import net.canvoki.shared.component.AppScaffold
 import net.canvoki.shared.component.openUri
 import net.canvoki.shared.settings.ThemeSettings
 import java.time.Instant
