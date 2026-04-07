@@ -553,54 +553,136 @@ def generate_manifest(project_root: Path, project_name: str, target_sdk: int) ->
     write_content(project_root / "app/src/main/AndroidManifest.xml", content)
 
 
+def generate_compose_ui(project_root: Path, package_name: str) -> None:
+    """Generate Compose UI components."""
+    ui_dir = project_root / "app/src/main/kotlin" / package_name.replace(".", "/") / "ui"
+
+    write_content(ui_dir / "BrandedText.kt", f"""\
+package {package_name}.ui
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun BrandedText(
+    text: String,
+    icon: Painter,
+    modifier: Modifier = Modifier,
+) {{
+    Box(
+        modifier = modifier.padding(24.dp),
+        contentAlignment = Alignment.Center,
+    ) {{
+        Icon(
+            painter = icon,
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize().alpha(0.1f),
+            tint = MaterialTheme.colorScheme.onSurface,
+        )
+        Text(
+            text = text,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
+    }}
+}}
+""")
+
+    write_content(ui_dir / "AppScaffold.kt", f"""\
+package {package_name}.ui
+
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+
+
+@Composable
+fun AppScaffold(
+    modifier: Modifier = Modifier,
+    topBar: @Composable () -> Unit = {{}},
+    content: @Composable ColumnScope.() -> Unit,
+) {{
+    val isDark = isSystemInDarkTheme()
+    val colorScheme = remember(isDark) {{
+        if (isDark) darkColorScheme() else lightColorScheme()
+    }}
+
+    MaterialTheme(colorScheme = colorScheme) {{
+        Scaffold(
+            topBar = topBar,
+            contentWindowInsets = WindowInsets.safeDrawing,
+        ) {{ padding ->
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(padding),
+            ) {{
+                content()
+            }}
+        }}
+    }}
+}}
+""")
+
 def generate_kotlin_files(project_root: Path, package_name: str) -> None:
     """Generate Kotlin source files."""
     package_dir = package_name.replace(".", "/")
+    main_activity_path = project_root / f"app/src/main/kotlin/{package_dir}/MainActivity.kt"
     main_activity = f"""\
 package {package_name}
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import {package_name}.ui.BrandedText
+import {package_name}.ui.AppScaffold
 
 class MainActivity : AppCompatActivity() {{
     override fun onCreate(savedInstanceState: Bundle?) {{
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContent {{
+            AppScaffold {{
+                BrandedText(
+                    text = "Hello, World!",
+                    icon = painterResource(R.drawable.ic_brand),
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }}
+        }}
     }}
 }}
 """
+
     write_content(
-        project_root / f"app/src/main/kotlin/{package_dir}/MainActivity.kt",
+        main_activity_path,
         main_activity,
-    )
-
-
-def generate_layout(project_root: Path) -> None:
-    """Generate activity_main.xml layout."""
-    content = """\
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
-"""
-    write_content(
-        project_root / "app/src/main/res/layout/activity_main.xml",
-        content,
     )
 
 
@@ -745,6 +827,34 @@ def generate_icons(
         download_material_icon_svg(icon, svg_path)
 
     generate_launcher_icon(project_root, svg_path, bg_color, fg_color, minsdk)
+
+def generate_editorconfig(project_root: Path) -> None:
+    """Generate .editorconfig with Compose-friendly ktlint rules."""
+    write_content(project_root / ".editorconfig", """\
+# .editorconfig
+root = true
+
+[*.{kt,kts}]
+end_of_line = lf
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+max_line_length = 120
+ktlint_code_style = ktlint_official
+#ktlint_code_style = android_studio
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+#ij_kotlin_imports_layout = *,java.**,javax.**,kotlin.**,^
+#ij_kotlin_packages_to_use_import_on_demand = unset
+#ktlint_function_signature_body_expression_wrapping = multiline
+ktlint_function_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than = 2
+#ktlint_ignore_back_ticked_identifier = false
+ktlint_standard_comment-spacing = disabled
+ktlint_standard_value-argument-comment = disabled
+ktlint_standard_type-parameter-comment = disabled
+ktlint_standard_value-parameter-comment = disabled
+ktlint_function_naming_ignore_when_annotated_with = Composable
+""")
 
 def generate_gitignore(project_root: Path) -> None:
     """Generate .gitignore file."""
@@ -1092,7 +1202,7 @@ def main(
         project_root=project_root, project_name=proj_name, target_sdk=TARGET_SDK
     )
     generate_kotlin_files(project_root=project_root, package_name=pkg_name)
-    generate_layout(project_root=project_root)
+    generate_compose_ui(project_root=project_root, package_name=pkg_name)
     generate_resources(project_root=project_root, project_name=proj_name)
     generate_icons(
         project_root=project_root,
@@ -1102,6 +1212,7 @@ def main(
         minsdk=MIN_SDK,
     )
     generate_gitignore(project_root=project_root)
+    generate_editorconfig(project_root=project_root)
     copy_config_files(
         project_root=project_root, env_path=dotenv_path, keystore_path=store_file
     )
