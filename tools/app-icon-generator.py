@@ -232,6 +232,19 @@ def launcher_icon(
     <monochrome android:drawable="@drawable/ic_launcher_monochrome"/>
 </adaptive-icon>""".strip())
 
+
+    drawable_plain_dir = output_dir / "drawable"
+    # Generate ic_brand.xml for Compose (no padding, full-bleed)
+    write_file(drawable_plain_dir / "ic_brand.xml", f"""\
+    <?xml version="1.0" encoding="utf-8"?>
+    <vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="24dp"
+        android:height="24dp"
+        android:viewportWidth="24"
+        android:viewportHeight="24">
+        <path android:fillColor="{foreground_color}" android:pathData="{path_data}"/>
+    </vector>""".strip())
+
     typer.echo("✅ Generación completa.")
 
 @app.command()
