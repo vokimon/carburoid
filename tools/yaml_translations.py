@@ -46,8 +46,60 @@ yaml.indent(mapping=2, sequence=4, offset=2)
 yaml.width = 10**9
 yaml.preserve_quotes = True
 
+def existing_languages(directory: Path) -> set[str]:
+    return { f.stem for f in collect_yaml_files_from_dir(directory)}
+
+def collect_files(paths):
+    files = set()
+    if not paths:
+        paths = ["."]
+
+    for p in paths:
+        p = Path(p)
+        if p.is_dir():
+            files.update(p.glob("*.yml"))
+            files.update(p.glob("*.yaml"))
+        elif p.suffix in [".yml", ".yaml"]:
+            files.add(p)
+
+    return sorted(files)
+
+def collect_yaml_files_from_dir(directory: Path) -> list[Path]:
+    """Collect all YAML files (.yml and .yaml) in a directory."""
+    if not directory.is_dir():
+        fail(f"{directory} is not a directory")
+    files = list(directory.glob("*.yml")) + list(directory.glob("*.yaml"))
+    return sorted(files)
+
+def lang_file(directory: Path, lang: str, fallback_extension: str = ".yaml") -> Path:
+    """
+    Determine the file to use for a given language in a directory.
+
+    Whatever already exists, prioritizing yaml over yml
+    If it does not exist, look for other languages in the directory
+    and use their same extension, also prioritizing yaml over yml.
+    """
+    yaml_file = directory / f"{lang}.yaml"
+    yml_file = directory / f"{lang}.yml"
+
+    if yaml_file.exists():
+        return yaml_file
+    if yml_file.exists():
+        return yml_file
+
+    other_yaml = list(directory.glob("*.yaml"))
+    if other_yaml:
+        return yaml_file
+
+    other_yml = list(directory.glob("*.yml"))
+    if other_yml:
+        return yml_file
+
+    return directory / f"{lang}{fallback_extension}"
+
 
 def flatten(d, parent_key="", sep="."):
+    """Flattens id hierarchies into dotted ids in translation data"""
     items = {}
     for k, v in (d or {}).items():
         new_key = f"{parent_key}{sep}{k}" if parent_key else k
@@ -59,6 +111,7 @@ def flatten(d, parent_key="", sep="."):
 
 
 def unflatten(d, sep="."):
+    """Unflattens dotted ids as hierarchy in translation data"""
     result = {}
     for key, value in d.items():
         parts = key.split(sep)
@@ -77,37 +130,21 @@ def load_flat(path: Path) -> dict:
         data = yaml.load(f) or {}
     return flatten(data)
 
+def load_flat_langs(directory: Path, languages: list[str]) -> dict[str, dict]:
+    """
+    Load flattened YAMLs for specified languages from a directory.
+    If `languages` is None, all YAML files in the directory are loaded.
+    """
+    return {
+        lang: load_flat(lang_file(directory, lang))
+        for lang in languages
+    }
 
 def dump_flat(path: Path, flat_dict: dict):
     """Dump flattened dict into YAML at path, preserving hierarchy."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
         yaml.dump(unflatten(flat_dict), f)
-
-
-def collect_files(paths):
-    files = set()
-    if not paths:
-        paths = ["."]
-
-    for p in paths:
-        p = Path(p)
-        if p.is_dir():
-            files.update(p.glob("*.yml"))
-            files.update(p.glob("*.yaml"))
-        elif p.suffix in [".yml", ".yaml"]:
-            files.add(p)
-
-    return sorted(files)
-
-
-def collect_yaml_files_from_dir(directory: Path) -> list[Path]:
-    """Collect all YAML files (.yml and .yaml) in a directory."""
-    if not directory.is_dir():
-        fail(f"{directory} is not a directory")
-    files = list(directory.glob("*.yml")) + list(directory.glob("*.yaml"))
-    return sorted(files)
-
 
 def detect_reference(files, ref_lang):
     for f in files:
@@ -120,25 +157,25 @@ def apply_format(target_value, ref_value):
     return type(ref_value)(target_value)
 
 
-def reorder(ref_flat, target_flat, file_name, add_missing, remove_extra):
+def reorder(ref_data, data, context, add_missing, remove_extra):
     result = OrderedDict()
 
     # Ids in the reference language
-    for key in ref_flat:
-        if key in target_flat:
-            result[key] = apply_format(target_flat[key], ref_flat[key])
+    for key in ref_data:
+        if key in data:
+            result[key] = apply_format(data[key], ref_data[key])
         else:
-            warn(f"{file_name}: missing {key}")
+            warn(f"{context}: missing {key}")
             if add_missing:
                 result[key] = ""
 
     # Ids not in reference language
-    extras = [k for k in target_flat if k not in ref_flat]
+    extras = [k for k in data if k not in ref_data]
     if extras:
-        warn(f"{file_name}: extra keys {extras}")
+        warn(f"{context}: extra keys {', '.join(extras)}")
         if not remove_extra:
             for k in sorted(extras):
-                result[k] = target_flat[k]
+                result[k] = data[k]
 
     return result
 
@@ -163,7 +200,7 @@ def distribute(
         fail("No languages found in input YAML")
 
     # Load existing YAMLs for all languages into flattened dictionaries
-    lang_flats = {lang: load_flat(output_dir / f"{lang}.yaml") for lang in languages}
+    lang_flats = load_flat_langs(output_dir, languages)
 
     # Merge input data into each language's flattened dictionary
     for key, translations in data.items():
@@ -190,38 +227,46 @@ def sync(
     add_missing: bool = typer.Option(False, "--add-missing",
         help="Adds missing ids from reference language with an empty string ready to fill",
     ),
-    remove_not_in_ref: bool = typer.Option(False, "--remove-not-in-ref",
+    remove_extra: bool = typer.Option(False, "--remove-extra",
         help="Removes ids not in the reference language",
     ),
 ):
     """
-    Applies the order and format of the reference language to the specified yaml files
+    Applies the order and format of the reference language to YAML files.
+
+    Each directory is processed independently, caching reference files.
     """
     files = collect_files(yamls)
     if not files:
         fail("No YAML files found")
 
-    ref_file = detect_reference(files, ref)
-    step(f"Reference: {ref_file}")
-
-    ref_flat = load_flat(ref_file)
+    ref_cache: dict[Path, dict] = {}
 
     for file in files:
-        if file == ref_file:
+        if file.stem == ref:
             continue
 
         step(f"Processing {file}...")
-        flat = load_flat(file)
-        new_flat = reorder(
-            ref_flat,
-            flat,
-            file.name,
-            add_missing,
-            remove_not_in_ref,
-        )
-        dump_flat(file, new_flat)
-        success(f"{file.name} synced successfully")
+        directory = file.parent
 
+        if directory not in ref_cache:
+            ref_file = lang_file(directory, ref)
+            if not ref_file.exists():
+                fail(f"Reference file '{ref}.{ref_file.suffix[1:]}' not found in {directory}")
+            ref_cache[directory] = load_flat(ref_file)
+
+        ref_data = ref_cache[directory]
+
+        data = load_flat(file)
+        new_data = reorder(
+            ref_data = ref_data,
+            data = data,
+            context = file,
+            add_missing = add_missing,
+            remove_extra = remove_extra,
+        )
+        dump_flat(file, new_data)
+    success("Done")
 
 @app.command()
 def rename(
@@ -253,19 +298,6 @@ def rename(
         success(f"{file.name}: '{old_id}' renamed to '{new_id}'")
 
 
-def choose_destination_file(dst_dir: Path, lang: str, src_file: Path) -> Path:
-    for ext in (".yaml", ".yml"):
-        candidate = dst_dir / f"{lang}{ext}"
-        if candidate.exists():
-            return candidate
-
-    other_files = list(dst_dir.glob("*.yaml")) + list(dst_dir.glob("*.yml"))
-    if other_files:
-        return dst_dir / f"{lang}{other_files[0].suffix}"
-
-    return dst_dir / src_file.name
-
-
 @app.command()
 def move(
     src_dir: Path = typer.Argument(..., help="Source translation directory"),
@@ -281,7 +313,7 @@ def move(
 
     for src_file in sorted(src_files):
         lang = src_file.stem
-        dst_file = choose_destination_file(dst_dir, lang, src_file)
+        dst_file = lang_file(dst_dir, lang, fallback_extension=src_dir.suffix)
 
         src_flat = load_flat(src_file)
         dst_flat = load_flat(dst_file)
@@ -310,6 +342,35 @@ def move(
         dump_flat(src_file, src_flat)
         success(f"{lang}: moved {ids} from {src_dir} to {dst_dir}")
 
+@app.command()
+def extract(
+    input_dir: Path = typer.Argument(..., help="Directory with per-language YAML files"),
+    ids: list[str] = typer.Argument(None, help="IDs or prefixes to extract (all if omitted)"),
+    output_yaml: Path = typer.Argument(..., help="Output YAML file for extracted translations"),
+):
+    """
+    Extract translations for specified IDs from per-language YAMLs into a single flattened YAML.
+    If no IDs are provided, all translations are extracted.
+    """
+    lang_flats = load_flat_langs(input_dir, existing_languages(input_dir))
+
+    extracted: dict[str, dict[str, str]] = {}
+
+    for lang, flat in lang_flats.items():
+        for key, value in flat.items():
+            if not ids or any(key == id_ or key.startswith(id_ + ".") for id_ in ids):
+                extracted.setdefault(key, {})[lang] = value
+
+    if not extracted:
+        warn("No matching keys found in any language files")
+        return
+
+    # Write the extracted dictionary to the output YAML
+    output_yaml.parent.mkdir(parents=True, exist_ok=True)
+    with output_yaml.open("w", encoding="utf-8") as f:
+        yaml.dump(extracted, f)
+
+    success(f"Extracted {len(extracted)} keys into {output_yaml}")
 
 if __name__ == "__main__":
     app()
