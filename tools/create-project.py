@@ -128,7 +128,7 @@ def in_git_repo(directory: Path) -> bool:
 def generate_gradle_wrapper(project_root: Path, gradle_version: str) -> None:
     """Generate Gradle wrapper files."""
     if not shutil.which("gradle"):
-        norun("sudo", "apt", "install", "gradle")
+        run("sudo", "apt", "install", "gradle")
     run("gradle", "--version")
     run("gradle", "wrapper", f"--gradle-version={gradle_version}", cwd=project_root)
     run("./gradlew", "--version", cwd=project_root)

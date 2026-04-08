@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+"""
+Management tools for YAML translation files.
+
+A directory holds the translations for a single module/component,
+as one yaml file per language, ie, ru.yaml for russian.
+
+Usually one of the languages is considered the reference one, usually 'en'.
+
+YAML's contain a dictionary where keys are the ids to refer them.
+Nested dictionaries are interpreted as namespaces.
+
+A different multilingual yaml format is often used for transfers.
+It contains structures ID->lang->text.
+"""
+
 
 import typer
 from pathlib import Path
@@ -6,7 +21,10 @@ from ruamel.yaml import YAML
 from collections import OrderedDict
 from typer import echo, style
 
-app = typer.Typer(invoke_without_command=True)
+app = typer.Typer(
+    help=__doc__,
+    invoke_without_command=True,
+)
 
 # ------------------ message helpers ------------------
 
@@ -179,6 +197,34 @@ def reorder(ref_data, data, context, add_missing, remove_extra):
 
     return result
 
+@app.command()
+def extract(
+    input_dir: Path = typer.Argument(..., help="Directory with per-language YAML files"),
+    ids: list[str] = typer.Argument(None, help="IDs or prefixes to extract (all if omitted)"),
+    output_yaml: Path = typer.Argument(..., help="Output YAML file for extracted translations"),
+):
+    """
+    Join translations in the directory into a multilingual file with flattened ids.
+    """
+    lang_flats = load_flat_langs(input_dir, existing_languages(input_dir))
+
+    extracted: dict[str, dict[str, str]] = {}
+
+    for lang, flat in lang_flats.items():
+        for key, value in flat.items():
+            if not ids or any(key == id_ or key.startswith(id_ + ".") for id_ in ids):
+                extracted.setdefault(key, {})[lang] = value
+
+    if not extracted:
+        warn("No matching keys found in any language files")
+        return
+
+    # Write the extracted dictionary to the output YAML
+    output_yaml.parent.mkdir(parents=True, exist_ok=True)
+    with output_yaml.open("w", encoding="utf-8") as f:
+        yaml.dump(extracted, f)
+
+    success(f"Extracted {len(extracted)} keys into {output_yaml}")
 
 @app.command()
 def distribute(
@@ -186,7 +232,7 @@ def distribute(
     output_dir: Path = typer.Argument(..., help="Directory with per language YAML translation files"),
 ):
     """
-    Merge translations from input YAML into per-language YAML files, preserving the format in the source.
+    Merge translations from a multilingual YAML into per-language YAML files.
     """
     with open(input_yaml, "r", encoding="utf-8") as f:
         data = yaml.load(f) or {}
@@ -232,7 +278,7 @@ def sync(
     ),
 ):
     """
-    Applies the order and format of the reference language to YAML files.
+    Applies the order and format of the reference language to the specified yaml files.
 
     Each directory is processed independently, caching reference files.
     """
@@ -342,35 +388,6 @@ def move(
         dump_flat(src_file, src_flat)
         success(f"{lang}: moved {ids} from {src_dir} to {dst_dir}")
 
-@app.command()
-def extract(
-    input_dir: Path = typer.Argument(..., help="Directory with per-language YAML files"),
-    ids: list[str] = typer.Argument(None, help="IDs or prefixes to extract (all if omitted)"),
-    output_yaml: Path = typer.Argument(..., help="Output YAML file for extracted translations"),
-):
-    """
-    Extract translations for specified IDs from per-language YAMLs into a single flattened YAML.
-    If no IDs are provided, all translations are extracted.
-    """
-    lang_flats = load_flat_langs(input_dir, existing_languages(input_dir))
-
-    extracted: dict[str, dict[str, str]] = {}
-
-    for lang, flat in lang_flats.items():
-        for key, value in flat.items():
-            if not ids or any(key == id_ or key.startswith(id_ + ".") for id_ in ids):
-                extracted.setdefault(key, {})[lang] = value
-
-    if not extracted:
-        warn("No matching keys found in any language files")
-        return
-
-    # Write the extracted dictionary to the output YAML
-    output_yaml.parent.mkdir(parents=True, exist_ok=True)
-    with output_yaml.open("w", encoding="utf-8") as f:
-        yaml.dump(extracted, f)
-
-    success(f"Extracted {len(extracted)} keys into {output_yaml}")
 
 if __name__ == "__main__":
     app()
