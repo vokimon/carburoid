@@ -4,33 +4,33 @@ DESCRIPTION: App Open Source ta Android ta trobar benzineras baratas
 KEYWORDS: benzinería, gasolinera, estación de servicio, combustible, gasoil, diésel, gasolina
 FEATURE_OFFICIAL_DATA_TITLE: Datos oficiales
 FEATURE_OFFICIAL_DATA_DESCRIPTION: |
-    Usamos datos oficiales que as benzineras remiten a os reguladors.
-    Agora mismo cubrimos España, Francia y Portugal.
+  Usamos datos oficiales que as benzineras remiten a os reguladors.
+  Agora mismo cubrimos España, Francia y Portugal.
 FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY: Afigir o mio país
 FEATURE_RELEVANT_STATIONS_TITLE: Solo benzineras rellevants
 FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
-    Carburoid descarta as benzineras que no mejoran o precio d’otras más cercanas.
-    Esto reduce a lista de candidatas de millares a decenas.
+  Carburoid descarta as benzineras que no mejoran o precio d’otras más cercanas.
+  Esto reduce a lista de candidatas de millares a decenas.
 FEATURE_YOUR_CHOICE_TITLE: Tú decides
 FEATURE_YOUR_CHOICE_DESCRIPTION: |
-    Os precios mejoran conforme bajas por a lista, pero tamién crece a distancia.
-    Tú decides hasta qué punto ye faena d’anar por o ahorro.
+  Os precios mejoran conforme bajas por a lista, pero tamién crece a distancia.
+  Tú decides hasta qué punto ye faena d’anar por o ahorro.
 FEATURE_ROUND_TRIP_DETOUR_MODES_TITLE: Anada y tornada u ruta con desvío
 FEATURE_ROUND_TRIP_DETOUR_MODES_DESCRIPTION: |
-    O modo “Anada y tornada” solo considera a distancia entre a tuya ubicación y a benzinería.
-    Si fijas un punto destino, se calcula a distancia que implica o desvío ta a benzinería.
+  O modo “Anada y tornada” solo considera a distancia entre a tuya ubicación y a benzinería.
+  Si fijas un punto destino, se calcula a distancia que implica o desvío ta a benzinería.
 FEATURE_FREEDOM_AS_FEATURE_TITLE: A llibertat como funcionalidat
 FEATURE_FREEDOM_AS_FEATURE_DESCRIPTION: |
-    A llicencia AGPLv3 protege a tuya llibertat como usuaria.
-    O código ye manteniu por a comunidat y totz lo puede auditar.
-    Sin espías. Sin recoyida de datos. Sin promoción pagada de benzineras.
-    F‑Droid assegura que os APK vienen d’o código fuente tal como s’ha publicado.
+  A llicencia AGPLv3 protege a tuya llibertat como usuaria.
+  O código ye manteniu por a comunidat y totz lo puede auditar.
+  Sin espías. Sin recoyida de datos. Sin promoción pagada de benzineras.
+  F‑Droid assegura que os APK vienen d’o código fuente tal como s’ha publicado.
 FEATURE_FREEDOM_AS_FEATURE_ACTION_GITHUB: Código fonte
 FEATURE_FREEDOM_AS_FEATURE_ACTION_LICENSE: GNU Affero GPLv3 u posterior
 FEATURE_TRANSLATIONS_TITLE: Traduzions
 FEATURE_TRANSLATIONS_DESCRIPTION: |
-    Teniemos especial coidau en apoyar as luengas minoritarias.
-    Ye un esfuerzo comunal — traduce a tuya luenga con Weblate.
+  Teniemos especial coidau en apoyar as luengas minoritarias.
+  Ye un esfuerzo comunal — traduce a tuya luenga con Weblate.
 FEATURE_TRANSLATIONS_ACTION_WEBLATE: Traduz
 ACTION_FDROID: Disponible en F‑Droid
 ACTION_DONATE: Faid una donación

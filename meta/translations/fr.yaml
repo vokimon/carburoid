@@ -1,7 +1,6 @@
+project_name: Carburoid
 splash_motto: Faites le plein moins cher, plus proche
 short_description: Trouvez les stations-service par prix et par distance en Espagne, en France et au Portugal.
-keywords: station-service, essence, diesel, gazole, carburant
-project_name: Carburoid
 full_description_md: |-
   Jusqu'où conduire pour trouver une station moins chère ?
 
@@ -18,3 +17,4 @@ full_description_md: |-
   - 🗺️ S'intègre parfaitement à votre application de navigation préférée
   - 🌐 Traductions disponibles en espagnol, catalan, basque, anglais, etc.
   - ☀️ Thème sombre et thème clair
+keywords: station-service, essence, diesel, gazole, carburant

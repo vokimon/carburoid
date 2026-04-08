@@ -76,7 +76,7 @@ location_deactivated: A ubicación ye desactivada
 location_activate: Activa
 location_permisions_concede: Permite
 refreshing_data: S'están actualizando las datos…
-failed_download: "Ha fallau a descarga de datos: {error}"
+failed_download: 'Ha fallau a descarga de datos: {error}'
 open_in_maps: Ubrir en o mapa
 location_picker_title: Triga una ubicación
 location_picker_search_icon_description: Circar

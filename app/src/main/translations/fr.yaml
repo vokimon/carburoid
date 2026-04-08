@@ -1,50 +1,26 @@
 app_name: Carburoid
 menu_back: Retour
 menu_settings: Paramètres
+menu_chart: Graphique
 settings_category_language_appearance: Langue et apparence
+settings_category_station_filters: Filtres des stations-service
+settings_filter_expensive: Masquer les stations-service non pertinentes
+settings_filter_expensive_summary: Une station est considérée comme non pertinente s'il en existe une autre plus proche ou moins chère. (Recommandé)
+settings_filter_expensive_warning: Carburoid est conçu pour fonctionner avec ce filtre activé. Le désactiver affiche beaucoup plus de stations-service, ce qui ralentit considérablement l'application. Pensez à le réactiver plus tard.
 settings_filter_non_public: Afficher uniquement les prix publics
+settings_filter_non_public_summary: Masquer les prix nécessitant un abonnement ou autre.
+settings_filter_beyond_sea: Masquer les stations-service situées au-delà de la mer
+settings_filter_beyond_sea_summary: Afficher uniquement celle de votre zone (péninsule, îles Baléares, îles Canaries ou Ceuta et Melilla)
 settings_filter_closed: Afficher les stations fermées
+settings_filter_closed_summary: Définir une marge de temps pour les stations-service qui ouvriront bientôt
+settings_filter_closed_tolerance_none: Aucune marge, toujours filtrer
 settings_filter_closed_tolerance_half_hour: 30 minutes
 settings_filter_closed_tolerance_one_hour: 1 heure
 settings_filter_closed_tolerance_two_hours: 2 heures
 settings_filter_closed_tolerance_twelve_hours: Une demi-journée
 settings_filter_closed_tolerance_one_day: Un jour
 settings_filter_closed_tolerance_never: Toujours afficher
-settings_filter_expensive_summary: Une station est considérée comme non pertinente s'il en existe une autre plus proche ou moins chère. (Recommandé)
-settings_filter_expensive_warning: Carburoid est conçu pour fonctionner avec ce filtre activé. Le désactiver affiche beaucoup plus de stations-service, ce qui ralentit considérablement l'application. Pensez à le réactiver plus tard.
-settings_category_station_filters: Filtres des stations-service
-settings_filter_expensive: Masquer les stations-service non pertinentes
-settings_filter_non_public_summary: Masquer les prix nécessitant un abonnement ou autre.
-settings_filter_beyond_sea: Masquer les stations-service situées au-delà de la mer
-settings_filter_beyond_sea_summary: Afficher uniquement celle de votre zone (péninsule, îles Baléares, îles Canaries ou Ceuta et Melilla)
-settings_filter_closed_summary: Définir une marge de temps pour les stations-service qui ouvriront bientôt
-settings_filter_closed_tolerance_none: Aucune marge, toujours filtrer
 no_gas_stations: Aucune stations-service trouvé
-menu_chart: Graphique
-location_picker_search_icon_description: Recherche
-location_picker_searching: Recherche en cours…
-location_picker_search_location_hint: Rechercher une ville ou une adresse
-location_picker_title: Sélectionner un emplacement
-location_selector_hint: Emplacement
-detail_opening_hours: Heures
-button_cheaper: Moins chère
-detail_location: Emplacement
-button_closer: Plus proche
-detail_other_products: Autres Produits
-failed_download: 'Échec du téléchargement : {error}'
-loading_new_data: Téléchargement de nouvelles données…
-location_activate: Activer
-location_deactivated: La position est désactivée
-location_selector_locate_device: Emplacement de l'appareil
-station_status_247: 24/7
-station_status_closed: Fermé
-station_status_open: Ouvert
-location_error: Erreur de détection de la position
-location_forbidden: Accès à la position refusé
-location_not_available: Position non détectée
-location_permisions_concede: Autoriser
-refreshing_data: Mise à jour des données…
-location_picker_no_results: Position non déterminée
 product_selector_hint: Produit
 product_selector_icon_description: Sélection des produits
 product_category_recent: Récent
@@ -75,7 +51,12 @@ product_name_hidrogeno: Hydrogène
 product_name_amoniaco: Ammoniac
 product_name_metanol: Méthanol
 product_name_adblue: AdBlue
+location_selector_hint: Emplacement
+location_selector_locate_device: Emplacement de l'appareil
 price_not_public: ✱ Prix conditionnel
+detail_location: Emplacement
+detail_opening_hours: Heures
+detail_other_products: Autres Produits
 station_no_name: Sans nom
 station_no_address: Pas d'adresse
 station_no_city: Pas de ville
@@ -83,9 +64,26 @@ station_no_price: Indisponible
 station_no_distance: ?? km
 station_status_unknown: Fermé ??
 station_status_permanently_closed: Fermé défintivement
+station_status_closed: Fermé
 station_status_opens_at: Ouvre {when}
 station_status_closes_at: Ferme {when}
+station_status_open: Ouvert
+station_status_247: 24/7
+location_not_available: Position non détectée
+location_error: Erreur de détection de la position
+location_forbidden: Accès à la position refusé
+location_deactivated: La position est désactivée
+location_activate: Activer
+location_permisions_concede: Autoriser
+refreshing_data: Mise à jour des données…
+failed_download: 'Échec du téléchargement : {error}'
 open_in_maps: Ouvrir sur une carte
+location_picker_title: Sélectionner un emplacement
+location_picker_search_icon_description: Recherche
+location_picker_search_location_hint: Rechercher une ville ou une adresse
+location_picker_searching: Recherche en cours…
+location_picker_no_results: Position non déterminée
+loading_new_data: Téléchargement de nouvelles données…
 settings_country_title: Source des données
 settings_country_summary: Choisissez la source des données des prix des carburants
 settings_country_es: Espagne
@@ -94,3 +92,5 @@ settings_country_fr_warning_wip: Les données française sont toujours en cours 
 settings_country_pt: Portugal
 settings_warning_dialog_wip: En cours de développement
 warning_dialog_title: Attention
+button_closer: Plus proche
+button_cheaper: Moins chère

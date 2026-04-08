@@ -28,9 +28,10 @@ product_category_diesel: Diesel
 product_category_gasoline: Benzin
 product_category_gaseous: Gasförmig
 product_category_additives: Zusatzstoffe
-product_name_gasoleo_premium: Premium Diesel
 product_name_gasoleo_a: Road Diesel (A)
+product_name_gasoleo_premium: Premium Diesel
 product_name_gasoleo_b: Off-Road Diesel
+product_name_diesel_renovable: Renewable Diesel
 product_name_gasolina_95_e10: Benzin 95 E10
 product_name_gasolina_95_e25: Benzin 95 E25
 product_name_gasolina_95_e5: Benzin 95 E5
@@ -43,9 +44,13 @@ product_name_gas_natural_comprimido: Komprimiertes Erdgas
 product_name_gas_natural_licuado: Flüssigerdgas
 product_name_biogas_natural_comprimido: Komprimiertes Biogas
 product_name_biogas_natural_licuado: Flüssigbiogas
+product_name_biodiesel: Biodiesel
+product_name_bioetanol: Bioethanol
 product_name_gases_licuados_del_petroleo: Autogas
 product_name_hidrogeno: Wasserstoff
 product_name_amoniaco: Ammoniak
+product_name_metanol: Methanol
+product_name_adblue: AdBlue
 location_selector_hint: Standort
 location_selector_locate_device: Gerät lokalisieren
 price_not_public: ✱ Bedingter Preis
@@ -56,12 +61,14 @@ station_no_name: Unbenannt
 station_no_address: Keine Adresse
 station_no_city: Keine Stadt
 station_no_price: Nicht zutreffend
+station_no_distance: ?? km
 station_status_unknown: Geschlossen??
 station_status_permanently_closed: Permanent geschlossen
 station_status_closed: Geschlossen
 station_status_opens_at: Öffnet {when}
 station_status_closes_at: Schließt {when}
 station_status_open: Offen
+station_status_247: 24/7
 location_not_available: Keine Standortdaten gefunden
 location_error: Fehler bei Standorterkennung
 location_forbidden: Standortzugriff verweigert
@@ -87,10 +94,3 @@ settings_warning_dialog_wip: In Arbeit
 warning_dialog_title: Warnung
 button_closer: Näher
 button_cheaper: Günstiger
-product_name_diesel_renovable: Renewable Diesel
-product_name_biodiesel: Biodiesel
-product_name_bioetanol: Bioethanol
-product_name_metanol: Methanol
-product_name_adblue: AdBlue
-station_no_distance: ?? km
-station_status_247: 24/7

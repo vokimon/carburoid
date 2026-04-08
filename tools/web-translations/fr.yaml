@@ -4,33 +4,33 @@ DESCRIPTION: Application Open Source pour Android pour trouver des stations‑se
 KEYWORDS: station‑service, essence, diesel, carburant, gasoline, Android
 FEATURE_OFFICIAL_DATA_TITLE: Données officielles
 FEATURE_OFFICIAL_DATA_DESCRIPTION: |
-    Nous utilisons des données officielles envoyées par les stations‑service aux régulateurs.
-    Actuellement, nous couvrons l'Espagne, la France et le Portugal.
+  Nous utilisons des données officielles envoyées par les stations‑service aux régulateurs.
+  Actuellement, nous couvrons l'Espagne, la France et le Portugal.
 FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY: Ajouter mon pays
 FEATURE_RELEVANT_STATIONS_TITLE: Stations pertinentes uniquement
 FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
-    Carburoid élimine les stations qui n’améliorent pas le prix des plus proches.
-    Cela réduit la liste des candidats de milliers à quelques dizaines.
+  Carburoid élimine les stations qui n’améliorent pas le prix des plus proches.
+  Cela réduit la liste des candidats de milliers à quelques dizaines.
 FEATURE_YOUR_CHOICE_TITLE: Votre choix
 FEATURE_YOUR_CHOICE_DESCRIPTION: |
-    Les prix s’améliorent au fur et à mesure que vous descendez dans la liste, mais les distances augmentent aussi.
-    C’est à vous de décider jusqu’où il vaut la peine d’aller pour économiser.
+  Les prix s’améliorent au fur et à mesure que vous descendez dans la liste, mais les distances augmentent aussi.
+  C’est à vous de décider jusqu’où il vaut la peine d’aller pour économiser.
 FEATURE_ROUND_TRIP_DETOUR_MODES_TITLE: Aller‑retour ou itinéraire avec détour
 FEATURE_ROUND_TRIP_DETOUR_MODES_DESCRIPTION: |
-    Le mode “Aller‑retour” ne prend en compte que la distance entre votre position et la station.
-    En définissant une destination, on calcule la distance incluant le détour.
+  Le mode “Aller‑retour” ne prend en compte que la distance entre votre position et la station.
+  En définissant une destination, on calcule la distance incluant le détour.
 FEATURE_FREEDOM_AS_FEATURE_TITLE: La liberté en tant que fonctionnalité
 FEATURE_FREEDOM_AS_FEATURE_DESCRIPTION: |
-    La licence AGPLv3 protège votre liberté en tant qu’utilisatrice.
-    Le code est maintenu par la communauté et tout le monde peut l’auditer.
-    Pas d’espionnage. Pas de collecte de données. Pas de promotion payée des stations-service.
-    F‑Droid garantit que les binaires proviennent du code source tel que publié.
+  La licence AGPLv3 protège votre liberté en tant qu’utilisatrice.
+  Le code est maintenu par la communauté et tout le monde peut l’auditer.
+  Pas d’espionnage. Pas de collecte de données. Pas de promotion payée des stations-service.
+  F‑Droid garantit que les binaires proviennent du code source tel que publié.
 FEATURE_FREEDOM_AS_FEATURE_ACTION_GITHUB: Code source
 FEATURE_FREEDOM_AS_FEATURE_ACTION_LICENSE: GNU Affero GPLv3 ou ultérieur
 FEATURE_TRANSLATIONS_TITLE: Traductions
 FEATURE_TRANSLATIONS_DESCRIPTION: |
-    Une attention particulière est portée au soutien des langues minoritaires.
-    C’est un effort communautaire — traduisez votre langue avec Weblate.
+  Une attention particulière est portée au soutien des langues minoritaires.
+  C’est un effort communautaire — traduisez votre langue avec Weblate.
 FEATURE_TRANSLATIONS_ACTION_WEBLATE: Traduire
 ACTION_FDROID: Disponible sur F‑Droid
 ACTION_DONATE: Faites un don

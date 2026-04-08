@@ -4,33 +4,33 @@ DESCRIPTION: App Open Source para Android para atopar estacións de servizo bara
 KEYWORDS: estación de servizo, gasolineira, combustible, gasóleo, diésel, gasolina, Android
 FEATURE_OFFICIAL_DATA_TITLE: Datos oficiais
 FEATURE_OFFICIAL_DATA_DESCRIPTION: |
-    Usamos datos oficiais que envían as estacións de servizo aos reguladores.
-    Actualmente cubrimos España, Francia e Portugal.
+  Usamos datos oficiais que envían as estacións de servizo aos reguladores.
+  Actualmente cubrimos España, Francia e Portugal.
 FEATURE_OFFICIAL_DATA_ACTION_ADD_COUNTRY: Engadir o meu país
 FEATURE_RELEVANT_STATIONS_TITLE: Só estacións relevantes
 FEATURE_RELEVANT_STATIONS_DESCRIPTION: |
-    Carburoid descarta estacións que non melloran o prezo das máis próximas.
-    Isto reduce a lista de candidatas de miles a unhas poucas decenas.
+  Carburoid descarta estacións que non melloran o prezo das máis próximas.
+  Isto reduce a lista de candidatas de miles a unhas poucas decenas.
 FEATURE_YOUR_CHOICE_TITLE: Ti decides
 FEATURE_YOUR_CHOICE_DESCRIPTION: |
-    Os prezos melloran conforme baixas na lista, pero tamén aumentan as distancias.
-    Ti decides ata onde paga a pena ir polo aforro.
+  Os prezos melloran conforme baixas na lista, pero tamén aumentan as distancias.
+  Ti decides ata onde paga a pena ir polo aforro.
 FEATURE_ROUND_TRIP_DETOUR_MODES_TITLE: Ida e volta ou ruta con desvío
 FEATURE_ROUND_TRIP_DETOUR_MODES_DESCRIPTION: |
-    O modo “Ida e volta” só considera a distancia entre a túa posición e a estación.
-    Se marcas un punto de destino, calcúlase a distancia incluíndo o desvío.
+  O modo “Ida e volta” só considera a distancia entre a túa posición e a estación.
+  Se marcas un punto de destino, calcúlase a distancia incluíndo o desvío.
 FEATURE_FREEDOM_AS_FEATURE_TITLE: Liberdade como funcionalidade
 FEATURE_FREEDOM_AS_FEATURE_DESCRIPTION: |
-    A licenza AGPLv3 protexe a túa liberdade como usuaria.
-    O código mantéñeno a comunidade e calquera persoa pode auditorialo.
-    Sen espías. Sen recollida de datos. Sen promoción paga das estacións de servizo.
-    F‑Droid garante que os binarios proceden do código fonte tal como se publicou.
+  A licenza AGPLv3 protexe a túa liberdade como usuaria.
+  O código mantéñeno a comunidade e calquera persoa pode auditorialo.
+  Sen espías. Sen recollida de datos. Sen promoción paga das estacións de servizo.
+  F‑Droid garante que os binarios proceden do código fonte tal como se publicou.
 FEATURE_FREEDOM_AS_FEATURE_ACTION_GITHUB: Código fonte
 FEATURE_FREEDOM_AS_FEATURE_ACTION_LICENSE: GNU Affero GPLv3 ou posterior
 FEATURE_TRANSLATIONS_TITLE: Traducións
 FEATURE_TRANSLATIONS_DESCRIPTION: |
-    Poñemos especial coidado en apoiar as linguas minoritarias.
-    É un esforzo comunitario — traduce a túa lingua con Weblate.
+  Poñemos especial coidado en apoiar as linguas minoritarias.
+  É un esforzo comunitario — traduce a túa lingua con Weblate.
 FEATURE_TRANSLATIONS_ACTION_WEBLATE: Traducir
 ACTION_FDROID: Disponible en F‑Droid
 ACTION_DONATE: Fai unha doazón

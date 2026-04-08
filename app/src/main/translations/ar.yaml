@@ -76,7 +76,7 @@ location_deactivated: الموقع معطل
 location_activate: فعّل
 location_permisions_concede: سماح
 refreshing_data: جاري تحديث البيانات…
-failed_download: "فشل تنزيل البيانات: {error}"
+failed_download: 'فشل تنزيل البيانات: {error}'
 open_in_maps: افتح في الخرائط
 location_picker_title: اختر موقعًا
 location_picker_search_icon_description: بحث
