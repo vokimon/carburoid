@@ -18,8 +18,10 @@ It contains structures ID->lang->text.
 import typer
 from pathlib import Path
 from ruamel.yaml import YAML
+from ruamel.yaml.scalarstring import LiteralScalarString, ScalarString
 from collections import OrderedDict
 from typer import echo, style
+
 
 app = typer.Typer(
     help=__doc__,
@@ -64,41 +66,32 @@ yaml.indent(mapping=2, sequence=4, offset=2)
 yaml.width = 10**9
 yaml.preserve_quotes = True
 
+TRANSLATION_SUFIXES = ['.yaml', '.yml']
+
+def translations_in_dir(path: Path, suffixes: set[str]=TRANSLATION_SUFIXES) -> set[Path]:
+    return {p for p in path.glob("*") if p.suffix in suffixes}
+
 def existing_languages(directory: Path) -> set[str]:
-    return { f.stem for f in collect_yaml_files_from_dir(directory)}
-
-def collect_files(paths):
-    files = set()
-    if not paths:
-        paths = ["."]
-
-    for p in paths:
-        p = Path(p)
-        if p.is_dir():
-            files.update(p.glob("*.yml"))
-            files.update(p.glob("*.yaml"))
-        elif p.suffix in [".yml", ".yaml"]:
-            files.add(p)
-
-    return sorted(files)
-
-def collect_yaml_files_from_dir(directory: Path) -> list[Path]:
-    """Collect all YAML files (.yml and .yaml) in a directory."""
-    if not directory.is_dir():
-        fail(f"{directory} is not a directory")
-    files = list(directory.glob("*.yml")) + list(directory.glob("*.yaml"))
-    return sorted(files)
+    return { f.stem for f in translations_in_dir(directory)}
 
 def collect_json_files(paths):
+    return collect_files(paths, [".json"])
+
+def collect_yaml_files(paths):
+    return collect_files(paths, TRANSLATION_SUFIXES)
+    
+def collect_files(paths, suffixes):
     files = set()
     for p in paths:
-        p = Path(p)
-        if p.is_dir():
-            files.update(p.glob("*.json"))
-        elif p.suffix == ".json":
-            files.add(p)
-
+        files.update(translations_from(Path(p), suffixes))
     return sorted(files)
+
+def translations_from(path, suffixes):
+    if path.is_dir():
+        return translations_in_dir(path, suffixes)
+    if p.suffix in suffixes:
+        return [p]
+    return []
 
 def lang_file(directory: Path, lang: str, fallback_extension: str = ".yaml") -> Path:
     """
@@ -107,6 +100,7 @@ def lang_file(directory: Path, lang: str, fallback_extension: str = ".yaml") -> 
     Whatever already exists, prioritizing yaml over yml
     If it does not exist, look for other languages in the directory
     and use their same extension, also prioritizing yaml over yml.
+    Else use the fallback_extension, '.yaml' by default.
     """
     yaml_file = directory / f"{lang}.yaml"
     yml_file = directory / f"{lang}.yml"
@@ -207,6 +201,58 @@ def reorder(ref_data, data, context, add_missing, remove_extra):
 
     return result
 
+
+
+
+
+def format_multiline_as_block(data, force: bool = False):
+    """
+    Convert multiline strings to block style using `|`.
+    If `force` is True, even single-line strings are converted.
+    Works recursively on dicts and lists.
+    """
+    if isinstance(data, str):
+        if "\n" in data or force:
+            return LiteralScalarString(data)
+        return data
+
+    if isinstance(data, list):
+        return [format_multiline_as_block(item, force) for item in data]
+
+    if isinstance(data, dict):
+        return {k: format_multiline_as_block(v, force) for k, v in data.items()}
+
+    return data
+
+def blockify_keys(flat_data: dict, ids: list[str] | None, force: bool):
+    new_data = flat_data.copy()
+    for key, value in flat_data.items():
+        if not ids or any(key == id_ or key.startswith(id_ + ".") for id_ in ids):
+            new_data[key] = format_multiline_as_block(value, force)
+    return new_data
+
+def format_as_flow(data, force=False):
+    """Convert strings to flow-style (normal str)."""
+    if isinstance(data, ScalarString):
+        if force or "\n" not in str(data):
+            return str(data)
+        return data
+
+    if isinstance(data, str):
+        if force or "\n" not in data:
+            return data
+        return data
+
+    if isinstance(data, list):
+        return [format_as_flow(item, force=force) for item in data]
+
+    if isinstance(data, dict):
+        return {k: format_as_flow(v, force=force) for k, v in data.items()}
+
+    return data
+
+
+
 @app.command()
 def extract(
     input_dir: Path = typer.Argument(..., help="Directory with per-language YAML files"),
@@ -302,7 +348,7 @@ def sync(
     \n\n
     Each file uses the reference language from its own directory.
     """
-    files = collect_files(yamls)
+    files = collect_yaml_files(yamls)
     if not files:
         fail("No YAML files found")
 
@@ -343,11 +389,11 @@ def rename(
     """
     Renames a text id in all the translation files
     """
-    files = collect_yaml_files_from_dir(path)
+    files = collect_yaml_files([path])
     if not files:
         fail("No YAML files found")
 
-    for file in sorted(files):
+    for file in files:
         step(f"Processing {file}...")
         flat = load_flat(file)
 
@@ -371,7 +417,7 @@ def move(
     ids: list[str] = typer.Argument(..., help="IDs or namespaces to move"),
 ):
     """Move translation keys or namespaces from source to destination module."""
-    src_files = collect_yaml_files_from_dir(src_dir)
+    src_files = collect_yaml_files([src_dir])
     if not src_files:
         fail("No YAML files found in source")
 
@@ -463,34 +509,34 @@ def andaluh(
     if not src_file.exists():
         fail(f"Source language '{SPANISH}' not found in {path}")
 
-    dst_file = lang_file(path, dst_lang)
+    dst_file = lang_file(path, ANDALUSIAN)
 
     step(f"Source: {src_file}")
     step(f"Destination: {dst_file}")
 
-    src_flat = load_flat(src_file)
-    dst_flat = load_flat(dst_file)
+    src_data = load_flat(src_file)
+    dst_data = load_flat(dst_file)
 
     updated = 0
     skipped = 0
 
-    for key, value in src_flat.items():
-        if key in dst_flat:
+    for key, value in src_data.items():
+        if key in dst_data:
             if not overwrite:
-                warn(f"{dst_lang}: '{key}' already exists, skipping")
+                warn(f"{ANDALUSIAN}: '{key}' already exists, skipping")
                 skipped += 1
                 continue
             warn(f"{ANDALUSIAN}: '{key}' overwritten")
 
-        dst_flat[key] = translate_value(value)
+        dst_data[key] = translate_value(value)
         updated += 1
 
-    if "language_code" in dst_flat:
-        dst_flat["language_code"] = ANDALUSIAN
-    if "language_name" in dst_flat:
-        dst_flat["language_name"] = "Andalûh"
+    if "language_code" in dst_data:
+        dst_data["language_code"] = ANDALUSIAN
+    if "language_name" in dst_data:
+        dst_data["language_name"] = "Andalûh"
 
-    dump_flat(dst_file, dst_flat)
+    dump_flat(dst_file, dst_data)
 
     success(f"{ANDALUSIAN}: {updated} keys updated, {skipped} skipped")
 
@@ -503,7 +549,7 @@ def to_json(
     """
     import json
 
-    files = collect_files(paths)
+    files = collect_yaml_files(paths)
     if not files:
         fail("No YAML files found")
 
@@ -520,60 +566,8 @@ def to_json(
 
         success(f"{file.name} → {output.name}")
 
-
-
-from ruamel.yaml.scalarstring import LiteralScalarString
-
-def format_multiline_as_block(data, force: bool = False):
-    """
-    Convert multiline strings to block style using `|`.
-    If `force` is True, even single-line strings are converted.
-    Works recursively on dicts and lists.
-    """
-    if isinstance(data, str):
-        if "\n" in data or force:
-            return LiteralScalarString(data)
-        return data
-
-    if isinstance(data, list):
-        return [format_multiline_as_block(item, force) for item in data]
-
-    if isinstance(data, dict):
-        return {k: format_multiline_as_block(v, force) for k, v in data.items()}
-
-    return data
-
-def blockify_keys(flat_data: dict, ids: list[str] | None, force: bool):
-    new_data = flat_data.copy()
-    for key, value in flat_data.items():
-        if not ids or any(key == id_ or key.startswith(id_ + ".") for id_ in ids):
-            new_data[key] = format_multiline_as_block(value, force)
-    return new_data
-
-def format_as_flow(data, force=False):
-    """Convert strings to flow-style (normal str)."""
-    from ruamel.yaml.scalarstring import ScalarString
-
-    if isinstance(data, ScalarString):
-        if force or "\n" not in str(data):
-            return str(data)
-        return data
-
-    if isinstance(data, str):
-        if force or "\n" not in data:
-            return data
-        return data
-
-    if isinstance(data, list):
-        return [format_as_flow(item, force=force) for item in data]
-
-    if isinstance(data, dict):
-        return {k: format_as_flow(v, force=force) for k, v in data.items()}
-
-    return data
-
-@app.command("from-json")
-def to_yaml(
+@app.command()
+def from_json(
     paths: list[str] = typer.Argument(..., help="JSON files or directories"),
 ):
     """
@@ -601,31 +595,6 @@ def to_yaml(
 
 @app.command()
 def blockify(
-    path: Path = typer.Argument(..., help="Directory with YAML files or a single YAML file"),
-    ids: list[str] = typer.Argument(None, help="IDs or prefixes to process (all if omitted)"),
-    force: bool = typer.Option(False, "--force", help="Convert even single-line strings"),
-):
-    """
-    Format multiline values into block format (`|`) in YAML files.
-    """
-    files = []
-    if path.is_dir():
-        files = collect_yaml_files_from_dir(path)
-    elif path.is_file() and path.suffix in [".yml", ".yaml"]:
-        files = [path]
-    else:
-        fail(f"{path} is neither a YAML file nor a directory containing YAMLs")
-
-    for file in files:
-        step(f"Processing {file}...")
-        data = load_flat(file)  # flattened dict
-        # Convert to block style recursively
-        data_block = blockify_keys(data, force)
-        dump_flat(file, data_block)
-        success(f"{file.name} updated")
-
-@app.command()
-def blockify(
     path: Path = typer.Argument(..., help="YAML file or directory"),
     ids: list[str] = typer.Argument(None, help="IDs or namespaces to process (all if omitted)"),
     force: bool = typer.Option(False, "--force", help="Convert also single-line strings"),
@@ -633,7 +602,7 @@ def blockify(
     """
     Format multiline values as block style. Single line are kept unless forced.
     """
-    files = [path] if path.suffix in ['.yaml', '.yml'] else collect_yaml_files_from_dir(path)
+    files = collect_yaml_files([path])
 
     if not files:
         fail("No YAML files found")
@@ -641,24 +610,24 @@ def blockify(
     for file in files:
         step(f"Processing {file}...")
 
-        flat = load_flat(file)
+        data = load_flat(file)
         updated = 0
 
-        for key, value in flat.items():
+        for key, value in data.items():
             if ids and not any(key == i or key.startswith(i + ".") for i in ids):
                 continue
 
             new_value = format_multiline_as_block(value, force=force)
 
             if new_value != value or type(new_value) is not type(value):
-                flat[key] = new_value
+                data[key] = new_value
                 updated += 1
 
         if updated == 0:
             warn(f"{file.name}: no changes")
             continue
 
-        dump_flat(file, flat)
+        dump_flat(file, data)
         success(f"{file.name}: {updated} values reformatted")
 
 @app.command()
@@ -670,7 +639,7 @@ def flowify(
     """
     Convert strings in YAML to flow style, Multiline are kept unless forced.
     """
-    files = [path] if path.suffix in ['.yaml', '.yml'] else collect_yaml_files_from_dir(path)
+    files = collect_yaml_files([path])
 
     if not files:
         fail("No YAML files found")
