@@ -8,12 +8,16 @@ from collections import OrderedDict
 
 app = typer.Typer(invoke_without_command=True)
 
+yaml = YAML(typ="rt")
+yaml.indent(mapping=2, sequence=4, offset=2)
+yaml.width = 10**9
+yaml.preserve_quotes = True
+
 @app.callback()
 def main(ctx: typer.Context):
     if ctx.invoked_subcommand is None:
         typer.echo(ctx.get_help())
         raise typer.Exit()
-
 
 @app.command()
 def distribute(
@@ -21,50 +25,43 @@ def distribute(
     output_dir: Path = typer.Argument(..., help="Directory with per language YAML translation files"),
 ):
     """
-    Append ids in multilanguage input into per-language yamls.
-
-    This is useful to apply batch translations. Complementary to extract command.
+    Merge translations from input YAML into per-language YAML files, preserving the format in the source.
     """
 
     with open(input_yaml, "r", encoding="utf-8") as f:
-        data = yaml.safe_load(f)
+        data = yaml.load(f) or {}
 
     if not isinstance(data, dict):
         typer.echo("❌ Input YAML must be a dictionary")
         raise typer.Exit(1)
 
+    # Gather all languages present in the input
+    languages = sorted({lang for translations in data.values() for lang in translations.keys()})
+    if not languages:
+        typer.echo("❌ No languages found in input YAML")
+        raise typer.Exit(1)
+
+    # Load existing YAMLs for all languages into flattened dictionaries
+    lang_flats = {lang: load_flat(output_dir / f"{lang}.yaml") for lang in languages}
+
+    # Merge input data into each language's flattened dictionary
     for key, translations in data.items():
-        if not isinstance(translations, dict):
-            typer.echo(f"⚠️ Skipping {key}: not a dict")
-            continue
-
         for lang, text in translations.items():
-            lang_file = output_dir / f"{lang}.yaml"
+            flat = lang_flats[lang]
 
-            # Ensure directory exists
-            lang_file.parent.mkdir(parents=True, exist_ok=True)
+            if key in flat:
+                typer.echo(f"[WARN] {lang}: '{key}' already exists, overwriting")
 
-            # Prepare YAML line (safe dump of single key)
-            snippet = yaml.dump(
-                {key: text},
-                allow_unicode=True,
-                sort_keys=False,
-            )
+            flat[key] = text
 
-            # Append to file
-            with open(lang_file, "a", encoding="utf-8") as f:
-                # Ensure separation
-                f.write("\n")
-                f.write(snippet)
-
-            typer.echo(f"✅ {lang}: appended '{key}'")
+    # Write updated flattened dictionaries back to YAML files
+    for lang, flat in lang_flats.items():
+        lang_file = output_dir / f"{lang}.yaml"
+        dump_flat(lang_file, flat)
+        typer.echo(f"✅ {lang}: updated {len(data)} keys")
 
     typer.echo("🎉 Done!")
 
-
-yaml = YAML(typ='rt')
-yaml.indent(mapping=2, sequence=4, offset=2)
-yaml.width = 10**9
 
 def flatten(d, parent_key="", sep="."):
     items = {}
@@ -105,6 +102,7 @@ def collect_files(paths):
     return sorted(files)
 
 
+
 def detect_reference(files, ref_lang):
     for f in files:
         if f.stem == ref_lang:
@@ -118,7 +116,7 @@ def apply_format(target_value, ref_value):
 def reorder(ref_flat, target_flat, file_name, add_missing, remove_extra):
     result = OrderedDict()
 
-    # claves de referencia
+    # Ids in the reference language
     for key in ref_flat:
         if key in target_flat:
             result[key] = apply_format(target_flat[key], ref_flat[key])
@@ -127,7 +125,7 @@ def reorder(ref_flat, target_flat, file_name, add_missing, remove_extra):
             if add_missing:
                 result[key] = ""
 
-    # extras
+    # Ids not in reference language
     extras = [k for k in target_flat if k not in ref_flat]
     if extras:
         typer.echo(f"[EXTRA] {file_name}: {extras}")
