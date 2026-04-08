@@ -101,6 +101,14 @@ def collect_files(paths):
     return sorted(files)
 
 
+def collect_yaml_files_from_dir(directory: Path) -> list[Path]:
+    """Collect all YAML files (.yml and .yaml) in a directory."""
+    if not directory.is_dir():
+        fail(f"{directory} is not a directory")
+    files = list(directory.glob("*.yml")) + list(directory.glob("*.yaml"))
+    return sorted(files)
+
+
 def detect_reference(files, ref_lang):
     for f in files:
         if f.stem == ref_lang:
@@ -224,10 +232,7 @@ def rename(
     """
     Renames a text id in all the translation files
     """
-    if not path.is_dir():
-        fail("Path must be a directory")
-
-    files = list(path.glob("*.yml")) + list(path.glob("*.yaml"))
+    files = collect_yaml_files_from_dir(path)
     if not files:
         fail("No YAML files found")
 
@@ -268,7 +273,7 @@ def move(
     ids: list[str] = typer.Argument(..., help="IDs or prefixes to move"),
 ):
     """Move translation keys (possibly hierarchical) from source to destination module."""
-    src_files = list(src_dir.glob("*.yml")) + list(src_dir.glob("*.yaml"))
+    src_files = collect_yaml_files_from_dir(src_dir)
     if not src_files:
         fail("No YAML files found in source")
 
