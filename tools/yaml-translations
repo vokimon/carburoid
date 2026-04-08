@@ -572,29 +572,6 @@ def format_as_flow(data, force=False):
 
     return data
 
-@app.command()
-def flowify(
-    path: Path = typer.Argument(..., help="Directory or YAML file"),
-    ids: list[str] = typer.Argument(None, help="IDs or prefixes to convert (all if omitted)"),
-    force: bool = typer.Option(False, "--force", help="Force conversion to flow even for multiline strings"),
-):
-    """
-    Convert single-line values (or all with --force) into flow-style strings.
-    """
-    files = [path] if path.is_file() else collect_yaml_files_from_dir(path)
-
-    for file in sorted(files):
-        step(f"Processing {file}...")
-        flat = load_flat(file)
-        new_flat = {}
-        for key, value in flat.items():
-            if not ids or any(key == id_ or key.startswith(id_ + ".") for id_ in ids):
-                new_flat[key] = format_as_flow(value, force=force)
-            else:
-                new_flat[key] = value
-        dump_flat(file, new_flat)
-        success(f"{file}: flowified {len(new_flat)} keys")
-
 @app.command("from-json")
 def to_yaml(
     paths: list[str] = typer.Argument(..., help="JSON files or directories"),
@@ -650,11 +627,11 @@ def blockify(
 @app.command()
 def blockify(
     path: Path = typer.Argument(..., help="YAML file or directory"),
-    ids: list[str] = typer.Argument(None, help="IDs or prefixes to process (all if omitted)"),
+    ids: list[str] = typer.Argument(None, help="IDs or namespaces to process (all if omitted)"),
     force: bool = typer.Option(False, "--force", help="Convert also single-line strings"),
 ):
     """
-    Format multiline values as block format
+    Format multiline values as block style. Single line are kept unless forced.
     """
     files = [path] if path.suffix in ['.yaml', '.yml'] else collect_yaml_files_from_dir(path)
 
@@ -687,11 +664,11 @@ def blockify(
 @app.command()
 def flowify(
     path: Path = typer.Argument(..., help="YAML file or directory"),
-    ids: list[str] = typer.Argument(None, help="IDs or prefixes to process (all if omitted)"),
-    force: bool = typer.Option(False, "--force", help="Convert all strings to flow style"),
+    ids: list[str] = typer.Argument(None, help="IDs or namespaces to process (all if omitted)"),
+    force: bool = typer.Option(False, "--force", help="Convert also multi-line"),
 ):
     """
-    Convert strings in YAML to flow style (single-line) where possible
+    Convert strings in YAML to flow style, Multiline are kept unless forced.
     """
     files = [path] if path.suffix in ['.yaml', '.yml'] else collect_yaml_files_from_dir(path)
 
