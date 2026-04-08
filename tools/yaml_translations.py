@@ -17,14 +17,16 @@ def main(ctx: typer.Context):
 
 @app.command()
 def distribute(
-    input_file: Path = typer.Argument(..., help="YAML with id: lang: translation"),
+    input_yaml: Path = typer.Argument(..., help="YAML with id -> lang -> translation"),
     output_dir: Path = typer.Argument(..., help="Directory with per language YAML translation files"),
 ):
     """
-    Append translations to per-language YAML files without modifying existing content.
+    Append ids in multilanguage input into per-language yamls.
+
+    This is useful to apply batch translations. Complementary to extract command.
     """
 
-    with open(input_file, "r", encoding="utf-8") as f:
+    with open(input_yaml, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f)
 
     if not isinstance(data, dict):
@@ -136,10 +138,25 @@ def reorder(ref_flat, target_flat, file_name, add_missing, remove_extra):
 
     return result
 
+def load_flat(path: Path) -> dict:
+    """Load YAML from path and return as flattened dict. Returns empty dict if file does not exist."""
+    if not path.exists():
+        return {}
+    with path.open("r", encoding="utf-8") as f:
+        data = yaml.load(f) or {}
+    return flatten(data)
+
+def dump_flat(path: Path, flat_dict: dict):
+    """Dump flattened dict into YAML at path, preserving hierarchy."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as f:
+        yaml.dump(unflatten(flat_dict), f)
 
 @app.command()
 def sync(
-    paths: list[str] = typer.Argument(..., min=1),
+    yamls: list[str] = typer.Argument(..., min=1,
+        help="Directory containing translation yamls or specific yamls to process",
+    ),
     ref: str = typer.Option("en", "--ref", help="Reference language"),
     add_missing: bool = typer.Option(False, "--add-missing",
         help="Adds missing ids from reference language with an empty string ready to fill",
@@ -149,12 +166,12 @@ def sync(
     ),
 ):
     """
-    Syncs string order and yaml format with the one in the reference language.
+    Applies the order and format of the reference language to the specified yaml files
 
     Provide a translation directory or a set of yaml files.
     """
 
-    files = collect_files(paths)
+    files = collect_files(yamls)
 
     if not files:
         typer.echo("No YAML files found")
@@ -165,10 +182,7 @@ def sync(
     typer.echo(f"Reference: {ref_file}")
 
     # cargar referencia
-    with ref_file.open() as f:
-        ref_data = yaml.load(f) or {}
-
-    ref_flat = flatten(ref_data)
+    ref_flat = load_flat(ref_file)
     ref_keys = list(ref_flat.keys())
 
     # procesar resto
@@ -178,10 +192,7 @@ def sync(
 
         typer.echo(f"\nProcessing {file}...")
 
-        with file.open() as f:
-            data = yaml.load(f) or {}
-
-        flat = flatten(data)
+        flat = load_flat(file)
 
         new_flat = reorder(
             ref_flat,
@@ -191,10 +202,114 @@ def sync(
             remove_not_in_ref,
         )
 
-        new_data = unflatten(new_flat)
+        dump_flat(file, new_flat)
 
-        with file.open("w") as f:
-            yaml.dump(new_data, f)
+
+@app.command()
+def rename(
+    path: Path = typer.Argument(..., help="Directory with YAML files"),
+    old_id: str = typer.Argument(..., help="Old translation key"),
+    new_id: str = typer.Argument(..., help="New translation key"),
+):
+    """
+    Renames a text id in all the translation files
+    """
+    files = []
+
+    if not path.is_dir():
+        raise typer.Exit("Path must be a directory")
+    files.extend(path.glob("*.yml"))
+    files.extend(path.glob("*.yaml"))
+
+    if not files:
+        typer.echo("No YAML files found")
+        raise typer.Exit()
+
+    for file in sorted(files):
+        typer.echo(f"\nProcessing {file}...")
+
+        flat = load_flat(file)
+
+        if old_id not in flat:
+            typer.echo(f"[WARN] {file.name}: '{old_id}' not found")
+            continue
+
+        if new_id in flat:
+            typer.echo(f"[WARN] {file.name}: '{new_id}' already exists (overwriting)")
+
+        # mover
+        flat[new_id] = flat[old_id]
+        del flat[old_id]
+
+        dump_flat(file, flat)
+
+
+yaml = YAML(typ="rt")
+yaml.indent(mapping=2, sequence=4, offset=2)
+yaml.width = 10**9
+yaml.preserve_quotes = True
+
+app = typer.Typer()
+
+# Funciones de flatten/unflatten (ya existen arriba)
+
+def choose_destination_file(dst_dir: Path, lang: str, src_file: Path) -> Path:
+    for ext in (".yaml", ".yml"):
+        candidate = dst_dir / f"{lang}{ext}"
+        if candidate.exists():
+            return candidate
+
+    other_files = list(dst_dir.glob("*.yaml")) + list(dst_dir.glob("*.yml"))
+    if other_files:
+        return dst_dir / f"{lang}{other_files[0].suffix}"
+
+    return dst_dir / src_file.name
+
+@app.command()
+def move(
+    src_dir: Path = typer.Argument(..., help="Source translation directory"),
+    dst_dir: Path = typer.Argument(..., help="Destination translation directory"),
+    ids: list[str] = typer.Argument(..., help="IDs or prefixes to move"),
+):
+    """Move translation keys (possibly hierarchical) from source to destination module."""
+    src_files = list(src_dir.glob("*.yml")) + list(src_dir.glob("*.yaml"))
+    if not src_files:
+        typer.echo("[ERROR] No YAML files found in source")
+        raise typer.Exit()
+
+    dst_dir.mkdir(parents=True, exist_ok=True)
+
+    for src_file in sorted(src_files):
+        lang = src_file.stem
+        dst_file = choose_destination_file(dst_dir, lang, src_file)
+
+        src_flat = load_flat(src_file)
+        dst_flat = load_flat(dst_file)
+
+        moved_any = False
+        for move_id in ids:
+            to_move = {k: v for k, v in src_flat.items()
+                       if k == move_id or k.startswith(move_id + ".")}
+
+            if not to_move:
+                typer.echo(f"[WARN] {lang}: '{move_id}' not found in source")
+                continue
+
+            for k, v in to_move.items():
+                if k in dst_flat:
+                    typer.echo(f"[WARN] {lang}: '{k}' already in destination (overwriting)")
+                dst_flat[k] = v
+                del src_flat[k]
+                moved_any = True
+
+        if not moved_any:
+            typer.echo(f"[INFO] {lang}: no keys moved")
+            continue
+
+        dump_flat(dst_file, dst_flat)
+        dump_flat(src_file, src_flat)
+
+        typer.echo(f"[OK] {lang}: moved {ids} from {src_dir} to {dst_dir}")
 
 
 if __name__ == "__main__":
