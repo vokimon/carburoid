@@ -388,6 +388,92 @@ def move(
         dump_flat(src_file, src_flat)
         success(f"{lang}: moved {ids} from {src_dir} to {dst_dir}")
 
+@app.command()
+def andaluh(
+    path: Path = typer.Argument(..., help="Directory with translation YAML files"),
+    overwrite: bool = typer.Option(False, "--overwrite",
+        help="Overwrite existing translations in destination language",
+    ),
+):
+    """
+    Generate Andalûh ('and') translations from Spanish ('es') file.
+
+    The use of 'and' code is an abuse of a seldomly used code for
+    Papuan Anzu language until Andalûh gets its own.
+    """
+    import re
+    import andaluh as andaluh_lib
+
+    def protect_variables(text):
+        if not isinstance(text, str):
+            return text, []
+
+        variables = []
+
+        def replace_var(match):
+            variables.append(match.group(0))
+            return f"%%%{len(variables) - 1}%%%"
+
+        protected = re.sub(r"\{[^}]+\}", replace_var, text)
+        return protected, variables
+
+    def restore_variables(text, variables):
+        if not isinstance(text, str):
+            return text
+
+        for i, var in enumerate(variables):
+            text = text.replace(f"%%%{i}%%%", var)
+        return text
+
+    def translate_value(value):
+        if not isinstance(value, str):
+            return value
+
+        protected, variables = protect_variables(value)
+        translated = andaluh_lib.epa(protected)
+        return restore_variables(translated, variables)
+
+    if not path.is_dir():
+        fail("Path must be a directory")
+
+    src_lang = "es"
+    dst_lang = "and"
+
+    src_file = lang_file(path, src_lang)
+    if not src_file.exists():
+        fail(f"Source language '{src_lang}' not found in {path}")
+
+    dst_file = lang_file(path, dst_lang)
+
+    step(f"Source: {src_file}")
+    step(f"Destination: {dst_file}")
+
+    src_flat = load_flat(src_file)
+    dst_flat = load_flat(dst_file)
+
+    updated = 0
+    skipped = 0
+
+    for key, value in src_flat.items():
+        if key in dst_flat:
+            if not overwrite:
+                warn(f"{dst_lang}: '{key}' already exists, skipping")
+                skipped += 1
+                continue
+            warn(f"{dst_lang}: '{key}' overwritten")
+
+        dst_flat[key] = translate_value(value)
+        updated += 1
+
+    if "language_code" in dst_flat:
+        dst_flat["language_code"] = dst_lang
+    if "language_name" in dst_flat:
+        dst_flat["language_name"] = "Andalûh"
+
+    dump_flat(dst_file, dst_flat)
+
+    success(f"{dst_lang}: {updated} keys updated, {skipped} skipped")
+
 
 if __name__ == "__main__":
     app()
