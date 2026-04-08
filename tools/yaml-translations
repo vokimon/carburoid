@@ -2,8 +2,8 @@
 """
 Management tools for YAML translation files.
 
-A directory holds the translations for a single module/component,
-as one yaml file per language, ie, ru.yaml for russian.
+YAML translations are stored as individual files for each language,
+(ie, ru.yaml for russian), inside a directory for a single module or component.
 
 Usually one of the languages is considered the reference one, usually 'en'.
 
@@ -151,7 +151,6 @@ def load_flat(path: Path) -> dict:
 def load_flat_langs(directory: Path, languages: list[str]) -> dict[str, dict]:
     """
     Load flattened YAMLs for specified languages from a directory.
-    If `languages` is None, all YAML files in the directory are loaded.
     """
     return {
         lang: load_flat(lang_file(directory, lang))
@@ -204,7 +203,9 @@ def extract(
     output_yaml: Path = typer.Argument(..., help="Output YAML file for extracted translations"),
 ):
     """
-    Join translations in the directory into a multilingual file with flattened ids.
+    Extract translations from per-language YAMLs into a multilingual YAML.
+
+    Output format: id -> lang -> text (flattened keys).
     """
     lang_flats = load_flat_langs(input_dir, existing_languages(input_dir))
 
@@ -232,7 +233,9 @@ def distribute(
     output_dir: Path = typer.Argument(..., help="Directory with per language YAML translation files"),
 ):
     """
-    Merge translations from a multilingual YAML into per-language YAML files.
+    Distribute translations from a multilingual YAML into per-language files.
+
+    Input format: id -> lang -> text (flattened keys).
     """
     with open(input_yaml, "r", encoding="utf-8") as f:
         data = yaml.load(f) or {}
@@ -271,16 +274,22 @@ def sync(
     ),
     ref: str = typer.Option("en", "--ref", help="Reference language"),
     add_missing: bool = typer.Option(False, "--add-missing",
-        help="Adds missing ids from reference language with an empty string ready to fill",
+        help="Add missing ids from reference language with an empty string ready to fill",
     ),
     remove_extra: bool = typer.Option(False, "--remove-extra",
-        help="Removes ids not in the reference language",
+        help="Remove ids not in the reference language",
     ),
 ):
     """
-    Applies the order and format of the reference language to the specified yaml files.
+    Align translation files with the reference language.
 
-    Each directory is processed independently, caching reference files.
+    - Orders keys like the reference
+
+    - Uses yaml text formating used in reference language file
+
+    - Reports or optionally adds/remove missing and extra keys
+    \n\n
+    Each file uses the reference language from its own directory.
     """
     files = collect_files(yamls)
     if not files:
@@ -348,9 +357,9 @@ def rename(
 def move(
     src_dir: Path = typer.Argument(..., help="Source translation directory"),
     dst_dir: Path = typer.Argument(..., help="Destination translation directory"),
-    ids: list[str] = typer.Argument(..., help="IDs or prefixes to move"),
+    ids: list[str] = typer.Argument(..., help="IDs or namespaces to move"),
 ):
-    """Move translation keys (possibly hierarchical) from source to destination module."""
+    """Move translation keys or namespaces from source to destination module."""
     src_files = collect_yaml_files_from_dir(src_dir)
     if not src_files:
         fail("No YAML files found in source")
@@ -359,7 +368,7 @@ def move(
 
     for src_file in sorted(src_files):
         lang = src_file.stem
-        dst_file = lang_file(dst_dir, lang, fallback_extension=src_dir.suffix)
+        dst_file = lang_file(dst_dir, lang, fallback_extension=src_file.suffix)
 
         src_flat = load_flat(src_file)
         dst_flat = load_flat(dst_file)
@@ -436,12 +445,12 @@ def andaluh(
     if not path.is_dir():
         fail("Path must be a directory")
 
-    src_lang = "es"
-    dst_lang = "and"
+    SPANISH = "es"
+    ANDALUSIAN = "and"
 
-    src_file = lang_file(path, src_lang)
+    src_file = lang_file(path, SPANISH)
     if not src_file.exists():
-        fail(f"Source language '{src_lang}' not found in {path}")
+        fail(f"Source language '{SPANISH}' not found in {path}")
 
     dst_file = lang_file(path, dst_lang)
 
@@ -460,19 +469,19 @@ def andaluh(
                 warn(f"{dst_lang}: '{key}' already exists, skipping")
                 skipped += 1
                 continue
-            warn(f"{dst_lang}: '{key}' overwritten")
+            warn(f"{ANDALUSIAN}: '{key}' overwritten")
 
         dst_flat[key] = translate_value(value)
         updated += 1
 
     if "language_code" in dst_flat:
-        dst_flat["language_code"] = dst_lang
+        dst_flat["language_code"] = ANDALUSIAN
     if "language_name" in dst_flat:
         dst_flat["language_name"] = "Andalûh"
 
     dump_flat(dst_file, dst_flat)
 
-    success(f"{dst_lang}: {updated} keys updated, {skipped} skipped")
+    success(f"{ANDALUSIAN}: {updated} keys updated, {skipped} skipped")
 
 
 if __name__ == "__main__":
