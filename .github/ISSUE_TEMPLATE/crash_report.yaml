@@ -17,7 +17,7 @@ body:
     id: app_version
     attributes:
       label: App Version
-      description: Which version of the app crashed? (e.g., 1.6.2)
+      description: Which version of the app crashed?
       placeholder: 2.4.1
     validations:
       required: true
@@ -25,7 +25,7 @@ body:
     id: android_version
     attributes:
       label: Android Version
-      description: Android version running on your device (e.g., Android 14)
+      description: Android version running on your device
       placeholder: Android 14
     validations:
       required: true
@@ -37,16 +37,12 @@ body:
       placeholder: Pixel 7
     validations:
       required: true
-  - type: dropdown
+  - type: input
     id: install_method
     attributes:
       label: Installation Method
       description: How did you install the app?
-      options:
-        - F-Droid
-        - GitHub Release APK
-        - Built from Source
-        - Other
+      placeholder: F-Droid
     validations:
       required: true
   - type: input
