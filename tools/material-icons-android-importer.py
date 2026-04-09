@@ -199,7 +199,6 @@ def import_icon(
 
     print("[bold green]✓ Done![/bold green]")
 
-
 @app.command()
 def download_icon(
     icon_name: str = typer.Argument(
@@ -229,6 +228,37 @@ def download_icon(
     output_file.write_bytes(svg_content)
     print(f"[green]✔ Saved as  {output_file}[/green]")
     print("[bold green]✓ Done![/bold green]")
+
+@app.command()
+def list(
+    query: str = typer.Argument(
+        '',
+        help="id search query for name, category or tags"
+    ),
+):
+    """
+    Lists all Material Icon ids
+    """
+    def match_category(o, search):
+        if not search: return False
+        return any(query in tag for tag in o.get("categories",[]))
+
+    def match_tag(o, search):
+        if not search: return False
+        return any(query in tag for tag in o.get("tags",[]))
+
+    metadata = load_collection_metadata()
+    print(Columns([
+        o["name"]
+        + ("🏷️" if match_tag(o, query) else "")
+        + ("📁" if match_category(o, query) else "")
+        for o in metadata.icons
+        if not query
+        or query in o["name"]
+        or match_tag(o, query)
+        or match_category(o, query)
+    ]))
+    print(metadata)
 
 
 
