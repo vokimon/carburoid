@@ -1,6 +1,6 @@
 # Change log
 
-## Unreleased
+## 1.6.3 (2026-04-09)
 
 - ✨ Crash handler to report crashes
 - ♻️ AppScaffold extracted to shared library

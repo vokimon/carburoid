@@ -22,6 +22,12 @@ full_description_md: |-
   - 🌐 Translations available in Spanish, Catalan, Basque, Galician, Aragonese…
   - ☀️ Dark and Light themes
 keywords: gas station, petrol, gasoline, gasoil, diesel
+changes_1_6_3_md: |-
+  - ✨ Crash handler to report crashes
+  - ♻️ AppScaffold extracted to shared library
+  - ♻️ WatermarkBox extracted to shared library
+  - ♻️ Shared library to a different repo, as git submodule
+  - 💄 Padding to the station not found message
 changes_1_6_2_md: |-
   Smaller apks and Portuguese translation
 
