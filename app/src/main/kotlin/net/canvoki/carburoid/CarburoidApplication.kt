@@ -11,6 +11,13 @@ import net.canvoki.carburoid.location.LocationService
 import net.canvoki.carburoid.model.FranceExtraStationData
 import net.canvoki.carburoid.network.GasStationApi
 import net.canvoki.carburoid.repository.GasStationRepository
+import net.canvoki.shared.crash.CopyCrashBackend
+import net.canvoki.shared.crash.CrashReporter
+import net.canvoki.shared.crash.CrashReporterConfig
+import net.canvoki.shared.crash.GitHubCrashBackend
+import net.canvoki.shared.crash.SaveFileAsCrashBackend
+import net.canvoki.shared.crash.SaveFileCrashBackend
+import net.canvoki.shared.crash.ShareFileCrashBackend
 import net.canvoki.shared.log
 import net.canvoki.shared.settings.LanguageSettings
 import net.canvoki.shared.settings.ThemeSettings
@@ -31,6 +38,22 @@ class CarburoidApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        CrashReporter.initialize(
+            this,
+            CrashReporterConfig(
+                appName = "Carburoid",
+                appVersion = BuildConfig.VERSION_NAME,
+                crashFileName = "carburoid_crash.txt",
+                backends =
+                    listOf(
+                        GitHubCrashBackend("https://github.com/vokimon/carburoid"),
+                        CopyCrashBackend(),
+                        ShareFileCrashBackend(),
+                        SaveFileCrashBackend(),
+                        SaveFileAsCrashBackend(),
+                    ),
+            ),
+        )
         LanguageSettings.initialize(this)
         ThemeSettings.initialize(this)
         CountrySettings.initialize(this)
