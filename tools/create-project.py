@@ -12,12 +12,14 @@ from typing import Optional
 try:
     import typer
     from dotenv import dotenv_values, set_key
+    from bs4 import BeautifulSoup
+    import requests
 except ImportError:
     print(
         """\
 Either you are not in the Python environment or you didn't install the dependencies.
 If you already have a user writable Python environment, install the dependencies with:
-$ pip install typer python-dotenv
+$ pip install typer python-dotenv beautfulsoup4 requests
 """
     )
     raise
@@ -125,6 +127,37 @@ def in_git_repo(directory: Path) -> bool:
     return result.returncode == 0
 
 
+def fetch_gradle_checksum(version: str) -> str | None:
+    """Fetch SHA-256 checksum for Gradle -bin.zip from official site."""
+    url = "https://gradle.org/release-checksums/"
+    response = requests.get(url, timeout=30)
+    response.raise_for_status()
+
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    # Find the anchor for this version
+    anchor = soup.find("a", id=version) or soup.find("a", name=version)
+    if not anchor:
+        return None
+
+    # Find the next <ul> containing checksums
+    ul = anchor.find_next("ul")
+    if not ul:
+        return None
+
+    # Look for the "Binary-only (-bin) ZIP Checksum" entry
+    for li in ul.find_all("li"):
+        text = li.get_text()
+        if "Binary-only" in text and "-bin" in text:
+            code = li.find("code")
+            if code:
+                checksum = code.get_text().strip()
+                # Validate SHA-256 format (64 hex characters)
+                if len(checksum) == 64 and all(c in "0123456789abcdef" for c in checksum.lower()):
+                    return checksum
+
+    fail(f"Checkum not found for gradle version {gradle_version}")
+
 def generate_gradle_wrapper(project_root: Path, gradle_version: str) -> None:
     """Generate Gradle wrapper files."""
     if not shutil.which("gradle"):
@@ -132,6 +165,17 @@ def generate_gradle_wrapper(project_root: Path, gradle_version: str) -> None:
     run("gradle", "--version")
     run("gradle", "wrapper", f"--gradle-version={gradle_version}", cwd=project_root)
     run("./gradlew", "--version", cwd=project_root)
+
+    step(f"Fetching Gradle {gradle_version} checksum for F-Droid...")
+    checksum = fetch_gradle_checksum(gradle_version)
+
+    wrapper_props = project_root / "gradle/wrapper/gradle-wrapper.properties"
+    content = wrapper_props.read_text(encoding="utf-8")
+
+    if "gradleWrapperSha256Sum" not in content:
+        content = content.rstrip() + f"\ngradleWrapperSha256Sum={checksum}\n"
+        wrapper_props.write_text(content, encoding="utf-8")
+        success(f"Added gradleWrapperSha256Sum to gradle-wrapper.properties")
 
 
 def generate_project_structure(project_root: Path, package_name: str) -> None:
