@@ -22,4 +22,4 @@ Thanks to all contributors for their work!
 - **Florent Rucquoy** ([@florent.rucquoy](https://hosted.weblate.org/user/florent.rucquoy/)) - French
 - **Sudoman** ([@sudoman](https://www.openstreetmap.org/user/sudo_man)) - French
 - **Jorge A. Silva** ([jeenio](https://jorgeasilva.pt/)) - Portuguese
-- **Felî Ontañón** ([fontanon](https://github.com/fontanon)) - Andalusian
+- **AndaluGeeks** ([andalugeeks](https://github.com/andalugeeks)) - Andalusian
