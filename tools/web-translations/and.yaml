@@ -1,7 +1,7 @@
 LANGUAGE_NAME: Andalûh
 MOTTO: Yena mâh barato, mâh çerca
-DESCRIPTION: Aplicaçión libre pa Androîh pa encontrâh gaçolinerâ baratâ
-KEYWORDS: gaçolinera, êttaçión de çerbiçio, combûttible, gaçoîh, diéçê, gaçolina, Androîh
+DESCRIPTION: Aplicaçión libre pa Android pa encontrâh gaçolinerâ baratâ
+KEYWORDS: gaçolinera, êttaçión de çerbiçio, combûttible, gaçoîh, diéçê, gaçolina, Android
 FEATURE_OFFICIAL_DATA_TITLE: Datô ofiçialê
 FEATURE_OFFICIAL_DATA_DESCRIPTION: |
   Uçamô datô ofiçialê que embían lâ gaçolinerâ a lô reguladorê.
@@ -24,7 +24,7 @@ FEATURE_FREEDOM_AS_FEATURE_DESCRIPTION: |
   La liçençia AGPL3 protehe tu libertá como uçuaria.
   Er código lo mantiene la comunidá y cuarquiêh perçona puede auditâl-lo.
   Çin êppíâ. Çin recolêççión de datô. Çin promoçión pagá de gaçolinerâ.
-  F‑Droîh garantiça que lô binariô probienen der código fuente tar como çe publicó.
+  F‑Droid garantiça que lô binariô probienen der código fuente tar como çe publicó.
 FEATURE_FREEDOM_AS_FEATURE_ACTION_GITHUB: Código fuente
 FEATURE_FREEDOM_AS_FEATURE_ACTION_LICENSE: GNU Âffero AGPLv3 o pôtteriôh
 FEATURE_TRANSLATIONS_TITLE: Tradûççionê
@@ -32,7 +32,7 @@ FEATURE_TRANSLATIONS_DESCRIPTION: |
   Prêttamô êppeçiâh atençión al apoyo de lenguâ minoritariâ.
   Êh un êffuerço comunitario — traduçe tu lengua con Weblate.
 FEATURE_TRANSLATIONS_ACTION_WEBLATE: Traduçîh
-ACTION_FDROID: Dîpponible en F‑Droîh
+ACTION_FDROID: Dîpponible en F‑Droid
 ACTION_DONATE: Âh una donaçión
 ACTION_SOCIAL: Çígenô
 ACTION_GOOGLE_PLAY: Google Play
