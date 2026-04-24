@@ -311,7 +311,7 @@ fun loadEnv() {
         if (parts.size == 2) {
             val key = parts[0].trim()
             val value = parts[1].trim()
-            // Elimina cometes dobles o simples envolvents
+            // Removes quotes
             val cleanedValue = value.removeSurrounding("\\"").removeSurrounding("'")
             project.ext.set(key, cleanedValue)
         }

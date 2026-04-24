@@ -667,5 +667,142 @@ def flowify(
         dump_flat(file, flat)
         success(f"{file.name}: {updated} values converted to flow style")
 
+def collect_source_files(
+    root: Path,
+    excluded_dirs: set[Path],
+    included_suffixes: set[str],
+):
+    def is_binary_file(path: Path, sample_size: int = 1024) -> bool:
+        with path.open("rb") as f:
+            chunk = f.read(sample_size)
+            if not chunk:
+                return False
+
+            if b"\x00" in chunk:
+                return True
+
+            text_bytes = bytearray(range(32, 127)) + b"\n\r\t\f\b"
+            non_text = sum(byte not in text_bytes for byte in chunk)
+
+            return non_text / len(chunk) > 0.30
+
+    def is_excluded(p: Path) -> bool:
+        parts = p.parts
+        for ex in excluded_dirs:
+            ex_parts = tuple(ex.split("/"))
+            n = len(ex_parts)
+            for i in range(len(parts) -n +1):
+                if tuple(parts[i:i+n]) == ex_parts:
+                    return True
+        return False
+
+    def valid_suffix(p: Path):
+        return not included_suffixes or  p.suffix in included_suffixes
+
+    return [
+        p for p in root.rglob("*")
+        if p.is_file()
+        and valid_suffix(p)
+        and not is_excluded(p)
+        and not is_binary_file(p)
+    ]
+
+@app.command()
+def find(
+    path: Path = typer.Argument(..., help="Directory with translations or a specific YAML file"),
+    ids: list[str] = typer.Argument(None, help="IDs to search (all if omitted)"),
+    ref: str = typer.Option("en", "--ref", help="Reference language"),
+    exclude: list[str] = typer.Option(None, "-x", help="Directories to exclude"),
+    suffixes: list[str] = typer.Option(None, "-s", help="File suffixes to include"),
+    only_missing: bool = typer.Option(False, "--only-missing", help="Show only IDs with no occurrences"),
+):
+    """
+    Find usages of translation IDs in source files.
+    """
+
+    import re
+
+    exclude = set(exclude or [])
+    suffixes = set(suffixes or [])
+
+    if path.is_dir():
+        translations = translations_in_dir(path)
+        if not translations:
+            fail("No translation files found")
+
+        ref_file = detect_reference(translations, ref)
+        translation_dir = path
+    else:
+        ref_file = path
+        if not ref_file.exists():
+            fail(f"{ref_file} not found")
+        translation_dir = path.parent
+
+    root = Path.cwd()
+    ref_data = load_flat(ref_file)
+
+    selected_ids = {
+        key for key in ref_data
+        if any(
+            key == id or key.startswith(i + ".")
+            for id in ids
+        )
+    } if ids else set(ref_data.keys())
+
+    def to_android_id(id_: str) -> str:
+        return id_.replace(".", "__")
+
+    android_to_original = {
+        to_android_id(key): key for key in selected_ids
+    }
+
+    pattern = re.compile(
+        r"\b" + "|".join(
+            re.escape(k)
+            for k in android_to_original.keys()
+        ) + r"\b"
+    )
+
+    files_to_scan = collect_source_files(root, excluded_dirs = exclude | {str(translation_dir)}, included_suffixes = suffixes)
+    matches: dict[str, list[tuple[Path, int, str]]] = {i: [] for i in selected_ids}
+    for file in files_to_scan:
+        with file.open("r", encoding="utf-8", errors="ignore") as f:
+            for lineno, line in enumerate(f, 1):
+                for m in pattern.finditer(line):
+                    android_id = m.group(0)
+                    key = android_to_original.get(android_id)
+                    if not key: continue
+                    matches[key].append((file, lineno, line.rstrip("\n")))
+
+    total_found = 0
+
+    for key in sorted(selected_ids):
+        occurrences = matches.get(key, [])
+        count = len(occurrences)
+
+        if only_missing and count > 0:
+            continue
+
+        echo(style(f"{key} ({count} occurrences)", fg="cyan", bold=True))
+
+        if count == 0:
+            warn("No occurrences found")
+            continue
+
+        total_found += count
+
+        for file, lineno, line in occurrences:
+            highlighted = pattern.sub(
+                lambda m: style(m.group(0), fg="red", bold=True),
+                line
+            )
+
+            echo(
+                f"{style(str(file), fg='green')}:{style(str(lineno), fg='yellow')}: {highlighted}"
+            )
+
+    if not only_missing and total_found == 0:
+        warn("No occurrences found")
+
 if __name__ == "__main__":
     app()
