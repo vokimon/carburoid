@@ -214,6 +214,22 @@ def detect_reference(files, ref_lang):
             return f
     fail(f"Reference file '{ref_lang}.yaml' not found")
 
+def filter_ids(flatten_ids, filter_spec):
+    """
+    Selects flatten_id, given a list of ids and id sections.
+    Returns the whole list if the spec is empty.
+    """
+    if not filter_spec:
+        return flatten_ids
+
+    return [
+        flatten_id
+        for flatten_id in flatten_ids
+        if any(
+            flatten_id == filter_id or flatten_id.startswith(filter_id + ".")
+            for filter_id in filter_spec
+        )
+    ]
 
 def apply_format(target_value, ref_value):
     return type(ref_value)(target_value)
@@ -241,10 +257,6 @@ def reorder(ref_data, data, context, add_missing, remove_extra):
 
     return result
 
-
-
-
-
 def format_multiline_as_block(data, force: bool = False):
     """
     Convert multiline strings to block style using `|`.
@@ -266,9 +278,8 @@ def format_multiline_as_block(data, force: bool = False):
 
 def blockify_keys(flat_data: dict, ids: list[str] | None, force: bool):
     new_data = flat_data.copy()
-    for key, value in flat_data.items():
-        if not ids or any(key == id_ or key.startswith(id_ + ".") for id_ in ids):
-            new_data[key] = format_multiline_as_block(value, force)
+    for key in filter_ids(flat_data, ids):
+        new_data[key] = format_multiline_as_block(flat_data[key], force)
     return new_data
 
 def format_as_flow(data, force=False):
@@ -309,9 +320,8 @@ def extract(
     extracted: dict[str, dict[str, str]] = {}
 
     for lang, flat in lang_flats.items():
-        for key, value in flat.items():
-            if not ids or any(key == id_ or key.startswith(id_ + ".") for id_ in ids):
-                extracted.setdefault(key, {})[lang] = value
+        for key in filter_ids(flat, ids):
+            extracted.setdefault(key, {})[lang] = flat[key]
 
     if not extracted:
         warn("No matching keys found in any language files")
@@ -471,20 +481,13 @@ def move(
         dst_flat = load_flat(dst_file)
 
         moved_any = False
-        for move_id in ids:
-            to_move = {k: v for k, v in src_flat.items()
-                       if k == move_id or k.startswith(move_id + ".")}
-
-            if not to_move:
-                warn(f"{lang}: '{move_id}' not found in source")
-                continue
-
-            for k, v in to_move.items():
-                if k in dst_flat:
-                    warn(f"{lang}: '{k}' already in destination (overwriting)")
-                dst_flat[k] = v
-                del src_flat[k]
-                moved_any = True
+        for k in filter_ids(src_flat, ids):
+            v = src_flat[k]
+            if k in dst_flat:
+                warn(f"{lang}: '{k}' already in destination (overwriting)")
+            dst_flat[k] = v
+            del src_flat[k]
+            moved_any = True
 
         if not moved_any:
             warn(f"{lang}: no keys moved")
@@ -653,9 +656,8 @@ def blockify(
         data = load_flat(file)
         updated = 0
 
-        for key, value in data.items():
-            if ids and not any(key == i or key.startswith(i + ".") for i in ids):
-                continue
+        for key in filter_ids(data.keys(), ids):
+            value = data[key]
 
             new_value = format_multiline_as_block(value, force=force)
 
@@ -687,24 +689,23 @@ def flowify(
     for file in files:
         step(f"Processing {file}...")
 
-        flat = load_flat(file)
+        data = load_flat(file)
         updated = 0
 
-        for key, value in flat.items():
-            if ids and not any(key == i or key.startswith(i + ".") for i in ids):
-                continue
+        for key in filter_ids(data.keys(), ids):
+            value = data[key]
 
             new_value = format_as_flow(value, force=force)
 
             if new_value != value or type(new_value) is not type(value):
-                flat[key] = new_value
+                data[key] = new_value
                 updated += 1
 
         if updated == 0:
             warn(f"{file.name}: no changes")
             continue
 
-        dump_flat(file, flat)
+        dump_flat(file, data)
         success(f"{file.name}: {updated} values converted to flow style")
 
 @app.command()
@@ -741,13 +742,7 @@ def find(
     root = Path.cwd()
     ref_data = load_flat(ref_file)
 
-    selected_ids = {
-        key for key in ref_data
-        if any(
-            key == id or key.startswith(i + ".")
-            for id in ids
-        )
-    } if ids else set(ref_data.keys())
+    selected_ids = set(filter_ids(ref_data, ids))
 
     def to_android_id(id_: str) -> str:
         return id_.replace(".", "__")
