@@ -89,8 +89,8 @@ def collect_files(paths, suffixes):
 def translations_from(path, suffixes):
     if path.is_dir():
         return translations_in_dir(path, suffixes)
-    if p.suffix in suffixes:
-        return [p]
+    if path.suffix in suffixes:
+        return [path]
     return []
 
 def collect_source_files(
