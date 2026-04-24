@@ -45,6 +45,33 @@ spdx2assetlib_license = {
     '': 'Proprietary',
 }
 
+# System utilities
+
+def program_exists(program):
+    import shutil
+    return shutil.which(program) is not None
+
+def expect_file(path):
+    Path(path).exists() or fail(f"Missing expected file {path}")
+
+def mkdir(path):
+    path.mkdir(exist_ok=True, parents=True)
+
+def cp(origin, target):
+    origin=Path(origin)
+    expect_file(origin)
+    target=Path(target)
+    print(f":: \033[34;1m{origin} -> {target}\033[0m")
+    mkdir(target.parent)
+    target.write_bytes(origin.read_bytes())
+
+def dump(file, content):
+    print(f":: \033[34;1m{file}\033[0m\n{content}")
+    file = Path(file)
+    mkdir(file.parent)
+    file.write_text(content)
+
+
 def extract_fingerprint(keystore: Path|str, password: str, alias: str) -> str:
 
     from cryptography.hazmat.primitives.serialization import pkcs12
@@ -396,6 +423,7 @@ class Config():
 
     @classmethod
     def from_file(cls, filename):
+        expect_file(filename)
         config_yaml = ns.load(filename)
         return cls(**config_yaml)
 
@@ -482,26 +510,6 @@ emoji_pattern = re.compile(
 def remove_emojis(text):
     return emoji_pattern.sub(r'', text)
 
-def program_exists(program):
-    import shutil
-    return shutil.which(program) is not None
-
-def mkdir(path):
-    path.mkdir(exist_ok=True, parents=True)
-
-def cp(origin, target):
-    origin=Path(origin)
-    target=Path(target)
-    print(f":: \033[34;1m{origin} -> {target}\033[0m")
-    mkdir(target.parent)
-    target.write_bytes(origin.read_bytes())
-
-def dump(file, content):
-    print(f":: \033[34;1m{file}\033[0m\n{content}")
-    file = Path(file)
-    mkdir(file.parent)
-    file.write_text(content)
-
 def generate_metadata_translation_master():
     translation = ns()
     translation.project_name = config.project_name
@@ -555,6 +563,9 @@ def generate_fastlane_changelogs(metadata_path: Path, translations):
 
 def generate_fastlane_featuredImages(metadata_path: Path, translations):
     from svg_template import SvgTemplate
+    if not Path(config.splash_svg).exists():
+        warn(f"Not generating splash. Missing {config.splash_svg}")
+        return
     template = SvgTemplate(config.splash_svg)
     for lang, trans in translations.items():
         featured_path = metadata_path/lang/'images'/'featureGraphic.png'
