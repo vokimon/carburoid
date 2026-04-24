@@ -93,6 +93,46 @@ def translations_from(path, suffixes):
         return [p]
     return []
 
+def collect_source_files(
+    root: Path,
+    excluded_dirs: set[str],
+    included_suffixes: set[str],
+):
+    def is_binary_file(path: Path, sample_size: int = 1024) -> bool:
+        with path.open("rb") as f:
+            chunk = f.read(sample_size)
+            if not chunk:
+                return False
+
+            if b"\x00" in chunk:
+                return True
+
+            text_bytes = bytearray(range(32, 127)) + b"\n\r\t\f\b"
+            non_text = sum(byte not in text_bytes for byte in chunk)
+
+            return non_text / len(chunk) > 0.30
+
+    def is_excluded(p: Path) -> bool:
+        parts = p.parts
+        for ex in excluded_dirs:
+            ex_parts = tuple(ex.split("/"))
+            n = len(ex_parts)
+            for i in range(len(parts) -n +1):
+                if tuple(parts[i:i+n]) == ex_parts:
+                    return True
+        return False
+
+    def valid_suffix(p: Path):
+        return not included_suffixes or  p.suffix in included_suffixes
+
+    return [
+        p for p in root.rglob("*")
+        if p.is_file()
+        and valid_suffix(p)
+        and not is_excluded(p)
+        and not is_binary_file(p)
+    ]
+
 def lang_file(directory: Path, lang: str, fallback_extension: str = ".yaml") -> Path:
     """
     Determine the file to use for a given language in a directory.
@@ -666,46 +706,6 @@ def flowify(
 
         dump_flat(file, flat)
         success(f"{file.name}: {updated} values converted to flow style")
-
-def collect_source_files(
-    root: Path,
-    excluded_dirs: set[Path],
-    included_suffixes: set[str],
-):
-    def is_binary_file(path: Path, sample_size: int = 1024) -> bool:
-        with path.open("rb") as f:
-            chunk = f.read(sample_size)
-            if not chunk:
-                return False
-
-            if b"\x00" in chunk:
-                return True
-
-            text_bytes = bytearray(range(32, 127)) + b"\n\r\t\f\b"
-            non_text = sum(byte not in text_bytes for byte in chunk)
-
-            return non_text / len(chunk) > 0.30
-
-    def is_excluded(p: Path) -> bool:
-        parts = p.parts
-        for ex in excluded_dirs:
-            ex_parts = tuple(ex.split("/"))
-            n = len(ex_parts)
-            for i in range(len(parts) -n +1):
-                if tuple(parts[i:i+n]) == ex_parts:
-                    return True
-        return False
-
-    def valid_suffix(p: Path):
-        return not included_suffixes or  p.suffix in included_suffixes
-
-    return [
-        p for p in root.rglob("*")
-        if p.is_file()
-        and valid_suffix(p)
-        and not is_excluded(p)
-        and not is_binary_file(p)
-    ]
 
 @app.command()
 def find(
