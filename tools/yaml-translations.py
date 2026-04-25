@@ -219,9 +219,9 @@ def filter_ids(flatten_ids, filter_spec):
     Selects flatten_id, given a list of ids and id sections.
     Returns the whole list if the spec is empty.
     """
+    report_unmatching_id_filters(flatten_ids, filter_spec)
     if not filter_spec:
         return flatten_ids
-
     return [
         flatten_id
         for flatten_id in flatten_ids
@@ -230,6 +230,17 @@ def filter_ids(flatten_ids, filter_spec):
             for filter_id in filter_spec
         )
     ]
+
+def report_unmatching_id_filters(flatten_ids, filter_spec):
+    """
+    Warn if any filter id does not match any key.
+    """
+    if not filter_spec:
+        return
+
+    for f in filter_spec:
+        if not any(k == f or k.startswith(f + ".") for k in flatten_ids):
+            warn(f"No ids match '{f}'")
 
 def apply_format(target_value, ref_value):
     return type(ref_value)(target_value)
