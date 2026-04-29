@@ -19,13 +19,35 @@ full_description_md: |-
   - ☀️ Temas oscuro y claro
 keywords: gasolinera, estación de servicio, combustible, carburante, gasoil, diesel, gasolina
 changes_1_6_1_md: |-
-  Ampliación de traducción y dependencia andaluza
+  La traducción andaluza y el impulso a la dependencia
 
-  - Nuevo idioma: andaluz
-  - Dependeciones de bombas
+  - 🌐 Nuevo idioma: Andalusian
+  - 🏗️ Actualizar dependencias
 changes_1_6_0_md: |-
   Portugal dato de #canal gasistas y marcas
 
   - ✨ fuente de dato de Portugal
   - ✨ campo de Marca en detalles (para Francia y Portugal, no todavía España)
   - ♻️ La mayoría de pares/de longitud de la latitud encapsulated tan GeoPoints
+changes_1_6_3_md: |-
+  - ✨ Gestor de fallos para informar de fallos
+  - ♻️ AppScaffold se extrajo a la biblioteca compartida.
+  - ♻️ WatermarkBox se extrajo a la biblioteca compartida.
+  - ♻️ Biblioteca compartida a un repositorio diferente, como submódulo de Git.
+  - 💄 Mensaje de relleno para la estación no encontrada
+changes_1_6_2_md: |-
+  APK más pequeños y traducción al portugués
+
+  - 🌐 Nuevo idioma: portugués (¡gracias, Jorge A. Silva!)
+  - 🌐 Correcciones al andaluz (¡gracias, Felî Ontañón!)
+  - ⚡️ APK minimizado y recursos reducidos de 63M -> 51M Cierra el #25
+changes_1_4_4_md: |-
+  Nuevo selector de ubicación y traducción al francés en curso
+
+  - 🌐 Traducción FR 43%
+  - ✨ Selector de ubicación: Mapa con tema oscuro en modo oscuro
+  - ✨ Selector de ubicación: Mantener pulsado para establecer una ruta (deshabilitado para esta versión)
+  - ✨ Selector de ubicación: Rutas de marco automático en el mapa (deshabilitado para esta versión)
+  - ♻️ Selector de ubicación: usando maplibre-compose
+  - 🐛 Selector de ubicación: Toma la ubicación correctamente cuando proviene del GPS.
+  - ♻️ Detalles de la estación migrados a composición
