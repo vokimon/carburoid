@@ -51,3 +51,12 @@ changes_1_4_4_md: |-
   - ♻️ Selector de ubicación: usando maplibre-compose
   - 🐛 Selector de ubicación: Toma la ubicación correctamente cuando proviene del GPS.
   - ♻️ Detalles de la estación migrados a composición
+changes_1_5_1_md: |-
+  Route deviation really activated and France location search
+
+  - 🐛 La desviación de ruta solo estaba activa en modo depuración.
+  - 🐛 La búsqueda de ubicaciones no se limita a España, se adapta a la fuente de datos (por lo que ahora funciona en Francia).
+  - ✨ Nombre alternativo para las gasolineras francesas
+  - ✨ Base de datos actualizada de nombres de estaciones de Francia
+  - ♻️ Utilizar nominatim para todas las consultas de nombres de ubicación.
+  - 🌐 Traducción del alemán marcada como completa (estaba completa pero se marcó como incompleta)
