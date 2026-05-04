@@ -7,6 +7,8 @@ Do you want to help? This is my roadmap.
     - Splitting the location widget for origin and destination? too small
     - Just changing the icon to indicate we are in route mode? Maybe too subtle
     - ...?
+- [ ] Data source Portugal: Missing Opening hours
+- [ ] Data source Spain: Missing Brands: use heuristic? look for an api?
 - [ ] Location Picker: button to set the current location to gps
 - [ ] Location Picker: button to clear the target location
 - [ ] Location Picker: button to swap current and target
@@ -16,7 +18,6 @@ Do you want to help? This is my roadmap.
 - [ ] Route: Display both deviation and distance from A to the station
 - [ ] Route: Consider distance to the station as secondary filter criteria
 - [ ] Brands: Station card: consider showing optional brand
-- [ ] Brands: Spain use heuristics to deduce brand
 - [ ] Brands: Brands API/Web to get info (history, ethics, relations...)
 - [ ] Brands: Obtain/Show brand icon
 - [ ] Products: Update product list from: https://energia.serviciosmin.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/Listados/ProductosPetroliferos/
@@ -27,7 +28,7 @@ Do you want to help? This is my roadmap.
 - [ ] Products: What to do with official short names: G95E85 GOA GOA+ BGNL... 
 - [ ] Language: Portuguese
 - [ ] Language: Asturian
-- [ ] Language: Aranese (Occitan)
+- [ ] Language: Aranese
 - [ ] Language: Occitan
 - [ ] Language: Breton
 - [ ] Language: Alsacian
