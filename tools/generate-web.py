@@ -16,12 +16,16 @@ from watchdog.events import FileSystemEventHandler
 
 app = typer.Typer(invoke_without_command=True)
 
-# Base paths (independent of cwd)
-BASE_DIR = Path(__file__).resolve().parent
-DATA_FILE = BASE_DIR / "web-data.yaml"
-TEMPLATE_FILE = BASE_DIR / "web-template.html"
-OUTPUT_DIR = BASE_DIR / "web"
-TRANSLATIONS_DIR = BASE_DIR / "web-translations"
+
+def resolve_paths(data_file: Path):
+    base_dir = data_file.resolve().parent
+    return {
+        "BASE_DIR": base_dir,
+        "DATA_FILE": data_file,
+        "TEMPLATE_FILE": base_dir / "web-template.html",
+        "OUTPUT_DIR": base_dir / "web",
+        "TRANSLATIONS_DIR": base_dir / "web-translations",
+    }
 
 
 class RebuildHandler(FileSystemEventHandler):
@@ -80,31 +84,39 @@ def serve_directory(directory: Path, port: int):
         httpd.serve_forever()
 
 @app.command()
-def serve(port: int = 8000):
+def serve(
+    port: int = 8000,
+    data_file: Path = typer.Argument(Path("./web-data.yaml"))
+):
     """Serve the site locally and rebuild on changes"""
 
+    paths = resolve_paths(data_file)
+
+    def _build():
+        build(data_file=data_file)
+
     # Initial build
-    build()
+    _build()
 
     watched_paths = [
-        DATA_FILE,
-        TEMPLATE_FILE,
-        TRANSLATIONS_DIR,
+        paths["DATA_FILE"],
+        paths["TEMPLATE_FILE"],
+        paths["TRANSLATIONS_DIR"],
     ]
 
     # Start watcher
-    event_handler = RebuildHandler(build, watched_paths)
+    event_handler = RebuildHandler(_build, watched_paths)
     observer = Observer()
 
-    observer.schedule(event_handler, str(DATA_FILE))
-    observer.schedule(event_handler, str(TEMPLATE_FILE))
-    observer.schedule(event_handler, str(TRANSLATIONS_DIR), recursive=True)
+    observer.schedule(event_handler, str(paths["DATA_FILE"]))
+    observer.schedule(event_handler, str(paths["TEMPLATE_FILE"]))
+    observer.schedule(event_handler, str(paths["TRANSLATIONS_DIR"]), recursive=True)
     observer.start()
 
     typer.echo("👀 Watching for changes...")
 
     try:
-        serve_directory(OUTPUT_DIR, port)
+        serve_directory(paths["OUTPUT_DIR"], port)
     except KeyboardInterrupt:
         typer.echo("\n🛑 Stopping...")
         observer.stop()
@@ -112,26 +124,26 @@ def serve(port: int = 8000):
     observer.join()
 
 
-def load_data():
-    if not DATA_FILE.exists():
-        typer.echo(f"❌ Missing {DATA_FILE}")
+def load_data(data_file):
+    if not data_file.exists():
+        typer.echo(f"❌ Missing {data_file}")
         raise typer.Exit(1)
 
-    with open(DATA_FILE) as f:
+    with open(data_file) as f:
         return yaml.safe_load(f)
 
 
-def load_template():
-    if not TEMPLATE_FILE.exists():
-        typer.echo(f"❌ Missing {TEMPLATE_FILE}")
+def load_template(template_file):
+    if not template_file.exists():
+        typer.echo(f"❌ Missing {template_file}")
         raise typer.Exit(1)
 
-    with open(TEMPLATE_FILE) as t:
+    with open(template_file) as t:
         return Template(t.read())
 
-def load_translations():
+def load_translations(translations_dir):
     translations = {}
-    for lang_file in TRANSLATIONS_DIR.glob("*.yaml"):
+    for lang_file in translations_dir.glob("*.yaml"):
         typer.echo(f"🌐 Loading translation {lang_file}")
         lang = lang_file.stem
         with open(lang_file) as f:
@@ -224,13 +236,17 @@ def main(ctx: typer.Context):
         raise typer.Exit()
 
 @app.command()
-def build():
+def build(
+    data_file: Path = typer.Argument(Path("./web-data.yaml"))
+):
     """Generate the static site"""
-    translations = load_translations()
-    data = load_data()
+    paths = resolve_paths(data_file)
+
+    translations = load_translations(paths["TRANSLATIONS_DIR"])
+    data = load_data(paths["DATA_FILE"])
     fallback_lang = data.get("fallback_language", "en")
     data = apply_translations(data, translations, fallback_lang)
-    template = load_template()
+    template = load_template(paths["TEMPLATE_FILE"])
     langs = {
         lang: translations[lang].get('LANGUAGE_NAME', lang)
         for lang in detect_languages(data, fallback_lang)
@@ -239,7 +255,7 @@ def build():
         translated_data = translate_data(data, lang, fallback_lang)
         translated_data['lang'] = lang
         html_output = template.render(langs=langs, **translated_data)
-        lang_dir = OUTPUT_DIR / lang
+        lang_dir = paths["OUTPUT_DIR"] / lang
 
         lang_dir.mkdir(parents=True, exist_ok=True)
         output_file = lang_dir / "index.html"
@@ -251,9 +267,12 @@ def build():
 
 
 @app.command()
-def publish():
+def publish(
+    data_file: Path = typer.Argument(Path("./web-data.yaml"))
+):
     """Publish via rsync over SSH"""
     load_dotenv()
+    paths = resolve_paths(data_file)
 
     remote = os.getenv("REMOTE_PATH")
 
@@ -261,7 +280,7 @@ def publish():
         typer.echo("❌ REMOTE_PATH not set in .env")
         raise typer.Exit(1)
 
-    if not OUTPUT_DIR.exists():
+    if not paths["OUTPUT_DIR"].exists():
         typer.echo("❌ Nothing to publish. Run build first.")
         raise typer.Exit(1)
 
@@ -269,7 +288,7 @@ def publish():
         "rsync",
         "-avz",
         "--delete",
-        f"{OUTPUT_DIR}/",
+        f"{paths['OUTPUT_DIR']}/",
         remote,
     ]
 
