@@ -60,3 +60,20 @@ changes_1_5_1_md: |-
   - ✨ Base de datos actualizada de nombres de estaciones de Francia
   - ♻️ Utilizar nominatim para todas las consultas de nombres de ubicación.
   - 🌐 Traducción del alemán marcada como completa (estaba completa pero se marcó como incompleta)
+changes_1_5_0_md: |-
+  Desviación de ruta, refinar la lista usando distancias reales por carretera y más idiomas.
+
+  - ✨ Refinamiento progresivo de la lista utilizando distancias reales por carretera en lugar de distancias en línea recta.
+  - ✨ Rutas de A a B utilizando la desviación para tomar la estación como distancia
+  - ⚡️ Evite re‐cálculos redundantes al reconfigurar filtros, re‐posicionar productos y cambiar de producto.
+  - ♻️ Representación de posición unificada (menos errores y regresiones al mezclar latitud y longitud).
+  - 🌐 Traducción al francés (¡gracias, Sudoman y Florent Ruquoy!)
+  - 🌐 Traducción al alemán (¡gracias, Zintor!)
+  - 🌐 Traducción de metadatos y biblioteca compartida al alemán y ruso (¡Gracias, IA! 😛)
+  - 🏗 Se eliminaron las dependencias no utilizadas
+changes_1_4_3_md: |-
+  Correcciones de compilación de F-Droid
+
+  – 🏗️ Compilar android-yaml-string como submódulo para volver a habilitar f-droid.
+  – 🏗️ Reconocer a F Droid como fuente de datos no libre: data.economie.gouv.fr
+  – ♻️ Enlace WeblateLink extraído para ser compartido
