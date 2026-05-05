@@ -155,6 +155,8 @@ Builds:
     submodules: true
     gradle:
       - floss
+    scandelete:
+      - shared/build-logic
 
 AllowedAPKSigningKeys: 8cdfd389b1a7979943201321188a416ed54dbdf1c432ed07e2bb44b5b3cea722
 

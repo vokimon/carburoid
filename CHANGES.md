@@ -1,5 +1,11 @@
 # Change log
 
+## unreleased
+
+- 🏗️ Updated dependencies
+- 🏗️ keep debug symbols in release for better crash reports
+- 🏗️ inherit yaml-strings plugin from shared
+
 ## 1.6.3 (2026-04-09)
 
 - ✨ Crash handler to report crashes
