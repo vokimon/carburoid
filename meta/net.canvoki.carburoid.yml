@@ -86,7 +86,7 @@ Builds:
 
   - versionName: 1.4.3
     versionCode: 1040300
-    commit: carburoid-1.4.3
+    commit: 8cc0ff71d05f3ab5ce7b53ce8ee41e9fe5fb94d6
     subdir: app
     submodules: true
     gradle:
@@ -95,8 +95,8 @@ Builds:
       - build-logic
 
   - versionName: 1.4.4
-    versionCode: 1040300
-    commit: carburoid-1.4.4
+    versionCode: 1040400
+    commit: 57f250e11418275514db475a619f24ab29c23719
     subdir: app
     submodules: true
     gradle:
@@ -106,7 +106,17 @@ Builds:
 
   - versionName: 1.5.0
     versionCode: 1050000
-    commit: carburoid-1.5.0
+    commit: ec7b66e7d136d508f69fd47ee9b4357b21a64173
+    subdir: app
+    submodules: true
+    gradle:
+      - floss
+    scandelete:
+      - build-logic
+
+  - versionName: 1.5.1
+    versionCode: 1050100
+    commit: 5ee2115cdd1529b57fdbb9958fea7801b0c6a33c
     subdir: app
     submodules: true
     gradle:
@@ -116,18 +126,40 @@ Builds:
 
   - versionName: 1.6.0
     versionCode: 1060000
-    commit: carburoid-1.6.0
+    commit: 7282999d7b7eb39e8674b99b5fa280ce3fa68cb1
     subdir: app
     submodules: true
     gradle:
       - floss
-    scandelete:
-      - build-logic
+
+  - versionName: 1.6.1
+    versionCode: 1060100
+    commit: d6e117405ca9b94a1859c76249fb18ef5ca151ab
+    subdir: app
+    submodules: true
+    gradle:
+      - floss
+
+  - versionName: 1.6.2
+    versionCode: 1060200
+    commit: 12980ff7bea7f09434732f505769300597dfc497
+    subdir: app
+    submodules: true
+    gradle:
+      - floss
+
+  - versionName: 1.6.3
+    versionCode: 1060300
+    commit: b4beb33e80c1378f1a4235c1c141d638ee6c3c8e
+    subdir: app
+    submodules: true
+    gradle:
+      - floss
 
 AllowedAPKSigningKeys: 8cdfd389b1a7979943201321188a416ed54dbdf1c432ed07e2bb44b5b3cea722
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags carburoid-([\d.]+)
 UpdateCheckData: version.properties|versionCode=(\d+)|.|versionName=([\d.]+)
-CurrentVersion: 1.6.0
-CurrentVersionCode: 1060000
+CurrentVersion: 1.6.3
+CurrentVersionCode: 1060300
