@@ -22,8 +22,8 @@ local.properties
 # Python scripts
 
 __pycache__
-tools/fdroid-data
-tools/fdroid-server
+meta/fdroid-data
+meta/fdroid-server
 tools/graphhopper-data
 tools/graphhopper-cli.jar
 
