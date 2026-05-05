@@ -18,3 +18,62 @@ full_description_md: |-
   - 🌐 Traducciones al Español, Catalán, Vasco, Gallego, Aragonés…
   - ☀️ Temas oscuro y claro
 keywords: gasolinera, estación de servicio, combustible, carburante, gasoil, diesel, gasolina
+changes_1_6_3_md: |-
+  - ✨ Gestor de fallos para informar de fallos
+  - ♻️ AppScaffold se extrajo a la biblioteca compartida.
+  - ♻️ WatermarkBox se extrajo a la biblioteca compartida.
+  - ♻️ Biblioteca compartida a un repositorio diferente, como submódulo de Git.
+  - 💄 Mensaje de relleno para la estación no encontrada
+changes_1_6_2_md: |-
+  APK más pequeños y traducción al portugués
+
+  - 🌐 Nuevo idioma: portugués (¡gracias, Jorge A. Silva!)
+  - 🌐 Correcciones al andaluz (¡gracias, Felî Ontañón!)
+  - ⚡️ APK minimizado y recursos reducidos de 63M -> 51M Cierra el #25
+changes_1_6_1_md: |-
+  La traducción andaluza y el impulso a la dependencia
+
+  - 🌐 Nuevo idioma: Andalusian
+  - 🏗️ Actualizar dependencias
+changes_1_6_0_md: |-
+  Portugal dato de #canal gasistas y marcas
+
+  - ✨ fuente de dato de Portugal
+  - ✨ campo de Marca en detalles (para Francia y Portugal, no todavía España)
+  - ♻️ La mayoría de pares/de longitud de la latitud encapsulated tan GeoPoints
+changes_1_5_1_md: |-
+  Route deviation really activated and France location search
+
+  - 🐛 La desviación de ruta solo estaba activa en modo depuración.
+  - 🐛 La búsqueda de ubicaciones no se limita a España, se adapta a la fuente de datos (por lo que ahora funciona en Francia).
+  - ✨ Nombre alternativo para las gasolineras francesas
+  - ✨ Base de datos actualizada de nombres de estaciones de Francia
+  - ♻️ Utilizar nominatim para todas las consultas de nombres de ubicación.
+  - 🌐 Traducción del alemán marcada como completa (estaba completa pero se marcó como incompleta)
+changes_1_5_0_md: |-
+  Desviación de ruta, refinar la lista usando distancias reales por carretera y más idiomas.
+
+  - ✨ Refinamiento progresivo de la lista utilizando distancias reales por carretera en lugar de distancias en línea recta.
+  - ✨ Rutas de A a B utilizando la desviación para tomar la estación como distancia
+  - ⚡️ Evite re‐cálculos redundantes al reconfigurar filtros, re‐posicionar productos y cambiar de producto.
+  - ♻️ Representación de posición unificada (menos errores y regresiones al mezclar latitud y longitud).
+  - 🌐 Traducción al francés (¡gracias, Sudoman y Florent Ruquoy!)
+  - 🌐 Traducción al alemán (¡gracias, Zintor!)
+  - 🌐 Traducción de metadatos y biblioteca compartida al alemán y ruso (¡Gracias, IA! 😛)
+  - 🏗 Se eliminaron las dependencias no utilizadas
+changes_1_4_4_md: |-
+  Nuevo selector de ubicación y traducción al francés en curso
+
+  - 🌐 Traducción FR 43%
+  - ✨ Selector de ubicación: Mapa con tema oscuro en modo oscuro
+  - ✨ Selector de ubicación: Mantener pulsado para establecer una ruta (deshabilitado para esta versión)
+  - ✨ Selector de ubicación: Rutas de marco automático en el mapa (deshabilitado para esta versión)
+  - ♻️ Selector de ubicación: usando maplibre-compose
+  - 🐛 Selector de ubicación: Toma la ubicación correctamente cuando proviene del GPS.
+  - ♻️ Detalles de la estación migrados a composición
+changes_1_4_3_md: |-
+  Correcciones de compilación de F-Droid
+
+  – 🏗️ Compilar android-yaml-string como submódulo para volver a habilitar f-droid.
+  – 🏗️ Reconocer a F Droid como fuente de datos no libre: data.economie.gouv.fr
+  – ♻️ Enlace WeblateLink extraído para ser compartido
