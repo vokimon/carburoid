@@ -1,0 +1,7 @@
+## 1.6.4 (2026-05-05)
+
+- 🏗️ Updated dependencies
+- 🏗️ keep debug symbols in release for better crash reports
+- 🏗️ inherit yaml-strings plugin from shared
+- 🏗️ relocatable dev scripts
+

@@ -14,6 +14,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = 'Carburoid'
-include ':shared'
 include ':app'
-
+include ':shared'

@@ -338,7 +338,7 @@ def generate_fdroid_metadata_file(metadata_path):
     for key in blockKeys:
         output = output.replace(key, f"\n{key}")
 
-    dump(Path('tools')/(config.unique_name+".yml"), output)
+    dump(Path('meta')/(config.unique_name+".yml"), output)
 
 
 @dataclass

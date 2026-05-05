@@ -17,8 +17,7 @@ AutoName: Carburoid
 
 RepoType: git
 Repo: https://github.com/vokimon/carburoid.git
-Binaries: 
-  https://github.com/vokimon/carburoid/releases/download/carburoid-%v/net.canvoki.carburoid-floss-%v-release.apk
+Binaries: https://github.com/vokimon/carburoid/releases/download/carburoid-%v/net.canvoki.carburoid-floss-%v-release.apk
 
 Builds:
   - versionName: 1.2.0
@@ -155,13 +154,19 @@ Builds:
     submodules: true
     gradle:
       - floss
-    scandelete:
-      - shared/build-logic
+
+  - versionName: 1.6.4
+    versionCode: 1060400
+    commit: HEAD
+    subdir: app
+    submodules: true
+    gradle:
+      - floss
 
 AllowedAPKSigningKeys: 8cdfd389b1a7979943201321188a416ed54dbdf1c432ed07e2bb44b5b3cea722
 
 AutoUpdateMode: Version
 UpdateCheckMode: Tags carburoid-([\d.]+)
 UpdateCheckData: version.properties|versionCode=(\d+)|.|versionName=([\d.]+)
-CurrentVersion: 1.6.3
-CurrentVersionCode: 1060300
+CurrentVersion: 1.6.4
+CurrentVersionCode: 1060400

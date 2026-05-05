@@ -20,6 +20,7 @@ body:
     label: App Version
     description: Which version of the app are you using?
     options:
+    - 1.6.4
     - 1.6.3
     - 1.6.2
     - 1.6.1

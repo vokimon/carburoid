@@ -25,5 +25,5 @@ fdroid_extra_build:
   subdir: app
   gradle:
     - floss
-  scandelete:
-    - build-logic
+#  scandelete:
+#    - shared/build-logic
