@@ -48,7 +48,22 @@ echo done
 
 # ./gradlew dependencyUpdates -DdependencyUpdates.gradleReleaseChannel="current"
 
+# emulator -list-avds
+# emulator -avd <avdname>
+
+
 # take screenshot
 # screenshot2 -d lala.png # first device
 # screenshot2 -e lala.png # first emulator
+
+# Run previews @Preview components
+# adb shell am start \
+# -a android.intent.action.VIEW \
+# -d "preview://preview?composable=com.example.MyClassFileKt.MyPreview" \
+# -n com.example/androidx.compose.ui.tooling.PreviewActivity
+# Ojo no son FQN tipicas, el penultimo paso es el fichero + Kt
+
+
+# Inspecting package info
+# adb shell dumpsys package your.package
 
