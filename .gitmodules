@@ -1,3 +1,6 @@
 [submodule "shared"]
 	path = shared
 	url = git@github.com:vokimon/android-shared.git
+[submodule "tools"]
+	path = tools
+	url = git@github.com:vokimon/android-dev-scripts.git
