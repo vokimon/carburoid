@@ -1,3 +1,4 @@
+# The native name of the translated language (Español, Català, Deutsch...), not "English" translated to the language 
 LANGUAGE_NAME: English
 MOTTO: Fill up cheaper, closer
 DESCRIPTION: An Open Source Android app to find cheap gas stations
