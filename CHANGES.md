@@ -1,13 +1,17 @@
 # Change log
 
-## 1.6.4 (2026-05-05)
+## 1.6.4 (2026-05-06)
 
+Improved builds
+
+- 🏗️ Keep debug symbols in release for better crash reports
 - 🏗️ Updated dependencies
-- 🏗️ keep debug symbols in release for better crash reports
-- 🏗️ inherit yaml-strings plugin from shared
-- 🏗️ relocatable dev scripts
+- 🏗️ Inherit yaml-strings plugin from shared
+- 🏗️ Dev scripts as submodule and relocatable
 
 ## 1.6.3 (2026-04-09)
+
+New Crash handler and new repo for the shared library
 
 - ✨ Crash handler to report crashes
 - ♻️ AppScaffold extracted to shared library

@@ -23,11 +23,15 @@ full_description_md: |-
   - ☀️ Dark and Light themes
 keywords: gas station, petrol, gasoline, gasoil, diesel
 changes_1_6_4_md: |-
+  Improved builds
+
+  - 🏗️ Keep debug symbols in release for better crash reports
   - 🏗️ Updated dependencies
-  - 🏗️ keep debug symbols in release for better crash reports
-  - 🏗️ inherit yaml-strings plugin from shared
-  - 🏗️ relocatable dev scripts
+  - 🏗️ Inherit yaml-strings plugin from shared
+  - 🏗️ Dev scripts as submodule and relocatable
 changes_1_6_3_md: |-
+  New Crash handler and new repo for the shared library
+
   - ✨ Crash handler to report crashes
   - ♻️ AppScaffold extracted to shared library
   - ♻️ WatermarkBox extracted to shared library

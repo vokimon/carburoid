@@ -1,5 +1,7 @@
 ## 1.6.3 (2026-04-09)
 
+New Crash handler and new repo for the shared library
+
 - ✨ Crash handler to report crashes
 - ♻️ AppScaffold extracted to shared library
 - ♻️ WatermarkBox extracted to shared library
