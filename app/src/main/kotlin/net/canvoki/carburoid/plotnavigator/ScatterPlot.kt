@@ -78,8 +78,8 @@ fun yRange(
     val allPrices = allItems.mapNotNull(getY)
     val unionPrices = filteredPrices + allPrices
 
-    var unionMin = unionPrices.minOrNull()!!
-    var unionMax = unionPrices.maxOrNull()!!
+    var unionMin = unionPrices.minOrNull()
+    var unionMax = unionPrices.maxOrNull()
 
     // No points, default range
     if (unionMax == null || unionMin == null) {
