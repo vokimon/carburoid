@@ -2,7 +2,8 @@
 
 ## unreleased
 
-- 🐛 PlotNavigator: Crash when no results and slide
+- 🐛 PlotNavigator: Avoid crash when no results and slide. Closes #28
+- 🐛 PlotNavigator: Avoid crash when no results and closer/cheaper pressed
 
 ## 1.6.4 (2026-05-06)
 
