@@ -4,6 +4,8 @@
 
 - 🐛 PlotNavigator: Avoid crash when no results and slide. Closes #28
 - 🐛 PlotNavigator: Avoid crash when no results and closer/cheaper pressed
+- 🐛 PlotNavigator: Do not cutoff distance if no station before the cutoff
+- 💄 PlotNavigator: Single station centered horizontally
 
 ## 1.6.4 (2026-05-06)
 

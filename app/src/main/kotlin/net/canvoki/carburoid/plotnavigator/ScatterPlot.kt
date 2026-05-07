@@ -31,6 +31,9 @@ import net.canvoki.shared.log
 
 typealias RangeF = Pair<Float, Float>
 
+private const val DEFAULT_DISPLAY_KM = 800f
+private const val CUTOFF_DISPLAY_KM = 1000f
+
 data class StationPoint(
     val item: GasStation,
     val index: Int,
@@ -43,15 +46,19 @@ data class StationPoint(
  */
 fun xRange(points: List<StationPoint>): RangeF {
     val xMax = points.maxOfOrNull { it.x } ?: 0f
-    return 0f to (
-        if (xMax <= 0f) {
-            800f
-        } else if (xMax > 1000f) {
-            1000f
-        } else {
-            xMax
-        }
-    )
+
+    if (xMax <= 0f) return 0f to DEFAULT_DISPLAY_KM
+
+    // Single point: double the max so point appears centered
+    if (points.size <= 1) return 0f to (2 * xMax)
+
+    // Only cap at CUTOFF_DISPLAY_KM if max exceeds it and there are nearby points
+    if (xMax > CUTOFF_DISPLAY_KM) {
+        val hasNearbyPoints = points.any { it.x <= CUTOFF_DISPLAY_KM }
+        if (hasNearbyPoints) return 0f to CUTOFF_DISPLAY_KM
+    }
+
+    return 0f to xMax
 }
 
 /**

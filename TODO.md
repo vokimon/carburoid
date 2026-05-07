@@ -2,6 +2,11 @@
 
 Do you want to help? This is my roadmap.
 
+- [ ] Fix: StationList: Crash https://github.com/vokimon/carburoid/issues/29, suspect some null distances there, easy to solve, but first reproduce.
+- [x] Fix: PlotNavigator: Crash when no station
+- [x] Fix: PlotNavigator: Range when a single station (or none) is undefined
+- [ ] Fix: PlotNavigator: Show an overlay message when no stations available
+
 - [ ] Make visible that we are in Route mode
     - Duplication the origin location widget for destination? It takes too much screen
     - Splitting the location widget for origin and destination? too small
