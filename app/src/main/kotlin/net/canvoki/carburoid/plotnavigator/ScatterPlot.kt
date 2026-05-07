@@ -166,7 +166,9 @@ fun ScatterPlot(
             ),
         modifier =
             modifier.horizontalSwipe(onStep = { delta ->
-                onIndexSelected((currentIndex + delta).coerceIn(0, points.lastIndex))
+                if (points.isNotEmpty()) {
+                    onIndexSelected((currentIndex + delta).coerceIn(0, points.lastIndex))
+                }
             }),
     ) {
         val bins: HeatMapGrid<Int> = histogram

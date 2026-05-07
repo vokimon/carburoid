@@ -1,5 +1,9 @@
 # Change log
 
+## unreleased
+
+- 🐛 PlotNavigator: Crash when no results and slide
+
 ## 1.6.4 (2026-05-06)
 
 Improved builds
