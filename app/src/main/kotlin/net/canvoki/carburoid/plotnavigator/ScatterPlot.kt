@@ -61,21 +61,6 @@ fun xRange(points: List<StationPoint>): RangeF {
     return 0f to xMax
 }
 
-/**
- * Compute min/max range for Y axis
- */
-fun yRange(points: List<StationPoint>): RangeF {
-    val defaultMin = 0f
-    val defaultMax = 2f
-    val yMin = points.minOfOrNull { it.y }
-    val yMax = points.maxOfOrNull { it.y }
-
-    if (yMin == null || yMax == null) return defaultMin to defaultMax
-    if (yMin < yMax) return yMin to yMax
-    if (yMax <= defaultMin) return defaultMin to defaultMax
-    return defaultMin to yMax
-}
-
 fun yRange(
     points: List<StationPoint>,
     allItems: List<GasStation>,
