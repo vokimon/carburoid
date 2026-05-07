@@ -2,10 +2,13 @@
 
 ## unreleased
 
+PlotNavigator edge cases
+
 - 🐛 PlotNavigator: Avoid crash when no results and slide. Closes #28
 - 🐛 PlotNavigator: Avoid crash when no results and closer/cheaper pressed
-- 🐛 PlotNavigator: Do not cutoff distance if no station before the cutoff
-- 💄 PlotNavigator: Single station centered horizontally
+- 🐛 PlotNavigator: Do not cutoff by distance if there is no station before the cutoff
+- 💄 PlotNavigator: Single station or single price displayed in the center
+- 💄 PlotNavigator: Padding in prices range to avoid poitns to overlap the axis
 
 ## 1.6.4 (2026-05-06)
 
