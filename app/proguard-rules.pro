@@ -1,5 +1,6 @@
 # Keep all symbol names for the stacktrace to be meaningful
--keep class * { *; }
+-dontobfuscate
+-keepattributes SourceFile,LineNumberTable
 
 # Suppress warning about javax.lang.model.element.Modifier.
 # See https://github.com/google/error-prone/issues/2122
