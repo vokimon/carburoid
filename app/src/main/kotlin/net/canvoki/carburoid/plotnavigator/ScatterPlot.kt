@@ -28,11 +28,19 @@ import io.github.koalaplot.core.xygraph.rememberAxisStyle
 import io.github.koalaplot.core.xygraph.rememberFloatLinearAxisModel
 import net.canvoki.carburoid.model.GasStation
 import net.canvoki.shared.log
+import kotlin.math.abs
 
 typealias RangeF = Pair<Float, Float>
 
 private const val DEFAULT_DISPLAY_KM = 800f
 private const val CUTOFF_DISPLAY_KM = 1000f
+
+private const val MIN_PRICE_PADDING_EUR = 0.01f
+private const val PADDING_RATIO = 0.05f
+private const val ZERO_RANGE_EPSILON = 0.001f
+private const val MIN_RANGE_EUR = 0.5f
+private const val DEFAULT_Y_MIN = 0f
+private const val DEFAULT_Y_MAX = 2f
 
 data class StationPoint(
     val item: GasStation,
@@ -66,22 +74,24 @@ fun yRange(
     allItems: List<GasStation>,
     getY: (GasStation) -> Float?,
 ): RangeF {
-    val defaultMin = 0f
-    val defaultMax = 2f
+    val filteredPrices = points.map { it.y }
+    val allPrices = allItems.mapNotNull(getY)
+    val unionPrices = filteredPrices + allPrices
 
-    // Local minimum remains based on visible points
-    val localMin = points.minOfOrNull { it.y } ?: defaultMin
-
-    // Global maximum comes ONLY from allItems
-    val globalMax = allItems.mapNotNull(getY).maxOrNull() ?: defaultMax
-
-    // Sanity rules
-    if (localMin >= globalMax) {
-        if (globalMax <= defaultMin) return defaultMin to defaultMax
-        return defaultMin to globalMax
+    if (unionPrices.isEmpty()) {
+        return DEFAULT_Y_MIN to DEFAULT_Y_MAX
     }
 
-    return localMin to globalMax
+    var unionMin = unionPrices.minOrNull()!!
+    var unionMax = unionPrices.maxOrNull()!!
+
+    if (abs(unionMax - unionMin) < ZERO_RANGE_EPSILON) {
+        return 0f to unionMax * 2f
+    }
+    val padding = maxOf(MIN_PRICE_PADDING_EUR, (unionMax - unionMin) * PADDING_RATIO)
+    return (
+        (unionMin - padding).coerceAtLeast(DEFAULT_Y_MIN) to unionMax + padding
+    )
 }
 
 /**
