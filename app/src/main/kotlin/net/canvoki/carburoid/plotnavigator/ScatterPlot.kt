@@ -78,20 +78,22 @@ fun yRange(
     val allPrices = allItems.mapNotNull(getY)
     val unionPrices = filteredPrices + allPrices
 
-    if (unionPrices.isEmpty()) {
-        return DEFAULT_Y_MIN to DEFAULT_Y_MAX
-    }
-
     var unionMin = unionPrices.minOrNull()!!
     var unionMax = unionPrices.maxOrNull()!!
 
+    // No points, default range
+    if (unionMax == null || unionMin == null) {
+        return DEFAULT_Y_MIN to DEFAULT_Y_MAX
+    }
+
+    // Single price, center vertically
     if (abs(unionMax - unionMin) < ZERO_RANGE_EPSILON) {
         return 0f to unionMax * 2f
     }
+
+    // Regular set, just add some padding to the actual range
     val padding = maxOf(MIN_PRICE_PADDING_EUR, (unionMax - unionMin) * PADDING_RATIO)
-    return (
-        (unionMin - padding).coerceAtLeast(DEFAULT_Y_MIN) to unionMax + padding
-    )
+    return unionMin - padding to unionMax + padding
 }
 
 /**
