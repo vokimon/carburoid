@@ -88,7 +88,9 @@ fun GasStationScatterPlot(
     }
 
     fun selectIndex(index: Int) {
-        selectedIndex = index.coerceIn(0..currentItems.lastIndex)
+        if (currentItems.isNotEmpty()) {
+            selectedIndex = index.coerceIn(0, currentItems.lastIndex)
+        }
     }
 
     Material2KoalaTheme {
