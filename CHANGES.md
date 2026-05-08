@@ -1,6 +1,6 @@
 # Change log
 
-## unreleased
+## 1.6.5 (2026-05-07)
 
 PlotNavigator edge cases
 
