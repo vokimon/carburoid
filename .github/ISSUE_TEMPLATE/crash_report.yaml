@@ -77,6 +77,16 @@ body:
     validations:
       required: true
   - type: textarea
+    id: app_state
+    attributes:
+      label: App State
+      description: |
+        Application configuration and runtime state at crash time.
+        This helps diagnose and reproduce issues.
+      render: text
+    validations:
+      required: false
+  - type: textarea
     id: logs
     attributes:
       label: Full Crash Log
