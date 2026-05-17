@@ -5,11 +5,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import net.canvoki.carburoid.algorithms.FilterSettings
+import net.canvoki.carburoid.algorithms.StationFilter
 import net.canvoki.carburoid.country.CountryRegistry
 import net.canvoki.carburoid.country.CountrySettings
 import net.canvoki.carburoid.location.LocationService
 import net.canvoki.carburoid.model.FranceExtraStationData
 import net.canvoki.carburoid.network.GasStationApi
+import net.canvoki.carburoid.product.ProductManager
 import net.canvoki.carburoid.repository.GasStationRepository
 import net.canvoki.shared.crash.CopyCrashBackend
 import net.canvoki.shared.crash.CrashReporter
@@ -54,6 +57,7 @@ class CarburoidApplication : Application() {
                     ),
             ),
         )
+        CrashReporter.setAppStateInfoProvider { collectAppStateInfo() }
         LanguageSettings.initialize(this)
         ThemeSettings.initialize(this)
         CountrySettings.initialize(this)
@@ -93,4 +97,22 @@ class CarburoidApplication : Application() {
             )
         return repository
     }
+
+    private fun collectAppStateInfo(): String =
+        buildString {
+            appendLine("- Country: ${CountryRegistry.current.countryCode}")
+            appendLine("- Product: ${ProductManager.getCurrent()}")
+            val filters = FilterSettings.config(this@CarburoidApplication)
+            appendLine("- Filter hide expensive: ${filters.hideExpensiveFurther}")
+            appendLine("- Filter only public prices: ${filters.onlyPublicPrices}")
+            appendLine("- Filter closed margin (min): ${filters.hideClosedMarginInMinutes}")
+            appendLine("- Filter hide beyond sea: ${filters.hideBeyondSea}")
+            val location = locationService.loadLastLocation()
+            if (location != null) {
+                appendLine("- Origin: ${location.first.pretty()}")
+                location.second?.let { appendLine("- Destination: ${it.pretty()}") }
+            } else {
+                appendLine("- Location: Device GPS (no saved location)")
+            }
+        }
 }
