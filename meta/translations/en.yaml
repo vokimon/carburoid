@@ -23,13 +23,14 @@ full_description_md: |-
   - ☀️ Dark and Light themes
 keywords: gas station, petrol, gasoline, gasoil, diesel
 changes_1_6_5_md: |-
-  PlotNavigator edge cases
+  PlotNavigator edge cases and more debug info for crashes
 
   - 🐛 PlotNavigator: Avoid crash when no results and slide. Closes #28
   - 🐛 PlotNavigator: Avoid crash when no results and closer/cheaper pressed
   - 🐛 PlotNavigator: Do not cutoff by distance if there is no station before the cutoff
   - 💄 PlotNavigator: Single station or single price displayed in the center
   - 💄 PlotNavigator: Padding in prices range to avoid poitns to overlap the axis
+  - ✨ Crash report now includes saved preferences to improve diagnoses
 changes_1_6_4_md: |-
   Improved builds
 
