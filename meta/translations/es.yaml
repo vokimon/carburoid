@@ -58,9 +58,11 @@ changes_1_5_1_md: |-
   - 🐛 La búsqueda de ubicaciones no se limita a España, se adapta a la fuente de datos (por lo que ahora funciona en Francia).
   - ✨ Nombre alternativo para las gasolineras francesas
   - ✨ Base de datos actualizada de nombres de estaciones de Francia
-  - ♻️ Utilizar nominatim para todas las consultas de nombres de ubicación.
+  - ♻️ Utilizar “nominatim” para todas las consultas de nombres de ubicación.
   - 🌐 Traducción del alemán marcada como completa (estaba completa pero se marcó como incompleta)
 changes_1_6_3_md: |-
+  Nuevo gestor de errores y nuevo repositorio para la biblioteca compartida
+
   - ✨ Gestor de fallos para informar de fallos
   - ♻️ AppScaffold se extrajo a la biblioteca compartida.
   - ♻️ WatermarkBox se extrajo a la biblioteca compartida.
@@ -78,7 +80,79 @@ changes_1_6_1_md: |-
   - 🌐 Nuevo idioma: Andalusian
   - 🏗️ Actualizar dependencias
 changes_1_6_4_md: |-
+  Versiones mejoradas
+
+  - 🏗️ Mantén los símbolos de depuración en la versión final para obtener mejores informes de fallos
   - 🏗️ Dependencias actualizadas
-  - 🏗️ mantener símbolos depurantes en versión para mejores informes de cuelgue
-  - 🏗️ heredar complemento yaml-strings desde compartidos
-  - 🏗️ reubicar guiones dev
+  - 🏗️ Heredar complemento yaml-strings desde compartidos
+  - 🏗️ Guiones de desarrollo como submódulos y reubicables
+changes_1_4_2_md: |-
+  Reorganización interna y traducciones incompletas en mantenimiento
+
+  - 🏗️ Se han actualizado las dependencias a las versiones actuales de la lista de materiales (BOM)
+  - 🏗️ Se ha extraído el código general como biblioteca compartida; por ahora es interno.
+  - 🏗️ Complemento de traducción de YAML extraído como https://github.com/vokimon/android-yaml-strings
+  - 🔧 No te quedes atascado con las traducciones en curso
+  - 🚸 Avisar sobre las traducciones WIP
+changes_1_3_2_md: |-
+  Ajustes de producto de trabajo remoto
+
+  - 🐛 La configuración remota del producto utilizó por error una interfaz de bajo nivel
+       omitiendo las medidas de seguridad de la interfaz de alto nivel y ha fallado
+       al cambiar el producto en algunas condiciones.
+changes_1_2_2_md: '- 🏗️ agp degradado 8.13.0 -> 8.11.0 porque el servidor compiló fdroid (Soluciona #1)'
+changes_1_4_1_md: |-
+  Soporte para producción en Francia y navegador de tramas
+
+  - ✨ Masas continentales de Francia: no muestre Córcega si se encuentra en la Francia continental y viceversa.
+  - ✨ Nombres y marcas de Francia: utilice una base de datos estática como solución alternativa.
+  - ✨ Horario de apertura en Francia
+  - ✨ Navegador de trama: ya no es una vista experimental
+  - ✨ Navegador de trama: Trazado horizontal
+  - ✨ Navegador de trama: Encabezado, backbutton y selectores ubicación/producto
+  - 🧹 Navegador de trama: Extensiones koalaplot retiradas ya integradas en koalaplot 0.11.0
+  - 🌐 Navegador de trama: Traducciones de textos
+changes_1_4_0_md: |-
+  Reescritura de los ajustes de las gasolineras francesas y de Compose/Material3
+
+  - ✨ Opción de fuente de datos: admite compatibilidad con otros países además de España
+  - ✨ Gasolineras francesas (con algunas limitaciones)
+  - 🚸 Aviso único al desactivar un filtro que consume muchos recursos
+  - 💄 Página de configuración rediseñada con Compose/Material 3
+  - ⚡️ Utilizar una biblioteca que permita cargar los datos más rápido (Gson → Kotlin Serialization) 20% de aceleración
+  - ♻️ Abstracción del formato de la API. Un paso adelante hacia la compatibilidad con otros países
+changes_1_3_1_md: |-
+  Lista de gasolineras reescrita con Compose
+
+  - ✨ Solicitud de intención de modificar el producto de forma externa (Aborda parcialmente #5)
+  - 🐛 Navegación por trama: Se ha corregido el problema de la lista de estaciones fantasma al cambiar los filtros (Correcciones #15)
+  - 🌐 Ajustes del filtro: «Estaciones irrelevantes» en lugar de «caras y lejanas»; es más breve y destaca la intención.
+  - 🚸 Lista de gasolineras: Barra de desplazamiento que indica a qué distancia estamos de la opción más cercana y más barata.
+  - 💄 Lista de gasolineras: Imagen de fondo en la búsqueda vacía
+  - 💄 Lista de gasolineras: Los selectores de producto y de ubicación son más compactos.
+  - ♻️ Lista de gasolineras: Migrado a Compose
+changes_1_2_3_md: |-
+  - 💄 Un indicador de carga menos molesto para la actualización de datos
+  - 🌐 El español contenía palabras en catalán sin traducir (Fixes #4)
+      - Gracias a wuniversales por el informe.
+  - 🏗️ Se ha vuelto a actualizar AGP. Se ha actualizado el servidor de F-Droid.
+changes_1_2_0_md: |-
+  Modifica tu ubicación actual
+
+  - ✨ Al pulsar el icono de edición, accederás a la pantalla de edición de posiciones.
+  - ✨ Editar posición con el mapa interactivo
+  - ✨ Editar posición con búsqueda de ubicación con autocompletado
+  - ✨ Reposiciona el GPS haciendo clic en el icono del blanco concéntrico
+  - 💥 Al deslizar el dedo no se actualiza la posición actual, solo se actualizan las gasolineras.
+  - 💄 Evita el parpadeo al actualizar la descripción
+changes_1_0_3_md: |-
+  Más ajustes para FDroid:
+
+  - 🏗️ Fdroid: Se ha eliminado la información privativa sobre la dependencia, a la que solo Google tenía acceso.
+  - 🏗️ Se han vaciado las advertencias sobre el uso opcional de API experimentales en las pruebas
+changes_1_0_2_md: |-
+  Ajustes de FDroid:
+
+  - 🏗️ Paquetes firmados y automatizaciones relacionadas
+  - 🏗️ Nombres apk informativos: appid-flavor-version-build.apk
+  - 🏗️ pasa a gradle 8.14
